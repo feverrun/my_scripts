@@ -1,77 +1,106 @@
 /*
-签到领现金兑换
-
-0 0 * * * jd_cash_exchange.js
+愤怒的锦鲤
+更新时间：2021-7-11
+备注：高速并发请求，专治偷助力。在kois环境变量中填入需要助力的pt_pin，有多个请用@符号连接
+TG学习交流群：https://t.me/cdles
+0 0 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_angryKoi.js
 */
-const $ = Env("签到领现金兑换")
+const $ = new Env("愤怒的锦鲤")
+const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
+var kois = process.env.kois ?? ""
 let cookiesArr = []
-let exchangeAccounts //不指定默认为所有账号兑换10红包，部分账号会出现参数错误的提示
-// let exchangeAccounts = {
-//     "jd_账号1": 10,//十元
-//     "jd_账号2": 2,//两元
-// }
-
+var helps = [];
+var tools= []
 !(async () => {
-    await requireConfig()
-    if (!cookiesArr[0]) {
-        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {
-            "open-url": "https://bean.m.jd.com/bean/signIndex.action"
-        });
-        return;
+    if(!kois){
+        console.log("请在环境变量中填写需要助力的账号")
     }
-    for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
-            pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
-            amount = 0
-            if(exchangeAccounts){
-                amount = exchangeAccounts[pt_pin]
-                if(!amount)continue
+    requireConfig()
+    for (let i in cookiesArr) {
+        cookie = cookiesArr[i]
+        if(kois.indexOf(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])!=-1){
+            var data = await requestApi('h5launch',cookie);
+            switch (data?.data?.result?.status) {
+                case 1://火爆
+                    continue;
+                case 2://已经发起过
+                    break;
+                default:
+                    if(data?.data?.result?.redPacketId){
+                        helps.push({redPacketId: data.data.result.redPacketId, success: false, id: i, cookie: cookie})
+                    }
+                    continue;
+            }   
+            data = await requestApi('h5activityIndex',cookie);
+            switch (data?.data?.code) {
+                case 20002://已达拆红包数量限制
+                    break;
+                case 10002://活动正在进行，火爆号
+                    break;
+                case 20001://红包活动正在进行，可拆
+                    helps.push({redPacketId: data.data.result.redpacketInfo.id, success: false, id: i, cookie: cookie})
+                    break;
+                default:
+                    break;
             }
-            exchange(cookie,amount,pt_pin)
         }
+        tools.push({id: i, cookie: cookie})   
     }
-    await $.wait(3000)
-})()
-function exchange(cookie,amount,pt_pin) {
-    body = ""
-    if(amount == 2){
-        body = `adid=41CBA646-6EA3-4E79-8623-680F74A5FD7D&area=20_1726_22885_60437&body={"type":"2","amount":"200"}&build=167724&client=apple&clientVersion=10.0.6&d_brand=apple&d_model=iPhone10,4&eid=eidI56d7812024s3J0UGWUp+RVK4+9/EY14sMidFB85YSXDSHPI9r07frvvGbXtVFQYuMENUoWFIARXaAYlZNGDyc8dfGQqd42Fer11K0PRjAQjbTBp5&isBackground=N&joycious=79&lang=zh_CN&networkType=wifi&networklibtype=JDNetworkBaseAF&openudid=96ca9290eae9f41770e2c16fd4d07c67eb06b445&osVersion=14.4.2&partner=apple&rfs=0000&scope=10&screen=750*1334&sign=1be417384d1ffccde3dbf6a207277706&st=1625756188161&sv=111&uemps=0-0&uts=0f31TVRjBSsqndu4/jgUPz6uymy50MQJCNy5Ou1kywjunNJYhK2mQzTDwvkNHz8d6J9JA+AN8f7dHT8E/pp+/K+s+/hw3ktfXf7rIWQ3qVqjrVZ8RJpuJJq5WCCsy0wGM2uum+4ppHaNVwnSBrL/ZniFeKJAAxcyCaBFHBfNkP1t3YA8CtB8pQTjm5pvQ/eWyy8qqiBgfB+iPthLx1deRA==&uuid=hjudwgohxzVu96krv/T6Hg==`
-    }else{
-        body = `adid=A23D8ECF-B992-477E-BA88-A5E7680DD8F6&area=20_1726_22885_51456&body={"type":"2","amount":"1000"}&build=167638&client=apple&clientVersion=9.5.0&eid=eidI5E4E0119RTBCMkMxNEMtNjgxQi00NQ==20v8iy1ivQ9DClEjHXmgvcd5v2MhcsarbJkOkdI5EZKIlK2CiFmfRE6MG017DU87QAHcuwoYwkjGXGws&isBackground=N&joycious=61&lang=zh_CN&networkType=wifi&networklibtype=JDNetworkBaseAF&openudid=3245ad3d16ab2153c69f9ca91cd2e931b06a3bb8&osVersion=13.6.1&rfs=0000&scope=11&screen=1242*2208&sign=427a28328d1650d4c553c1cfdf25744c&st=1618885128891&sv=100&uemps=0-0&uts=0f31TVRjBSsqndu4/jgUPz6uymy50MQJ/+MrMjk4y13kWuMN4VaxQad1iD1QgEcDK/YYLWTuOPAd1akjd5yd8GStO+tvG+FdogNDbDiKjvQgXieBZsBtY63e8GaM2SFD74E/SCZQOKBCgUHo9/gWatL87O9NO0DFzwx44pkT4mA7/S1gDn01AyEbB70wvtsnPtixLxroKuYYDIBNepnJLQ==&uuid=hjudwgohxzVu96krv/T6Hg==`
+    for(let help of helps){
+        open(help)
     }
-    $.post({
-        url: 'https://api.m.jd.com/client.action?functionId=cash_getRedPacket',
-        headers: {
-            'Cookie': cookie,
-            'Accept': '*/*',
-            'Connection': 'keep-alive',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'User-Agent': ua,
-            'Accept-Language': 'zh-Hans-CN;q=1',
-            'Host': 'api.m.jd.com',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: body,
-    }, (err, resp, data) => {
-        try {
-            data = JSON.parse(data)
-            if(data.data){
-                 console.log(data.data.bizMsg)
-                 if(data.data.bizMsg==""){
-                    data.data.bizMsg = `成功兑换${amount}元红包`
-                 }
-                 notify.sendNotify(`签到领现金账号 ${decodeURIComponent(pt_pin)}`, data.data.bizMsg);
+    await $.wait(60000)
+})()  .catch((e) => {
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+  })
+  .finally(() => {
+    $.done();
+  })
+
+function open(help){
+    var tool = tools.pop()
+    if(!tool)return
+    if(help.success)return
+    requestApi('jinli_h5assist', tool.cookie, {
+        "redPacketId": help.redPacketId
+    }).then(function(data){
+        desc = data?.data?.result?.statusDesc
+        if (desc && desc.indexOf("助力已满") != -1) {
+            tools.unshift(tool)
+            help.success=true
+        } else if (!data) {
+            tools.unshift(tool)
+        }
+        console.log(`${tool.id}->${help.id}`, desc)   
+        open(help)         
+    })   
+}
+
+function requestApi(functionId, cookie, body = {}) {
+    return new Promise(resolve => {
+        $.post({
+            url: `${JD_API_HOST}/api?appid=jd_mp_h5&functionId=${functionId}&loginType=2&client=jd_mp_h5&clientVersion=10.0.5&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi`,
+            headers: {
+                "Cookie": cookie,
+                "origin": "https://h5.m.jd.com",
+                "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "X-Requested-With": "com.jingdong.app.mall",
+                "User-Agent": ua,
+            },
+            body: `body=${escape(JSON.stringify(body))}`,
+        }, (_, resp, data) => {
+            try {
+                data = JSON.parse(data)
+            } catch (e) {
+                $.logErr('Error: ', e, resp)
+            } finally {
+                resolve(data)
             }
-            if(data.errorMessage){
-               console.log(data.errorMessage)
-          }
-        } catch (e) {
-            $.logErr('Error: ', e, resp)
-        }
+        })
     })
- }
+}
 
 function requireConfig() {
     return new Promise(resolve => {

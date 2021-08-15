@@ -71,7 +71,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
             } else {
                 dyjStr = dyjCode.split("@")
                 if (dyjStr[0]) {
-                    $.rid = dyjDtr[0]
+                    $.rid = dyjStr[0]
                     $.inviter = dyjStr[1]
                 }
             }
@@ -107,19 +107,19 @@ const JD_API_HOST = `https://api.m.jd.com`;
             }
         }
     }
-        //if($.type == 2){
-        //for (let i = 0 ; i <cookiesArr.length ; i++) {
-          //  cookie = cookiesArr[i];
-            //if (cookie) {
-              //  $.index = i + 1;
-              //  console.log(`\n******查询【京东账号${$.index}】红包情况\n`);
-                //await help($.rid, $.inviter,$.helptype)
-            //}
-        //}
-        //}
+    //if($.type == 2){
+    //for (let i = 0 ; i <cookiesArr.length ; i++) {
+    //  cookie = cookiesArr[i];
+    //if (cookie) {
+    //  $.index = i + 1;
+    //  console.log(`\n******查询【京东账号${$.index}】红包情况\n`);
+    //await help($.rid, $.inviter,$.helptype)
+    //}
+    //}
+    //}
 
 })()
-.catch((e) => {
+    .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
     })
     .finally(() => {

@@ -1,94 +1,116 @@
 /*
-赚30元
-更新时间：2021-7-19
-入口：我的-赚30
-备注：赚30元每日签到红包、天降红包助力，在earn30Pins环境变量中填入需要签到和接受助力的账号。
-技巧：每月可以提现100元，但需要邀请一个新人下首单。可以用已注册手机号重新注册为新人账号，切换ip可以提高成功率。
+真·抢京豆
+更新时间：2021-7-25
+备注：高速并发抢京豆，专治偷助力。设置环境变量angryBeanPins为指定账号助力，默认不助力。环境变量angryBeanMode可选值priority(优先模式)、smart(智能模式)和speed(极速模式)，默认speed模式。默认推送通知，如要屏蔽通知需将环境变量enableAngryBeanNotify的值设为false。
 TG学习交流群：https://t.me/cdles
-3 1,6 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_earn30.js
+0 0 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_angryBean.js
 */
-const $ = new Env("赚30元")
-const JD_API_HOST = 'https://api.m.jd.com/client.action';
+const $ = new Env("真·抢京豆")
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
-var pins = process.env.earn30Pins ? process.env.earn30Pins : '';
+const speed = "speed"
+const smart = "smart"
+var pins = $.isNode() ? (process.env.angryBeanPins ? process.env.angryBeanPins : "") : "";
 let cookiesArr = [];
 var helps = [];
 var tools = [];
+var maxTimes = 3;
+var finished = new Set();
+var init = [];
+var mode = $.isNode() ? (process.env.angryBeanMode ? process.env.angryBeanMode : "speed") : "priority";
+
 !(async () => {
-     if (!pins) {
-          console.log("未填写环境变量earn30Pins，默认所有账号")
+     if ($.isNode() && !pins) {
+          console.log("请在环境变量中填写需要助力的账号")
+          return
      }
+     console.log(`开启${mode}模式`)
      requireConfig()
      for (let i in cookiesArr) {
           i = +i
           cookie = cookiesArr[i]
-          if (!pins || pins.indexOf(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]) != -1) {
-               var data = await requestApi('createSplitRedPacket', cookie, {
-                    scene: 3
-               });
-               if(data){
-                    if (data.code === 0 && data.SplitRedPacketInfo) {
-                         helps.push({
-                              redPacketId: data.SplitRedPacketInfo.redPacketId,
-                              shareCode: data.SplitRedPacketInfo.shareCode,
-                              id: i,
-                              cookie: cookie
-                         })
-                    } else if (data.code === 1) {
-                         data = await requestApi('getSplitRedPacket', cookie);
-                         if (data && data.code === '0' && data.SplitRedPacketInfo ) {//&& data.SplitRedPacketInfo.finishedMoney != data.SplitRedPacketInfo.totalMoney
-                              helps.push({
-                                   redPacketId: data.SplitRedPacketInfo.redPacketId,
-                                   shareCode: data.SplitRedPacketInfo.shareCode,
-                                   id: i,
-                                   cookie: cookie
-                              })
-                         }
-                    }
-               }
-               data = await requestApi('fpSign', cookie);
-               if (data) {
-                    if (data.code === 1) {
-                         console.log(`${i+1} 已经签到过了`)
-                    } else if (data.code === '0') {
-                         console.log(`${i+1} 签到获得${data.money}`)
-                    } else {
-                         console.log(`${i+1} 签到失败`)
-                    }
-               }               
-          }
-          tools.push({
+          var tool = {
                id: i,
                cookie: cookie,
-               helps:[],
-          })
-     }
-     for(let help of helps){
-          while (tools.length) {
-               var tool = tools.pop()
-               var data = await requestApi('splitRedPacket', tool.cookie, {shareCode:help.shareCode,groupCode:help.redPacketId});
-               if(data){
-                    if(tool.id == help.id){
-                         continue
-                    }
-                    console.log(`${tool.id+1}->${help.id+1} ${data.text}`)
-                    if(tool.helps.indexOf(help.id) != -1){
-                         break
-                    }
-                    if(data.text == "我的红包已拆完啦"){
-                         tools.unshift(tool)
-                         break
-                    }
-                    if(data.text.indexOf("帮拆出错")!=-1){
-                         continue
-                    }
-                    if(data.text.indexOf("帮拆次数已达上限")!=-1){
-                         continue
-                    }
-                    tool.helps.push(help.id)
-                    tools.unshift(tool)
-               }
+               helps: new Set(),
+               times: 0,
+               timeout: 0,
           }
+          var address = pins.indexOf(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+          if (!$.isNode() || address != -1) {
+               var data = await requestApi('signGroupHit', cookie, {
+                    activeType: 2
+               });
+               if (data && data.data && data.data.respCode) {
+                    if (data.data.respCode != "SG100") {
+                         data = await getTuanInfo(cookie)
+                         if (data && data.data && data.data.shareCode) {
+                              console.log(`账号${toChinesNum(i+1)}，准备抢京豆`)
+                              var help = {
+                                   id: i,
+                                   cookie: cookie,
+                                   groupCode: data.data.groupCode,
+                                   shareCode: data.data.shareCode,
+                                   activityId: data.data.activityMsg.activityId,
+                                   success: false,
+                                   address: address,
+                                   notYet: data.data.beanCountProgress.progressNotYet,
+                              }
+                              helps.push(help)
+                              if (mode == speed) {
+                                   tool.helps.add(i)
+                              }
+                              init.push(i)
+                         } else {
+                              console.log(`账号${toChinesNum(i+1)}，异常`)
+                         }
+                    } else {
+                         console.log(`账号${toChinesNum(i+1)}是黑号，快去怼客服吧`)
+                    }
+               } else {
+                    console.log(`账号${toChinesNum(i+1)}，登录信息过期了`)
+               }
+
+          }
+          tools.push(tool)
+     }
+     helps.sort((i, j) => {
+          return i.address > j.address ? 1 : -1
+     })
+     for (var k = 0; k < (mode == smart ? 50 : 1); k++) {
+          for (let help of helps) {
+               if (k != 0) {
+                    if (help.success) break
+                    cookie = help.cookie
+                    data = await getTuanInfo(cookie)
+                    if (data && data.data && data.data.shareCode) {
+                         help.notYet = data.data.beanCountProgress.progressNotYet
+                    }
+                    if (!help.notYet) break
+               }
+               await open(help)
+          }
+     }
+     if (mode == speed) {
+          while (finished.size != init.length)
+               await $.wait(100)
+     }
+     var beanCount = 0
+     var msg = ""
+     for (let help of helps) {
+          data = await getTuanInfo(help.cookie)
+          if (data) {
+               var sumBeanNum = +data.data.sumBeanNumStr
+               beanCount += sumBeanNum
+               out = `账号${toChinesNum(help.id+1)}，已抢京豆：${sumBeanNum}`
+               console.log(out)
+               msg += out + "\n"
+          }
+     }
+     out = `今日累计获得${beanCount}京豆`
+     console.log(out)
+     msg += out + "\n"
+     if (($.isNode() ? (process.env.enableAngryBeanNotify == "false" ? "false" : "true") : "false") == "true") {
+          require('./sendNotify').sendNotify(`真·抢京豆`, msg);
      }
 })().catch((e) => {
           $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -97,32 +119,168 @@ var tools = [];
           $.done();
      })
 
-function requestApi(functionId, cookie, body = {}) {
+async function getTuanInfo(cookie) {
+     return await requestApi('signBeanGroupStageIndex', cookie, {
+          rnVersion: "3.9",
+          fp: "-1",
+          shshshfp: "-1",
+          shshshfpa: "-1",
+          referUrl: "-1",
+          userAgent: "-1",
+          jda: "-1",
+          monitor_source: "bean_m_bean_index"
+     });
+}
+
+async function open(help) {
+     var tool = tools.pop()
+     if (!tool) {
+          finished.add(help.id)
+          return
+     }
+     if (mode == smart && !help.notYet) {
+          return
+     }
+     if (mode == speed) {
+          tool.timeout++
+          ecpt = new Set(tool.helps, finished)
+          diff = new Set(init.filter(hid => !ecpt.has(hid)))
+          if (tool.timeout > maxTimes * 2) { //超时处理
+               open(help)
+               return
+          }
+          if (diff.size == 0) { //助力完成
+               open(help)
+               return
+          } else {
+               if (tool.helps.has(help.id)) { //阻止自己给自己助力
+                    tools.unshift(tool)
+                    open(help)
+                    return
+               }
+               //ok
+          }
+     } else {
+          if (tool.helps.has(help.id)) {
+               tool.helps.add(help.id)
+               tools.unshift(tool)
+               finished.add(help.id)
+               return
+          }
+          if (tool.id == help.id) {
+               tool.helps.add(help.id)
+               tools.unshift(tool)
+               await open(help)
+               return
+          }
+     }
+     async function handle(data) {
+          var helpToast = undefined
+          if (data && data.data && data.data.helpToast) {
+               tool.helps.add(help.id)
+               helpToast = data.data.helpToast
+               if (helpToast.indexOf("助力成功") != -1) { //助力成功
+                    tool.times++
+                    help.notYet--
+               }
+               if (helpToast.indexOf("满") != -1) { //该团已经满啦~去帮别人助力吧~
+                    help.success = true
+               }
+               if (helpToast.indexOf("今日助力次数已达上限") != -1) { //您今日助力次数已达上限~
+                    tool.times = maxTimes
+               }
+               if (helpToast.indexOf("火爆") != -1) { //活动太火爆啦~请稍后再试~
+                    tool.times = maxTimes
+               }
+               if (tool.times < maxTimes) {
+                    tools.unshift(tool)
+               }
+          } else {
+               if (data && data.errorMessage == "用户未登录") {
+                    helpToast = "用户未登录"
+               } else {
+                    tools.unshift(tool)
+                    helpToast = "异常"
+               }
+          }
+          console.log(`${tool.id+1}->${help.id+1} ${helpToast}`)
+          if (!help.success) {
+               await open(help)
+          } else {
+               finished.add(help.id)
+          }
+     }
+     var params = {
+          activeType: 2,
+          groupCode: help.groupCode,
+          shareCode: help.shareCode,
+          activeId: help.activityId + "",
+          source: "guest",
+     }
+     if (mode != "speed") {
+          data = await requestApi('signGroupHelp', tool.cookie, params)
+          await handle(data)
+     } else {
+          requestApi('signGroupHelp', tool.cookie, params).then(handle)
+     }
+}
+
+function requestApi(functionId, cookie, body = {}, time = 0) {
+     var url = `https://api.m.jd.com/client.action?functionId=${functionId}&body=${JSON.stringify(body)}&appid=ld&client=apple&clientVersion=10.0.4&networkType=wifi&osVersion=13.7&uuid=&openudid=`
      return new Promise(resolve => {
-          $.post({
-               url: `${JD_API_HOST}?functionIdTest=${functionId}`,
+          $.get({
+               url: url,
                headers: {
                     "Cookie": cookie,
-                    "Host": "api.m.jd.com",
+                    "Accept": '*/*',
+                    "Connection": 'keep-alive',
+                    'Referer': 'https://h5.m.jd.com/rn/3MQXMdRUTeat9xqBSZDSCCAE9Eqz/index.html?has_native=0',
+                    "origin": "https://h5.m.jd.com",
                     'Content-Type': 'application/x-www-form-urlencoded',
+                    "X-Requested-With": "com.jingdong.app.mall",
                     "User-Agent": ua,
+                    "Host": "api.m.jd.com",
                },
-               body: `functionId=${functionId}&body=${escape(JSON.stringify(body))}&client=wh5&clientVersion=1.0.0`,
+               timeout: 2500,
           }, (_, resp, data) => {
-               try {
+               if (data) {
                     data = JSON.parse(data)
-               } catch (e) {
-                    $.logErr('Error: ', e, resp)
-               } finally {
                     resolve(data)
+               } else {
+                    if (time == 5) {
+                         resolve(0)
+                    } else {
+                         requestApi(functionId, cookie, body, time + 1).then(function (data) {
+                              resolve(data)
+                         })
+                    }
                }
           })
      })
 }
 
+let toChinesNum = (num) => {
+     let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+     let unit = ["", "十", "百", "千", "万"];
+     num = parseInt(num);
+     let getWan = (temp) => {
+          let strArr = temp.toString().split("").reverse();
+          let newNum = "";
+          for (var i = 0; i < strArr.length; i++) {
+               newNum = (i == 0 && strArr[i] == 0 ? "" : (i > 0 && strArr[i] == 0 && strArr[i - 1] == 0 ? "" : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i]))) + newNum;
+          }
+          return newNum;
+     }
+     let overWan = Math.floor(num / 10000);
+     let noWan = num % 10000;
+     if (noWan.toString().length < 4) {
+          noWan = "0" + noWan;
+     }
+     return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
+}
+
 function requireConfig() {
      return new Promise(resolve => {
-          notify = $.isNode() ? require('./sendNotify') : '';
           const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
           if ($.isNode()) {
                Object.keys(jdCookieNode).forEach((item) => {
