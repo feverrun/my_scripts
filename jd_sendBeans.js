@@ -26,10 +26,7 @@ if ($.isNode()) {
   });
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
-  cookiesArr = [
-    $.getdata("CookieJD"),
-    $.getdata("CookieJD2"),
-    ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
+  cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 !(async () => {
   $.isLoginInfo = {};
@@ -40,11 +37,12 @@ if ($.isNode()) {
   $.activityId = '';
   $.completeNumbers = '';
   console.log(`开始获取活动信息`);
-  for (let i = 0; i < 3 && $.activityId === ''; i++) {
+  for (let i = 0; i < cookiesArr.length; i++) {
     $.cookie = cookiesArr[i];
-    $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);;
+    $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+    $.index = i + 1;
     $.isLogin = true;
-    $.nickName = $.UserName;
+    $.nickName = ''
     await TotalBean();
     $.isLoginInfo[$.UserName] = $.isLogin;
     if (!$.isLogin) {
@@ -54,11 +52,19 @@ if ($.isNode()) {
       }
       continue;
     }
+    await myReward()
+  }
+  for (let i = 0; (cookiesArr.length < 3 ? i < cookiesArr.length : i < 3) && $.activityId === ''; i++) {
+    $.cookie = cookiesArr[i];
+    $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+    $.isLogin = true;
+    $.nickName = ''
+    if (!$.isLoginInfo[$.UserName]) continue;
     await getActivityInfo();
   }
   if ($.activityId === '') {
     console.log(`获取活动ID失败`);
-    return ;
+    return;
   }
   let openCount = Math.floor((Number(cookiesArr.length)-1)/Number($.completeNumbers));
   console.log(`\n共有${cookiesArr.length}个账号，前${openCount}个账号可以开团\n`);
@@ -66,7 +72,7 @@ if ($.isNode()) {
   console.log(`前${openCount}个账号开始开团\n`);
   for (let i = 0; i < cookiesArr.length && i < openCount; i++) {
     $.cookie = cookiesArr[i];
-    $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);;
+    $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     $.index = i + 1;
     $.isLogin = true;
     $.nickName = '';
@@ -154,6 +160,48 @@ async function getActivityInfo(){
   console.log(`获取到的活动ID：${$.activityId},需要邀请${$.completeNumbers}人瓜分`);
 }
 
+async function myReward(){
+  return new Promise(async (resolve) => {
+    let options = {
+      "url": `https://sendbeans.jd.com/common/api/bean/activity/myReward?itemsPerPage=10&currentPage=1&sendType=0&invokeKey=ztmFUCxcPMNyUq0P`,
+      "headers": {
+        "Host": "sendbeans.jd.com",
+        "Origin": "https://sendbeans.jd.com",
+        "Cookie": $.cookie,
+        "app-id": "h5",
+        "Connection": "keep-alive",
+        "Accept": "application/json, text/plain, */*",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        "Accept-Language": "zh-cn",
+        "Referer": "https://sendbeans.jd.com/dist/index.html",
+        "Accept-Encoding": "gzip, deflate, br",
+        "openId": ""
+      }
+    };
+    $.get(options, async (err, resp, data) => {
+      try {
+        data = JSON.parse(data);
+        if (data.success) {
+          for (let key of Object.keys(data.datas)) {
+            let vo = data.datas[key]
+            if (vo.status === 3 && vo.type === 2) {
+              $.rewardRecordId = vo.id
+              await rewardBean()
+              $.rewardRecordId = ''
+            }
+          }
+        }else{
+          console.log(JSON.stringify(data));
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
+
 async function getActivityList(){
   return new Promise((resolve) => {
     let options = {
@@ -187,7 +235,6 @@ async function getActivityList(){
     })
   })
 }
-
 
 async function openTuan(){
   $.detail = {};
