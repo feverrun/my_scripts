@@ -38,12 +38,14 @@ function rstr2hex(input) {
     }
     return output
 }
+
 /*
  * Encode a string as utf-8
  */
 function str2rstrUTF8(input) {
     return unescape(encodeURIComponent(input))
 }
+
 /*
  * Calculate the MD5 of a raw string
  */
@@ -54,6 +56,7 @@ function rstrMD5(s) {
 function hexMD5(s) {
     return rstr2hex(rawMD5(s))
 }
+
 function rawMD5(s) {
     return rstrMD5(str2rstrUTF8(s))
 }
@@ -180,6 +183,7 @@ function binlMD5(x, len) {
     }
     return [a, b, c, d]
 }
+
 /*
  * Convert an array of little-endian words to a string
  */
@@ -269,8 +273,7 @@ function sha256_expand(W, j) {
 }
 
 /* Hash constant words K: */
-var K256 = new Array(
-    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
+var K256 = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
     0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
     0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -285,14 +288,13 @@ var K256 = new Array(
     0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,
     0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
     0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
-    0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
-);
+    0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];
 
 /* global arrays */
 var ihash, count, buffer;
 var sha256_hex_digits = "0123456789abcdef";
 
-/* Add 32-bit integers with 16-bit operations (bug in some JS-interpreters: 
+/* Add 32-bit integers with 16-bit operations (bug in some JS-interpreters:
 overflow) */
 function safe_add(x, y) {
     var lsw = (x & 0xffff) + (y & 0xffff);
@@ -426,13 +428,14 @@ function sha256_encode_bytes() {
 
 /* Get the internal hash as a hex string */
 function sha256_encode_hex() {
-    var output = new String();
+    var output = String();
     for (var i = 0; i < 8; i++) {
         for (var j = 28; j >= 0; j -= 4)
             output += sha256_hex_digits.charAt((ihash[i] >>> j) & 0x0f);
     }
     return output;
 }
+
 let utils = {
     getDefaultVal: function (e) {
         try {
@@ -584,7 +587,8 @@ let utils = {
             n = "";
         try {
             n = this.Crc32(e).toString(36), t = this.addZeroToSeven(n)
-        } catch (e) {}
+        } catch (e) {
+        }
         return t
     },
     addZeroToSeven: function (e) {
@@ -673,8 +677,8 @@ let utils = {
             i = e.indexOf(t) + t.length,
             o = e.length;
         if ((r = (r = e.slice(i, o).split(".")).map(function (e) {
-                return m.atobPolyfill(e)
-            }))[1] && r[0] && r[2]) {
+            return m.atobPolyfill(e)
+        }))[1] && r[0] && r[2]) {
             var a = r[0].slice(2, 7),
                 s = r[0].slice(7, 9),
                 u = m.xorEncrypt(r[1] || "", a).split("~");
@@ -720,10 +724,11 @@ let utils = {
             var o = m.slice(0);
             for (j = 0; j < 80; j++)
                 w[j] = j < 16 ? s[i + j] : rol(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1),
-                t = rol(m[0], 5) + f[j / 20 | 0]() + m[4] + w[j] + k[j / 20 | 0] | 0,
-                m[1] = rol(m[1], 30), m.pop(), m.unshift(t);
+                    t = rol(m[0], 5) + f[j / 20 | 0]() + m[4] + w[j] + k[j / 20 | 0] | 0,
+                    m[1] = rol(m[1], 30), m.pop(), m.unshift(t);
             for (j = 0; j < 5; j++) m[j] = m[j] + o[j] | 0;
-        };
+        }
+
         t = new DataView(new Uint32Array(m).buffer);
         for (var i = 0; i < 5; i++) m[i] = t.getUint32(i << 2);
 
@@ -738,14 +743,46 @@ let utils = {
         for (i = 0; i < s.length; i++)
             if ((c = s.charCodeAt(i)) < 0x80) r.push(c);
             else if (c < 0x800) r.push(0xC0 + (c >> 6 & 0x1F), 0x80 + (c & 0x3F));
-        else {
-            if ((x = c ^ 0xD800) >> 10 == 0) //对四字节UTF-16转换为Unicode
-                c = (x << 10) + (s.charCodeAt(++i) ^ 0xDC00) + 0x10000,
-                r.push(0xF0 + (c >> 18 & 0x7), 0x80 + (c >> 12 & 0x3F));
-            else r.push(0xE0 + (c >> 12 & 0xF));
-            r.push(0x80 + (c >> 6 & 0x3F), 0x80 + (c & 0x3F));
-        };
+            else {
+                if ((x = c ^ 0xD800) >> 10 == 0) //对四字节UTF-16转换为Unicode
+                    c = (x << 10) + (s.charCodeAt(++i) ^ 0xDC00) + 0x10000,
+                        r.push(0xF0 + (c >> 18 & 0x7), 0x80 + (c >> 12 & 0x3F));
+                else r.push(0xE0 + (c >> 12 & 0xF));
+                r.push(0x80 + (c >> 6 & 0x3F), 0x80 + (c & 0x3F));
+            }
+
         return r;
+    },
+    gettoken: function (UA) {
+        const https = require('https');
+        var body = `content={"appname":"50082","whwswswws":"","jdkey":"","body":{"platform":"1"}}`;
+        return new Promise((resolve, reject) => {
+            let options = {
+                hostname: "bh.m.jd.com",
+                port: 443,
+                path: "/gettoken",
+                method: "POST",
+                rejectUnauthorized: false,
+                headers: {
+                    "Content-Type": "text/plain;charset=UTF-8",
+                    "Host": "bh.m.jd.com",
+                    "Origin": "https://h5.m.jd.com",
+                    "X-Requested-With": "com.jingdong.app.mall",
+                    "Referer": "https://h5.m.jd.com/babelDiy/Zeus/41Lkp7DumXYCFmPYtU3LTcnTTXTX/index.html",
+                    "User-Agent": UA,
+                }
+            }
+            const req = https.request(options, (res) => {
+                res.setEncoding('utf-8');
+                let rawData = '';
+                res.on('error', reject);
+                res.on('data', chunk => rawData += chunk);
+                res.on('end', () => resolve(rawData));
+            });
+            req.write(body);
+            req.on('error', reject);
+            req.end();
+        });
     },
     get_blog: function (pin) {
         let encrypefun = {
@@ -785,10 +822,8 @@ let utils = {
         var timestamp = this.getCurrentTime();
         var nonce_str = this.getRandomWord(10);
         var isDefaultKey = "B";
-        // timestamp = 1627139784174;
         refer = "com.miui.home";
         encrypeid = "x";
-        //nonce_str = "jNN40H0elF";
         var json = {
             r: refer,
             a: "",
@@ -800,56 +835,56 @@ let utils = {
         var key = encrypefun[encrypeid](timestamp.toString(), nonce_str);
         //console.log(key);
         var cipher = encrypefun["jiami"](JSON.stringify(json), key);
-        //sOf+"~1"+sa1+sb+"~"+sb1+"~~~"+str+"~"+sa+"~"+sa2;
-        //"1627139784174~1jNN40H0elF14e91ebb633928c23d5afbaa8f947952~x~~~B~TBJHGg0bVAlaF1oPTVwfXQtaVBdJFQcVChcaGxtURA0bVkQUF0cXXhUDG1AZXhUcF0wVAxVSBg4DREU=~0v3u0bq",
-        return `${timestamp}~1${nonce_str+token}~${encrypeid}~~~${isDefaultKey}~${cipher}~${this.getCrcCode(cipher)}`;
+        return `${timestamp}~1${nonce_str + token}~${encrypeid}~~~${isDefaultKey}~${cipher}~${this.getCrcCode(cipher)}`;
     },
-    getBody: async function ($ = {}) {
-        var pin = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    get_risk_result: async function ($) {
         var appid = "50082";
         var TouchSession = this.getTouchSession();
+        if (!$.joyytoken || $.joyytoken_count > 18) {
+            $.joyytoken = JSON.parse(await this.gettoken($.UA))["joyytoken"];
+            $.joyytoken_count = 0;
+        }
+        $.joyytoken_count++;
         let riskData;
         switch ($.action) {
-          case 'startTask':
-            riskData = { taskId: $.id };
-            break;
-          case 'chargeScores':
-            riskData = { bubleId: $.id };
-            break;
-          case 'sign':
-            riskData = {};
-            break;
-          case 'exchangeGift':
-            riskData = { scoreNums: $.id, giftConfigId: $.giftConfigId || 198 };
-            break;
-          default:
-            break;
+            case 'startTask':
+                riskData = {
+                    taskId: $.id
+                };
+                break;
+            case 'chargeScores':
+                riskData = {
+                    bubleId: $.id
+                };
+                break;
+            case 'sign':
+                riskData = {};
+            default:
+                break;
         }
 
         var random = Math.floor(1e+6 * Math.random()).toString().padEnd(6, '8');
         var senddata = this.objToString2(this.RecursiveSorting({
-            pin,
+            pin: $.UserName,
             random,
             ...riskData
         }));
         var time = this.getCurrentTime();
-        // time = 1626970587918;
-        var encrypt_id = this.decipherJoyToken(appid + $.joyToken, appid)["encrypt_id"].split(",");
+        var encrypt_id = this.decipherJoyToken(appid + $.joyytoken, appid)["encrypt_id"].split(",");
         var nonce_str = this.getRandomWord(10);
-        // nonce_str="iY8uFBbYX7";
         var key = this.getKey(encrypt_id[2], nonce_str, time.toString());
 
-        var str1 = `${senddata}&token=${$.joyToken}&time=${time}&nonce_str=${nonce_str}&key=${key}&is_trust=1`;
-        //console.log(str1);
+        var str1 = `${senddata}&token=${$.joyytoken}&time=${time}&nonce_str=${nonce_str}&key=${key}&is_trust=1`;
         str1 = this.sha1(str1);
-        var outstr = [time, "1" + nonce_str + $.joyToken, encrypt_id[2] + "," + encrypt_id[3]];
+        var outstr = [time, "1" + nonce_str + $.joyytoken, encrypt_id[2] + "," + encrypt_id[3]];
         outstr.push(str1);
         outstr.push(this.getCrcCode(str1));
         outstr.push("C");
-        var data = {
+        var data = {}
+        data = {
             tm: [],
-            tnm: ["d5-15,C5,5JD,a,t","d7-15,C5,5LJ,a,t"],
-            grn: 1,
+            tnm: ['d5-9L,JU,8DB,a,t', 'd7-9L,JU,8HF,a,t', 'd1-9M,JV,8JH,u,t'],
+            grn: $.joyytoken_count,
             ss: TouchSession,
             wed: 'ttttt',
             wea: 'ffttttua',
@@ -858,19 +893,19 @@ let utils = {
             cs: hexMD5("Object.P.<computed>=&HTMLDocument.Ut.<computed>=https://storage.360buyimg.com/babel/00750963/1942873/production/dev/main.e5d1c436.js"),
             np: 'iPhone',
             t: time,
-            jk: $.uuid,
+            jk: `${$.UUID}`,
             fpb: '',
             nv: 'Apple Computer, Inc.',
             nav: '167741',
-            scr: [736, 414],
+            scr: [896, 414],
             ro: [
-              'iPhone10,2',
-              'iOS',
-              '14.4.2',
-              '10.0.8',
-              '167741',
-              $.uuid,
-              'a'
+                'iPhone12,1',
+                'iOS',
+                '14.3',
+                '10.0.10',
+                '167741',
+                `${$.UUID}`,
+                'a'
             ],
             ioa: 'fffffftt',
             aj: 'u',
@@ -878,16 +913,12 @@ let utils = {
             cf_v: '01',
             bd: senddata,
             mj: [1, 0, 0],
-            blog: 'a',
+            blog: "a",
             msg: ''
         }
-        // console.log(data);
-        //console.log(JSON.stringify(data));
         data = new Buffer.from(this.xorEncrypt(JSON.stringify(data), key)).toString('base64');
-        //console.log(data);
         outstr.push(data);
         outstr.push(this.getCrcCode(data));
-        //console.log(outstr.join("~"));
         return {
             extraData: {
                 log: outstr.join("~"),
@@ -899,5 +930,5 @@ let utils = {
     }
 };
 module.exports = {
-  utils
+    utils
 }

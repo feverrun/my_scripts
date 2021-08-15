@@ -1,4 +1,3 @@
-// @grant    require
 /*
 jd宠汪汪 搬的https://github.com/uniqueque/QuantumultX/blob/4c1572d93d4d4f883f483f907120a75d925a693e/Script/jd_joy.js
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -56,7 +55,7 @@ if(process.env.JOY_HOST){
 
 const weAppUrl = 'https://jdjoy.jd.com//pet';
 // const validator = require('./JDJRValidator.js');
-const validator = require('./JDJRValidator_Smiek.js');
+const validator = require('./JDJRValidator_Pure.js');
 $.get=validator.injectToRequest($.get.bind($))
 $.post=validator.injectToRequest($.post.bind($))
 !(async () => {
