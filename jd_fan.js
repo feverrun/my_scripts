@@ -1,8 +1,8 @@
 /**
-* 粉丝互动，没啥水
-* 修改温某的脚本，由于温某不干活，只能自己动手修改了
-* 注意：脚本会加购，脚本会加购，脚本会加购
-* 若发现脚本里没有的粉丝互动活动。欢迎反馈给我
+粉丝互动，没啥水
+修改温某的脚本，由于温某不干活，只能自己动手修改了
+注意：脚本会加购，脚本会加购，脚本会加购
+若发现脚本里没有的粉丝互动活动。欢迎反馈给我
 cron 34 6,18 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_fan.js
 * */
 const $ = new Env('粉丝互动');
@@ -10,18 +10,21 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 const activityList = [
+    {'actid':'5ae85e34c6054f379b3bdb0867842cd0','endTime':1629302400000},
+    {'actid':'4baf19fa3f454e6abf82be7d66605ab4','endTime':1630425599000},
     {'actid':'c75ae2afd7ff4aec9ed47008b08400f7','endTime':1630288800000},
     {'actid':'3da50af9e8664746844c5456b8920b7d','endTime':1630425599000},
     {'actid':'162c43699ba945e8adb83b2bd5fe0142','endTime':1630425599000},
-    {'actid':'31073025b8a34de59d8d55faffdd44ab','endTime':1630425599000},
-    {'actid':'5a8aea7f27b84900a14624fe9dcc8fe1','endTime':1628956799000},
     {'actid':'58121dee0d84428bbdeb83934ffa1b80','endTime':1630425599000},
     {'actid':'a422e7bb8cee4092b3b5bc91a0d8fa61','endTime':1629129600000},
     {'actid':'8afc9104d6444696b3f16ceb23a24536','endTime':1630425599000},
     {'actid':'f006443799d34b55b9061be7b765c3fa','endTime':1630339200000},
     {'actid':'ca6c8e28204e4955b850c58aaf1811e8','endTime':1629129600000},
-    {'actid':'22b1a22937be493f88f8c1913b010666','endTime':1628956800000},
-    {'actid':'59ed837510d4424dada9c662c6b25857','endTime':1628824016000},
+    {'actid':'4ee56f673e164305a527545efe566b20','endTime':1630425599000},//需要入会
+    {'actid':'c77e8342bca24d5f86d2a076b8f00860','endTime':1629907199000},
+    {'actid':'49d8035a8f294ac7893e814d2b8e79ed','endTime':1629907199000},
+    {'actid':'f22809ea36b14411a625641ef9685e53','endTime':1630339200000},
+    {'actid':'9bb5cb2801114f2981c183abbc2aa522','endTime':1630425596000},//需要入会
 ];
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -29,7 +32,10 @@ if ($.isNode()) {
     })
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
-    cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
+    cookiesArr = [
+        $.getdata("CookieJD"),
+        $.getdata("CookieJD2"),
+        ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 !(async () => {
     if (!cookiesArr[0]) {
