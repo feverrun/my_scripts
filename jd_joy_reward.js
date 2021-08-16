@@ -29,10 +29,10 @@ cron "58 7,15,23 * * *" script-path=jd_joy_reward.js,tag=宠汪汪积分兑换�
 // prettier-ignore
 const $ = new Env('宠汪汪积分兑换奖品');
 const zooFaker = require('./utils/JDJRValidator_Pure.js');
-// $.get = zooFaker.injectToRequest2($.get.bind($));
-// $.post = zooFaker.injectToRequest2($.post.bind($));
+$.get = zooFaker.injectToRequest2($.get.bind($));
+$.post = zooFaker.injectToRequest2($.post.bind($));
 let allMessage = '';
-// let joyRewardName = 500;//是否兑换京豆，默认0不兑换京豆，其中20为兑换20京豆,500为兑换500京豆，0为不兑换京豆.数量有限先到先得
+let joyRewardName = 20; //是否兑换京豆，默认0不兑换京豆，其中20为兑换20京豆,500为兑换500京豆，0为不兑换京豆.数量有限先到先得
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -128,22 +128,22 @@ async function joyReward() {
         const data = $.getExchangeRewardsRes.data;
         // const levelSaleInfos = data.levelSaleInfos;
         // const giftSaleInfos = levelSaleInfos.giftSaleInfos;
-        // console.log(`当前积分 ${data.coin}\n`);
-        // console.log(`宠物等级 ${data.level}\n`);
+        console.log(`当前积分 ${data.coin}\n`);
+        console.log(`宠物等级 ${data.level}\n`);
         let saleInfoId = '', giftValue = '', extInfo = '', leftStock = 0, salePrice = 0;
         let rewardNum = 0;
-        // if ($.isNode() && process.env.JD_JOY_REWARD_NAME) {
-        //   rewardNum = process.env.JD_JOY_REWARD_NAME * 1;
-        // } else if ($.getdata('joyRewardName')) {
-        //   if ($.getdata('joyRewardName') * 1 === 1) {
-        //     //兼容之前的BoxJs设置
-        //     rewardNum = 20;
-        //   } else {
-        //     rewardNum = $.getdata('joyRewardName') * 1;
-        //   }
-        // } else {
-        //   rewardNum = joyRewardName;
-        // }
+        if ($.isNode() && process.env.JD_JOY_REWARD_NAME) {
+          rewardNum = process.env.JD_JOY_REWARD_NAME * 1;
+        } else if ($.getdata('joyRewardName')) {
+          if ($.getdata('joyRewardName') * 1 === 1) {
+            //兼容之前的BoxJs设置
+            rewardNum = 20;
+          } else {
+            rewardNum = $.getdata('joyRewardName') * 1;
+          }
+        } else {
+          rewardNum = joyRewardName;
+        }
         let giftSaleInfos = 'beanConfigs0';
         let time = new Date($.getExchangeRewardsRes['currentTime']).getHours();
         if (time >= 0 && time < 8) {
