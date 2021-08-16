@@ -97,11 +97,11 @@ async function run() {
 
       {configCode:'d9de88cd314b4455859027978a7abb68',configName:'七夕联合开卡第一组'},
       {configCode:'ec46a109054a463395c5666694908d5a',configName:'七夕联合开卡第2组 新'},
-      {configCode:'c8240993509a49da9b53645084a69e12',configName:'七夕任务组件1-2组'},
+      // {configCode:'c8240993509a49da9b53645084a69e12',configName:'七夕任务组件1-2组'},
       {configCode:'9af170296a9f4bce8268eb5c813bb359',configName:'七夕联合开卡第三组'},
       {configCode:'4f6dac3a61084e23bf9bcad9360987d8',configName:'七夕联合开卡第4组'},
       {configCode:'af1ac7eba89c4b089c1d6976988e1013',configName:'七夕联合开卡第5组 新'},
-      {configCode:'abe6bafe2f6b4efca6ba5b429daf5f26',configName:'七夕任务组件3-5组'}
+      // {configCode:'abe6bafe2f6b4efca6ba5b429daf5f26',configName:'七夕任务组件3-5组'}
     ]
     for(let i in config){
       $.hotFlag = false
@@ -131,6 +131,7 @@ async function run() {
           }else if($.task.showOrder == 2){
             $.cacheNum = 0
             $.doTask = false
+            $.outActivity = false
             let name = `${1 == $.oneTask.groupType ? "关注并浏览店铺" : 2 == $.oneTask.groupType ? "加购并浏览商品" : 3 == $.oneTask.groupType ? "关注并浏览频道" : 6 == $.oneTask.groupType ? "浏览会场" : "未知"}`
             let msg = `(${$.oneTask.finishCount}/${$.oneTask.taskCount})`
             let status = `${$.oneTask.finishCount >= $.oneTask.taskCount && '已完成' || "去" + (1 == $.oneTask.groupType ? "关注" : 2 == $.oneTask.groupType ? "加购" : 3 == $.oneTask.groupType ? "关注" : 6 == $.oneTask.groupType ? "浏览" : "做任务")}`
@@ -140,7 +141,8 @@ async function run() {
             if($.oneTask.finishCount < $.oneTask.taskCount){
               await doTask(`{"configCode":"${item.configCode}","groupType":${$.oneTask.groupType},"itemId":"${$.oneTask.item.itemId}","eid":"${$.eid}","fp":"${$.fp}"}`)
               let c = $.oneTask.taskCount - $.oneTask.finishCount - 1
-              for(n=2;c--;n++){
+              for(n=2;c-- && !$.outActivity;n++){
+                if($.outActivity) break
                 console.log(`第${n}次`)
                 await getActivity(item.configCode,item.configName,$.oneTask.groupType)
                 $.oneTasks = ''
@@ -273,8 +275,11 @@ function doTask(body) {
           if(typeof res == 'object'){
             if(res.success == true){
               console.log(`领奖成功:${$.oneTask.rewardQuantity}京豆`)
-            }else{
+            }else if(res.errorMessage){
+              if(res.errorMessage.indexOf('活动已结束') > -1) $.outActivity = true
               console.log(`${res.errorMessage}`)
+            }else{
+              console.log(data)
             }
           }
           
