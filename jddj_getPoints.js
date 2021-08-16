@@ -73,7 +73,7 @@ async function getPoints() {
 
             $.http.post(option).then(async response => {
                 let data = JSON.parse(response.body);
-                //console.log(data);
+                console.log(data);
                 if (data.code == 0) {
                     console.log('\n【收水车水滴】:' + data.msg + '->当前收取:' + data.result.addWater + ',当前剩余:' + data.result.water + ',当日累计:' + data.result.dailyWater);
                     // if (data.result.water >= 100) {
