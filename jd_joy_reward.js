@@ -128,8 +128,8 @@ async function joyReward() {
         const data = $.getExchangeRewardsRes.data;
         // const levelSaleInfos = data.levelSaleInfos;
         // const giftSaleInfos = levelSaleInfos.giftSaleInfos;
-        console.log(`当前积分 ${data.coin}\n`);
-        console.log(`宠物等级 ${data.level}\n`);
+        // console.log(`当前积分 ${data.coin}\n`);
+        // console.log(`宠物等级 ${data.level}\n`);
         let saleInfoId = '', giftValue = '', extInfo = '', leftStock = 0, salePrice = 0;
         let rewardNum = 0;
         if ($.isNode() && process.env.JD_JOY_REWARD_NAME) {
