@@ -10,7 +10,7 @@ npm i png-js 或者 npm i png-js -S
 */
 
 const validator = require('./JDJRValidator_Smiek.js');
-const Faker=require('./sign_graphics_validate.js')
+const Faker=require('./sign_graphics_validate.js');
 
 const $ = new Env('京东签到图形验证');
 const notify = $.isNode() ? require('./sendNotify') : '';
