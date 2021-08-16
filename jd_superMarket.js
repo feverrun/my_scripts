@@ -1584,11 +1584,11 @@ function jsonParse(str) {
 //   await bigWinner();//省钱大赢家
 // }
 // async function barGain() {
-//   let res = await getAuthorShareCode2('https://raw.githubusercontent.com/zero205/updateTeam/main/shareCodes/jd_barGain.json')
+//   let res = await getAuthorShareCode2('https://raw.githubusercontent.com/feverrun/updateTeam/main/shareCodes/jd_barGain.json')
 //   if (!res) {
-//     $.http.get({url: 'https://purge.jsdelivr.net/gh/zero205/updateTeam@main/shareCodes/jd_barGain.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
+//     $.http.get({url: 'https://purge.jsdelivr.net/gh/feverrun/updateTeam@main/shareCodes/jd_barGain.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
 //     await $.wait(1000)
-//     res = await getAuthorShareCode2('https://cdn.jsdelivr.net/gh/zero205/updateTeam@main/shareCodes/jd_barGain.json')
+//     res = await getAuthorShareCode2('https://cdn.jsdelivr.net/gh/feverrun/updateTeam@main/shareCodes/jd_barGain.json')
 //   }
 //   $.inBargaining = [...(res && res['inBargaining'] || [])]
 //   $.inBargaining = getRandomArrayElements($.inBargaining, $.inBargaining.length > 3 ? 6 : $.inBargaining.length);
@@ -1615,11 +1615,11 @@ function jsonParse(str) {
 // }
 
 // async function bigWinner() {
-//   let res = await getAuthorShareCode2('https://raw.githubusercontent.com/zero205/updateTeam/main/shareCodes/dyj.json')
+//   let res = await getAuthorShareCode2('https://raw.githubusercontent.com/feverrun/updateTeam/main/shareCodes/dyj.json')
 //   if (!res) {
-//     $.http.get({url: 'https://purge.jsdelivr.net/gh/zero205/updateTeam@main/shareCodes/dyj.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
+//     $.http.get({url: 'https://purge.jsdelivr.net/gh/feverrun/updateTeam@main/shareCodes/dyj.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
 //     await $.wait(1000)
-//     res = await getAuthorShareCode2('https://cdn.jsdelivr.net/gh/zero205/updateTeam@main/shareCodes/dyj.json')
+//     res = await getAuthorShareCode2('https://cdn.jsdelivr.net/gh/feverrun/updateTeam@main/shareCodes/dyj.json')
 //   }
 //   $.codeList = getRandomArrayElements([...(res || [])], [...(res || [])].length);
 //   for (let vo of $.codeList) {

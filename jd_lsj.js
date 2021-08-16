@@ -2,7 +2,7 @@
 #京东零食街
 #入口 京东 频道 美食馆
 
-由zero205基于柠檬大佬原版修改
+由feverrun基于柠檬大佬原版修改
 取消入会，加购功能
 优化脚本输出，查询金币数量，添加金币兑换牛奶提醒
 助力逻辑：优先账号内互助，然后再帮我助力
@@ -84,7 +84,7 @@ if ($.isNode()) {
     }
   }
   await $.wait(1000)
-  console.log(`\n开始帮【zero205】助力，感谢！\n`);
+  console.log(`\n开始帮【feverrun】助力，感谢！\n`);
   let shareCodes = [
     '28D1B0FF74A7A1D4FBE02ED2FA90A9F3C49D80AFF03099EF32C50897D923F6F049336DE54E26AA8F2834B248E6398CB7A755DF4FDAE585EC3E1ABE26F3DD3CFFC956D12974FF00A045D8E31A84FE84C18A8357DE96A1F617B8AC4D64BC24B689',
     '16C819C7B4D681C695A9D56F0F58F2FC7BD1102FE0B67DE91732CDD3AAE6028C49336DE54E26AA8F2834B248E6398CB7A755DF4FDAE585EC3E1ABE26F3DD3CFFC956D12974FF00A045D8E31A84FE84C18A8357DE96A1F617B8AC4D64BC24B689',
@@ -100,7 +100,7 @@ if ($.isNode()) {
       if ($.UserName === shareCodes[j].usr || $.oneCodeInfo.max) {
         continue;
       }
-      console.log(`${$.UserName}去助力【zero205】`)
+      console.log(`${$.UserName}去助力【feverrun】`)
       nick = useInfo[$.UserName];
       await dohelp(shareCodes[j]);
       await $.wait(3000)
@@ -180,9 +180,9 @@ function getinfo() {
                 $.cion = data.data.data.customer.remainChance;
                 console.log(`\n查询成功：京东账号【${$.nickName || $.UserName}】当前剩余金币为：${$.cion}`)
                 if ($.cion > 750000) {
-                  $.msg($.name, `【提示】\n京东账号【${$.nickName || $.UserName}】已可兑换牛奶`, `\n兑换入口：京东APP->美食馆->瓜分京豆\n每天10点开始兑换`, { "更多脚本": "https://github.com/zero205/JD_tencent_scf" });
+                  $.msg($.name, `【提示】\n京东账号【${$.nickName || $.UserName}】已可兑换牛奶`, `\n兑换入口：京东APP->美食馆->瓜分京豆\n每天10点开始兑换`, { "更多脚本": "https://github.com/feverrun/JD_tencent_scf" });
                   if ($.isNode()) {
-                    await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `【京东账号${$.index}】 ${$.nickName}\n已可兑换牛奶\n兑换入口：京东APP->美食馆->瓜分京豆，每天10点开始兑换\n更多脚本->"https://github.com/zero205/JD_tencent_scf"`);
+                    await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `【京东账号${$.index}】 ${$.nickName}\n已可兑换牛奶\n兑换入口：京东APP->美食馆->瓜分京豆，每天10点开始兑换\n更多脚本->"https://github.com/feverrun/JD_tencent_scf"`);
                   }
                 }
               }

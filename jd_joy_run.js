@@ -125,7 +125,7 @@ async function main() {
   console.log(`打印token：${$.LKYLToken ? $.LKYLToken : '暂无token'}\n`)
   if (!$.LKYLToken) {
     $.msg($.name, '【提示】请先获取来客有礼宠汪汪token', "iOS用户微信搜索'来客有礼'小程序\n点击底部的'发现'Tab\n即可获取Token");
-    console.log(`尝试获取【zero205】仓库来客有礼token，如失效请提issues提醒更新\n`)
+    console.log(`尝试获取【feverrun】仓库来客有礼token，如失效请提issues提醒更新\n`)
     $.LKYLToken = $.lkyl
     // return;
   }
@@ -283,7 +283,7 @@ function readToken() {
 function updateToken() {
   return new Promise(resolve => {
     $.get({
-      url: "https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/lkyl.json",
+      url: "https://raw.fastgit.org/feverrun/updateTeam/main/shareCodes/lkyl.json",
       headers: {
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
       }

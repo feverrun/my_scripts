@@ -19,9 +19,9 @@
 ```
 * 其他环境变量按正常填写即可  
 #### elecV2P 京东任务订阅地址  
-`https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/jd_task.json`
+`https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_task.json`
 #### 订阅地址使用说明  
 * 登录elecV2P后台，选择`TASK`，选择添加订阅任务，输入上面的订阅地址，点击获取内容，点击全部添加即可  
 
 #### elecV2P 通知方式
-* [点此查看](https://github.com/zero205/JD_tencent_scf/issues/15)
+* [点此查看](https://github.com/feverrun/JD_tencent_scf/issues/15)

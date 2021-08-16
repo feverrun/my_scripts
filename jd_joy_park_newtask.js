@@ -5,7 +5,7 @@
 
 仅用于完成汪汪乐园新手引导
 
-https://github.com/zero205/JD_tencent_scf
+https://github.com/feverrun/JD_tencent_scf
 
 */
 // 兼容elecV2P用户

@@ -6,7 +6,7 @@ export TYT_PACKETID=""
 #柠檬推一推
 0 6-23/4 * * * http://nm66.top/jd_tyt.js, tag=柠檬推一推, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 注意：助力码每天会变，旧的不可用。
-助力逻辑：优先助力互助码变量，北京时间15点后默认会助力【zero205】，介意请勿运行！
+助力逻辑：优先助力互助码变量，北京时间15点后默认会助力【feverrun】，介意请勿运行！
 */
 const $ = new Env('柠檬推一推');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -41,7 +41,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
   }
-  console.log(`\n******北京时间15点后会助力【zero205】，介意请勿运行******\n`);
+  console.log(`\n******北京时间15点后会助力【feverrun】，介意请勿运行******\n`);
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -83,7 +83,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       if (cookiesArr[i]) {
         cookie = cookiesArr[i];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-        console.log(`${$.UserName} 去助力【zero205】`)
+        console.log(`${$.UserName} 去助力【feverrun】`)
         for (let j = 0; j < $.authorCode.length; j++) {
           let tytpacketId = $.authorCode[j];
           await tythelp(tytpacketId)

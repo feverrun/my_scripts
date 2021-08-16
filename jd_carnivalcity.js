@@ -9,7 +9,7 @@ b、 每日第2-10000名，可获得50个京豆
 c、 每日第10001-30000名可获得20个京豆
 d、 30000名之外，0京豆
 
- * 助力逻辑: 优先自己账号内部相互邀请助力，有剩余助力机会，给Aaron以及zero205助力
+ * 助力逻辑: 优先自己账号内部相互邀请助力，有剩余助力机会，给Aaron以及feverrun助力
 
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ===================quantumultx================
@@ -53,7 +53,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
   }
   console.log('【京东手机狂欢城】\n' +
       '助力逻辑: 优先自己账号内部相互邀请助力\n' +
-      '          有剩余助力机会，给Aaron以及zero205助力\n');
+      '          有剩余助力机会，给Aaron以及feverrun助力\n');
   $.temp = [];
   if (nowTime > new Date(activeEndTime).getTime()) {
     //活动结束后弹窗提醒
@@ -113,7 +113,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
         }
       }
       if ($.canHelp) {
-        console.log(`\n${$.UserName}有剩余助力次数，帮Aaron以及zero205助力\n`)
+        console.log(`\n${$.UserName}有剩余助力次数，帮Aaron以及feverrun助力\n`)
         await doHelp();
       }
     }
@@ -509,7 +509,7 @@ function saveJbean(date) {
   })
 }
 async function doHelp() {
-  console.log(`\n${$.UserName}开始助力Aaron及zero205\n`);
+  console.log(`\n${$.UserName}开始助力Aaron及feverrun\n`);
   for (let item of $.newShareCodes) {
     if (!item) continue;
     const helpRes = await toHelp(item);
@@ -685,7 +685,7 @@ function updateShareCodesCDN(url = 'https://cdn.jsdelivr.net/gh/Aaron-lv/updateT
 function updateShareCodes() {
   return new Promise(resolve => {
       $.get({
-          url: "https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/jd_carnivalcity.json",
+          url: "https://raw.fastgit.org/feverrun/updateTeam/main/shareCodes/jd_carnivalcity.json",
           headers: {
               "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
           }
@@ -695,7 +695,7 @@ function updateShareCodes() {
                   console.log(`${JSON.stringify(err)}`);
                   console.log(`${$.name} API请求失败，请检查网路重试`);
               } else {
-                  $.zero205ShareCodes = JSON.parse(data);
+                  $.feverrunShareCodes = JSON.parse(data);
               }
           } catch (e) {
               $.logErr(e, resp)
@@ -740,7 +740,7 @@ function shareCodesFormat() {
       // console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       $.newShareCodes = inviteCodes[tempIndex] && inviteCodes[tempIndex].split('@') || [];
-      if ($.updatePkActivityIdRes && $.updatePkActivityIdRes.length) $.newShareCodes = [...$.updatePkActivityIdRes, ...$.zero205ShareCodes, ...$.newShareCodes];
+      if ($.updatePkActivityIdRes && $.updatePkActivityIdRes.length) $.newShareCodes = [...$.updatePkActivityIdRes, ...$.feverrunShareCodes, ...$.newShareCodes];
     }
     // const readShareCodeRes = await readShareCode();
     // if (readShareCodeRes && readShareCodeRes.code === 200) {

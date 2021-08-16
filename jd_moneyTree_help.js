@@ -2,24 +2,24 @@
 *
 京东摇钱树助力
 活动入口：京东APP我的-更多工具-摇钱树，[活动链接](https://uua.jr.jd.com/uc-fe-wxgrowing/moneytree/index/?channel=yxhd)
-脚本更新地址：https://github.com/zero205/JD_tencent_scf
+脚本更新地址：https://github.com/feverrun/JD_tencent_scf
 助力逻辑：优先账号内互助，再给我助力
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
 #摇钱树助力
-30 * * * * https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/jd_moneyTree_help.js, tag=摇钱树助力, enabled=true
+30 * * * * https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_moneyTree_help.js, tag=摇钱树助力, enabled=true
 
 ================Loon==============
 [Script]
-cron "30 * * * *" script-path=https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/jd_moneyTree_help.js,tag=摇钱树助力
+cron "30 * * * *" script-path=https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_moneyTree_help.js,tag=摇钱树助力
 
 ===============Surge=================
-摇钱树助力 = type=cron,cronexp="30 * * * *",wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/jd_moneyTree_help.js
+摇钱树助力 = type=cron,cronexp="30 * * * *",wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_moneyTree_help.js
 
 ============小火箭=========
-摇钱树助力 = type=cron,script-path=https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/jd_moneyTree_help.js, cronexpr="30 * * * *", timeout=200, enable=true
+摇钱树助力 = type=cron,script-path=https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_moneyTree_help.js, cronexpr="30 * * * *", timeout=200, enable=true
 *
 */
 const $ = new Env('京东摇钱树助力');
@@ -256,13 +256,11 @@ function shareCodesFormat() {
   return new Promise(async resolve => {
     $.newShareCodes = [];
     let inviteCodes = [
-      't_7LVGP8mopofh8AG0Q7E8AdoUJQ3Dik@zExA7lNc3HrJrbVuG3xRVMAdoUJQ3Dik@cvwWiz9o2evNHFdNk0oNbMAdoUJQ3Dik@8MQ6wrd9H0IAujNGUqzTAA@0IzWPVQGlmepafqlqgOSXw',
-      't_7LVGP8mopofh8AG0Q7E8AdoUJQ3Dik@zExA7lNc3HrJrbVuG3xRVMAdoUJQ3Dik@cvwWiz9o2evNHFdNk0oNbMAdoUJQ3Dik@8MQ6wrd9H0IAujNGUqzTAA@0IzWPVQGlmepafqlqgOSXw'
     ];
     if ($.shareCodesArr[$.index - 1]) {
       $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
     } else {
-      console.log(`由于您第${$.index}个京东账号未提供shareCode,将为本脚本作者【zero205】助力\n`)
+      console.log(`您第${$.index}个京东账号未提供shareCode 将为作者助力! \n`)
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       $.newShareCodes = inviteCodes[tempIndex].split('@');
     }

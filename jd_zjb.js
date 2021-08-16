@@ -3,7 +3,7 @@
 ##入口为极速版 百元生活费 赚金币 邀请好友
 ##第一次运行可不填写邀请码 运行一次查看自己的邀请码
 ##export InviterPin="dS%2Bp85VyjydPuAOOnFP%2Faw%3D%3D"
-##助力逻辑：填写你的邀请码变量之后会助力你填写的邀请码，未填写则会默认给【zero205】助力，介意请勿运行
+##助力逻辑：填写你的邀请码变量之后会助力你填写的邀请码，未填写则会默认给【feverrun】助力，介意请勿运行
 
 
 [task_local]
@@ -61,8 +61,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       if (InviterPin.length != 0) {
         await help()
       } else {
-        console.log(`\n您未填写赚金币邀请码变量，开始助力【zero205】\n`);
-        await help2("zero205","%2FeNHdfn6fP%2BTFwVda3ipjWwvTFqeKBZaRG38adWABKk%3D")
+        console.log(`\n您未填写赚金币邀请码变量，开始助力【feverrun】\n`);
+        await help2("feverrun","%2FeNHdfn6fP%2BTFwVda3ipjWwvTFqeKBZaRG38adWABKk%3D")
         await help2("whisper liu","Sev6JWjut6GyaEHJIWpSQQ%3D%3D")
         
       }

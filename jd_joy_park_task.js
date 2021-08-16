@@ -66,7 +66,7 @@ message = ""
           for (let j = 0; j < $.invitePin.length; j++) {
             let resp = await getJoyBaseInfo(undefined, 2, $.invitePin[$.openIndex]);
             if (resp.data && resp.data.helpState && resp.data.helpState === 1) {
-              $.log("帮【zero205】开工位成功，感谢！\n");
+              $.log("帮【feverrun】开工位成功，感谢！\n");
             } else if (resp.data && resp.data.helpState && resp.data.helpState === 3) {
               $.log("你不是新用户！跳过\n");
               break
