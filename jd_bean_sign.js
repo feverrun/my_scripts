@@ -172,7 +172,7 @@ function TotalBean(cookie) {
 }
 async function download() {
   return new Promise(resolve => {
-    const options = { 'url':'https://raw.githubusercontent.com/feverrun/my-script/main/utils/JD_DailyBonus.js', "timeout": 10000 };
+    const options = { 'url':'https://cdn.jsdelivr.net/gh/feverrun/my-script/utils/JD_DailyBonus.js', "timeout": 10000 };
     if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
       const tunnel = require("tunnel");
       const agent = {
