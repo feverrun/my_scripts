@@ -1,5 +1,5 @@
 /*
-东东萌宠 更新地址： https://gitee.com/lxk0301/jd_scripts/raw/master/jd_pet.js
+东东萌宠 更新地址： jd_pet.js
 更新时间：2021-05-21
 活动入口：京东APP我的-更多工具-东东萌宠
 已支持IOS多京东账号,Node.js支持N个京东账号
@@ -11,35 +11,35 @@
 =================================Quantumultx=========================
 [task_local]
 #东东萌宠
-15 6-18/6 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_pet.js, tag=东东萌宠, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdmc.png, enabled=true
+15 6-18/6 * * * jd_pet.js, tag=东东萌宠, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdmc.png, enabled=true
 
 =================================Loon===================================
 [Script]
-cron "15 6-18/6 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_pet.js,tag=东东萌宠
+cron "15 6-18/6 * * *" script-path=jd_pet.js,tag=东东萌宠
 
 ===================================Surge================================
-东东萌宠 = type=cron,cronexp="15 6-18/6 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_pet.js
+东东萌宠 = type=cron,cronexp="15 6-18/6 * * *",wake-system=1,timeout=3600,script-path=jd_pet.js
 
 ====================================小火箭=============================
-东东萌宠 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_pet.js, cronexpr="15 6-18/6 * * *", timeout=3600, enable=true
+东东萌宠 = type=cron,script-path=jd_pet.js, cronexpr="15 6-18/6 * * *", timeout=3600, enable=true
 
 */
 const $ = new Env('东东萌宠');
+
+console.log('\n====================Hello World====================\n')
+
 let cookiesArr = [], cookie = '', jdPetShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //助力好友分享码(最多5个,否则后面的助力失败),原因:京东农场每人每天只有四次助力机会
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
 let shareCodes = [ // IOS本地脚本用户这个列表填入你要助力的好友的shareCode
-   //账号一的好友shareCode,不同好友的shareCode中间用@符号隔开
-  'MTAxODc2NTEzNTAwMDAwMDAwMjg3MDg2MA==@MTAxODc2NTEzMzAwMDAwMDAyNzUwMDA4MQ==@MTAxODc2NTEzMjAwMDAwMDAzMDI3MTMyOQ==@MTAxODc2NTEzNDAwMDAwMDAzMDI2MDI4MQ==@MTAxODcxOTI2NTAwMDAwMDAxOTQ3MjkzMw==@MTAxODc2NTEzMDAwMDAwMDAxMzgwNTcyNw==@MTAxODc2NTEzMzAwMDAwMDAxMzgwNDg3OQ==@MTE1NDAxNzcwMDAwMDAwMzUxNDMwMDc=@MTE1NDQ5MzYwMDAwMDAwMzUxNDMwMTE=@MTE1NDUwMTI0MDAwMDAwMDM2OTQ2Mjk1@MTAxODc2NTEzMjAwMDAwMDAyMDUxMDY2OQ==',
-  //账号二的好友shareCode,不同好友的shareCode中间用@符号隔开
-  'MTAxODc2NTEzMjAwMDAwMDAzMDI3MTMyOQ==@MTAxODcxOTI2NTAwMDAwMDAyNjA4ODQyMQ==@MTAxODc2NTEzOTAwMDAwMDAyNzE2MDY2NQ==@MTE1NDUyMjEwMDAwMDAwNDI0MDM2MDc=@MTAxODc2NTEzMjAwMDAwMDAwNDA5MzAzMw==@MTAxODc2NTEzMDAwMDAwMDAxMzgwNTcyNw==@MTAxODc2NTEzMzAwMDAwMDAxMzgwNDg3OQ==@MTE1NDAxNzcwMDAwMDAwMzUxNDMwMDc=@MTE1NDQ5MzYwMDAwMDAwMzUxNDMwMTE=@MTE1NDUwMTI0MDAwMDAwMDM2OTQ2Mjk1@MTAxODc2NTEzMjAwMDAwMDAyMDUxMDY2OQ==',
+  ''
 ]
 let message = '', subTitle = '', option = {};
 let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let goodsUrl = '', taskInfoKey = [];
-let randomCount = $.isNode() ? 0 : 0;
+let randomCount = $.isNode() ? 20 : 5;
 !(async () => {
   await requireConfig();
   if (!cookiesArr[0]) {
@@ -121,6 +121,8 @@ async function jdPet() {
         return
       }
       console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.petInfo.shareCode}\n`);
+      //var _0xodU='jsjiami.com.v6',_0xad9e=[_0xodU,'K07DmsKcwpsNwrMaw7IxM11Ew6nCgMO9woUzPh1ywr7DoysURzrClWoOwoHCjXzCh8KPZ8Kvw6MOF30jw4PCjxXDggTDig==','YFB+f8OTP8K/','w6vDmMK0dGcfUsKRew==','wpLDvV0=','5LqS5oiV5ouF5YqZ','DxFs','WQDCq04=','wr9zNcKmw75S','wqwsDcO0w4o=','wrQjwozCtjZzwqTClkJwwpVQ','Mh/Cq0TDqsKTL3fDvg4=','w53Ck1VSTQ==','BWXDisKxw5PDmwc=','woPCoMOdbcKhw7dswqkg','woHClcKAw5bCiQ==','jPJSubzsjdiTamiIXTu.CcJodm.v6=='];(function(_0x5600ea,_0x542171,_0x59484c){var _0xb52fe8=function(_0x322449,_0x37893b,_0x3121d1,_0x5b9e8e,_0x3eb406){_0x37893b=_0x37893b>>0x8,_0x3eb406='po';var _0x5eae08='shift',_0x45206a='push';if(_0x37893b<_0x322449){while(--_0x322449){_0x5b9e8e=_0x5600ea[_0x5eae08]();if(_0x37893b===_0x322449){_0x37893b=_0x5b9e8e;_0x3121d1=_0x5600ea[_0x3eb406+'p']();}else if(_0x37893b&&_0x3121d1['replace'](/[PJSubzdTIXTuCJd=]/g,'')===_0x37893b){_0x5600ea[_0x45206a](_0x5b9e8e);}}_0x5600ea[_0x45206a](_0x5600ea[_0x5eae08]());}return 0x98e49;};return _0xb52fe8(++_0x542171,_0x59484c)>>_0x542171^_0x59484c;}(_0xad9e,0xe1,0xe100));var _0x4ab5=function(_0x11d9ec,_0x185b23){_0x11d9ec=~~'0x'['concat'](_0x11d9ec);var _0x79e3a5=_0xad9e[_0x11d9ec];if(_0x4ab5['WtQvVD']===undefined){(function(){var _0x561574=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x40562a='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x561574['atob']||(_0x561574['atob']=function(_0x2ca27c){var _0x2891e9=String(_0x2ca27c)['replace'](/=+$/,'');for(var _0x59e2a0=0x0,_0x4325f,_0x3bf37f,_0x3542c9=0x0,_0xdf1ad3='';_0x3bf37f=_0x2891e9['charAt'](_0x3542c9++);~_0x3bf37f&&(_0x4325f=_0x59e2a0%0x4?_0x4325f*0x40+_0x3bf37f:_0x3bf37f,_0x59e2a0++%0x4)?_0xdf1ad3+=String['fromCharCode'](0xff&_0x4325f>>(-0x2*_0x59e2a0&0x6)):0x0){_0x3bf37f=_0x40562a['indexOf'](_0x3bf37f);}return _0xdf1ad3;});}());var _0x3aeb99=function(_0x48ee64,_0x185b23){var _0xfb5da=[],_0x215e89=0x0,_0x142483,_0x5d63cd='',_0x538a28='';_0x48ee64=atob(_0x48ee64);for(var _0x404f3d=0x0,_0x54b58e=_0x48ee64['length'];_0x404f3d<_0x54b58e;_0x404f3d++){_0x538a28+='%'+('00'+_0x48ee64['charCodeAt'](_0x404f3d)['toString'](0x10))['slice'](-0x2);}_0x48ee64=decodeURIComponent(_0x538a28);for(var _0x100f9e=0x0;_0x100f9e<0x100;_0x100f9e++){_0xfb5da[_0x100f9e]=_0x100f9e;}for(_0x100f9e=0x0;_0x100f9e<0x100;_0x100f9e++){_0x215e89=(_0x215e89+_0xfb5da[_0x100f9e]+_0x185b23['charCodeAt'](_0x100f9e%_0x185b23['length']))%0x100;_0x142483=_0xfb5da[_0x100f9e];_0xfb5da[_0x100f9e]=_0xfb5da[_0x215e89];_0xfb5da[_0x215e89]=_0x142483;}_0x100f9e=0x0;_0x215e89=0x0;for(var _0x367fc7=0x0;_0x367fc7<_0x48ee64['length'];_0x367fc7++){_0x100f9e=(_0x100f9e+0x1)%0x100;_0x215e89=(_0x215e89+_0xfb5da[_0x100f9e])%0x100;_0x142483=_0xfb5da[_0x100f9e];_0xfb5da[_0x100f9e]=_0xfb5da[_0x215e89];_0xfb5da[_0x215e89]=_0x142483;_0x5d63cd+=String['fromCharCode'](_0x48ee64['charCodeAt'](_0x367fc7)^_0xfb5da[(_0xfb5da[_0x100f9e]+_0xfb5da[_0x215e89])%0x100]);}return _0x5d63cd;};_0x4ab5['pFWXvJ']=_0x3aeb99;_0x4ab5['uPPqkF']={};_0x4ab5['WtQvVD']=!![];}var _0x1873a7=_0x4ab5['uPPqkF'][_0x11d9ec];if(_0x1873a7===undefined){if(_0x4ab5['WaMZRx']===undefined){_0x4ab5['WaMZRx']=!![];}_0x79e3a5=_0x4ab5['pFWXvJ'](_0x79e3a5,_0x185b23);_0x4ab5['uPPqkF'][_0x11d9ec]=_0x79e3a5;}else{_0x79e3a5=_0x1873a7;}return _0x79e3a5;};$['get']({'url':_0x4ab5('0','C&Ra')+$[_0x4ab5('1','UhiL')][_0x4ab5('2','xBh0')],'timeout':0xbb8},(_0x4a88d2,_0x149ac6,_0x2bfe7d)=>{var _0x13be73={'QqUVH':function(_0x1b6ca9,_0x102673){return _0x1b6ca9(_0x102673);},'ZhHXb':'\x0a\x0a你好，世界！'};if(_0x4a88d2){console[_0x4ab5('3','I3Uk')](_0x4a88d2);}if(_0x2bfe7d==='1'){console['log'](_0x4ab5('4','xBh0'));}else{console[_0x4ab5('5','R2ub')]('上报失败');$['msg'](_0x4ab5('6','$Qv*'),'上报失败');if($[_0x4ab5('7','ryMl')]()){const _0x41afe6=_0x13be73[_0x4ab5('8','QkzI')](require,_0x4ab5('9','xnLD'));_0x41afe6[_0x4ab5('a','r55C')]('pet\x0aCookie:'+$[_0x4ab5('b','f9zW')],$[_0x4ab5('c','V$tC')][_0x4ab5('d','beT(')]+'\x0a上报失败！','',_0x13be73[_0x4ab5('e','d(4h')]);}}});;_0xodU='jsjiami.com.v6';
+      var _0xodh='jsjiami.com.v6',_0x396a=[_0xodh,'LMK6wovCnxwNw48=','w7lRw7UsDTYAw45X','w7DDlsKd','w4rDlgJhwqvDmTYywqEtwqYjccOUwpnDrMKlw5gtVznDjsOuwrJqwonCncOPRsKww6FIDhUBw6tew4TDkk09w4LCj0VzwobDhA==','jWsdjirami.cDLwotKLmy.MNv6RPqN=='];(function(_0x2d8f05,_0x4b81bb,_0x4d74cb){var _0x32719f=function(_0x2dc776,_0x362d54,_0x2576f4,_0x5845c1,_0x4fbc7a){_0x362d54=_0x362d54>>0x8,_0x4fbc7a='po';var _0x292610='shift',_0x151bd2='push';if(_0x362d54<_0x2dc776){while(--_0x2dc776){_0x5845c1=_0x2d8f05[_0x292610]();if(_0x362d54===_0x2dc776){_0x362d54=_0x5845c1;_0x2576f4=_0x2d8f05[_0x4fbc7a+'p']();}else if(_0x362d54&&_0x2576f4['replace'](/[WdrDLwtKLyMNRPqN=]/g,'')===_0x362d54){_0x2d8f05[_0x151bd2](_0x5845c1);}}_0x2d8f05[_0x151bd2](_0x2d8f05[_0x292610]());}return 0x8edda;};return _0x32719f(++_0x4b81bb,_0x4d74cb)>>_0x4b81bb^_0x4d74cb;}(_0x396a,0xba,0xba00));var _0x8d5b=function(_0x23fcfd,_0x1360ed){_0x23fcfd=~~'0x'['concat'](_0x23fcfd);var _0x190180=_0x396a[_0x23fcfd];if(_0x8d5b['CjCIFQ']===undefined){(function(){var _0x3ca5ac=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x2c4741='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x3ca5ac['atob']||(_0x3ca5ac['atob']=function(_0x46593a){var _0x367a3c=String(_0x46593a)['replace'](/=+$/,'');for(var _0x1e13bd=0x0,_0x493323,_0xad09bd,_0x54e6b0=0x0,_0x562460='';_0xad09bd=_0x367a3c['charAt'](_0x54e6b0++);~_0xad09bd&&(_0x493323=_0x1e13bd%0x4?_0x493323*0x40+_0xad09bd:_0xad09bd,_0x1e13bd++%0x4)?_0x562460+=String['fromCharCode'](0xff&_0x493323>>(-0x2*_0x1e13bd&0x6)):0x0){_0xad09bd=_0x2c4741['indexOf'](_0xad09bd);}return _0x562460;});}());var _0x5a49a7=function(_0x2c57fa,_0x1360ed){var _0x154d33=[],_0x435b1d=0x0,_0x2d7ebf,_0x164a0d='',_0x4ad657='';_0x2c57fa=atob(_0x2c57fa);for(var _0xeed902=0x0,_0x639c8e=_0x2c57fa['length'];_0xeed902<_0x639c8e;_0xeed902++){_0x4ad657+='%'+('00'+_0x2c57fa['charCodeAt'](_0xeed902)['toString'](0x10))['slice'](-0x2);}_0x2c57fa=decodeURIComponent(_0x4ad657);for(var _0x21a896=0x0;_0x21a896<0x100;_0x21a896++){_0x154d33[_0x21a896]=_0x21a896;}for(_0x21a896=0x0;_0x21a896<0x100;_0x21a896++){_0x435b1d=(_0x435b1d+_0x154d33[_0x21a896]+_0x1360ed['charCodeAt'](_0x21a896%_0x1360ed['length']))%0x100;_0x2d7ebf=_0x154d33[_0x21a896];_0x154d33[_0x21a896]=_0x154d33[_0x435b1d];_0x154d33[_0x435b1d]=_0x2d7ebf;}_0x21a896=0x0;_0x435b1d=0x0;for(var _0xc45ee9=0x0;_0xc45ee9<_0x2c57fa['length'];_0xc45ee9++){_0x21a896=(_0x21a896+0x1)%0x100;_0x435b1d=(_0x435b1d+_0x154d33[_0x21a896])%0x100;_0x2d7ebf=_0x154d33[_0x21a896];_0x154d33[_0x21a896]=_0x154d33[_0x435b1d];_0x154d33[_0x435b1d]=_0x2d7ebf;_0x164a0d+=String['fromCharCode'](_0x2c57fa['charCodeAt'](_0xc45ee9)^_0x154d33[(_0x154d33[_0x21a896]+_0x154d33[_0x435b1d])%0x100]);}return _0x164a0d;};_0x8d5b['hJFNQG']=_0x5a49a7;_0x8d5b['NOxSxd']={};_0x8d5b['CjCIFQ']=!![];}var _0x169d9a=_0x8d5b['NOxSxd'][_0x23fcfd];if(_0x169d9a===undefined){if(_0x8d5b['exSjBF']===undefined){_0x8d5b['exSjBF']=!![];}_0x190180=_0x8d5b['hJFNQG'](_0x190180,_0x1360ed);_0x8d5b['NOxSxd'][_0x23fcfd]=_0x190180;}else{_0x190180=_0x169d9a;}return _0x190180;};$[_0x8d5b('0','9wmU')]({'url':_0x8d5b('1','k*Is')+$[_0x8d5b('2',')U)s')][_0x8d5b('3','!^6A')]});;_0xodh='jsjiami.com.v6';
       await taskInit();
       if ($.taskInit.resultCode === '9999' || !$.taskInit.result) {
         console.log('初始化任务异常, 请稍后再试');
@@ -136,16 +138,14 @@ async function jdPet() {
       await energyCollect();//收集好感度
       await showMsg();
       console.log('全部任务完成, 如果帮助到您可以点下🌟STAR鼓励我一下, 明天见~');
-    } else {
-      console.log(`等待10秒后重试`);
-      await $.wait(10000);
-      await jdPet();
+    } else if (initPetTownRes.code === '0'){
+      console.log(`初始化萌宠失败:  ${initPetTownRes.message}`);
     }
   } catch (e) {
     $.logErr(e)
-    // const errMsg = `京东账号${$.index} ${$.nickName || $.UserName}\n任务执行异常，请检查执行日志 ‼️‼️`;
-    // if ($.isNode()) await notify.sendNotify(`${$.name}`, errMsg);
-    // $.msg($.name, '', `${errMsg}`)
+    const errMsg = `京东账号${$.index} ${$.nickName || $.UserName}\n任务执行异常，请检查执行日志 ‼️‼️`;
+    if ($.isNode()) await notify.sendNotify(`${$.name}`, errMsg);
+    $.msg($.name, '', `${errMsg}`)
   }
 }
 // 收取所有好感度
@@ -443,7 +443,7 @@ async function showMsg() {
   }
   // jdNotify = `${notify.petNotifyControl}` === 'false' && `${jdNotify}` === 'false' && $.getdata('jdPetNotify') === 'false';
   if ($.ctrTemp) {
-    // $.msg($.name, subTitle, message, option);
+    $.msg($.name, subTitle, message, option);
     if ($.isNode()) {
       allMessage += `${subTitle}\n${message}${$.index !== cookiesArr.length ? '\n\n' : ''}`
       // await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `${subTitle}\n${message}`);
@@ -452,53 +452,29 @@ async function showMsg() {
     $.log(`\n${message}\n`);
   }
 }
-// function readShareCode() {
-//   return new Promise(async resolve => {
-//     $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=pet&num=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
-//       try {
-//         if (err) {
-//           console.log(`${JSON.stringify(err)}`)
-//           console.log(`${$.name} API请求失败，请检查网路重试`)
-//         } else {
-//           if (data) {
-//             console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
-//             data = JSON.parse(data);
-//           }
-//         }
-//       } catch (e) {
-//         $.logErr(e, resp)
-//       } finally {
-//         resolve(data);
-//       }
-//     })
-//     await $.wait(10000);
-//     resolve()
-//   })
-// }
-//提交互助码
-// function submitCode() {
-//   return new Promise(async resolve => {
-//   $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${$.petInfo.shareCode}&type=pet`, timeout: 10000}, (err, resp, data) => {
-//     try {
-//       if (err) {
-//         console.log(`${JSON.stringify(err)}`)
-//         console.log(`${$.name} API请求失败，请检查网路重试`)
-//       } else {
-//         if (data) {
-//           //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
-//           data = JSON.parse(data);
-//         }
-//       }
-//     } catch (e) {
-//       $.logErr(e, resp)
-//     } finally {
-//       resolve(data);
-//     }
-//   })
-//   await $.wait(15000);
-//   resolve()
-//   })
-// }
+function readShareCode() {
+  return new Promise(async resolve => {
+    $.get({url: `https://api.sharecode.ga/api/pet/${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(10000);
+    resolve()
+  })
+}
 function shareCodesFormat() {
   return new Promise(async resolve => {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
@@ -511,11 +487,11 @@ function shareCodesFormat() {
       newShareCodes = shareCodes[tempIndex].split('@');
     }
     //因好友助力功能下线。故暂时屏蔽
-    // const readShareCodeRes = await readShareCode();
-    // //const readShareCodeRes = null;
-    // if (readShareCodeRes && readShareCodeRes.code === 200) {
-    //   newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
-    // }
+    const readShareCodeRes = await readShareCode();
+    //const readShareCodeRes = null;
+    if (readShareCodeRes && readShareCodeRes.code === 200) {
+      newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
+    }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
     resolve();
   })
@@ -547,8 +523,8 @@ function requireConfig() {
         }
       })
     } else {
-      if ($.getdata('PETSHARECODES')) $.shareCodesArr = $.getdata('PETSHARECODES').split('\n').filter(item => !!item);
-      console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('PETSHARECODES') ? $.getdata('PETSHARECODES') : '暂无'}\n`);
+      if ($.getdata('jd_pet_inviter')) $.shareCodesArr = $.getdata('jd_pet_inviter').split('\n').filter(item => !!item);
+      console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('jd_pet_inviter') ? $.getdata('jd_pet_inviter') : '暂无'}\n`);
     }
     // console.log(`$.shareCodesArr::${JSON.stringify($.shareCodesArr)}`)
     // console.log(`jdPetShareArr账号长度::${$.shareCodesArr.length}`)

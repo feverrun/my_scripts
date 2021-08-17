@@ -1,26 +1,31 @@
 /*
-*
-京东金融养猪猪
-活动入口：京东金融养猪猪，
-脚本更新地址：https://github.com/feverrun/JD_tencent_scf
+Last Modified time: 2021-5-19 12:27:16
+活动入口：京东金融养猪猪
+一键开完所有的宝箱功能。耗时70秒
+大转盘抽奖
+喂食
+每日签到
+完成分享任务得猪粮
 已支持IOS双京东账号,Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-============Quantumultx===============
+脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
+===============Quantumultx===============
 [task_local]
-#摇钱树助力
-12 0-23/6 * * * https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_pigPet.js, tag=京东金融养猪猪, enabled=true
+#京东金融养猪猪
+12 0-23/6 * * * jd_pigPet.js, tag=京东金融养猪猪, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdyz.png, enabled=true
+
 ================Loon==============
 [Script]
-cron "12 0-23/6 * * *" script-path=https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_pigPet.js,tag=摇钱树助力
-===============Surge=================
-京东金融养猪猪 = type=cron,cronexp="12 0-23/6 * * *",wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_pigPet.js
-============小火箭=========
-京东金融养猪猪 = type=cron,script-path=https://raw.githubusercontent.com/feverrun/JD_tencent_scf/main/jd_pigPet.js, cronexpr="12 0-23/6 * * *", timeout=3600, enable=true
-*
-*/
+cron "12 0-23/6 * * *" script-path=jd_pigPet.js, tag=京东金融养猪猪
 
+===============Surge=================
+京东金融养猪猪 = type=cron,cronexp="12 0-23/6 * * *",wake-system=1,timeout=3600,script-path=jd_pigPet.js
+
+============小火箭=========
+京东金融养猪猪 = type=cron,script-path=jd_pigPet.js, cronexpr="12 0-23/6 * * *", timeout=3600, enable=true
+ */
 const $ = new Env('金融养猪');
 const url = require('url');
+const querystring = require('querystring');
 let cookiesArr = [], cookie = '', allMessage = '';
 const JD_API_HOST = 'https://ms.jr.jd.com/gw/generic/uc/h5/m';
 const MISSION_BASE_API = `https://ms.jr.jd.com/gw/generic/mission/h5/m`;

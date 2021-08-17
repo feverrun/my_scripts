@@ -5,7 +5,7 @@
 
 无需京喜token,只需京东cookie即可.
 
-京喜农场:脚本更新地址 https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jxnc.js
+京喜农场:脚本更新地址 jd_jxnc.js
 更新时间：2021-06-3
 活动入口：京喜APP我的-京喜农场
 东东农场活动链接：https://wqsh.jd.com/sns/201912/12/jxnc/detail.html?ptag=7155.9.32&smp=b47f4790d7b2a024e75279f55f6249b9&active=jdnc_1_chelizi1205_2
@@ -15,21 +15,21 @@
 
 ==========================Quantumultx=========================
 [task_local]
-0 9,12,18 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jxnc.js, tag=京喜农场, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxnc.png, enabled=true
+0 9,12,18 * * * jd_jxnc.js, tag=京喜农场, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxnc.png, enabled=true
 =========================Loon=============================
 [Script]
-cron "0 9,12,18 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jxnc.js,tag=京喜农场
+cron "0 9,12,18 * * *" script-path=jd_jxnc.js,tag=京喜农场
 
 =========================Surge============================
-京喜农场 = type=cron,cronexp="0 9,12,18 * * *",timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jxnc.js
+京喜农场 = type=cron,cronexp="0 9,12,18 * * *",timeout=3600,script-path=jd_jxnc.js
 
 =========================小火箭===========================
-京喜农场 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jxnc.js, cronexpr="0 9,12,18 * * *", timeout=3600, enable=true
+京喜农场 = type=cron,script-path=jd_jxnc.js, cronexpr="0 9,12,18 * * *", timeout=3600, enable=true
 */
 
 const $ = new Env('京喜农场');
 let notify = ''; // nodejs 发送通知脚本
-let notifyLevel = $.isNode() ? process.env.JXNC_NOTIFY_LEVEL || 0 : 0; // 通知级别 0=只通知成熟;1=本次获得水滴>0;2=任务执行;3=任务执行+未种植种子;
+let notifyLevel = $.isNode() ? process.env.JXNC_NOTIFY_LEVEL || 1 : 1; // 通知级别 0=只通知成熟;1=本次获得水滴>0;2=任务执行;3=任务执行+未种植种子;
 let notifyBool = true; // 代码内部使用，控制是否通知
 let cookieArr = []; // 用户 cookie 数组
 let currentCookie = ''; // 当前用户 cookie
@@ -187,7 +187,7 @@ function requireConfig() {
 
     try {
       let options = {
-        "url": `https://raw.fastgit.org/feverrun/updateTeam/main/shareCodes/jxnc.txt`,
+        "url": ``,
         "headers": {
           "Accept": "application/json,text/plain, */*",
           "Content-Type": "application/x-www-form-urlencoded",
@@ -527,7 +527,7 @@ function getAssistUser() {
   return new Promise(resolve => {
     try {
       $.get({
-        url: `https://api.ninesix.cc/`,
+        url: `https://api.ninesix.cc/api/jx-nc?active=${$.info.active}`,
         timeout: 10000
       }, async (err, resp, _data) => {
         try {
