@@ -1,6 +1,6 @@
 import axios from "axios";
 import {readFileSync, writeFileSync, unlinkSync} from "fs";
-import {execSync} from "./child_process";
+import {execSync} from "child_process";
 import {requireConfig} from "./TS_USER_AGENTS";
 import {TotalBean} from "./TS_USER_AGENTS";
 
