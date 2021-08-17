@@ -1,3 +1,13 @@
+/**
+ * /*
+ [task_local]
+ #乞丐
+ 10 7 * * * jd_car.js, tag=乞丐,
+ ================Loon==============
+ [Script]
+ cron "0 0 * * *" script-path=jd_foodRuning.ts, tag=乞丐
+ */
+
 import axios from "axios";
 import USER_AGENT, {TotalBean} from "./TS_USER_AGENTS";
 
