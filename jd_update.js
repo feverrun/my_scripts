@@ -6,7 +6,7 @@
 const exec = require('child_process').exec;
 
 if(process.env.PWD==='/ql/scripts'){
-  exec("cd /ql/repo/JDHelloWorld_jd_scripts")
+  exec("cd /ql/repo/feverrun_jd_scripts")
 }
 
 exec("git fetch --all; git reset --hard origin/main; git pull", (error, stdout, stderr) => {
