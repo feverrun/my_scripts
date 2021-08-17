@@ -1,4 +1,3 @@
-// @grant    require
 /*
 京喜财富岛
 cron 5 * * * * jd_cfd.js
@@ -67,12 +66,12 @@ $.appId = 10028;
     await $.wait(1000)
     res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/cfd.json')
   }
-  let res2 = await getAuthorShareCode('https://raw.githubusercontent.com/feverrun/updateTeam/main/shareCodes/cfd.json')
+  let res2 = await getAuthorShareCode('https://raw.githubusercontent.com/zero205/updateTeam/main/shareCodes/cfd.json')
   if (!res2) {
     await $.wait(1000)
-    res2 = await getAuthorShareCode('https://raw.fastgit.org/feverrun/updateTeam/main/shareCodes/cfd.json')
+    res2 = await getAuthorShareCode('https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/cfd.json')
   }
-  $.strMyShareIds = [...(res && res.shareId || []), ...(res2 && res2.shareId || [])]
+  $.strMyShareIds = [...(res && res.shareId || []), ...(res2 || [])]
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -92,7 +91,7 @@ $.appId = 10028;
       }
       $.allTask = []
       $.info = {}
-      UA = `jdpingou;iPhone;4.13.0;14.4.2;${randomString()};network/wifi;model/iPhone10,2;appBuild/100609;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/1;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2019_3111789;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`
+      UA = `jdpingou;iPhone;4.13.0;14.4.2;${randomString(40)};network/wifi;model/iPhone10,2;appBuild/100609;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/1;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2019_3111789;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`
       token = await getJxToken()
       await shareCodesFormat()
       await cfd();
@@ -134,12 +133,12 @@ async function cfd() {
   try {
     nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000)
     let beginInfo = await getUserInfo();
-    if (beginInfo.Fund.ddwFundTargTm === 0) {
+    if (beginInfo.LeadInfo.dwLeadType === 2) {
       console.log(`还未开通活动，尝试初始化`)
       await noviceTask()
       await $.wait(2000)
       beginInfo = await getUserInfo(false);
-      if (beginInfo.Fund.ddwFundTargTm !== 0) {
+      if (beginInfo.LeadInfo.dwLeadType !== 2) {
         console.log(`初始化成功\n`)
       } else {
         console.log(`初始化失败\n`)
@@ -1223,7 +1222,7 @@ function getUserInfo(showInvite = true) {
             sErrMsg,
             strMyShareId,
             dwLandLvl,
-            Fund = {},
+            LeadInfo = {},
             StoryInfo = {},
             Business = {}
           } = data;
@@ -1243,7 +1242,7 @@ function getUserInfo(showInvite = true) {
             ddwCoinBalance,
             strMyShareId,
             dwLandLvl,
-            Fund,
+            LeadInfo,
             StoryInfo
           };
           resolve({
@@ -1251,7 +1250,7 @@ function getUserInfo(showInvite = true) {
             ddwRichBalance,
             ddwCoinBalance,
             strMyShareId,
-            Fund,
+            LeadInfo,
             StoryInfo
           });
         }
@@ -1561,12 +1560,12 @@ function taskListUrl(function_path, body = '', bizCode = 'jxbfd') {
   };
 }
 
-function randomString() {
-  return Math.random().toString(16).slice(2, 10) +
-    Math.random().toString(16).slice(2, 10) +
-    Math.random().toString(16).slice(2, 10) +
-    Math.random().toString(16).slice(2, 10) +
-    Math.random().toString(16).slice(2, 10)
+function randomString(e) {
+  e = e || 32;
+  let t = "0123456789abcdef", a = t.length, n = "";
+  for (let i = 0; i < e; i++)
+    n += t.charAt(Math.floor(Math.random() * a));
+  return n
 }
 
 function showMsg() {
