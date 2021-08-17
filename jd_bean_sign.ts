@@ -23,7 +23,7 @@ async function main() {
 
     let data: any;
     try {
-      data = await axios.get('https://cdn.jsdelivr.net/gh/feverrun/my-script/utils/JD_DailyBonus.js', {timeout: 5000})
+      data = await axios.get('https://cdn.jsdelivr.net/gh/feverrun/my-script/JD_DailyBonus.js', {timeout: 10000})
       data = data.data
     } catch (e) {
       try {
