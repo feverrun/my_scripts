@@ -319,6 +319,27 @@ function taskAPI(fn: string, stk: string, params: Params = {}) {
   })
 }
 
+function getJxToken(cookie: string) {
+  function generateStr(input: number) {
+    let src = 'abcdefghijklmnopqrstuvwxyz1234567890';
+    let res = '';
+    for (let i = 0; i < input; i++) {
+      res += src[Math.floor(src.length * Math.random())];
+    }
+    return res;
+  }
+
+  let phoneId = generateStr(40);
+  let timestamp = Date.now().toString();
+  let nickname = cookie.match(/pt_pin=([^;]*)/)![1];
+  let jstoken = Md5.hashStr('' + decodeURIComponent(nickname) + timestamp + phoneId + 'tPOamqCuk9NLgVPAljUyIHcPRmKlVxDy');
+  return {
+    'strPgtimestamp': timestamp,
+    'strPhoneID': phoneId,
+    'strPgUUNum': jstoken
+  }
+}
+
 function makeShareCodes(code: string) {
   return new Promise(async (resolve, reject) => {
     let bean: string = await getBeanShareCode(cookie)
