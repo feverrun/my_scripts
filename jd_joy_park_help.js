@@ -1,78 +1,123 @@
 /*
-签到领现金兑换
-需要填写exchangeAccounts参数，兑换多少取决于app内显示，默认为所有账号兑换10红包，部分账号会出现参数错误的提示。指定账号+金额应这样填写 export exchangeAccounts="pt_pin1@2&pt_pin2@10"
-TG学习交流群https://t.me/cdles
-0 0 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_cash_exchange.js
+汪汪乐园每日助力
+更新时间：2021-7-7
+活动入口：京东极速版-赚金币-汪汪乐园
+靠前账号优先助力,建议晚上十一点半运行确保收益最大化
+30 23 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_joy_park_help.js
 */
-const $ = new Env("签到领现金兑换")
-const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random() * 4 + 10)}.${Math.ceil(Math.random() * 4)};${randomString(40)}`
+const $ = Env("汪汪乐园每日助力")
+const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
 let cookiesArr = []
-var exchangeAccounts = process.env.exchangeAccounts ??  ""
+let cookie = ''
+let inviters = []
+let inviter = {};
 
 !(async () => {
-        if (exchangeAccounts) {
-            v = exchangeAccounts.split("&")
-            exchangeAccounts = {}
-            for (var i of v) {
-                j = i.split("@")
-                exchangeAccounts[j[0]] = j[1] ? +j[1] : 10
-            }
-        }
-        await requireConfig()
-        for (let i = 0; i < cookiesArr.length; i++) {
-            if (cookiesArr[i]) {
-                cookie = cookiesArr[i];
-                pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
-                amount = 0
-                if (exchangeAccounts) {
-                    amount = exchangeAccounts[pt_pin]
-                    if (!amount) continue
+    await requireConfig()
+    if (!cookiesArr[0]) {
+        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {
+            "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+        });
+        return;
+    }
+    for (let i = 0; i < cookiesArr.length; i++) {
+        if (cookiesArr[i]) {
+            cookie = cookiesArr[i];
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.index = i + 1;
+            $.isLogin = true;
+            $.nickName = '';
+            message = '';
+            await TotalBean();
+            console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
+                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+                });
+                if ($.isNode()) {
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
-                exchange(cookie, amount, pt_pin)
+                continue
             }
+            inviter = inviters[0] ?? inviter
+            helpInfo = {}
+            bashInfo = await requestApi("joyBaseInfo",inviter ? {
+                taskId: "167" ,
+                inviteType:  '1',
+                inviterPin: inviter.pin,
+            } :{})
+            if (!bashInfo?.data?.invitePin) continue
+            helpInfo.pin = bashInfo.data.invitePin
+            if (bashInfo?.data?.helpState == 1) {
+                console.log(`账号${i+1}助力账号${inviters[0].index+1}成功`)
+                inviters[0].taskDoTimes++
+                cookie = cookiesArr[inviters[0].index]
+                for(;;){
+                    bonus = await requestApi("apTaskDrawAward",inviter ? {
+                        taskId: "167" ,
+                        taskType:  'SHARE_INVITE',
+                    } :{})
+                    if(bonus.success){
+                        console.log(`账号${inviters[0].index+1}领取${bonus.data[0].awardGivenNumber}工资`)
+                    } else {
+                        break
+                    }
+                }
+                cookie = cookiesArr[i];
+                if (inviters[0].taskDoTimes >= inviters[0].taskLimitTimes) {
+                    inviters.shift();
+                    if (inviters.length == 0) {
+                        break
+                    }
+                }
+            }
+            tasks = await requestApi("apTaskList")
+            if (!tasks?.data)continue
+            tasks.data.forEach(function (task) {
+                if(task.taskType == "SHARE_INVITE"){
+                    if (task.taskDoTimes < task.taskLimitTimes) {
+                        helpInfo.taskLimitTimes = task.taskLimitTimes 
+                        helpInfo.taskDoTimes = task.taskDoTimes
+                        helpInfo.index = i
+                        inviters.push(helpInfo)
+                    }
+                }
+            });
         }
-        await $.wait(3000)
-    })()
+    }
+})()
 
-    function exchange(cookie, amount, pt_pin) {
-        body = ""
-        if (amount == 2) {
-            body = `adid=41CBA646-6EA3-4E79-8623-680F74A5FD7D&body={"type":"2","amount":"200"}&build=167724&client=apple&clientVersion=10.0.6&d_brand=apple&d_model=iPhone10,4&eid=eidI56d7812024s3J0UGWUp+RVK4+9/EY14sMidFB85YSXDSHPI9r07frvvGbXtVFQYuMENUoWFIARXaAYlZNGDyc8dfGQqd42Fer11K0PRjAQjbTBp5&isBackground=N&joycious=79&lang=zh_CN&networkType=wifi&networklibtype=JDNetworkBaseAF&openudid=96ca9290eae9f41770e2c16fd4d07c67eb06b445&osVersion=14.4.2&partner=apple&rfs=0000&scope=10&screen=750*1334&sign=1be417384d1ffccde3dbf6a207277706&st=1625756188161&sv=111&uemps=0-0&uts=0f31TVRjBSsqndu4/jgUPz6uymy50MQJCNy5Ou1kywjunNJYhK2mQzTDwvkNHz8d6J9JA+AN8f7dHT8E/pp+/K+s+/hw3ktfXf7rIWQ3qVqjrVZ8RJpuJJq5WCCsy0wGM2uum+4ppHaNVwnSBrL/ZniFeKJAAxcyCaBFHBfNkP1t3YA8CtB8pQTjm5pvQ/eWyy8qqiBgfB+iPthLx1deRA==&uuid=hjudwgohxzVu96krv/T6Hg==`
-        } else {
-            amount = 10
-            body = `adid=A23D8ECF-B992-477E-BA88-A5E7680DD8F6&body={"type":"2","amount":"1000"}&build=167638&client=apple&clientVersion=9.5.0&eid=eidI5E4E0119RTBCMkMxNEMtNjgxQi00NQ==20v8iy1ivQ9DClEjHXmgvcd5v2MhcsarbJkOkdI5EZKIlK2CiFmfRE6MG017DU87QAHcuwoYwkjGXGws&isBackground=N&joycious=61&lang=zh_CN&networkType=wifi&networklibtype=JDNetworkBaseAF&openudid=3245ad3d16ab2153c69f9ca91cd2e931b06a3bb8&osVersion=13.6.1&rfs=0000&scope=11&screen=1242*2208&sign=427a28328d1650d4c553c1cfdf25744c&st=1618885128891&sv=100&uemps=0-0&uts=0f31TVRjBSsqndu4/jgUPz6uymy50MQJ/+MrMjk4y13kWuMN4VaxQad1iD1QgEcDK/YYLWTuOPAd1akjd5yd8GStO+tvG+FdogNDbDiKjvQgXieBZsBtY63e8GaM2SFD74E/SCZQOKBCgUHo9/gWatL87O9NO0DFzwx44pkT4mA7/S1gDn01AyEbB70wvtsnPtixLxroKuYYDIBNepnJLQ==&uuid=hjudwgohxzVu96krv/T6Hg==`
-        }
+function requestApi(functionId, params) {
+    if (!params) {
+        params = {}
+    }
+    params.linkId = "LsQNxL7iWDlXUs6cFl-AAg"
+
+    return new Promise(resolve => {
         $.post({
-            url: 'https://api.m.jd.com/client.action?functionId=cash_getRedPacket',
+            url: `https://api.m.jd.com/`,
             headers: {
-                'Cookie': cookie,
-                'Accept': '*/*',
-                'Connection': 'keep-alive',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'User-Agent': ua,
-                'Accept-Language': 'zh-Hans-CN;q=1',
                 'Host': 'api.m.jd.com',
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'accept': 'application/json, text/plain, */*',
+                'content-type': 'application/x-www-form-urlencoded',
+                'origin': 'hhttps://joypark.jd.com',
+                'accept-language': 'zh-cn',
+                'User-Agent': ua,
+                'referer': 'https://joypark.jd.com/?activityId=LsQNxL7iWDlXUs6cFl-AAg&lng=110.309497&lat=25.244346&sid=0341d5b9d804d0b838ae6018c19088dw&un_area=20_1726_22885_51456',
+                'cookie': cookie
             },
-            body: body,
+            body: `functionId=${functionId}&body=${JSON.stringify(params)}&_t=${Date.now()}&appid=activities_platform`,
         }, (err, resp, data) => {
             try {
                 data = JSON.parse(data)
-                if (data.data) {
-                    console.log(data.data.bizMsg)
-                    if (data.data.bizMsg.indexOf("success") != -1) {
-                        data.data.bizMsg = `成功兑换${amount}元红包`
-                    }
-                    notify.sendNotify(`签到领现金账号 ${decodeURIComponent(pt_pin)}`, data.data.bizMsg);
-                }
-                if (data.errorMessage) {
-                    console.log(data.errorMessage)
-                }
             } catch (e) {
                 $.logErr('Error: ', e, resp)
+            } finally {
+                resolve(data)
             }
         })
-    }
+    })
+}
 
 function requireConfig() {
     return new Promise(resolve => {
@@ -84,13 +129,57 @@ function requireConfig() {
                     cookiesArr.push(jdCookieNode[item])
                 }
             })
-            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-            };
+            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
         } else {
             cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
         }
         console.log(`共${cookiesArr.length}个京东账号\n`)
         resolve()
+    })
+}
+
+function TotalBean() {
+    return new Promise(async resolve => {
+        const options = {
+            "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
+            "headers": {
+                "Accept": "application/json,text/plain, */*",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept-Language": "zh-cn",
+                "Connection": "keep-alive",
+                "Cookie": cookie,
+                "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
+            }
+        }
+        $.post(options, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        data = JSON.parse(data);
+                        if (data['retcode'] === 13) {
+                            $.isLogin = false; //cookie过期
+                            return
+                        }
+                        if (data['retcode'] === 0) {
+                            $.nickName = (data['base'] && data['base'].nickname) || $.UserName;
+                        } else {
+                            $.nickName = $.UserName
+                        }
+                    } else {
+                        console.log(`京东服务器返回空数据`)
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
     })
 }
 
@@ -106,12 +195,10 @@ function randomString(e) {
 
 function Env(t, e) {
     "undefined" != typeof process && JSON.stringify(process.env).indexOf("GIT_HUB") > -1 && process.exit(0);
-
     class s {
         constructor(t) {
             this.env = t
         }
-
         send(t, e = "GET") {
             t = "string" == typeof t ? {
                 url: t
@@ -123,37 +210,29 @@ function Env(t, e) {
                 })
             })
         }
-
         get(t) {
             return this.send.call(this.env, t)
         }
-
         post(t) {
             return this.send.call(this.env, t, "POST")
         }
     }
-
     return new class {
         constructor(t, e) {
             this.name = t, this.http = new s(this), this.data = null, this.dataFile = "box.dat", this.logs = [], this.isMute = !1, this.isNeedRewrite = !1, this.logSeparator = "\n", this.startTime = (new Date).getTime(), Object.assign(this, e), this.log("", `🔔${this.name}, 开始!`)
         }
-
         isNode() {
             return "undefined" != typeof module && !!module.exports
         }
-
         isQuanX() {
             return "undefined" != typeof $task
         }
-
         isSurge() {
             return "undefined" != typeof $httpClient && "undefined" == typeof $loon
         }
-
         isLoon() {
             return "undefined" != typeof $loon
         }
-
         toObj(t, e = null) {
             try {
                 return JSON.parse(t)
@@ -161,7 +240,6 @@ function Env(t, e) {
                 return e
             }
         }
-
         toStr(t, e = null) {
             try {
                 return JSON.stringify(t)
@@ -169,17 +247,14 @@ function Env(t, e) {
                 return e
             }
         }
-
         getjson(t, e) {
             let s = e;
             const i = this.getdata(t);
             if (i) try {
                 s = JSON.parse(this.getdata(t))
-            } catch {
-            }
+            } catch {}
             return s
         }
-
         setjson(t, e) {
             try {
                 return this.setdata(JSON.stringify(t), e)
@@ -187,7 +262,6 @@ function Env(t, e) {
                 return !1
             }
         }
-
         getScript(t) {
             return new Promise(e => {
                 this.get({
@@ -195,7 +269,6 @@ function Env(t, e) {
                 }, (t, s, i) => e(i))
             })
         }
-
         runScript(t, e) {
             return new Promise(s => {
                 let i = this.getdata("@chavy_boxjs_userCfgs.httpapi");
@@ -217,17 +290,14 @@ function Env(t, e) {
                 this.post(n, (t, e, i) => s(i))
             }).catch(t => this.logErr(t))
         }
-
         loaddata() {
-            if (!this.isNode()) return {};
-            {
+            if (!this.isNode()) return {}; {
                 this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
                 const t = this.path.resolve(this.dataFile),
                     e = this.path.resolve(process.cwd(), this.dataFile),
                     s = this.fs.existsSync(t),
                     i = !s && this.fs.existsSync(e);
-                if (!s && !i) return {};
-                {
+                if (!s && !i) return {}; {
                     const i = s ? t : e;
                     try {
                         return JSON.parse(this.fs.readFileSync(i))
@@ -237,7 +307,6 @@ function Env(t, e) {
                 }
             }
         }
-
         writedata() {
             if (this.isNode()) {
                 this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
@@ -249,7 +318,6 @@ function Env(t, e) {
                 s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r)
             }
         }
-
         lodash_get(t, e, s) {
             const i = e.replace(/\[(\d+)\]/g, ".$1").split(".");
             let r = t;
@@ -257,11 +325,9 @@ function Env(t, e) {
                 if (r = Object(r)[t], void 0 === r) return s;
             return r
         }
-
         lodash_set(t, e, s) {
             return Object(t) !== t ? t : (Array.isArray(e) || (e = e.toString().match(/[^.[\]]+/g) || []), e.slice(0, -1).reduce((t, s, i) => Object(t[s]) === t[s] ? t[s] : t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}, t)[e[e.length - 1]] = s, t)
         }
-
         getdata(t) {
             let e = this.getval(t);
             if (/^@/.test(t)) {
@@ -275,12 +341,10 @@ function Env(t, e) {
             }
             return e
         }
-
         setdata(t, e) {
             let s = !1;
             if (/^@/.test(e)) {
-                const [, i, r] = /^@(.*?)\.(.*?)$/.exec(e), o = this.getval(i),
-                    h = i ? "null" === o ? null : o || "{}" : "{}";
+                const [, i, r] = /^@(.*?)\.(.*?)$/.exec(e), o = this.getval(i), h = i ? "null" === o ? null : o || "{}" : "{}";
                 try {
                     const e = JSON.parse(h);
                     this.lodash_set(e, r, t), s = this.setval(JSON.stringify(e), i)
@@ -291,21 +355,16 @@ function Env(t, e) {
             } else s = this.setval(t, e);
             return s
         }
-
         getval(t) {
             return this.isSurge() || this.isLoon() ? $persistentStore.read(t) : this.isQuanX() ? $prefs.valueForKey(t) : this.isNode() ? (this.data = this.loaddata(), this.data[t]) : this.data && this.data[t] || null
         }
-
         setval(t, e) {
             return this.isSurge() || this.isLoon() ? $persistentStore.write(t, e) : this.isQuanX() ? $prefs.setValueForKey(t, e) : this.isNode() ? (this.data = this.loaddata(), this.data[e] = t, this.writedata(), !0) : this.data && this.data[e] || null
         }
-
         initGotEnv(t) {
             this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar))
         }
-
-        get(t, e = (() => {
-        })) {
+        get(t, e = (() => {})) {
             t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), this.isSurge() || this.isLoon() ? (this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, {
                 "X-Surge-Skip-Scripting": !1
             })), $httpClient.get(t, (t, s, i) => {
@@ -355,9 +414,7 @@ function Env(t, e) {
                 e(s, i, i && i.body)
             }))
         }
-
-        post(t, e = (() => {
-        })) {
+        post(t, e = (() => {})) {
             if (t.body && t.headers && !t.headers["Content-Type"] && (t.headers["Content-Type"] = "application/x-www-form-urlencoded"), t.headers && delete t.headers["Content-Length"], this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, {
                 "X-Surge-Skip-Scripting": !1
             })), $httpClient.post(t, (t, s, i) => {
@@ -407,7 +464,6 @@ function Env(t, e) {
                 })
             }
         }
-
         time(t, e = null) {
             const s = e ? new Date(e) : new Date;
             let i = {
@@ -423,7 +479,6 @@ function Env(t, e) {
             for (let e in i) new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length)));
             return t
         }
-
         msg(e = t, s = "", i = "", r) {
             const o = t => {
                 if (!t) return t;
@@ -462,20 +517,16 @@ function Env(t, e) {
                 t.push(e), s && t.push(s), i && t.push(i), console.log(t.join("\n")), this.logs = this.logs.concat(t)
             }
         }
-
         log(...t) {
             t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(t.join(this.logSeparator))
         }
-
         logErr(t, e) {
             const s = !this.isSurge() && !this.isQuanX() && !this.isLoon();
             s ? this.log("", `❗️${this.name}, 错误!`, t.stack) : this.log("", `❗️${this.name}, 错误!`, t)
         }
-
         wait(t) {
             return new Promise(e => setTimeout(e, t))
         }
-
         done(t = {}) {
             const e = (new Date).getTime(),
                 s = (e - this.startTime) / 1e3;
