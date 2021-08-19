@@ -27,7 +27,7 @@ BARK = ''
 QYWX_AM = ''
 
 #######################################
-    version = 'v1.0.0 Beta'
+version = 'v1.0.0 Beta'
 readmes = """
 # JD 关注有礼
 
