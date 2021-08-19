@@ -79,7 +79,7 @@ $.log("******** 您共获取" + ReadArr.length + "次阅读请求，任务开始
     if (smallzq == "true") {
         $.log("     请注意缩减请求开关已打开‼️\n     如不需要    请强制停止\n     关闭Boxjs缩减请求开关")
     };
-    $.index = 0, readtimes="";
+    $.index = 0, readtimes="60";
     for (var i = indexLast ? indexLast : 0; i < ReadArr.length; i++) {
         if (ReadArr[i]) {
             articlebody = ReadArr[i];
@@ -100,7 +100,8 @@ function bodyInfo() {
     return new Promise((resolve, reject) => {
         $.get(batHost('article/info/get.json?' + articlebody), async(error, resp, data) => {
             let bodyobj = JSON.parse(data);
-            //$.log(JSON.stringify(bodyobj,null,2))
+            //
+            $.log(JSON.stringify(bodyobj,null,2))
             $.begin = $.begin + 1;
             let res = $.begin % ReadArr.length;
             $.setdata(res + "", 'zqbody_index');
@@ -140,7 +141,8 @@ function AutoRead() {
     return new Promise((resolve, reject) => {
         $.post(batHost('article/complete.json', articlebody), async(error, response, data) => {
             let readres = JSON.parse(data);
-            //$.log(JSON.stringify(readres,null,2))
+            //
+            $.log(JSON.stringify(readres,null,2))
             if (readres.items.complete == 1) {
                 $.log(readres.items.max_notice)
             } else {
