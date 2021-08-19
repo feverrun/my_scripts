@@ -1,16 +1,16 @@
 /* 
-cron 14 10 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/jd_sign_graphics.js
+cron 14 10 * * * jd_sign_graphics.js
 只支持nodejs环境
-需要安装依赖 
+需要安装依赖
 npm i png-js 或者 npm i png-js -S
-
+from：https://github.com/smiek2221/scripts/
 如果 read ECONNRESET 错误 可以试试
 环境变量 JOY_HOST
 修改域名 https://jdjoy.jd.com 可以改成ip https://49.7.27.236
 */
 
-const validator = require('./JDJRValidator_Smiek.js');
-const Faker=require('./sign_graphics_validate.js') 
+const validator = require('./utils/JDJRValidator_Pure.js');
+const Faker=require('./utils/sign_graphics_validate.js')
 
 const $ = new Env('京东签到图形验证');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -49,8 +49,8 @@ const turnTableId = [
   { "name": "京东超市", "id": 1204, "url": "https://pro.m.jd.com/mall/active/QPwDgLSops2bcsYqQ57hENGrjgj/index.html" },
 ]
 $.UA = $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1")
-$.get = validator.injectToRequest($.get.bind($), 'channelSign', $.UA)
-$.post = validator.injectToRequest($.post.bind($), 'channelSign', $.UA)
+$.get = validator.injectToRequest3($.get.bind($), 'channelSign', $.UA)
+$.post = validator.injectToRequest3($.post.bind($), 'channelSign', $.UA)
 
 !(async () => {
   if (!cookiesArr[0]) {
@@ -79,12 +79,12 @@ $.post = validator.injectToRequest($.post.bind($), 'channelSign', $.UA)
   }
   await showMsg();
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 async function showMsg() {
   $.msg($.name, `【签到数量】:  ${turnTableId.length}个\n` + subTitle + message);
