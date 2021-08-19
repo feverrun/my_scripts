@@ -18,6 +18,7 @@ let helpAuthor = false;
 const randomCount = $.isNode() ? 5 : 5;
 let cash_exchange = false;//是否消耗2元红包兑换200京豆，默认否
 const inviteCodes = ['']
+$.newShareCodes = []
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -72,7 +73,7 @@ async function jdCash() {
   $.signMoney = 0;
   await index()
   //await shareCodesFormat()
-  //await helpFriends()
+  await helpFriends()
   await getReward()
   await getReward('2');
   $.exchangeBeanNum = 0;
@@ -128,6 +129,7 @@ function index(info=false) {
                 'inviteCode': data.data.result.inviteCode,
                 'shareDate': data.data.result.shareDate
               }
+              $.newShareCodes.push(helpInfo)
               $.shareDate = data.data.result.shareDate;
               // $.log(`shareDate: ${$.shareDate}`)
               // console.log(helpInfo)
@@ -167,6 +169,7 @@ function index(info=false) {
 }
 async function helpFriends() {
   $.canHelp = true
+  console.log(`开始账号内互助\n`)
   for (let code of $.newShareCodes) {
     console.log(`去帮助好友${code['inviteCode']}`)
     await helpFriend(code)
@@ -361,7 +364,8 @@ function readShareCode() {
 function shareCodesFormat() {
   return new Promise(async resolve => {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
-    $.newShareCodes = [];
+    $.authorCode = []
+    $.authorCode2 = []
     if ($.shareCodesArr[$.index - 1]) {
       $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
     } else {
