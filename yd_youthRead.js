@@ -117,7 +117,7 @@ function bodyInfo() {
                     if (artArr.indexOf(acticid) == -1) {
                         artArr.unshift(acticid);
                         $.log(ctype + ": " + artdesc + "  ----- " + author + "\n")
-                        await $.wait(10000);
+                        await $.wait(100000);
                         await AutoRead();
                     } else if (artArr.indexOf(acticid) > -1&&!$.isNode()) {
                         await removebody();
