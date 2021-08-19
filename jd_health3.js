@@ -23,7 +23,6 @@ cron "13 1,6,22 * * *" script-path=jd_health.js, tag=东东健康社区
  */
 const $ = new Env("东东健康社区");
 
-console.log('\n====================Hello World====================\n')
 
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 let cookiesArr = [],
