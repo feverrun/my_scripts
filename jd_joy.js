@@ -58,7 +58,7 @@ const weAppUrl = 'https://jdjoy.jd.com//pet';
 // const validator = require('./JDJRValidator.js');
 const validator = require('./utils/JDJRValidator_Pure.js');
 $.get=validator.injectToRequest($.get.bind($))
-$.post=validator.injectToRequest($.post.bind($))
+$.post=validator.injectToRequest2($.post.bind($))
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
