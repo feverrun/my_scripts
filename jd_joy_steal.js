@@ -67,7 +67,7 @@ if ($.isNode() && process.env.jdJoyStealCoin) {
 } else {
   jdJoyStealCoinTemp = `${jdJoyStealCoin}` === 'true';
 }
-$.get=validator.injectToRequest($.get.bind($))
+$.get=validator.injectToRequest3($.get.bind($))
 $.post=validator.injectToRequest2($.post.bind($))
 
 !(async () => {
