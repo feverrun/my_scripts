@@ -98,7 +98,8 @@ $.log("******** 您共获取" + ReadArr.length + "次阅读请求，任务开始
 
 function bodyInfo() {
     return new Promise((resolve, reject) => {
-        $.get(batHost('article/info/get.json?' + articlebody), async(error, resp, data) => {
+        //article/info/get.json
+        $.get(batHost('article/detail.json?' + articlebody), async(error, resp, data) => {
             let bodyobj = JSON.parse(data);
             //$.log(JSON.stringify(bodyobj,null,2))
             $.begin = $.begin + 1;
