@@ -74,7 +74,7 @@ $.log("******** 您共获取" + ReadArr.length + "次阅读请求，任务开始
         }
     } else {
         indexLast = 0,
-        $.begin = 0
+            $.begin = 0
     }
     if (smallzq == "true") {
         $.log("     请注意缩减请求开关已打开‼️\n     如不需要    请强制停止\n     关闭Boxjs缩减请求开关")
@@ -84,8 +84,6 @@ $.log("******** 您共获取" + ReadArr.length + "次阅读请求，任务开始
         if (ReadArr[i]) {
             articlebody = ReadArr[i];
             $.index = $.index + 1;
-            //
-            console.log('xxxxx'+articlebody+'\n');
             $.log(`-------------------------\n开始中青看点第${$.index}次阅读\n`);
             await bodyInfo();
         }
@@ -100,10 +98,9 @@ $.log("******** 您共获取" + ReadArr.length + "次阅读请求，任务开始
 
 function bodyInfo() {
     return new Promise((resolve, reject) => {
-        //article/info/get.json
-        $.get(batHost('article/detail.json?' + articlebody), async(error, resp, data) => {
+        $.get(batHost('article/info/get.json?' + articlebody), async(error, resp, data) => {
             let bodyobj = JSON.parse(data);
-            $.log(JSON.stringify(bodyobj,null,2))
+            //$.log(JSON.stringify(bodyobj,null,2))
             $.begin = $.begin + 1;
             let res = $.begin % ReadArr.length;
             $.setdata(res + "", 'zqbody_index');
@@ -206,8 +203,7 @@ function removebody() {
 
 function batHost(api, body) {
     return {
-        // url: 'https://kandian.wkandian.com/v5/' + api,
-        url: 'https://kandian.youth.cn/v5/' + api,
+        url: 'https://kandian.wkandian.com/v5/' + api,
         headers: {
             'User-Agent': 'KDApp/2.1.1 (iPhone; iOS 14.6; Scale/3.00)',
             'Host': 'kandian.wkandian.com',
@@ -220,8 +216,6 @@ function batHost(api, body) {
 function readTime() {
     return new Promise((resolve, reject) => {
         $.post(batHost('user/stay.json', timebodyVal), (error, resp, data) => {
-            //stay data
-            console.log(data);
             let timeres = JSON.parse(data)
             if (timeres.error_code == 0) {
                 readtimes = timeres.time / 60
@@ -233,14 +227,11 @@ function readTime() {
 }
 
 function Getbody() {
-    //info
-    if ($request && ($request.url.match(/\/article\/detail/)|| $request.url.match(/\/article\/complete/))) {
+    if ($request && ($request.url.match(/\/article\/info/)|| $request.url.match(/\/article\/complete/))) {
         if($request.url.match(/complete/)){
             bodyVal = $request.body
-            console.log('bodyVal'+bodyVal);
         } else {
             bodyVal = $request.url.split("?")[1]
-            console.log('bv'+bodyVal);
         };
         if (YouthBody) {
             if (YouthBody.indexOf(bodyVal) > -1) {
