@@ -79,7 +79,7 @@ $.log("******** 您共获取" + ReadArr.length + "次阅读请求，任务开始
     if (smallzq == "true") {
         $.log("     请注意缩减请求开关已打开‼️\n     如不需要    请强制停止\n     关闭Boxjs缩减请求开关")
     };
-    $.index = 0, readtimes="60";
+    $.index = 0, readtimes="";
     for (var i = indexLast ? indexLast : 0; i < ReadArr.length; i++) {
         if (ReadArr[i]) {
             articlebody = ReadArr[i];
@@ -100,8 +100,7 @@ function bodyInfo() {
     return new Promise((resolve, reject) => {
         $.get(batHost('article/info/get.json?' + articlebody), async(error, resp, data) => {
             let bodyobj = JSON.parse(data);
-            //
-            $.log(JSON.stringify(bodyobj,null,2))
+            //$.log(JSON.stringify(bodyobj,null,2))
             $.begin = $.begin + 1;
             let res = $.begin % ReadArr.length;
             $.setdata(res + "", 'zqbody_index');
@@ -118,7 +117,7 @@ function bodyInfo() {
                     if (artArr.indexOf(acticid) == -1) {
                         artArr.unshift(acticid);
                         $.log(ctype + ": " + artdesc + "  ----- " + author + "\n")
-                        await $.wait(100000);
+                        await $.wait(10000);
                         await AutoRead();
                     } else if (artArr.indexOf(acticid) > -1&&!$.isNode()) {
                         await removebody();
@@ -141,8 +140,7 @@ function AutoRead() {
     return new Promise((resolve, reject) => {
         $.post(batHost('article/complete.json', articlebody), async(error, response, data) => {
             let readres = JSON.parse(data);
-            //
-            $.log(JSON.stringify(readres,null,2))
+            //$.log(JSON.stringify(readres,null,2))
             if (readres.items.complete == 1) {
                 $.log(readres.items.max_notice)
             } else {
@@ -205,7 +203,8 @@ function removebody() {
 
 function batHost(api, body) {
     return {
-        url: 'https://kandian.wkandian.com/v5/' + api,
+        // url: 'https://kandian.wkandian.com/v5/' + api,
+        url: 'https://kandian.youth.cn/v5/' + api,
         headers: {
             'User-Agent': 'KDApp/2.1.1 (iPhone; iOS 14.6; Scale/3.00)',
             'Host': 'kandian.wkandian.com',
@@ -218,6 +217,8 @@ function batHost(api, body) {
 function readTime() {
     return new Promise((resolve, reject) => {
         $.post(batHost('user/stay.json', timebodyVal), (error, resp, data) => {
+            //stay data
+            console.log(data);
             let timeres = JSON.parse(data)
             if (timeres.error_code == 0) {
                 readtimes = timeres.time / 60
@@ -229,11 +230,14 @@ function readTime() {
 }
 
 function Getbody() {
-    if ($request && ($request.url.match(/\/article\/info/)|| $request.url.match(/\/article\/complete/))) {
+    //info
+    if ($request && ($request.url.match(/\/article\/detail/)|| $request.url.match(/\/article\/complete/))) {
         if($request.url.match(/complete/)){
             bodyVal = $request.body
+            console.log('bodyVal'+bodyVal);
         } else {
             bodyVal = $request.url.split("?")[1]
+            console.log('bv'+bodyVal);
         };
         if (YouthBody) {
             if (YouthBody.indexOf(bodyVal) > -1) {
