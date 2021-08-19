@@ -2,7 +2,7 @@
 自动提交助力码，删除内置助力码。
 author: 疯疯
 东东健康社区
-更新时间：2021-4-22
+更新时间：2021-8-19
 活动入口：京东APP首页搜索 "玩一玩"即可
 
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -283,11 +283,11 @@ function readShareCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data || {"code":500});
             }
         })
         await $.wait(10000);
-        resolve()
+        resolve({"code":500})
     })
 }
 //提交互助码
@@ -307,11 +307,11 @@ function submitCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data || {"code":500});
             }
         })
-        await $.wait(15000);
-        resolve()
+        await $.wait(10000);
+        resolve({"code":500})
     })
 }
 //格式化助力码

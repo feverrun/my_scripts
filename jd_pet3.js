@@ -1,7 +1,7 @@
 /*
 自动提交助力码，删除内置助力码
 东东萌宠 更新地址： jd_pet.js
-更新时间：2021-05-21
+更新时间：2021-08-19
 活动入口：京东APP我的-更多工具-东东萌宠
 已支持IOS多京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -472,11 +472,11 @@ function readShareCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data || {"code":500})
             }
         })
         await $.wait(10000);
-        resolve()
+        resolve({"code":500})
     })
 }
 //提交互助码
@@ -496,11 +496,11 @@ function submitCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data || {"code":500})
             }
         })
-        await $.wait(15000);
-        resolve()
+        await $.wait(10000);
+        resolve({"code":500})
     })
 }
 function shareCodesFormat() {

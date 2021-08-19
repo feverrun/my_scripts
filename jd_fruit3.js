@@ -1,7 +1,7 @@
 /*
 自动提交助力码，删除内置助力码
 东东水果:脚本更新地址 jd_fruit.js
-更新时间：2021-5-18
+更新时间：2021-8-19
 活动入口：京东APP我的-更多工具-东东农场
 东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -1268,11 +1268,11 @@ function readShareCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data || {"code":500});
             }
         })
         await $.wait(10000);
-        resolve()
+        resolve({"code":500})
     })
 }
 //提交互助码
@@ -1292,11 +1292,11 @@ function submitCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data || {"code":500});
             }
         })
-        await $.wait(15000);
-        resolve()
+        await $.wait(10000);
+        resolve({"code":500})
     })
 }
 function shareCodesFormat() {

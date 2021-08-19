@@ -1,7 +1,7 @@
 /*
 自动提交助力码，删除内置助力码。
 京东京喜工厂
-更新时间：2021-6-7
+更新时间：2021-8-19
 修复做任务、收集电力出现火爆，不能完成任务，重新计算h5st验证
 参考自 ：https://www.orzlee.com/web-development/2021/03/03/lxk0301-jingdong-signin-scriptjingxi-factory-solves-the-problem-of-unable-to-signin.html
 活动入口：京东APP-游戏与互动-查看更多-京喜工厂
@@ -1321,11 +1321,11 @@ function readShareCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data || {"code":500});
             }
         })
         await $.wait(10000);
-        resolve()
+        resolve({"code":500})
     })
 }
 //提交互助码
@@ -1345,11 +1345,11 @@ function submitCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data || {"code":500});
             }
         })
-        await $.wait(15000);
-        resolve()
+        await $.wait(10000);
+        resolve({"code":500})
     })
 }
 //格式化助力码
