@@ -74,7 +74,7 @@ $.log("******** 您共获取" + ReadArr.length + "次阅读请求，任务开始
         }
     } else {
         indexLast = 0,
-            $.begin = 0
+        $.begin = 0
     }
     if (smallzq == "true") {
         $.log("     请注意缩减请求开关已打开‼️\n     如不需要    请强制停止\n     关闭Boxjs缩减请求开关")
@@ -84,6 +84,8 @@ $.log("******** 您共获取" + ReadArr.length + "次阅读请求，任务开始
         if (ReadArr[i]) {
             articlebody = ReadArr[i];
             $.index = $.index + 1;
+            //
+            console.log('xxxxx'+articlebody+'\n');
             $.log(`-------------------------\n开始中青看点第${$.index}次阅读\n`);
             await bodyInfo();
         }
@@ -101,7 +103,7 @@ function bodyInfo() {
         //article/info/get.json
         $.get(batHost('article/detail.json?' + articlebody), async(error, resp, data) => {
             let bodyobj = JSON.parse(data);
-            //$.log(JSON.stringify(bodyobj,null,2))
+            $.log(JSON.stringify(bodyobj,null,2))
             $.begin = $.begin + 1;
             let res = $.begin % ReadArr.length;
             $.setdata(res + "", 'zqbody_index');
