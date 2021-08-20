@@ -18,7 +18,7 @@ const JD_API_HOST = 'https://m.jingxi.com';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const openTuanCK = $.isNode() ? (process.env.OPEN_DREAMFACTORY_TUAN ? process.env.OPEN_DREAMFACTORY_TUAN : '1'):'1';
-let tuanActiveId = ``;
+let tuanActiveId = `yNtpovqFehHByNrt_lmb3g`;
 let cookiesArr = [], cookie = '', message = '';
 $.tuanIds = [];
 $.appId = 10001;
