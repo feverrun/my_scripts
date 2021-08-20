@@ -27,7 +27,7 @@ const $ = new Env('宠汪汪偷好友积分与狗粮');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const validator = require('./JDJRValidator_Pure.js');
+const validator = require('./utils/JDJRValidator_Pure');
 let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000);
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
