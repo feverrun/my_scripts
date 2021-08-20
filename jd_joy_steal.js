@@ -68,8 +68,8 @@ if ($.isNode() && process.env.jdJoyStealCoin) {
 } else {
   jdJoyStealCoinTemp = `${jdJoyStealCoin}` === 'true';
 }
-$.get=validator.injectToRequest($.get.bind($))
-$.post=validator.injectToRequest($.post.bind($))
+$.get=validator.injectToRequest3($.get.bind($))
+$.post=validator.injectToRequest3($.post.bind($))
 
 !(async () => {
   if (!cookiesArr[0]) {
