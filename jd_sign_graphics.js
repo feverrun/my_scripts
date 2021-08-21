@@ -1,7 +1,7 @@
 /* 
 cron 14 10 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/jd_sign_graphics.js
 只支持nodejs环境
-需要安装依赖
+需要安装依赖 
 npm i png-js 或者 npm i png-js -S
 
 如果 read ECONNRESET 错误 可以试试
@@ -10,7 +10,7 @@ npm i png-js 或者 npm i png-js -S
 */
 
 const validator = require('./utils/JDJRValidator_Pure.js');
-const Faker=require('./sign_graphics_validate.js')
+const Faker=require('./sign_graphics_validate.js') 
 
 const $ = new Env('京东签到图形验证');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -40,6 +40,7 @@ if(process.env.JOY_HOST){
 }
 
 const turnTableId = [
+  { "name": "PLUS会员定制", "id": 1265, "url": "https://prodev.m.jd.com/mall/active/3bhgbFe5HZcFCjEZf2jzp3umx4ZR/index.html" },
   { "name": "京东商城-内衣", "id": 1071, "url": "https://prodev.m.jd.com/mall/active/4PgpL1xqPSW1sVXCJ3xopDbB1f69/index.html" },
   { "name": "京东商城-健康", "id": 527, "url": "https://prodev.m.jd.com/mall/active/w2oeK5yLdHqHvwef7SMMy4PL8LF/index.html" },
   { "name": "京东商城-清洁", "id": 446, "url": "https://prodev.m.jd.com/mall/active/2Tjm6ay1ZbZ3v7UbriTj6kHy9dn6/index.html" },
@@ -75,20 +76,19 @@ $.post = validator.injectToRequest3($.post.bind($), 'channelSign', $.UA)
       await signRun()
       const UTC8 = new Date().getTime() + new Date().getTimezoneOffset()*60000 + 28800000;
       $.beanSignTime = new Date(UTC8).toLocaleString('zh', {hour12: false});
-      let msg = `【京东账号${$.index}】${$.nickName || $.UserName}\n【签到时间】:  ${$.beanSignTime}\n【签到概览】:  成功${successNum}个, 失败${errorNum}个\n【签到奖励】:  ${beanNum}京豆\n`
+      let msg = `【京东账号${$.index}】${$.nickName || $.UserName}\n【签到时间】:  ${$.beanSignTime}\n【签到概览】:  成功${successNum}个, 失败${errorNum}个\n${beanNum > 0 && "【签到奖励】:  "+beanNum+"京豆" || ""}\n`
       message += msg + '\n'
       $.msg($.name, msg);
-      // break
     }
   }
   await showMsg();
 })()
-    .catch((e) => {
-      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-    })
-    .finally(() => {
-      $.done();
-    })
+  .catch((e) => {
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+  })
+  .finally(() => {
+    $.done();
+  })
 
 async function showMsg() {
   $.msg($.name, `【签到数量】:  ${turnTableId.length}个\n` + subTitle + message);
