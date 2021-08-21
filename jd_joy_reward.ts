@@ -108,3 +108,4 @@ function exchange(beanId: number) {
     resolve();
   })
 }
+
