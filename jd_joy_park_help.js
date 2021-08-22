@@ -100,10 +100,10 @@ function requestApi(functionId, params) {
                 'Host': 'api.m.jd.com',
                 'accept': 'application/json, text/plain, */*',
                 'content-type': 'application/x-www-form-urlencoded',
-                'origin': 'hhttps://joypark.jd.com',
+                'origin': 'https://joypark.jd.com',
                 'accept-language': 'zh-cn',
                 'User-Agent': ua,
-                'referer': 'https://joypark.jd.com/?activityId=LsQNxL7iWDlXUs6cFl-AAg&lng=110.309497&lat=25.244346&sid=0341d5b9d804d0b838ae6018c19088dw&un_area=20_1726_22885_51456',
+                'referer': 'https://joypark.jd.com/?activityId=LsQNxL7iWDlXUs6cFl-AAg&lng=121.339852&lat=31.386995&sid=7b965e8d478c9b5f65e294e038c748dw&un_area=2_2824_51911_0',
                 'cookie': cookie
             },
             body: `functionId=${functionId}&body=${JSON.stringify(params)}&_t=${Date.now()}&appid=activities_platform`,

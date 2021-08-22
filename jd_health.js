@@ -34,8 +34,7 @@ if ($.isNode()) {
     cookiesArr.push(jdCookieNode[item]);
   });
   console.log(`如果出现提示 ?.data. 错误，请升级nodejs版本(进入容器后，apk add nodejs-current)`)
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false") console.log = () => {
-  };
+  if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false") console.log = () => {};
 } else {
   cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
@@ -62,12 +61,12 @@ const JD_API_HOST = "https://api.m.jd.com/";
     await notify.sendNotify(`${$.name}`, `${allMessage}`)
   }
 })()
-    .catch((e) => {
-      $.log("", `❌ ${$.name}, 失败! 原因: ${e}!`, "");
-    })
-    .finally(() => {
-      $.done();
-    });
+  .catch((e) => {
+    $.log("", `❌ ${$.name}, 失败! 原因: ${e}!`, "");
+  })
+  .finally(() => {
+    $.done();
+  });
 
 async function main() {
   try {
@@ -76,10 +75,10 @@ async function main() {
     await getTaskDetail(-1)
     await getTaskDetail(16)
     await getTaskDetail(6)
-    for (let i = 0; i < 5; ++i) {
+    for(let i = 0 ; i < 5; ++i){
       $.canDo = false
       await getTaskDetail()
-      if (!$.canDo) break
+      if(!$.canDo) break
       await $.wait(1000)
     }
     await collectScore()
@@ -101,7 +100,7 @@ async function helpFriends() {
     if (!code) continue
     console.log(`去助力好友${code}`)
     let res = await doTask(code, 6)
-    if ([108, -1001].includes(res?.data?.bizCode)) {
+    if([108,-1001].includes(res?.data?.bizCode)){
       console.log(`助力次数已满，跳出`)
       break
     }
@@ -120,76 +119,76 @@ function showMsg() {
 function getTaskDetail(taskId = '') {
   return new Promise(resolve => {
     $.get(taskUrl('jdhealth_getTaskDetail', {"buildingId": "", taskId: taskId === -1 ? '' : taskId, "channelId": 1}),
-        async (err, resp, data) => {
-          try {
-            if (safeGet(data)) {
-              data = $.toObj(data)
-              if (taskId === -1) {
-                let tmp = parseInt(parseFloat(data?.data?.result?.userScore ?? '0'))
-                if (!$.earn) {
-                  $.score = tmp
-                  $.earn = 1
-                } else {
-                  $.earn = tmp - $.score
-                  $.score = tmp
-                }
-              } else if (taskId === 6) {
-                if (data?.data?.result?.taskVos) {
-                  console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken}\n`);
-                  // console.log('好友助力码：' + data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken)
-                  myInviteCode = data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken;
-                  const submitCodeRes = await submitCode();
-                  if (submitCodeRes && submitCodeRes.code === 200) {
-                    console.log(`🏥东东健康-互助码提交成功！🏥`);
-                  } else if (submitCodeRes.code === 300) {
-                    console.log(`🏥东东健康-互助码已提交！🏥`);
-                  }
-                }
-              } else if (taskId === 22) {
-                console.log(`${data?.data?.result?.taskVos[0]?.taskName}任务，完成次数：${data?.data?.result?.taskVos[0]?.times}/${data?.data?.result?.taskVos[0]?.maxTimes}`)
-                if (data?.data?.result?.taskVos[0]?.times === data?.data?.result?.taskVos[0]?.maxTimes) return
-                await doTask(data?.data?.result?.taskVos[0].shoppingActivityVos[0]?.taskToken, 22, 1)//领取任务
-                await $.wait(1000 * (data?.data?.result?.taskVos[0]?.waitDuration || 3));
-                await doTask(data?.data?.result?.taskVos[0].shoppingActivityVos[0]?.taskToken, 22, 0);//完成任务
+      async (err, resp, data) => {
+        try {
+          if (safeGet(data)) {
+            data = $.toObj(data)
+            if (taskId === -1) {
+              let tmp = parseInt(parseFloat(data?.data?.result?.userScore ?? '0'))
+              if (!$.earn) {
+                $.score = tmp
+                $.earn = 1
               } else {
-                for (let vo of data?.data?.result?.taskVos.filter(vo => vo.taskType !== 19) ?? []) {
-                  console.log(`${vo.taskName}任务，完成次数：${vo.times}/${vo.maxTimes}`)
-                  for (let i = vo.times; i < vo.maxTimes; i++) {
-                    console.log(`去完成${vo.taskName}任务`)
-                    if (vo.taskType === 13) {
-                      await doTask(vo.simpleRecordInfoVo?.taskToken, vo?.taskId)
-                    } else if (vo.taskType === 8) {
-                      await doTask(vo.productInfoVos[i]?.taskToken, vo?.taskId, 1)
-                      await $.wait(1000 * 10)
-                      await doTask(vo.productInfoVos[i]?.taskToken, vo?.taskId, 0)
-                    } else if (vo.taskType === 9) {
-                      await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId, 1)
-                      await $.wait(1000 * 10)
-                      await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId, 0)
-                    } else if (vo.taskType === 10) {
-                      await doTask(vo.threeMealInfoVos[0]?.taskToken, vo?.taskId)
-                    } else if (vo.taskType === 26 || vo.taskType === 3) {
-                      await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId)
-                    } else if (vo.taskType === 1) {
-                      for (let key of Object.keys(vo.followShopVo)) {
-                        let taskFollow = vo.followShopVo[key]
-                        if (taskFollow.status !== 2) {
-                          await doTask(taskFollow.taskToken, vo.taskId, 0)
-                          break
-                        }
+                $.earn = tmp - $.score
+                $.score = tmp
+              }
+            } else if (taskId === 6) {
+              if (data?.data?.result?.taskVos) {
+                console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken}\n`);
+                // console.log('好友助力码：' + data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken)
+                myInviteCode = data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken;
+                const submitCodeRes = await submitCode();
+                if (submitCodeRes && submitCodeRes.code === 200) {
+                  console.log(`🏥东东健康-互助码提交成功！🏥`);
+                }else if (submitCodeRes.code === 300) {
+                  console.log(`🏥东东健康-互助码已提交！🏥`);
+                }
+              }
+            } else if (taskId === 22) {
+              console.log(`${data?.data?.result?.taskVos[0]?.taskName}任务，完成次数：${data?.data?.result?.taskVos[0]?.times}/${data?.data?.result?.taskVos[0]?.maxTimes}`)
+              if (data?.data?.result?.taskVos[0]?.times === data?.data?.result?.taskVos[0]?.maxTimes) return
+              await doTask(data?.data?.result?.taskVos[0].shoppingActivityVos[0]?.taskToken, 22, 1)//领取任务
+              await $.wait(1000 * (data?.data?.result?.taskVos[0]?.waitDuration || 3));
+              await doTask(data?.data?.result?.taskVos[0].shoppingActivityVos[0]?.taskToken, 22, 0);//完成任务
+            } else {
+              for (let vo of data?.data?.result?.taskVos.filter(vo => vo.taskType !== 19 && vo.taskType !== 25) ?? []) {
+                console.log(`${vo.taskName}任务，完成次数：${vo.times}/${vo.maxTimes}`)
+                for (let i = vo.times; i < vo.maxTimes; i++) {
+                  console.log(`去完成${vo.taskName}任务`)
+                  if (vo.taskType === 13) {
+                    await doTask(vo.simpleRecordInfoVo?.taskToken, vo?.taskId)
+                  } else if (vo.taskType === 8) {
+                    await doTask(vo.productInfoVos[i]?.taskToken, vo?.taskId, 1)
+                    await $.wait(1000 * 10)
+                    await doTask(vo.productInfoVos[i]?.taskToken, vo?.taskId, 0)
+                  } else if (vo.taskType === 9) {
+                    await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId, 1)
+                    await $.wait(1000 * 10)
+                    await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId, 0)
+                  } else if (vo.taskType === 10) {
+                    await doTask(vo.threeMealInfoVos[0]?.taskToken, vo?.taskId)
+                  } else if (vo.taskType === 26 || vo.taskType === 3) {
+                    await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId)
+                  } else if (vo.taskType === 1) {
+                    for (let key of Object.keys(vo.followShopVo)) {
+                      let taskFollow = vo.followShopVo[key]
+                      if (taskFollow.status !== 2) {
+                        await doTask(taskFollow.taskToken, vo.taskId, 0)
+                        break
                       }
                     }
-                    await $.wait(2000)
                   }
+                  await $.wait(2000)
                 }
               }
             }
-          } catch (e) {
-            console.log(e)
-          } finally {
-            resolve()
           }
-        })
+        } catch (e) {
+          console.log(e)
+        } finally {
+          resolve()
+        }
+      })
   })
 }
 
@@ -221,7 +220,6 @@ async function getCommodities() {
     })
   })
 }
-
 function exchange(commodityType, commodityId) {
   return new Promise(resolve => {
     const options = taskUrl('jdhealth_exchange', {commodityType, commodityId})
@@ -251,51 +249,51 @@ function doTask(taskToken, taskId, actionType = 0) {
   return new Promise(resolve => {
     const options = taskUrl('jdhealth_collectScore', {taskToken, taskId, actionType})
     $.get(options,
-        (err, resp, data) => {
-          try {
-            if (safeGet(data)) {
-              data = $.toObj(data)
-              if ([0, 1].includes(data?.data?.bizCode ?? -1)) {
-                $.canDo = true
-                if (data?.data?.result?.score)
-                  console.log(`任务完成成功，获得：${data?.data?.result?.score ?? '未知'}能量`)
-                else
-                  console.log(`任务领取结果：${data?.data?.bizMsg ?? JSON.stringify(data)}`)
-              } else {
-                console.log(`任务完成失败：${data?.data?.bizMsg ?? JSON.stringify(data)}`)
-              }
+      (err, resp, data) => {
+        try {
+          if (safeGet(data)) {
+            data = $.toObj(data)
+            if ([0, 1].includes(data?.data?.bizCode ?? -1)) {
+              $.canDo = true
+              if (data?.data?.result?.score)
+                console.log(`任务完成成功，获得：${data?.data?.result?.score ?? '未知'}能量`)
+              else
+                console.log(`任务领取结果：${data?.data?.bizMsg ?? JSON.stringify(data)}`)
+            } else {
+              console.log(`任务完成失败：${data?.data?.bizMsg ?? JSON.stringify(data)}`)
             }
-          } catch (e) {
-            console.log(e)
-          } finally {
-            resolve(data)
           }
-        })
+        } catch (e) {
+          console.log(e)
+        } finally {
+          resolve(data)
+        }
+      })
   })
 }
 
 function collectScore() {
   return new Promise(resolve => {
     $.get(taskUrl('jdhealth_collectProduceScore', {}),
-        (err, resp, data) => {
-          try {
-            if (safeGet(data)) {
-              data = $.toObj(data)
-              if (data?.data?.bizCode === 0) {
-                if (data?.data?.result?.produceScore)
-                  console.log(`任务完成成功，获得：${data?.data?.result?.produceScore ?? '未知'}能量`)
-                else
-                  console.log(`任务领取结果：${data?.data?.bizMsg ?? JSON.stringify(data)}`)
-              } else {
-                console.log(`任务完成失败：${data?.data?.bizMsg ?? JSON.stringify(data)}`)
-              }
+      (err, resp, data) => {
+        try {
+          if (safeGet(data)) {
+            data = $.toObj(data)
+            if (data?.data?.bizCode === 0) {
+              if (data?.data?.result?.produceScore)
+                console.log(`任务完成成功，获得：${data?.data?.result?.produceScore ?? '未知'}能量`)
+              else
+                console.log(`任务领取结果：${data?.data?.bizMsg ?? JSON.stringify(data)}`)
+            } else {
+              console.log(`任务完成失败：${data?.data?.bizMsg ?? JSON.stringify(data)}`)
             }
-          } catch (e) {
-            console.log(e)
-          } finally {
-            resolve()
           }
-        })
+        } catch (e) {
+          console.log(e)
+        } finally {
+          resolve()
+        }
+      })
   })
 }
 
@@ -347,21 +345,17 @@ function readShareCode() {
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve(data || {"code": 500});
+        resolve(data || {"code":500});
       }
     })
     await $.wait(10000);
-    resolve({"code": 500})
+    resolve({"code":500})
   })
 }
-
 //提交互助码
 function submitCode() {
-  return new Promise(async resolve => {
-    $.get({
-      url: `http://www.helpu.cf/jdcodes/submit.php?code=${myInviteCode}&type=health`,
-      timeout: 10000
-    }, (err, resp, data) => {
+    return new Promise(async resolve => {
+    $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${myInviteCode}&type=health`, timeout: 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -375,11 +369,11 @@ function submitCode() {
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve(data || {"code": 500});
+        resolve(data || {"code":500});
       }
     })
     await $.wait(10000);
-    resolve({"code": 500})
+    resolve({"code":500})
   })
 }
 

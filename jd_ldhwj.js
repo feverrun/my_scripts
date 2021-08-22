@@ -1,18 +1,14 @@
 /*
-tgchannel：https://t.me/Ariszy8028
-github：https://github.com/Ariszy/Private-Script
-boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
-
 [task_local]
 #来电好物季
-10 1 * * * https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_ryhxj.js, tag= 来电好物季
+10 1 * * * jd_ldhwj.js, tag= 来电好物季
 ================Loon==============
 [Script]
-cron "10 1 * * *" script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_ldhwj.js,tag= 来电好物季
+cron "10 3,15 * * *" script-path= jd_ldhwj.js,tag= 来电好物季
 ===============Surge=================
-来电好物季 = type=cron,cronexp="10 1 * * *",wake-system=1,timeout=3600,script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_ldhwj.js
+来电好物季 = type=cron,cronexp="10 1 * * *",wake-system=1,timeout=3600,script-path= jd_ldhwj.js
 ============小火箭=========
-来电好物季 = type=cron,script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_ldhw.js, cronexpr="10 1 * * *", timeout=3600, enable=true
+来电好物季 = type=cron,script-path= jd_ldhwj.js, cronexpr="10 1 * * *", timeout=3600, enable=true
 */
 const $ = new Env('来电好物季')
 const notify = $.isNode() ?require('./sendNotify') : '';
@@ -262,11 +258,14 @@ list2tokenArr.push(list1.simpleRecordInfoVo.taskToken)
 list2tokenArr.push(list2.shoppingActivityVos[i].taskToken)
        }
        
-       let list3 = result.data.result.taskVos.find(item => item.taskId == 3)
-       for(let i = 0; i < list3.shoppingActivityVos.length; i ++){
-       listtokenArr.push(3+list3.shoppingActivityVos[i].taskToken)
-list2tokenArr.push(list3.shoppingActivityVos[i].taskToken)
+       let list6 = result.data.result.taskVos.find(item => item.taskId == 3)
+       if (list6) {
+	  for(let i = 0; i < list6.shoppingActivityVos.length; i ++){
+              listtokenArr.push(6+list6.shoppingActivityVos[i].taskToken)
+              list2tokenArr.push(list6.shoppingActivityVos[i].taskToken)
+          }
        }
+       
        
        let list4 = result.data.result.taskVos.find(item => item.taskId == 4)
        for(let i = 0; i < list4.shoppingActivityVos.length; i ++){
