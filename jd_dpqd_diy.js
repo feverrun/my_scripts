@@ -1,7 +1,9 @@
 /*
-cron "2 0 * * *" jd_dpqd.js
 店铺签到，各类店铺签到，有新的店铺直接添加token即可
 搬运cui521大佬脚本，请勿外传！！！
+
+由LAzysheep更新
+cron 30 0,23 * * * jd_qpqd_diy.js, tag=店铺签到diy
 */
 const $ = new Env('店铺签到');
 
@@ -19,6 +21,7 @@ let num=0
 let shopname=''
 
 const token=[
+
 '020E4A5B75AE493CDF3020628CA72FDE',//3天，10豆；5天，20豆；7天，35豆；
 'ACD7EB42FB65AF1A447AEB329235DE04',//每日，3豆；15天，100豆；
 '5BB2C6C6332AD842011240152F7550EB',//每日，6豆；7天，100豆；

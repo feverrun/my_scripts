@@ -258,7 +258,7 @@ list2tokenArr.push(list1.simpleRecordInfoVo.taskToken)
 list2tokenArr.push(list2.shoppingActivityVos[i].taskToken)
        }
        
-       let list6 = result.data.result.taskVos.find(item => item.taskId == 3)
+       let list6 = result.data.result.taskVos.find(item => item.taskId == 6)
        if (list6) {
 	  for(let i = 0; i < list6.shoppingActivityVos.length; i ++){
               listtokenArr.push(6+list6.shoppingActivityVos[i].taskToken)
