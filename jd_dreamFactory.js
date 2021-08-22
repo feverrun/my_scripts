@@ -972,8 +972,8 @@ async function tuanActivity() {
     }
 }
 async function joinLeaderTuan() {
-    let res = await updateTuanIdsCDN(), res2 = await updateTuanIdsCDN("https://raw.githubusercontent.com/JDHelloWorld/jd_scripts/main/tools/empty.json")
-    if (!res) res = await updateTuanIdsCDN('https://raw.githubusercontent.com/JDHelloWorld/jd_scripts/main/tools/empty.json');
+    let res = await updateTuanIdsCDN(), res2 = await updateTuanIdsCDN("https://raw.githubusercontent.com/feverrun/jd_scripts/main/tools/empty.json")
+    if (!res) res = await updateTuanIdsCDN('https://raw.githubusercontent.com/feverrun/jd_scripts/main/tools/empty.json');
     $.authorTuanIds = [...(res && res.tuanIds || []),...(res2 && res2.tuanIds || [])]
     if ($.authorTuanIds && $.authorTuanIds.length) {
         for (let tuanId of $.authorTuanIds) {
@@ -1382,7 +1382,7 @@ function requireConfig() {
                 console.log(`拼团活动ID: 获取成功 ${tuanActiveId}\n`)
             } else {
                 if (!$.tuanConfigs) {
-                    await updateTuanIdsCDN('https://raw.githubusercontent.com/JDHelloWorld/jd_scripts/main/tools/empty.json');
+                    await updateTuanIdsCDN('https://raw.githubusercontent.com/feverrun/jd_scripts/main/tools/empty.json');
                     if ($.tuanConfigs && $.tuanConfigs['tuanActiveId']) {
                         tuanActiveId = $.tuanConfigs['tuanActiveId'];
                         console.log(`拼团活动ID: 获取成功 ${tuanActiveId}\n`)

@@ -1,5 +1,5 @@
 /**
- Author: JDHelloWorld
+ Author: feverrun
  东东电竞经理:脚本更新地址 jd_EsportsManager.js
  更新时间：2021-06-20
  活动入口：京东APP-东东农场-风车-电竞经理
@@ -10,7 +10,7 @@
  ==========================Quantumultx=========================
  [task_local]
  #东东电竞经理
- 0 0-23/2 * * * jd_EsportsManager.js, tag=东东电竞经理, img-url=https://raw.githubusercontent.com/JDHelloWorld/jd_scripts/main/icon/jd_EsportsManager.png, enabled=true
+ 0 0-23/2 * * * jd_EsportsManager.js, tag=东东电竞经理, img-url=https://raw.githubusercontent.com/feverrun/jd_scripts/main/icon/jd_EsportsManager.png, enabled=true
  =========================Loon=============================
  [Script]
  cron "0 0-23/2 * * *" script-path=jd_EsportsManager.js,tag=东东电竞经理

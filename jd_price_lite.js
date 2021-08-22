@@ -31,13 +31,13 @@ if (url.indexOf(path3) !== -1) {
 
 if (url.indexOf(path2) !== -1) {
     if (Math.ceil(Math.random() * 4) === 1) {
-        $.get({url: "https://raw.githubusercontent.com/JDHelloWorld/jd_price/main/version.log", timeout:3000}, (err, resp, data) => {
+        $.get({url: "https://raw.githubusercontent.com/feverrun/jd_price/main/version.log", timeout:3000}, (err, resp, data) => {
             if(!err){
                 try{
                     let latest = data.split('\n')[0]
                     let msg = data.split('\n')[1]
                     if (version !== latest) {
-                        $.msg('请更新！', `最新：${latest}  JDHelloWorld`, `更新内容：${msg}`)
+                        $.msg('请更新！', `最新：${latest}  feverrun`, `更新内容：${msg}`)
                         $.done({body});
                         return false
                     } else {

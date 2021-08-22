@@ -47,7 +47,7 @@ $.shareId = [];
       '活动地址: https://isp5g.m.jd.com\n' +
       '活动时间：2021-06-2到2021-07-31\n' +
       '更新时间：2021-06-3 12:00');
-  await updateShareCodesCDN('https://raw.githubusercontent.com/JDHelloWorld/jd_scripts/main/tools/empty.json')
+  await updateShareCodesCDN('https://raw.githubusercontent.com/feverrun/jd_scripts/main/tools/empty.json')
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];

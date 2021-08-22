@@ -24,8 +24,8 @@ let SCKEY_WECOM_URL = '';
 let BARK_PUSH = '';
 //BARK app推送铃声,铃声列表去APP查看复制填写
 let BARK_SOUND = '';
-//BARK app推送消息的分组，默认为”JDHelloWorld”
-let BARK_GROUP = 'JDHelloWorld'
+//BARK app推送消息的分组，默认为”feverrun”
+let BARK_GROUP = 'feverrun'
 
 // =======================================telegram机器人通知设置区域===========================================
 //此处填你telegram bot 的Token，telegram机器人通知推送必填项.例如：1077xxx4424:AAFjv0FcqxxxxxxgEMGfi22B4yh15R5uw

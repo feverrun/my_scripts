@@ -5,7 +5,7 @@
  ==========================Quantumultx=========================
  [task_local]
  #嗯
- * * * * * jd_logout.js, tag=嗯, img-url=https://raw.githubusercontent.com/JDHelloWorld/jd_scripts/main/icon/jd_logout.png, enabled=true
+ * * * * * jd_logout.js, tag=嗯, img-url=https://raw.githubusercontent.com/feverrun/jd_scripts/main/icon/jd_logout.png, enabled=true
  =========================Loon=============================
  [Script]
  cron "* * * * *" script-path=jd_logout.js,tag=嗯
