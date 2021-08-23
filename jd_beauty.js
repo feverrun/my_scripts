@@ -70,12 +70,12 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     }
   }
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 async function accountCheck() {
   $.hasDone = false;
@@ -154,7 +154,7 @@ async function mr() {
       'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
     }
   })
-  console.log(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`)
+  console.log(`wss://116.198.3.218/wss/?token=${$.token}`)
   client.onopen = async () => {
     console.log(`美容研究院服务器连接成功`);
     client.send('{"msg":{"type":"action","args":{"source":1},"action":"_init_"}}');
@@ -466,13 +466,13 @@ async function mr() {
             console.log(`收取产品失败，错误信息${vo.msg}`)
           }
           break
-        // case "get_task":
-        //   console.log(`当前任务【${vo.data.describe}】，需要【${vo.data.product.name}】${vo.data.package_stock}/${vo.data.num}份`)
-        //   if (vo.data.package_stock >= vo.data.num) {
-        //     console.log(`满足任务要求，去完成任务`)
-        //     client.send(`{"msg":{"type":"action","args":{"task_id":${vo.data.id}},"action":"complete_task"}}`)
-        //   }
-        //   break
+          // case "get_task":
+          //   console.log(`当前任务【${vo.data.describe}】，需要【${vo.data.product.name}】${vo.data.package_stock}/${vo.data.num}份`)
+          //   if (vo.data.package_stock >= vo.data.num) {
+          //     console.log(`满足任务要求，去完成任务`)
+          //     client.send(`{"msg":{"type":"action","args":{"task_id":${vo.data.id}},"action":"complete_task"}}`)
+          //   }
+          //   break
         case 'get_benefit':
           for (let benefit of vo.data) {
             if (benefit.type === 1) { //type 1 是京豆
@@ -530,8 +530,7 @@ function getIsvToken() {
       'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
       'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
       'content-type': 'application/x-www-form-urlencoded',
-      'Cookie': cookie,
-      'referer':'xinruimz-isv.isvjcloud.com',
+      'Cookie': cookie
     }
   }
   return new Promise(resolve => {
