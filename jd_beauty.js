@@ -530,7 +530,8 @@ function getIsvToken() {
       'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
       'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
       'content-type': 'application/x-www-form-urlencoded',
-      'Cookie': cookie
+      'Cookie': cookie,
+      'referer':'xinruimz-isv.isvjcloud.com',
     }
   }
   return new Promise(resolve => {
