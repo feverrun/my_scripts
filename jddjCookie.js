@@ -2,7 +2,7 @@
 此文件为Node.js专用。其他用户请忽略
  */
 //此处填写京东账号cookie。
-let CookieJDs = []
+let CookieJDs = ['PDJ_RN_JDPIN=18862988021_p; PDJ_RN_MOBILE=188****7028; PDJ_RN_PIN=JD_a5faf6efe75a000; cart_uuid=d45a13a650de78a8; o2o_m_rn_sid=9a3935bf-7b4f-4639-bd02-2c1e4ac25a61']
 
 // 判断环境变量里面是否有京东到家ck
 if (process.env.JDDJ_COOKIE) {
