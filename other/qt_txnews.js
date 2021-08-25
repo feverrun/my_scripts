@@ -361,6 +361,9 @@ function StepsTotal() {
                         //readtitle = awards.title.split("，")[0].replace(/[\u4e00-\u9fa5]/g,``)
                         title = awards.title.match(/\d+/)
                     over_red = Number(redtotal - red_opened);
+                    console.log(taskType);
+                    console.log("redtotal"+redtotal);
+                    console.log("red_opened"+red_opened);
                     if (taskType == "article") {
                         read_res = over_red;
                         $.desc += "【阅读资讯】 已领" + awards.opened + "个红包 已看" + readnum + "篇/再读" + title + "篇\n";
