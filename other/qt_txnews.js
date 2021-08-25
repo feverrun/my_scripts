@@ -8,7 +8,7 @@
 const $ = new Env('腾讯新闻');
 const notify = $.isNode() ? require('./sendNotify') : '';
 let notifyInterval =$.getdata('notifynum')||50; //阅读篇数间隔通知开为1，常关为0;
-let readnum ='';
+
 let SignArr = [],SignUrl = "";
 cookiesArr = [],CookieTxnews = "";
 VideoArr = [],SignUrl = "",order = "",
@@ -139,7 +139,7 @@ function Host(api, body, taskurl) {
             'Referer': taskurl,
             'store': '1',
             'devid': ID,
-            'User-Agent': '%E8%85%BE%E8%AE%AF%E6%96%B0%E9%97%BB6590(android)'//'QQNews/6.4.40 (iPhone; iOS 14.2; Scale/3.00)'
+            'User-Agent': 'QQNews/6.4.40 (iPhone; iOS 14.2; Scale/3.00)'
         },
         body: body
     }
@@ -178,7 +178,7 @@ function open() {
             headers: Host().headers,
             body: "actname=chajian_shouqi"
         };
-        url.headers['Referer'] = 'http://inews.qq.com/inews/android/';//'http://inews.qq.com/inews/iphone/';
+        url.headers['Referer'] = 'http://inews.qq.com/inews/iphone/';
         url.headers['Host'] = 'api.prize.qq.com';
         $.post(url, async(error, resp, data) => {
             if(resp.statusCode ==200){
@@ -205,7 +205,7 @@ function zhuli() {
             headers: Host().headers,
             body: "inviter_openid=17A2385EE6D27888DB9F9D6B0BE90EEA&source=main"
         };
-        url.headers['Referer'] = 'http://inews.qq.com/inews/android/';//'http://inews.qq.com/inews/iphone/';
+        url.headers['Referer'] = 'http://inews.qq.com/inews/iphone/';
         url.headers['Host'] = 'api.prize.qq.com';
         $.post(url, (error, resp, data) => {
             if(resp.statusCode ==200){
@@ -349,8 +349,8 @@ function StepsTotal() {
     return new Promise((resolve, reject) => {
         $.get(Host('activity/info/get?activity_id=' + actid), async(error, resp, data) => {
             totalred = JSON.parse(data);
-            $.log(JSON.stringify(totalred,null,2))
-            // totalcion = totalred.data.extends.today_total_coin;
+            //$.log(JSON.stringify(totalred,null,2))
+            totalcion = totalred.data.extends.today_total_coin;
             if (totalred.ret == 0) {
                 for (awards of totalred.data.award) {
                     taskType = awards.type,
@@ -361,9 +361,6 @@ function StepsTotal() {
                         //readtitle = awards.title.split("，")[0].replace(/[\u4e00-\u9fa5]/g,``)
                         title = awards.title.match(/\d+/)
                     over_red = Number(redtotal - red_opened);
-                    console.log(taskType);
-                    console.log("redtotal"+redtotal);
-                    console.log("red_opened"+red_opened);
                     if (taskType == "article") {
                         read_res = over_red;
                         $.desc += "【阅读资讯】 已领" + awards.opened + "个红包 已看" + readnum + "篇/再读" + title + "篇\n";
