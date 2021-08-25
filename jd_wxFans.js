@@ -39,7 +39,10 @@ if ($.isNode()) {
     })
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
-    cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
+    cookiesArr = [
+        $.getdata("CookieJD"),
+        $.getdata("CookieJD2"),
+        ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 !(async () => {
     if (!cookiesArr[0]) {
@@ -158,7 +161,15 @@ async function luckDraw(){
 }
 async function doTask(){
     $.runFalag = true;
-    if ($.activityData.task1Sign && $.activityData.task1Sign.finishedCount === 0) {
+    if($.activityData.actorInfo && !$.activityData.actorInfo.follow){
+        console.log(`关注店铺`);
+        await takePostRequest('followShop');
+        await $.wait(2000);
+        $.upFlag = true;
+    }else{
+        console.log('已关注')
+    }
+    if ($.activityData.task1Sign && $.activityData.task1Sign.finishedCount === 0 && $.runFalag) {
         console.log(`执行每日签到`);
         await takePostRequest('doSign');
         await $.wait(2000);
@@ -283,15 +294,13 @@ async function takePostRequest(type){
             url= 'https://lzkjdz-isv.isvjcloud.com/wxCommonInfo/getActMemberInfo';
             body = `venderId=${$.shopid}&activityId=${$.activityID}&pin=${encodeURIComponent($.pin)}`;
             break;
-        case 'doSign':
-            url= 'https://lzkjdz-isv.isvjcloud.com/wxFansInterActionActivity/doSign';
-            body = `activityId=${$.activityID}&uuid=${$.activityData.actorInfo.uuid}`;
-            break;
         case 'doBrowGoodsTask':
         case 'doAddGoodsTask':
             url= `https://lzkjdz-isv.isvjcloud.com/wxFansInterActionActivity/${type}`;
             body = `activityId=${$.activityID}&uuid=${$.activityData.actorInfo.uuid}&skuId=${$.oneGoodInfo.skuId}`;
             break;
+        case 'doSign':
+        case 'followShop':
         case 'doShareTask':
         case 'doRemindTask':
         case 'doMeetingTask':
@@ -368,6 +377,7 @@ function dealReturn(type, data) {
                 console.log(data.errorMessage)
             }
             break;
+        case 'followShop':
         case 'doBrowGoodsTask':
         case 'doAddGoodsTask':
         case 'doShareTask':
