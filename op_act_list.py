@@ -42,7 +42,7 @@ act_list = [
 
      },
     {'act_name': 'realme宠粉计划1', 'aid': 1182,
-     'if_task': False,  # 该活动没有任务
+     'if_task': True,  # 该活动没有任务
      'referer': 'https://hd.oppo.com/act/m/2020/realmechannejifendui/index.html?us=relmechannel&um=huodongyaofeng&uc=realmechongfenchoujiang',
      'if_draw': True,  # 已修复抽奖，如不需要抽奖请自行修改为False
      'extra_draw_cookie': 'app_innerutm={"uc":"realmechongfenchoujiang","um":"huodongyaofeng","ut":"direct","us":"relmechannel"};app_utm={"utm_source_app":"direct","utm_campaign_app":"direct","utm_term_app":"direct","utm_medium_app":"direct"};',
@@ -52,7 +52,7 @@ act_list = [
      'text':'每次扣取10积分'
      },
     {'act_name': 'realme宠粉计划2', 'aid': 1616,
-     'if_task': False,  # 该活动没有任务
+     'if_task': True,  # 该活动没有任务
      'referer': 'https://hd.oppo.com/act/m/2020/realmechannejifendui/index.html?us=relmechannel&um=huodongyaofeng&uc=realmechongfenchoujiang',
      'if_draw': True,  # 已修复抽奖，如不需要抽奖请自行修改为False
      'extra_draw_cookie': 'app_innerutm={"uc":"realmechongfenchoujiang","um":"huodongyaofeng","ut":"direct","us":"relmechannel"};app_utm={"utm_source_app":"direct","utm_campaign_app":"direct","utm_term_app":"direct","utm_medium_app":"direct"};',
@@ -64,7 +64,7 @@ act_list = [
     {'act_name': '智能硬件狂撒积分', 'aid': 1594,
      'if_task': True,
      'referer': 'https://hd.oppo.com/act/m/2021/huantai618jifenpengz/index.html?us=shouye&um=youshangjiao&uc=zhounianqing',
-     'if_draw': False,  # 该活动中奖率奇低，请自行选择是否抽奖
+     'if_draw': True,  # 该活动中奖率奇低，请自行选择是否抽奖
      'extra_draw_cookie': 'app_innerutm={"uc":"renwuzhongxin","um":"hudongleyuan","ut":"direct","us":"gerenzhongxin"};app_utm={"utm_source_app":"direct","utm_campaign_app":"direct","utm_term_app":"direct","utm_medium_app":"direct"};',
      'lid': 1482,
      'draw_times': 3,
@@ -72,7 +72,7 @@ act_list = [
      'text':'每次扣取10积分'
      },
     {'act_name': '天天积分翻倍', 'aid': 675,
-     'if_task': False,  # 该活动没有任务
+     'if_task': True,  # 该活动没有任务
      'referer': 'https://hd.oppo.com/act/m/2019/jifenfanbei/index.html?us=qiandao&um=task',
      'if_draw': True,  # 已修复抽奖，如不需要抽奖请自行修改为False
      'extra_draw_cookie': 'app_innerutm={"uc":"direct","um":"zuoshangjiao","ut":"direct","us":"shouye"};app_utm={"utm_source_app":"direct","utm_campaign_app":"direct","utm_term_app":"direct","utm_medium_app":"direct"};',
@@ -91,7 +91,7 @@ act_list = [
      'end_time': '2021-8-18 23:59:59'
      },
     {'act_name': '智能硬件0元抽奖', 'aid': 1588,
-     'if_task': False,  # 该活动没有任务
+     'if_task': True,  # 该活动没有任务
      'referer': 'https://hd.oppo.com/act/m/2021/3719/index.html?us=iotchannel&um=icon',
      'if_draw': True,  # 已修复抽奖，如不需要抽奖请自行修改为False
      'extra_draw_cookie': 'app_innerutm={"uc":"direct","um":"icon","ut":"direct","us":"iotchannel"};app_utm={"utm_source_app":"direct","utm_campaign_app":"direct","utm_term_app":"direct","utm_medium_app":"direct"};',
