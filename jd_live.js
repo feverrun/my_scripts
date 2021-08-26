@@ -105,14 +105,16 @@ function getTaskList() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            for (let key of Object.keys(data.data.starLiveList)) {
-              let vo = data.data.starLiveList[key]
-              if (vo.state !== 3) {
-                let authorId = (await getauthorId(vo.extra.liveId)).data.author.authorId
-                await superTask(vo.extra.liveId, authorId)
-                await awardTask("starViewTask", vo.extra.liveId)
+            if(data.data.starLiveList) {
+                for (let key of Object.keys(data.data.starLiveList)) {
+                let vo = data.data.starLiveList[key]
+                if (vo.state !== 3) {
+                  let authorId = (await getauthorId(vo.extra.liveId)).data.author.authorId
+                  await superTask(vo.extra.liveId, authorId)
+                  await awardTask("starViewTask", vo.extra.liveId)
+                }
               }
-            }
+            }  
             console.log(`去做分享直播间任务`)
             await shareTask()
             await awardTask()
