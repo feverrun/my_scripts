@@ -444,6 +444,7 @@ class Heytap:
                             time.sleep(3)
                 if self.if_draw:  # 判断当前用户是否抽奖
                     if if_draw:  # 判断当前活动是否抽奖
+                        ait = act_list['aid']
                         lid = act_list['lid']
                         extra_draw_cookie = act_list['extra_draw_cookie']
                         draw_times = act_list['draw_times']
@@ -579,7 +580,7 @@ class Heytap:
                     self.zaoshui_task()  # 早睡报名
                 except Exception as e:
                     self.log += f'账号{i}执行出错：{e}\n'
-                    print(f'账号{i}执行出错：{e}\n')
+                    # print(f'账号{i}执行出错：{e}\n')
             else:
                 self.log += f'账号{i}已失效，请及时更新cookies\n'
                 print(f'账号{i}已失效，请及时更新cookies\n')
