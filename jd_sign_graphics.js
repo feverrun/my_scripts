@@ -51,8 +51,8 @@ const turnTableId = [
   { "name": "京东超市", "id": 1204, "url": "https://pro.m.jd.com/mall/active/QPwDgLSops2bcsYqQ57hENGrjgj/index.html" },
 ]
 getUA()
-$.get = validator.injectToRequest2($.get.bind($), 'channelSign', $.UA)
-$.post = validator.injectToRequest2($.post.bind($), 'channelSign', $.UA)
+$.get = validator.injectToRequest3($.get.bind($), 'channelSign', $.UA)
+$.post = validator.injectToRequest3($.post.bind($), 'channelSign', $.UA)
 
 !(async () => {
   if (!cookiesArr[0]) {
