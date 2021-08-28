@@ -59,7 +59,7 @@ if ($.isNode()) {
                 $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
                 if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`, ``);
                 }
                 continue
             }
@@ -78,7 +78,7 @@ if ($.isNode()) {
     }
 
     if ($.isNode() && allMessage) {
-        await notify.sendNotify(`${$.name}`, `${allMessage}`, {url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`}, '\n\n本通知 By：https://github.com/he1pu/JDHelp')
+        await notify.sendNotify(`${$.name}`, `${allMessage}`, {url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`}, ``)
     }
 })()
     .catch((e) => {

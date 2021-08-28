@@ -10,29 +10,31 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 const activityList = [
-    {'actid':'59564c90a57443deb40371c83332df27','endTime':1629907199000},
-    {'actid':'61146464456f4e42927d067cfccdf579','endTime':1629907200000},
-    {'actid':'4a2eb0132725416fa2a3086018437594','endTime':1630339200000},
-    {'actid':'25d0cb359ef347c69ee1c044a4168efc','endTime':1629820799000},
-    {'actid':'0cdf614f95214c59b94697e3ed5ba37a','endTime':1629799864000},
-    {'actid':'4baf19fa3f454e6abf82be7d66605ab4','endTime':1630425599000},
-    {'actid':'c75ae2afd7ff4aec9ed47008b08400f7','endTime':1630288800000},
-    {'actid':'3da50af9e8664746844c5456b8920b7d','endTime':1630425599000},
-    {'actid':'162c43699ba945e8adb83b2bd5fe0142','endTime':1630425599000},
-    {'actid':'58121dee0d84428bbdeb83934ffa1b80','endTime':1630425599000},
-    {'actid':'8afc9104d6444696b3f16ceb23a24536','endTime':1630425599000},
-    {'actid':'f006443799d34b55b9061be7b765c3fa','endTime':1630339200000},
-    {'actid':'c77e8342bca24d5f86d2a076b8f00860','endTime':1629907199000},
-    {'actid':'49d8035a8f294ac7893e814d2b8e79ed','endTime':1629907199000},
-    {'actid':'f22809ea36b14411a625641ef9685e53','endTime':1630339200000},
-    {'actid':'eff9c47393be446f9dd576e26d13dd9d','endTime':1631635200000},
-    {'actid':'d6fe4bd6a34e4eb9b498932122453890','endTime':1630548000000},
-    {'actid':'e4c6bdba323948ceb05e4122acd97fba','endTime':1629648000000},
-    {'actid':'5622386323bb4a82a2ed4e0158f7c6a7','endTime':1631289599000},
-    {'actid':'4ee56f673e164305a527545efe566b20','endTime':1630425599000},//需要入会
-    {'actid':'9bb5cb2801114f2981c183abbc2aa522','endTime':1630425596000},//需要入会
-    {'actid':'72e2c4f63db0481cbe5acc2d962aa3b1','endTime':1630252799000},//要入会
-];
+     {"actid":"419e0a7e20714cb08336b03ca87f514c","endTime":1630339200000},
+     {"actid":"959ddcb1701d43fbbbd6e5b60136489f","endTime":1630857600000},
+     {"actid":"6994d2900dfc4cfba9ab0b2c12b725e6","endTime":1630684799000},
+     {"actid":"08427e35e7a3427f95a4db27312a65ce","endTime":1630080000000},
+     {"actid":"e3d5a39613094851b1a9d9c48c15c4ea","endTime":1630339200000},
+     {"actid":"5439ecda2ce940a5af366b78c7e85fe0","endTime":1630339200000},
+     {"actid":"9c78bd506f1d4e64ace5228105759edb","endTime":1630080000000},
+     {"actid":"6b7811e7b0a4438893f2ac9d5f53a8b8","endTime":1630857599000},
+     {"actid":"0136403278fa488fa65b276a47ac3e88","endTime":1630339200000},
+     {"actid":"e8206cf7401e4e90a5f645f990283144","endTime":1630339198000},
+     {"actid":"4a2eb0132725416fa2a3086018437594","endTime":1630339200000},
+     {"actid":"4baf19fa3f454e6abf82be7d66605ab4","endTime":1630425599000},
+     {"actid":"c75ae2afd7ff4aec9ed47008b08400f7","endTime":1630288800000},
+     {"actid":"3da50af9e8664746844c5456b8920b7d","endTime":1630425599000},
+     {"actid":"58121dee0d84428bbdeb83934ffa1b80","endTime":1630425599000},
+     {"actid":"8afc9104d6444696b3f16ceb23a24536","endTime":1630425599000},
+     {"actid":"f006443799d34b55b9061be7b765c3fa","endTime":1630339200000},
+     {"actid":"f22809ea36b14411a625641ef9685e53","endTime":1630339200000},
+     {"actid":"eff9c47393be446f9dd576e26d13dd9d","endTime":1631635200000},
+     {"actid":"d6fe4bd6a34e4eb9b498932122453890","endTime":1630548000000},
+     {"actid":"5622386323bb4a82a2ed4e0158f7c6a7","endTime":1631289599000},
+     {"actid":"4ee56f673e164305a527545efe566b20","endTime":1630425599000},
+     {"actid":"9bb5cb2801114f2981c183abbc2aa522","endTime":1630425596000},
+     {"actid":"72e2c4f63db0481cbe5acc2d962aa3b1","endTime":1630252799000}
+ ];
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -119,6 +121,16 @@ async function main() {
     let date = new Date($.activityData.actInfo.endTime)
     let endtime = date.getFullYear() + "-" + (date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
     console.log(`${$.actinfo.actName},${$.actinfo.shopName},当前积分：${$.nowUseValue},结束时间：${endtime}，${$.activityData.actInfo.endTime}`);
+    let gitList = [];
+    let gitTypeList = ['One','Two','Three'];
+    for (let i = 0; i < gitTypeList.length; i++) {
+      let gitInfo = $.activityData.actInfo['giftLevel'+ gitTypeList[i]] || '';
+      if(gitInfo){
+        gitInfo = JSON.parse(gitInfo);
+        gitList.push(gitInfo[0].name);
+      }
+    }
+    console.log(`奖品列表：` + gitList.toString());
     if($.actorInfo.prizeOneStatus && $.actorInfo.prizeTwoStatus && $.actorInfo.prizeThreeStatus){
         console.log(`已抽过所有奖品`);return;
     }
