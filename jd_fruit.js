@@ -1,19 +1,35 @@
 /*
-
 自动提交助力码，删除内置助力码
+东东水果:脚本更新地址 jd_fruit.js
 更新时间：2021-8-19
 活动入口：京东APP我的-更多工具-东东农场
+东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 互助码shareCode请先手动运行脚本查看打印可看到
 一天只能帮助3个人。多出的助力码无效
-
+==========================Quantumultx=========================
+[task_local]
+#jd免费水果
+5 6-18/6 * * * jd_fruit.js, tag=东东农场, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdnc.png, enabled=true
+=========================Loon=============================
 [Script]
 cron "5 6-18/6 * * *" script-path=jd_fruit.js,tag=东东农场
 
+=========================Surge============================
+东东农场 = type=cron,cronexp="5 6-18/6 * * *",wake-system=1,timeout=3600,script-path=jd_fruit.js
+
+=========================小火箭===========================
+东东农场 = type=cron,script-path=jd_fruit.js, cronexpr="5 6-18/6 * * *", timeout=3600, enable=true
+
+jd免费水果 搬的https://github.com/liuxiaoyucc/jd-helper/blob/a6f275d9785748014fc6cca821e58427162e9336/fruit/fruit.js
 */
 const $ = new Env('东东农场');
 
 let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //助力好友分享码(最多3个,否则后面的助力失败),原因:京东农场每人每天只有3次助力机会
+//此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
+//下面给出两个账号的填写示例（iOS只支持2个京东账号）
 let shareCodes = [''];
 let message = '', subTitle = '', option = {}, isFruitFinished = false;
 const retainWater = 100;//保留水滴大于多少g,默认100g;
@@ -62,7 +78,6 @@ const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%2
     .finally(() => {
         $.done();
     })
-
 async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName}`;
     try {
@@ -1237,7 +1252,6 @@ function timeFormat(time) {
     }
     return date.getFullYear() + '-' + ((date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1)) + '-' + (date.getDate() >= 10 ? date.getDate() : '0' + date.getDate());
 }
-// 读取分享码
 function readShareCode() {
     return new Promise(async resolve => {
         $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=farm&num=${randomCount}`, timeout: 10000,}, (err, resp, data) => {
@@ -1261,7 +1275,6 @@ function readShareCode() {
         resolve({"code":500})
     })
 }
-
 //提交互助码
 function submitCode() {
     return new Promise(async resolve => {
@@ -1286,7 +1299,6 @@ function submitCode() {
         resolve({"code":500})
     })
 }
-
 function shareCodesFormat() {
     return new Promise(async resolve => {
         // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
@@ -1302,12 +1314,11 @@ function shareCodesFormat() {
         if (readShareCodeRes && readShareCodeRes.code === 200) {
             // newShareCodes = newShareCodes.concat(readShareCodeRes.data || []);
             newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
-        }else{console.log("读取分享码失败")}
+        }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
         resolve();
     })
 }
-
 function requireConfig() {
     return new Promise(resolve => {
         console.log('开始获取配置文件\n')
