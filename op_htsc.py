@@ -4,7 +4,7 @@
 # @Email   : k@hwkxk.cn
 
 import json
-import notify
+import op_notify
 import requests
 import sys
 import time
@@ -14,8 +14,7 @@ import os
 import op_act_list
 
 
-#
-
+# 商城类
 class Heytap:
     def __init__(self, config):
         self.client = None
@@ -30,7 +29,7 @@ class Heytap:
         self.sa_distinct_id = ''
         self.sa_device_id = ''
         self.s_version = ''
-        self.brand = 'iPhone'  # 初始化设置为iPhone，会从cookie获取实际机型
+        self.brand = 'PCCM00'  # 初始化设置为PCCM00，会从cookie获取实际机型
         self.act_task = op_act_list.act_list  # 修改为从文件获取，避免更新代码后丢失原有活动配置
         self.if_draw = False  # 初始化设置为False，会从配置文件获取实际设置
 
@@ -513,7 +512,7 @@ class Heytap:
                 'Accept': 'application/json, text/plain, */*',
                 'source_type': self.source_type,
                 'utm_medium': 'direct',
-                'brand': 'iPhone',
+                'brand': self.brand,
                 'appId': '',
                 's_version': self.s_version,
                 'us': 'gerenzhongxin',
@@ -560,7 +559,43 @@ class Heytap:
             self.log += '【早睡打卡】\n错误，原因为: ' + str(e) + '\n'
             print('【早睡打卡】: 错误，原因为: ' + str(e) + '\n')
 
-    #
+    # oppo社区签到
+    def sq_sign(self):
+        try:
+            headers = {
+                'Host': 'i-api.oppo.cn',
+                'Connection': 'Keep-Alive',
+                'Accept-Encoding': 'gzip',
+                'User-Agent': 'okhttp/3.12.12.217',
+                # 'cookie': 'TOKEN_eyJhbGciOiJFQ0RTQSIsInYiOiIxIn0.eyJleHAiOjE2MzI1NDgwMDUxNTMsImlkIjoiNDY2OTA4ODA2IiwiaWRjIjoic2hvdW1pbmciLCJ0aWQiOiJpaGtSWU43RS9KOUJ2d1VDTndacndBZG1jUkhMM3lHWDArazk3UGpOd0VhSlhJVE1naUFGMGVlaDlmVEJqUkxaYjVXSitzOE0vQmhFbDQvWXlidmJMRWdoQlZlWFlrcDZrd29xSzdDNE54cz0ifQ.MEQCIDpX7Oea5ycYw2N5ZgS4Wtq6aQfbrGvbXQutgA-RC25oAiAwWAS_CDyXJebDWvupsND36mDnw-DY9ZflrqgCbbjnjQ',
+                'platform': 'android',
+                'ua': 'oppocommunity',
+                'modal': 'PCCM00',
+                'use_skin': 'false',
+                'screen_size': '1080x2340',
+                'os': '10',
+                'color_os': '17',
+                's_version': '81202',
+                'imei': 'bHDGewptPZ1BSWi1gTU242PCZqTiX5RdYlI0lDBt9sg%3D',
+                'networktype': 'wifi',
+                '_t': '1630079313657',
+                '_sign': 'b08e61d82c65f49cf5d898402198c20f9edc93d1',
+                'oaid': '0990A8DEE8484D29A1F033DCEFB178E3e82dce91adda643738be64a5c1dbd373',
+                'vaid': '8AE3F62475FD4B749207BA62A2E42A3CEC7D424979CC9C51B056230B96D064AB',
+                'udid': '',
+                'aaid': '',
+                'uuid': 'b95de57c-b924-4ec3-82f1-1bd3f3984b9a',
+                'color_os_name': 'V7.1',
+            }
+            res = self.client.get('https://i-api.oppo.cn/sign/v1/index/create.pb',
+                                  headers=headers)
+            print(res.text)
+
+        except Exception as e:
+            print(traceback.format_exc())
+            self.log += '【oppo社区签到】\n错误,原因为: ' + str(e) + '\n'
+            print('【oppo社区签到】: 错误, 原因为: ' + str(e) + '\n')
+
 
     # 主程序
     def main(self):
@@ -578,6 +613,8 @@ class Heytap:
                     self.daily_viewpush()  # 执行每日点推送任务
                     self.doTask_and_draw()  # 自己修改的接口，针对活动任务及抽奖，新增及删除活动请修改self.act_task
                     self.zaoshui_task()  # 早睡报名
+                    self.sq_sign()  # oppo社区签到
+
                 except Exception as e:
                     self.log += f'账号{i}执行出错：{e}\n'
                     # print(f'账号{i}执行出错：{e}\n')
@@ -587,12 +624,12 @@ class Heytap:
             i += 1
             self.log += '\n\n'
         if self.config['enterpriseWechat']['id']:
-            notify.sendWechat(self.config['enterpriseWechat']['id'],
+            op_notify.sendWechat(self.config['enterpriseWechat']['id'],
                               self.config['enterpriseWechat']['secret'],
                               self.config['enterpriseWechat']['agentld'], self.log,
                               self.config['enterpriseWechat']['thumb_media_id'])
         if self.config['pushplusToken']:
-            notify.sendPushplus(self.config['pushplusToken'], self.log)
+            op_notify.sendPushplus(self.config['pushplusToken'], self.log)
 
 
 # 腾讯云函数入口
