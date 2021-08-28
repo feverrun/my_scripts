@@ -67,7 +67,6 @@ async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName}`;
     try {
         await initForFarm();
-        console.log($.farmInfo);
         if ($.farmInfo.farmUserPro) {
             // option['media-url'] = $.farmInfo.farmUserPro.goodsImage;
             message = `【水果名称】${$.farmInfo.farmUserPro.name}\n`;
@@ -1238,6 +1237,7 @@ function timeFormat(time) {
     }
     return date.getFullYear() + '-' + ((date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1)) + '-' + (date.getDate() >= 10 ? date.getDate() : '0' + date.getDate());
 }
+// 读取分享码
 function readShareCode() {
     return new Promise(async resolve => {
         $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=farm&num=${randomCount}`, timeout: 10000,}, (err, resp, data) => {
@@ -1261,6 +1261,7 @@ function readShareCode() {
         resolve({"code":500})
     })
 }
+
 //提交互助码
 function submitCode() {
     return new Promise(async resolve => {
@@ -1301,7 +1302,7 @@ function shareCodesFormat() {
         if (readShareCodeRes && readShareCodeRes.code === 200) {
             // newShareCodes = newShareCodes.concat(readShareCodeRes.data || []);
             newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
-        }
+        }else{console.log("读取分享码失败")}
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
         resolve();
     })
