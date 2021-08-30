@@ -18,7 +18,7 @@ let ADD_CART = false
 ADD_CART = $.isNode() ? (process.env.PURCHASE_SHOPS ? process.env.PURCHASE_SHOPS : ADD_CART) : ($.getdata("ADD_CART") ? $.getdata("ADD_CART") : ADD_CART);
 // 加入购物车开关，与东东小窝共享
 
-let inviteCodes = ['']
+let inviteCodes = ['c83144bedd404a4eb556d8b40ba6a2f4']
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
