@@ -80,8 +80,7 @@ async function jdPlantBean() {
             }
         }
         // console.log(plantBeanIndexResult.data.taskList);
-        // $.plantBeanIndexResult && $.plantBeanIndexResult.code === '0' &&
-        if ($.plantBeanIndexResult.data) {
+        if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0' && $.plantBeanIndexResult.data) {
             const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
             $.myPlantUuid = getParam(shareUrl, 'plantUuid')
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
