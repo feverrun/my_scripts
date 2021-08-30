@@ -80,7 +80,8 @@ async function jdPlantBean() {
             }
         }
         // console.log(plantBeanIndexResult.data.taskList);
-        if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0' && $.plantBeanIndexResult.data) {
+        // $.plantBeanIndexResult && $.plantBeanIndexResult.code === '0' &&
+        if ($.plantBeanIndexResult.data) {
             const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
             $.myPlantUuid = getParam(shareUrl, 'plantUuid')
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
@@ -716,7 +717,7 @@ function request(function_id, body = {}){
         await $.wait(2000);
         $.post(taskUrl(function_id, body), (err, resp, data) => {
             try {
-                console.log(data)
+                // console.log(data)
                 if (err) {
                     console.log('\n种豆得豆: API查询请求失败 ‼️‼️')
                     console.log(`function_id:${function_id}`)
