@@ -11,7 +11,7 @@ Last Modified time: 2021-8-19
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 
 [Script]
-cron "10 * * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js,tag=东东工厂
+cron "0 0-22/1 * * * script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js,tag=东东工厂
 
  */
 const $ = new Env('东东工厂');
