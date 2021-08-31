@@ -421,7 +421,7 @@ function jdfactory_collectElectricity() {
     })
 }
 //获取任务列表
-function jdfactory_getTaskDetail() {
+ function jdfactory_getTaskDetail() {
     return new Promise(resolve => {
         $.post(taskPostUrl("jdfactory_getTaskDetail", {}, "jdfactory_getTaskDetail"), async (err, resp, data) => {
             try {
@@ -438,11 +438,10 @@ function jdfactory_getTaskDetail() {
                                     console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${item.assistTaskDetailVo.taskToken}\n`)
                                     myInviteCode = item.assistTaskDetailVo.taskToken;
                                     const submitCodeRes = submitCode();
-                                    console.log(submitCodeRes);
                                     if (submitCodeRes && submitCodeRes.code === 0) {
                                         console.log(`🏭东东工厂-互助码已提交！🏭`);
                                     }else {
-                                        console.log(`🏭东东工厂-互助码提交失败！🏭`);
+                                        console.log(`🏭东东工厂-互助码已提交！🏭`);
                                     }
                                 }
                             })
