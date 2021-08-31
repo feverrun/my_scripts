@@ -85,9 +85,7 @@ async function jdPlantBean() {
             $.myPlantUuid = getParam(shareUrl, 'plantUuid')
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
             const submitCodeRes = await submitCode();
-            if (submitCodeRes && submitCodeRes.code === 200) {
-                console.log(`🥑种豆得豆-互助码提交成功！🥑`);
-            }else if (submitCodeRes.code === 300) {
+            if (submitCodeRes && submitCodeRes.code === 0) {
                 console.log(`🥑种豆得豆-互助码已提交！🥑`);
             }
             roundList = $.plantBeanIndexResult.data.roundList;
@@ -586,7 +584,7 @@ function shareCodesFormat() {
             newShareCodes = shareCodes[tempIndex].split('@');
         }
         const readShareCodeRes = await readShareCode();
-        if (readShareCodeRes && readShareCodeRes.code === 200) {
+        if (readShareCodeRes && readShareCodeRes.code === 0) {
             newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
         }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
