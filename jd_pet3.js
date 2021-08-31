@@ -443,7 +443,7 @@ async function showMsg() {
 }
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=pet&num=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/get/pet?num=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -467,7 +467,7 @@ function readShareCode() {
 //提交互助码
 function submitCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${$.petInfo.shareCode}&type=pet`, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/submit/pet?code=${$.petInfo.shareCode}`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
