@@ -9,20 +9,10 @@ Last Modified time: 2021-8-19
 只有当心仪的商品存在，并且收集起来的电量满足当前商品所需电力，才投入
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-============Quantumultx===============
-[task_local]
-#东东工厂
-10 * * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js, tag=东东工厂, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_factory.png, enabled=true
 
-================Loon==============
 [Script]
 cron "10 * * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js,tag=东东工厂
 
-===============Surge=================
-东东工厂 = type=cron,cronexp="10 * * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js
-
-============小火箭=========
-东东工厂 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js, cronexpr="10 * * * *", timeout=3600, enable=true
  */
 const $ = new Env('东东工厂');
 
@@ -447,7 +437,7 @@ function jdfactory_getTaskDetail() {
                                 if (item.taskType === 14) {
                                     console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${item.assistTaskDetailVo.taskToken}\n`)
                                     myInviteCode = item.assistTaskDetailVo.taskToken;
-                                    const submitCodeRes = submitCode();
+                                    let submitCodeRes = submitCode();
                                     if (submitCodeRes && submitCodeRes.code === 0) {
                                         console.log(`🏭东东工厂-互助码已提交！🏭`);
                                     }else {
