@@ -8,25 +8,12 @@
 
 互助码shareCode请先手动运行脚本查看打印可看到
 一天只能帮助5个人。多出的助力码无效
-
-=================================Quantumultx=========================
-[task_local]
-#东东萌宠
-15 6-18/6 * * * jd_pet.js, tag=东东萌宠, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdmc.png, enabled=true
-
 =================================Loon===================================
 [Script]
 cron "15 6-18/6 * * *" script-path=jd_pet.js,tag=东东萌宠
-
-===================================Surge================================
-东东萌宠 = type=cron,cronexp="15 6-18/6 * * *",wake-system=1,timeout=3600,script-path=jd_pet.js
-
-====================================小火箭=============================
-东东萌宠 = type=cron,script-path=jd_pet.js, cronexpr="15 6-18/6 * * *", timeout=3600, enable=true
-
 */
-const $ = new Env('东东萌宠');
 
+const $ = new Env('东东萌宠');
 
 let cookiesArr = [], cookie = '', jdPetShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //助力好友分享码(最多5个,否则后面的助力失败),原因:京东农场每人每天只有四次助力机会
@@ -122,10 +109,10 @@ async function jdPet() {
             }
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.petInfo.shareCode}\n`);
             try{submitCodeRes =  await submitCode();}catch(e){}
-            if (submitCodeRes && submitCodeRes.code === 200) {
-                console.log(`🐶东东萌宠-互助码提交成功！🐶`);
-            }else if (submitCodeRes.code === 300) {
+            if (submitCodeRes && submitCodeRes.code === 0) {
                 console.log(`🐶东东萌宠-互助码已提交！🐶`);
+            }else {
+                console.log(`🐶东东萌宠-互助码提交失败！🐶`);
             }
             await taskInit();
             if ($.taskInit.resultCode === '9999' || !$.taskInit.result) {
@@ -458,7 +445,7 @@ async function showMsg() {
 }
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=pet&num=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/get/pet?codeNum=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -482,7 +469,7 @@ function readShareCode() {
 //提交互助码
 function submitCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${$.petInfo.shareCode}&type=pet`, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/submit/pet?code=${$.petInfo.shareCode}`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -517,7 +504,7 @@ function shareCodesFormat() {
         //因好友助力功能下线。故暂时屏蔽
         try{readShareCodeRes = await readShareCode();}catch(e){}
         //const readShareCodeRes = null;
-        if (readShareCodeRes && readShareCodeRes.code === 200) {
+        if (readShareCodeRes && readShareCodeRes.code === 0) {
             newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
         }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)

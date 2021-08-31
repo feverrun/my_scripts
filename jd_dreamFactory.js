@@ -591,10 +591,10 @@ function userInfo() {
                                 console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.user.encryptPin}`);
                                 myInviteCode = data.user.encryptPin;
                                 try{submitCodeRes = await submitCode(data.user.encryptPin);}catch(e){}
-                                if (submitCodeRes && submitCodeRes.code === 200) {
-                                    console.log(`🏭京喜工厂-互助码提交成功！🏭`);
-                                }else if (submitCodeRes.code === 300) {
+                                if (submitCodeRes && submitCodeRes.code === 0) {
                                     console.log(`🏭京喜工厂-互助码已提交！🏭`);
+                                }else {
+                                    console.log(`🏭京喜工厂-互助码提交失败！🏭`);
                                 }
                                 console.log(`已投入电力：${production.investedElectric}`);
                                 console.log(`所需电力：${production.needElectric}`);
@@ -1307,7 +1307,7 @@ async function showMsg() {
 function readShareCode() {
     console.log(`开始`)
     return new Promise(async resolve => {
-        $.get({url: `http://www.helpu.cf/jdcodes/getcode.php?type=jxfactory&num=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/get/jxfactory?codeNum=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -1331,7 +1331,7 @@ function readShareCode() {
 //提交互助码
 function submitCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${myInviteCode}&type=jxfactory`, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/submit/jxfactory?code=${myInviteCode}`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -1365,7 +1365,7 @@ function shareCodesFormat() {
             $.newShareCodes = inviteCodes[tempIndex].split('@');
         }
         try{readShareCodeRes = await readShareCode();}catch(e){}
-        if (readShareCodeRes && readShareCodeRes.code === 200) {
+        if (readShareCodeRes && readShareCodeRes.code === 0) {
             $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
         }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
