@@ -445,7 +445,7 @@ async function showMsg() {
 }
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `https://hz.feverrun.top:88/share/get/pet?num=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/get/pet?codeNum=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
