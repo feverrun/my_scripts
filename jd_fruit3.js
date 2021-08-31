@@ -1256,7 +1256,7 @@ function timeFormat(time) {
 
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `https://hz.feverrun.top/share/get/farm?codeNum=${randomCount}`, timeout: 10000,}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/get/farm?codeNum=${randomCount}`, timeout: 10000,}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
