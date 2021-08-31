@@ -111,6 +111,8 @@ async function jdPet() {
             try{submitCodeRes =  await submitCode();}catch(e){}
             if (submitCodeRes && submitCodeRes.code === 0) {
                 console.log(`🐶东东萌宠-互助码已提交！🐶`);
+            }else {
+                console.log(`🐶东东萌宠-互助码提交失败！🐶`);
             }
             await taskInit();
             if ($.taskInit.resultCode === '9999' || !$.taskInit.result) {

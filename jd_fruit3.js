@@ -90,6 +90,8 @@ async function jdFruit() {
             try{submitCodeRes = await submitCode();}catch(e){}
             if (submitCodeRes && submitCodeRes.code === 0) {
                 console.log(`🐔东东农场-互助码已提交！🐔`);
+            }else {
+                console.log(`🐔东东农场-互助码提交失败！🐔`);
             }
             console.log(`\n【已成功兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`);
             message += `【已兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`;

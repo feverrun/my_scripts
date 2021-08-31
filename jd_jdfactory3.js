@@ -450,6 +450,8 @@ function jdfactory_getTaskDetail() {
                                     const submitCodeRes = submitCode();
                                     if (submitCodeRes && submitCodeRes.code === 0) {
                                         console.log(`🏭东东工厂-互助码已提交！🏭`);
+                                    }else {
+                                        console.log(`🏭东东工厂-互助码提交失败！🏭`);
                                     }
                                 }
                             })

@@ -87,6 +87,8 @@ async function jdPlantBean() {
             const submitCodeRes = await submitCode();
             if (submitCodeRes && submitCodeRes.code === 0) {
                 console.log(`🥑种豆得豆-互助码已提交！🥑`);
+            }else {
+                console.log(`🥑种豆得豆-互助码提交失败！🥑`);
             }
             roundList = $.plantBeanIndexResult.data.roundList;
             currentRoundId = roundList[num].roundId;//本期的roundId
