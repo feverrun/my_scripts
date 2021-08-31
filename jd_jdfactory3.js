@@ -438,6 +438,7 @@ function jdfactory_getTaskDetail() {
                                     console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${item.assistTaskDetailVo.taskToken}\n`)
                                     myInviteCode = item.assistTaskDetailVo.taskToken;
                                     const submitCodeRes = submitCode();
+                                    console.log(submitCodeRes);
                                     if (submitCodeRes && submitCodeRes.code === 0) {
                                         console.log(`🏭东东工厂-互助码已提交！🏭`);
                                     }else {
