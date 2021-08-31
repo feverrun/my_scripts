@@ -591,10 +591,10 @@ function userInfo() {
                                 console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.user.encryptPin}`);
                                 myInviteCode = data.user.encryptPin;
                                 try{submitCodeRes = await submitCode(data.user.encryptPin);}catch(e){}
-                                if (submitCodeRes && submitCodeRes.code === 200) {
-                                    console.log(`🏭京喜工厂-互助码提交成功！🏭`);
-                                }else if (submitCodeRes.code === 300) {
+                                if (submitCodeRes && submitCodeRes.code === 0) {
                                     console.log(`🏭京喜工厂-互助码已提交！🏭`);
+                                }else {
+                                    console.log(`🏭京喜工厂-互助码提交失败！🏭`);
                                 }
                                 console.log(`已投入电力：${production.investedElectric}`);
                                 console.log(`所需电力：${production.needElectric}`);
