@@ -1582,7 +1582,7 @@ function showMsg() {
 //提交互助码
 function submitCode(myInviteCode, user) {
     return new Promise(async resolve => {
-    $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${myInviteCode}&type=jxcfd&user=${user}`, timeout: 10000}, (err, resp, data) => {
+    $.get({url: `https://hz.feverrun.top:88/share/submit/cfd?code=${myInviteCode}&user=${user}`, timeout: 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -1591,10 +1591,10 @@ function submitCode(myInviteCode, user) {
           if (data) {
             //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
             data = JSON.parse(data);
-            if (data.code === 300) {
+            if (data.code === 0) {
               console.log("🏝互助码已提交🏝");
-            }else if (data.code === 200) {
-              console.log("🏝互助码提交成功🏝");
+            }else {
+              console.log("🏝互助码提交失败🏝");
             }
           }
         }
@@ -1611,7 +1611,7 @@ function submitCode(myInviteCode, user) {
 function readShareCode() {
   return new Promise(async resolve => {
     $.get({
-      url: `http://www.helpu.cf/jdcodes/getcode.php?type=jxcfd&num=10`,
+      url: `https://hz.feverrun.top:88/share/get/cfd?codeNum=10`,
       'timeout': 10000
     }, (err, resp, data) => {
       try {
@@ -1650,7 +1650,7 @@ function shareCodesFormat() {
       //$.newShareCodes = [...$.strMyShareIds];
     }
     // const readShareCodeRes = await readShareCode();
-    // if (readShareCodeRes && readShareCodeRes.code === 200) {
+    // if (readShareCodeRes && readShareCodeRes.code === 0) {
     //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
     // }
     //console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)

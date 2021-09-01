@@ -118,10 +118,10 @@ function interact_template_getHomeData(timeout = 0) {
                             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.result.taskVos[i].assistTaskDetailVo.taskToken}\n`);
                             myInviteCode = data.data.result.taskVos[i].assistTaskDetailVo.taskToken;
                             const submitCodeRes = await submitCode();
-                            if (submitCodeRes && submitCodeRes.code === 200) {
-                                console.log(`📦闪购盲盒-互助码提交成功！📦`);
-                            }else if (submitCodeRes.code === 300) {
+                            if (submitCodeRes && submitCodeRes.code === 0) {
                                 console.log(`📦闪购盲盒-互助码已提交！📦`);
+                            }else {
+                                console.log(`📦闪购盲盒-互助码提交失败！📦`);
                             }
                             for (let code of $.newShareCodes) {
                                 if (!code) continue
@@ -309,7 +309,7 @@ function shareCodesFormat() {
         }
         const readShareCodeRes = await readShareCode();
         // console.log(readShareCodeRes)
-        if (readShareCodeRes && readShareCodeRes.code === 200) {
+        if (readShareCodeRes && readShareCodeRes.code === 0) {
             $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
         }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
@@ -321,7 +321,7 @@ function readShareCode() {
     console.log(`开始`)
     return new Promise(async resolve => {
         $.get({
-            url: `http://www.helpu.cf/jdcodes/getcode.php?type=sgmh&num=${randomCount}`,
+            url: `https://hz.feverrun.top:88/share/get/sgmh?codeNum=${randomCount}`,
             'timeout': 10000
         }, (err, resp, data) => {
             try {
@@ -347,7 +347,7 @@ function readShareCode() {
 //提交互助码
 function submitCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${myInviteCode}&type=sgmh`, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/submit/sgmh?code=${myInviteCode}`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
