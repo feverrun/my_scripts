@@ -562,8 +562,8 @@ function getIsvToken() {
 function getIsvToken2() {
   let config = {
     url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
-    // body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=6eb3237cff376c07a11c1e185761d073&st=1610161927336&sv=102&uuid=hjudwgohxzVu96krv/T6Hg%3D%3D',
-    body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=89743&client=android&clientVersion=10.1.2&openudid=9f1d035d2eedb52c&osVersion=10&partner=oppo&rfs=0000&scope=01&sign=85843e585010fa3ef17179817b8ee236&st=1630629293077&sv=110&uuid=9f1d035d2eedb52c',
+    body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=6eb3237cff376c07a11c1e185761d073&st=1610161927336&sv=102&uuid=hjudwgohxzVu96krv/T6Hg%3D%3D',
+
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
