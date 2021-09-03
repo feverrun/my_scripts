@@ -8,6 +8,10 @@
  */
 const $ = new Env('扫码获取京东cookie');
 const qrcode = require('qrcode-terminal');
+const agents = require('./USER_AGENTS').USER_AGENT;
+var index = Math.floor((Math.random()*agents.length));
+
+const user_agent = process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (agents[index]);
 let s_token, cookies, guid, lsid, lstoken, okl_token, token
 !(async () => {
   await loginEntrance();
@@ -82,7 +86,7 @@ function checkLogin() {
         'Connection': 'Keep-Alive',
         'Content-Type': 'application/x-www-form-urlencoded; Charset=UTF-8',
         'Accept': 'application/json, text/plain, */*',
-        'User-Agent': process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT),
+        'User-Agent': user_agent ,
       }
     }
     $.post(options, (err, resp, data) => {
@@ -165,7 +169,7 @@ function taskUrl() {
       'Accept': 'application/json, text/plain, */*',
       'Accept-Language': 'zh-cn',
       'Referer': `https://plogin.m.jd.com/login/login?appid=300&returnurl=https://wq.jd.com/passport/LoginRedirect?state=${Date.now()}&returnurl=https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport`,
-      'User-Agent': process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT),
+      'User-Agent': user_agent,
       'Host': 'plogin.m.jd.com'
     }
   }
@@ -181,7 +185,7 @@ function taskPostUrl() {
       'Accept': 'application/json, text/plain, */*',
       'Accept-Language': 'zh-cn',
       'Referer': `https://plogin.m.jd.com/login/login?appid=300&returnurl=https://wq.jd.com/passport/LoginRedirect?state=${Date.now()}&returnurl=https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport`,
-      'User-Agent': process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT),
+      'User-Agent': user_agent,
       'Host': 'plogin.m.jd.com'
     }
   }
