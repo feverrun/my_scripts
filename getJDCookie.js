@@ -8,10 +8,10 @@
  */
 const $ = new Env('扫码获取京东cookie');
 const qrcode = require('qrcode-terminal');
-const agents = require('./USER_AGENTS').USER_AGENT;
-var index = Math.floor((Math.random()*agents.length));
-
+let agents = require('./USER_AGENTS').USER_AGENT;
+let index = Math.floor((Math.random()*agents.length));
 const user_agent = process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (agents[index]);
+
 let s_token, cookies, guid, lsid, lstoken, okl_token, token
 !(async () => {
   await loginEntrance();
