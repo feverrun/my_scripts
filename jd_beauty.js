@@ -526,8 +526,7 @@ async function mr() {
 function getIsvToken() {
   let config = {
     url: 'https://api.m.jd.com/client.action?functionId=genToken',
-    // body: 'body=%7B%22to%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%5C/?channel%3Dmeizhuangguandibudaohang%26collectionId%3D96%26tttparams%3DYEyYQjMIeyJnTG5nIjoiMTE4Ljc2MjQyMSIsImdMYXQiOiIzMi4yNDE4ODIifQ8%253D%253D%26un_area%3D12_904_908_57903%26lng%3D118.7159742308471%26lat%3D32.2010317443041%22%2C%22action%22%3A%22to%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=b0aac3dd04b1c6d68cee3d425e27f480&st=1610161913667&sv=111',
-    body:'body=%7B%22action%22%3A%22to%22%2C%22to%22%3A%22https%253A%252F%252Fxinruimz-isv.isvjcloud.com%252F%253Fchannel%253Dwanyiwan%2526utm_campaign%253D%2526utm_source%253D%2526utm_term%253D%2526utm_medium%253D%22%7D&clientVersion=10.1.2&build=89743&client=android&d_brand=OPPO&d_model=PCCM00&osVersion=10&screen=2340*1080&partner=oppo&oaid=0990A8DEE8484D29A1F033DCEFB178E3e82dce91adda643738be64a5c1dbd373&openudid=9f1d035d2eedb52c&eid=eidAe7478122d8sbd5TTlEXLT0+YDhiZxKP8bXeU1Q32CvmB8QGJxZXlCaZnkoVCZJhvqTFhupc/WTxz7o/xO6XenK8NWWNye2wSnxsDQww8BoPo4XRI&sdkVersion=29&lang=zh_CN&uuid=9f1d035d2eedb52c&aid=9f1d035d2eedb52c&area=2_2824_51911_0&networkType=wifi&wifiBssid=cec1d024bebebed312a7c5e5351361fc&uts=0f31TVRjBSvb2atniorYKAvs8QZShfxazq7pmct%2FAAL%2BQQa7kiqhTWlBlyhFNCA%2BUXF6NUev15HPPPD4p1jagLO85sWJqVSPNCeSC6vkKbiLIAo%2F9sQ%2F%2FkPAePI8VHc6qCnhdMPqApatVeWs7eyf6jV%2F6TE%2BJ9JQ1ok88Zt0goRmngFSSslRdoxUYamM6jAYgczMnRt%2FUo%2Fs7FXke3HRug%3D%3D&uemps=0-0&harmonyOs=0&st=1630629293077&sign=85843e585010fa3ef17179817b8ee236&sv=110',
+    body: 'body=%7B%22to%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%5C/?channel%3Dmeizhuangguandibudaohang%26collectionId%3D96%26tttparams%3DYEyYQjMIeyJnTG5nIjoiMTE4Ljc2MjQyMSIsImdMYXQiOiIzMi4yNDE4ODIifQ8%253D%253D%26un_area%3D12_904_908_57903%26lng%3D118.7159742308471%26lat%3D32.2010317443041%22%2C%22action%22%3A%22to%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=b0aac3dd04b1c6d68cee3d425e27f480&st=1610161913667&sv=111',
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
@@ -563,7 +562,6 @@ function getIsvToken2() {
   let config = {
     url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
     body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=6eb3237cff376c07a11c1e185761d073&st=1610161927336&sv=102&uuid=hjudwgohxzVu96krv/T6Hg%3D%3D',
-
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
