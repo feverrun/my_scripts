@@ -1,21 +1,16 @@
 /*
 [task_local]
 #来电好物季
-10 1 * * * jd_ldhwj.js, tag= 来电好物季
 ================Loon==============
 [Script]
 cron "10 3,15 * * *" script-path= jd_ldhwj.js,tag= 来电好物季
-===============Surge=================
-来电好物季 = type=cron,cronexp="10 1 * * *",wake-system=1,timeout=3600,script-path= jd_ldhwj.js
-============小火箭=========
-来电好物季 = type=cron,script-path= jd_ldhwj.js, cronexpr="10 1 * * *", timeout=3600, enable=true
 */
 const $ = new Env('来电好物季')
 const notify = $.isNode() ?require('./sendNotify') : '';
 cookiesArr = []
 CodeArr = []
 cookie = ''
-var list2tokenArr = [],list4tokenArr = [],list6tokenArr = [],list5tokenArr = [],list4tokenArr = [],list3tokenArr = [],list1tokenArr = [],list2tokenArr = [],listtokenArr = []
+var list6tokenArr = [],list5tokenArr = [],list4tokenArr = [],list3tokenArr = [],list2tokenArr = [],list1tokenArr = [],listtokenArr = []
 var taskid,token,helpcode;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);

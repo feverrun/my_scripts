@@ -133,6 +133,20 @@ async function cfd() {
         return
       }
     }
+    
+     // 寻宝
+    console.log(`寻宝`)
+    let XBDetail = beginInfo.XbStatus.XBDetail.filter((x) => x.ddwColdEndTm === 0 && x.dwRemainCnt === 3)
+    if (XBDetail.length !== 0) {
+      console.log(`开始寻宝`)
+      for (let key of Object.keys(beginInfo.XbStatus.XBDetail)) {
+        let vo = beginInfo.XbStatus.XBDetail[key]
+        await $.wait(2000)
+        await TreasureHunt(vo.strIndex)
+      }
+    } else {
+      console.log(`暂无宝物`)
+    }
 
     //每日签到
     await $.wait(2000)
@@ -270,6 +284,37 @@ async function cfd() {
     $.logErr(e)
   }
 }
+
+// 寻宝
+function TreasureHunt(strIndex) {
+   return new Promise((resolve) => {
+     $.get(taskUrl(`user/TreasureHunt`, `strIndex=${strIndex}`), (err, resp, data) => {
+       try {
+         if (err) {
+           console.log(`${JSON.stringify(err)}`)
+           console.log(`${$.name} TreasureHunt API请求失败，请检查网路重试`)
+         } else {
+           data = JSON.parse(data);
+           if (data.iRet === 0) {
+             if (data.AwardInfo.dwAwardType === 0) {
+               console.log(`${data.strAwardDesc}，获得 ${data.AwardInfo.ddwValue} 金币`)
+             } else if (data.AwardInfo.dwAwardType === 1) {
+               console.log(`${data.strAwardDesc}，获得 ${data.AwardInfo.ddwValue} 财富`)
+             } else {
+               console.log(JSON.stringify(data))
+             }
+           } else {
+             console.log(`寻宝失败：${data.sErrMsg}`)
+           }
+         }
+       } catch (e) {
+         $.logErr(e, resp);
+       } finally {
+         resolve();
+       }
+     })
+   })
+ }
 
 // 合成珍珠
 async function composeGameState(type = true) {
@@ -570,7 +615,7 @@ async function getTakeAggrPage(type) {
               console.log(`${$.name} GetTakeAggrPage API请求失败，请检查网路重试`)
             } else {
               data = JSON.parse(data);
-              console.log(`每日签到`)
+              console.log(`\n每日签到`)
               for (let key of Object.keys(data.Data.Sign.SignList)) {
                 let vo = data.Data.Sign.SignList[key]
                 if (vo.dwDayId === data.Data.Sign.dwTodayId) {
@@ -1212,7 +1257,8 @@ function getUserInfo(showInvite = true) {
             dwLandLvl,
             LeadInfo = {},
             StoryInfo = {},
-            Business = {}
+            Business = {},
+            XbStatus = {}
           } = data;
           if (showInvite) {
             console.log(`\n获取用户信息：${sErrMsg}\n${$.showLog ? data : ""}`);
@@ -1232,7 +1278,8 @@ function getUserInfo(showInvite = true) {
             strMyShareId,
             dwLandLvl,
             LeadInfo,
-            StoryInfo
+            StoryInfo,
+            XbStatus
           };
           resolve({
             buildInfo,
@@ -1240,7 +1287,8 @@ function getUserInfo(showInvite = true) {
             ddwCoinBalance,
             strMyShareId,
             LeadInfo,
-            StoryInfo
+            StoryInfo,
+            XbStatus
           });
         }
       } catch (e) {
@@ -1582,7 +1630,7 @@ function showMsg() {
 //提交互助码
 function submitCode(myInviteCode, user) {
     return new Promise(async resolve => {
-    $.get({url: `https://hz.feverrun.top:88/share/submit/cfd?code=${myInviteCode}&user=${user}`, timeout: 10000}, (err, resp, data) => {
+    $.get({url: `http://www.helpu.cf/jdcodes/submit.php?code=${myInviteCode}&type=jxcfd&user=${user}`, timeout: 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -1591,10 +1639,10 @@ function submitCode(myInviteCode, user) {
           if (data) {
             //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
             data = JSON.parse(data);
-            if (data.code === 0) {
+            if (data.code === 300) {
               console.log("🏝互助码已提交🏝");
-            }else {
-              console.log("🏝互助码提交失败🏝");
+            }else if (data.code === 200) {
+              console.log("🏝互助码提交成功🏝");
             }
           }
         }
@@ -1611,7 +1659,7 @@ function submitCode(myInviteCode, user) {
 function readShareCode() {
   return new Promise(async resolve => {
     $.get({
-      url: `https://hz.feverrun.top:88/share/get/cfd?codeNum=10`,
+      url: `http://www.helpu.cf/jdcodes/getcode.php?type=jxcfd&num=10`,
       'timeout': 10000
     }, (err, resp, data) => {
       try {
@@ -1650,7 +1698,7 @@ function shareCodesFormat() {
       //$.newShareCodes = [...$.strMyShareIds];
     }
     // const readShareCodeRes = await readShareCode();
-    // if (readShareCodeRes && readShareCodeRes.code === 0) {
+    // if (readShareCodeRes && readShareCodeRes.code === 200) {
     //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
     // }
     //console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
