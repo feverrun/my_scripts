@@ -60,7 +60,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       }
       await accountCheck();
       while (!$.hasDone) {
-        await $.wait(1000)
+        await $.wait(3000)
       }
       if ($.accountCheck) {
         await jdBeauty();
@@ -97,7 +97,7 @@ async function accountCheck() {
   client.onopen = async () => {
     console.log(`美容研究院服务器连接成功`);
     client.send('{"msg":{"type":"action","args":{"source":1},"action":"_init_"}}');
-    await $.wait(1000);
+    await $.wait(3000);
     client.send(`{"msg":{"type":"action","args":{"source":1},"action":"get_user"}}`);
   };
   client.onmessage = async function (e) {
@@ -123,7 +123,7 @@ async function accountCheck() {
       // console.log(client.readyState);
       console.log('服务器连接关闭');
     };
-    await $.wait(1000);
+    await $.wait(3000);
   }
 }
 
@@ -138,7 +138,7 @@ async function jdBeauty() {
   // }
   await mr()
   while (!$.hasDone) {
-    await $.wait(1000)
+    await $.wait(3000)
   }
   await showMsg();
 }
@@ -162,25 +162,25 @@ async function mr() {
     client.send(`{"msg":{"type":"action","args":{"source":"meizhuangguandibudaohang"},"action":"stats"}}`)
     while (!$.init) {
       client.send(`ping`)
-      await $.wait(1000)
+      await $.wait(3000)
     }
     console.log('helpInfo', helpInfo);
     for (let help of helpInfo) {
       client.send(help);
     }
-    await $.wait(1000)
+    await $.wait(3000)
     client.send(`{"msg":{"type":"action","args":{},"action":"shop_products"}}`)
     // 获得可生产的原料列表
     client.send(`{"msg":{"type":"action","args":{},"action":"get_produce_material"}}`)
-    await $.wait(1000)
+    await $.wait(3000)
     // 获得正在生产的商品信息
     client.send('{"msg":{"type":"action","args":{},"action":"product_producing"}}')
-    await $.wait(1000)
+    await $.wait(3000)
     // 获得库存
     client.send(`{"msg":{"type":"action","args":{},"action":"get_package"}}`)
     // 获得可生成的商品列表
     client.send(`{"msg":{"type":"action","args":{"page":1,"num":10},"action":"product_lists"}}`)
-    await $.wait(1000)
+    await $.wait(3000)
 
     // 获得原料生产列表
     console.log(`========原料生产信息========`)
@@ -193,7 +193,7 @@ async function mr() {
     // client.send(`{"msg":{"type":"action","args":{},"action":"get_task"}}`)
     // 获取个人信息
     client.send(`{"msg":{"type":"action","args":{"source":1},"action":"get_user"}}`)
-    await $.wait(1000)
+    await $.wait(3000)
     // 获得福利中心
     client.send(`{"msg":{"type":"action","args":{},"action":"get_benefit"}}`)
     client.send(`{"msg":{"type":"action","args":{},"action":"collect_coins"}}`);
@@ -248,7 +248,7 @@ async function mr() {
               client.send(`{"msg":{"type":"action","args":{"shop_id":${shop.id}},"action":"shop_view"}}`);
               client.send(`{"msg":{"action":"write","type":"action","args":{"action_type":6,"channel":2,"source_app":2,"vender":"${shop.vender_id}"}}}`);
             }
-            await $.wait(1000);
+            await $.wait(3000);
           }
           count = $.taskState.product_adds.length;
           if (count < 5 && ADD_CART) console.log(`去做浏览并加购任务`)
@@ -261,7 +261,7 @@ async function mr() {
               client.send(`{"msg":{"action":"write","type":"action","args":{"action_type":9,"channel":2,"source_app":2,"vender":"${product.id}"}}}`);
               client.send(`{"msg":{"action":"write","type":"action","args":{"action_type":5,"channel":2,"source_app":2,"vender":"${product.id}"}}}`);
             }
-            await $.wait(1000)
+            await $.wait(3000)
           }
           for (let i = $.taskState.meetingplace_view; i < $.taskState.mettingplace_count; ++i) {
             console.log(`去做第${i + 1}次浏览会场任务`)
@@ -408,7 +408,7 @@ async function mr() {
                     need_material.push(material.material)
                   console.log(`need_material:${JSON.stringify(need_material)}`);
                   msg += `(没有库存)`
-                  num = -1000
+                  num = -3000
                 }
               }
               if (num !== Infinity && num > 0) {
@@ -486,7 +486,7 @@ async function mr() {
                 for (let i = benefit.day_exchange_count; i < 10; i++) {
                   // console.log(`开始兑换`)
                   client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`);
-                  await $.wait(1000);
+                  await $.wait(3000);
                 }
               }
 
@@ -496,7 +496,7 @@ async function mr() {
                 parseInt(benefit.day_exchange_count) < benefit.day_limit) {
                 console.log(`满足条件，去兑换`)
                 client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`)
-                await $.wait(1000)
+                await $.wait(3000)
               }
 
             }
