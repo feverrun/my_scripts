@@ -24,7 +24,8 @@ if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
+  };
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
@@ -149,8 +150,8 @@ async function mr() {
   $.pos = []
   $.helpInfo = []
   $.needs = []
-  let client = new WebSocket(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`,null,{
-    headers:{
+  let client = new WebSocket(`wss://xinruimz-isv.isvjcloud.com/wss/?token=${$.token}`, null, {
+    headers: {
       'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
     }
   })
@@ -210,7 +211,7 @@ async function mr() {
   client.onmessage = async function (e) {
     if (e.data !== 'pong' && e.data && safeGet(e.data)) {
       let vo = JSON.parse(e.data);
-      await $.wait(Math.random()*2000+500);
+      await $.wait(Math.random() * 2000 + 500);
       console.log(`\n开始任务："${JSON.stringify(vo.action)}`);
       switch (vo.action) {
         case "get_ad":
@@ -333,7 +334,7 @@ async function mr() {
               console.log(`【${vo.data.position}】上尚未开始生产`)
               let ma
               console.log(`$.needs:${JSON.stringify($.needs)}`);
-              if($.needs.length){
+              if ($.needs.length) {
                 ma = $.needs.pop()
                 console.log(`ma:${JSON.stringify(ma)}`);
               } else {
@@ -351,8 +352,7 @@ async function mr() {
                   client.send(`{"msg":{"type":"action","args":{"position":"${vo.data.position}","material_id":${ma.id}},"action":"material_produce_v2"}}`)
                 }
               }
-            }
-            else{
+            } else {
               console.log(`【${vo.data.position}】电力不足`)
             }
           }
@@ -385,7 +385,7 @@ async function mr() {
         case "product_lists":
           let need_material = []
           if (vo.code === '200' || vo.code === 200) {
-            $.products = vo.data.filter(vo=>vo.level===$.level)
+            $.products = vo.data.filter(vo => vo.level === $.level)
             console.log(`========可生产商品信息========`)
             for (let product of $.products) {
               let num = Infinity
@@ -397,11 +397,14 @@ async function mr() {
                 // console.log(`ma:${JSON.stringify(ma)}`);
                 if (ma) {
                   msg += `（库存 ${ma.num} 份）`;
-                  num = Math.min(num, Math.trunc(ma.num / material.num)) ;//Math.trunc 取整数部分
-                  if(material.num > ma.num){need_material.push(material.material)};
+                  num = Math.min(num, Math.trunc(ma.num / material.num));//Math.trunc 取整数部分
+                  if (material.num > ma.num) {
+                    need_material.push(material.material)
+                  }
+
                   // console.log(`num:${JSON.stringify(num)}`);
                 } else {
-                  if(need_material.findIndex(vo=>vo.id===material.material.id)===-1)
+                  if (need_material.findIndex(vo => vo.id === material.material.id) === -1)
                     need_material.push(material.material)
                   console.log(`need_material:${JSON.stringify(need_material)}`);
                   msg += `(没有库存)`
@@ -477,10 +480,10 @@ async function mr() {
           for (let benefit of vo.data) {
             if (benefit.type === 1) { //type 1 是京豆
               console.log(`benefit:${JSON.stringify(benefit)}`);
-              if(benefit.description === "1 京豆" &&   //500颗京豆打包兑换
+              if (benefit.description === "1 京豆" &&   //500颗京豆打包兑换
                   parseInt(benefit.day_exchange_count) < 10 &&
-                  $.total > benefit.coins){
-                for (let i = benefit.day_exchange_count; i < 10; i++){
+                  $.total > benefit.coins) {
+                for (let i = benefit.day_exchange_count; i < 10; i++) {
                   // console.log(`开始兑换`)
                   client.send(`{"msg":{"type":"action","args":{"benefit_id":${benefit.id}},"action":"to_exchange"}}`);
                   await $.wait(1000);
@@ -499,7 +502,7 @@ async function mr() {
           break
         case "to_exchange":
           if (vo?.data) {
-            console.log(`兑换${vo?.data?.coins/-100}京豆成功;${JSON.stringify(vo)}`)
+            console.log(`兑换${vo?.data?.coins / -100}京豆成功;${JSON.stringify(vo)}`)
           } else {
             console.log(`兑换京豆失败：${JSON.stringify(vo)}`)
           }
@@ -523,7 +526,8 @@ async function mr() {
 function getIsvToken() {
   let config = {
     url: 'https://api.m.jd.com/client.action?functionId=genToken',
-    body: 'body=%7B%22to%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%5C/?channel%3Dmeizhuangguandibudaohang%26collectionId%3D96%26tttparams%3DYEyYQjMIeyJnTG5nIjoiMTE4Ljc2MjQyMSIsImdMYXQiOiIzMi4yNDE4ODIifQ8%253D%253D%26un_area%3D12_904_908_57903%26lng%3D118.7159742308471%26lat%3D32.2010317443041%22%2C%22action%22%3A%22to%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=b0aac3dd04b1c6d68cee3d425e27f480&st=1610161913667&sv=111',
+    // body: 'body=%7B%22to%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%5C/?channel%3Dmeizhuangguandibudaohang%26collectionId%3D96%26tttparams%3DYEyYQjMIeyJnTG5nIjoiMTE4Ljc2MjQyMSIsImdMYXQiOiIzMi4yNDE4ODIifQ8%253D%253D%26un_area%3D12_904_908_57903%26lng%3D118.7159742308471%26lat%3D32.2010317443041%22%2C%22action%22%3A%22to%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=b0aac3dd04b1c6d68cee3d425e27f480&st=1610161913667&sv=111',
+    body:'body=%7B%22action%22%3A%22to%22%2C%22to%22%3A%22https%253A%252F%252Fxinruimz-isv.isvjcloud.com%252F%253Fchannel%253Dwanyiwan%2526utm_campaign%253D%2526utm_source%253D%2526utm_term%253D%2526utm_medium%253D%22%7D&clientVersion=10.1.2&build=89743&client=android&d_brand=OPPO&d_model=PCCM00&osVersion=10&screen=2340*1080&partner=oppo&oaid=0990A8DEE8484D29A1F033DCEFB178E3e82dce91adda643738be64a5c1dbd373&openudid=9f1d035d2eedb52c&eid=eidAe7478122d8sbd5TTlEXLT0+YDhiZxKP8bXeU1Q32CvmB8QGJxZXlCaZnkoVCZJhvqTFhupc/WTxz7o/xO6XenK8NWWNye2wSnxsDQww8BoPo4XRI&sdkVersion=29&lang=zh_CN&uuid=9f1d035d2eedb52c&aid=9f1d035d2eedb52c&area=2_2824_51911_0&networkType=wifi&wifiBssid=cec1d024bebebed312a7c5e5351361fc&uts=0f31TVRjBSvb2atniorYKAvs8QZShfxazq7pmct%2FAAL%2BQQa7kiqhTWlBlyhFNCA%2BUXF6NUev15HPPPD4p1jagLO85sWJqVSPNCeSC6vkKbiLIAo%2F9sQ%2F%2FkPAePI8VHc6qCnhdMPqApatVeWs7eyf6jV%2F6TE%2BJ9JQ1ok88Zt0goRmngFSSslRdoxUYamM6jAYgczMnRt%2FUo%2Fs7FXke3HRug%3D%3D&uemps=0-0&harmonyOs=0&st=1630629293077&sign=85843e585010fa3ef17179817b8ee236&sv=110',
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
@@ -558,7 +562,8 @@ function getIsvToken() {
 function getIsvToken2() {
   let config = {
     url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
-    body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=6eb3237cff376c07a11c1e185761d073&st=1610161927336&sv=102&uuid=hjudwgohxzVu96krv/T6Hg%3D%3D',
+    // body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=6eb3237cff376c07a11c1e185761d073&st=1610161927336&sv=102&uuid=hjudwgohxzVu96krv/T6Hg%3D%3D',
+    body: 'body=%7B%22action%22%3A%22to%22%2C%22to%22%3A%22https%253A%252F%252Fxinruimz-isv.isvjcloud.com%252F%253Fchannel%253Dwanyiwan%2526utm_campaign%253D%2526utm_source%253D%2526utm_term%253D%2526utm_medium%253D%22%7D&clientVersion=10.1.2&build=89743&client=android&d_brand=OPPO&d_model=PCCM00&osVersion=10&screen=2340*1080&partner=oppo&oaid=0990A8DEE8484D29A1F033DCEFB178E3e82dce91adda643738be64a5c1dbd373&openudid=9f1d035d2eedb52c&eid=eidAe7478122d8sbd5TTlEXLT0+YDhiZxKP8bXeU1Q32CvmB8QGJxZXlCaZnkoVCZJhvqTFhupc/WTxz7o/xO6XenK8NWWNye2wSnxsDQww8BoPo4XRI&sdkVersion=29&lang=zh_CN&uuid=9f1d035d2eedb52c&aid=9f1d035d2eedb52c&area=2_2824_51911_0&networkType=wifi&wifiBssid=cec1d024bebebed312a7c5e5351361fc&uts=0f31TVRjBSvb2atniorYKAvs8QZShfxazq7pmct%2FAAL%2BQQa7kiqhTWlBlyhFNCA%2BUXF6NUev15HPPPD4p1jagLO85sWJqVSPNCeSC6vkKbiLIAo%2F9sQ%2F%2FkPAePI8VHc6qCnhdMPqApatVeWs7eyf6jV%2F6TE%2BJ9JQ1ok88Zt0goRmngFSSslRdoxUYamM6jAYgczMnRt%2FUo%2Fs7FXke3HRug%3D%3D&uemps=0-0&harmonyOs=0&st=1630629293077&sign=85843e585010fa3ef17179817b8ee236&sv=110',
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
@@ -593,7 +598,7 @@ function getIsvToken2() {
 function getToken() {
   let config = {
     url: 'https://xinruimz-isv.isvjcloud.com/api/auth',
-    body: JSON.stringify({"token":$.token2,"source":"01"}),
+    body: JSON.stringify({"token": $.token2, "source": "01"}),
     headers: {
       'Host': 'xinruimz-isv.isvjcloud.com',
       'Accept': 'application/x.jd-school-island.v1+json',
