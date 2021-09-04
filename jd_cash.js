@@ -253,7 +253,8 @@ function helpFriend(helpInfo) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (safeGet(data)) {
-            data = JSON.parse(data);
+            console.log(data)
+            data = JSON.parse(data)
             if (data.code === 0 && data.data.bizCode === 0) {
               console.log(`助力成功，获得${data.data.result.cashStr}`)
               // console.log(data.data.result.taskInfos)
