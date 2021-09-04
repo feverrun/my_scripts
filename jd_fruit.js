@@ -9,10 +9,10 @@
 cron "5 6-18/6 * * *" script-path=jd_fruit.js,tag=东东农场
 */
 
-
 const $ = new Env('东东农场');
 
-let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
+const cookieArr = $.isNode() ? require("./jdCookie.js") : "";
+let cookiesArr = cookieArr, cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
 let shareCodes = [""];
