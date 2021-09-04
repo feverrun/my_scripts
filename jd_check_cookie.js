@@ -3,15 +3,15 @@
  *cron "35 23 * * *" jd_test.js
  */
 
-const $ = new Env('测试');
+const $ = new Env('检测cookie有效性');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
 let cookiesArr = []
 let cookie = ''
 let message = '';
+let allMessage = '';
 
 // 如果是node环境保存所有的
 if ($.isNode()) {
@@ -50,7 +50,7 @@ if ($.isNode()) {
                 if ($.isNode()) {
                     await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
-            }else {
+            } else {
                 $.log($.UserName + "  ✅Cookie有效中\n")
             }
 
