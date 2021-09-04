@@ -2,25 +2,9 @@
 ENV
 JOYPARK_JOY_START =      只做前几个CK
 JOY_COIN_MAXIMIZE =      最大化硬币收益，如果合成后全部挖土后还有空位，则开启此模式（默认关闭） 0关闭 1开启
-
 请确保新用户助力过开工位，否则开启游戏了就不算新用户，后面就不能助力开工位了！！！！！！！！！！
-
-更新地址：https://github.com/Tsukasa007/my_script
-
-============Quantumultx===============
-[task_local]
-#汪汪乐园养joy
-20 0-23/3 * * * jd_joypark_joy.js, tag=汪汪乐园养joy, img-url=https://raw.githubusercontent.com/tsukasa007/icon/master/jd_joypark_joy.png, enabled=true
-
-================Loon==============
 [Script]
 cron "20 0-23/3 * * *" script-path=jd_joypark_joy.js,tag=汪汪乐园养joy
-
-===============Surge=================
-汪汪乐园养joy = type=cron,cronexp="20 0-23/3 * * *",wake-system=1,timeout=3600,script-path=jd_joypark_joy.js
-
-============小火箭=========
-汪汪乐园养joy = type=cron,script-path=jd_joypark_joy.js, cronexpr="20 0-23/3 * * *", timeout=3600, enable=true
 */
 
 const $ = new Env('汪汪乐园养joy');

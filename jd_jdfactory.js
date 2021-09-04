@@ -7,8 +7,6 @@ Last Modified time: 2021-8-19
 开会员任务和去京东首页点击“数码电器任务目前未做
 不会每次运行脚本都投入电力
 只有当心仪的商品存在，并且收集起来的电量满足当前商品所需电力，才投入
-已支持IOS双京东账号,Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 
 [Script]
 cron "0 0-22/1 * * * script-path=jd_jdfactory.js,tag=东东工厂

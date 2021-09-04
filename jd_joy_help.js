@@ -13,24 +13,9 @@
 ②从京东APP宠汪汪->领狗粮->邀请好友助力，分享给你小号微信或者微信的文件传输助手。 自己再打开刚才的分享，助力成功后，返回到此小程序首页重新进去宠汪汪即可助力下一位好友
 ③如提示好友人气旺，说明此好友已满了三人助力，需重新进出小程序，重新进入来客有礼-宠汪汪。
 new Env('宠汪汪强制为别人助力');//此处忽略即可，为自动生成iOS端软件配置文件所需
-[MITM]
-hostname = draw.jdfcloud.com
-======================Surge=====================
-[Script]
-宠汪汪强制为别人助力= type=http-request,pattern=^https:\/\/draw\.jdfcloud\.com\/\/common\/pet\/enterRoom\/h5\?invitePin=.*(&inviteSource=task_invite&shareSource=\w+&inviteTimeStamp=\d+&openId=\w+)?&reqSource=weapp|^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/common\/pet\/helpFriend\?friendPin,requires-body=1,max-size=0,script-path=jd_joy_help.js
-
-===================Quantumult X=====================
-[rewrite_local]
-^https:\/\/draw\.jdfcloud\.com\/\/common\/pet\/enterRoom\/h5\?invitePin=.*(&inviteSource=task_invite&shareSource=\w+&inviteTimeStamp=\d+&openId=\w+)?&reqSource=weapp|^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/common\/pet\/helpFriend\?friendPin url script-request-header jd_joy_help.js
-
-=====================Loon=====================
 [Script]
 http-request ^https:\/\/draw\.jdfcloud\.com\/\/common\/pet\/enterRoom\/h5\?invitePin=.*(&inviteSource=task_invite&shareSource=\w+&inviteTimeStamp=\d+&openId=\w+)?&reqSource=weapp|^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/common\/pet\/helpFriend\?friendPin script-path=jd_joy_help.js, requires-body=true, timeout=3600, tag=宠汪汪强制为别人助力
-
-
-你也可从下面链接拿好友的friendPin(复制链接到有京东ck的浏览器打开即可)
-
-https://jdjoy.jd.com/pet/getFriends?itemsPerPage=20&currentPage=1
+\
 */
 const friendsArr = []
 /**

@@ -1,7 +1,7 @@
 /*
 发财大赢家助力
 更新时间：2021-7-15
-0 0 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_dyj_help.js
+0 0 * * * jd_dyj_help.js
 */
 const $ = new Env("发财大赢家助力")
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
