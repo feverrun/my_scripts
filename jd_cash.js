@@ -77,7 +77,8 @@ async function jdCash() {
 
   //准备互助码
   await shareCodesFormat()
-  await helpFriends()
+  // 领现金入口进入看不到互助界面先隐藏
+  // await helpFriends()
   await getReward()
   await getReward('2');
   $.exchangeBeanNum = 0;
