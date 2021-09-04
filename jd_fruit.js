@@ -11,7 +11,7 @@ cron "5 6-18/6 * * *" script-path=jd_fruit.js,tag=东东农场
 
 const $ = new Env('东东农场');
 
-const cookieArr = $.isNode() ? require("./jdCookie.js") : "";
+const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 let cookiesArr = cookieArr, cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
@@ -24,6 +24,16 @@ let jdFruitBeanCard = false;//农场使用水滴换豆卡(如果出现限时活�
 let randomCount = $.isNode() ? 20 : 5;
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
+
+if ($.isNode()) {
+    Object.keys(jdCookieNode).forEach((item) => {
+        cookiesArr.push(jdCookieNode[item]);
+    });
+    console.log(`如果出现提示 ?.data. 错误，请升级nodejs版本(进入容器后，apk add nodejs-current)`)
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false") console.log = () => {};
+} else {
+    cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
+}
 
 !(async () => {
     if (!cookiesArr[0]) {
