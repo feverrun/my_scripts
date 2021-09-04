@@ -12,7 +12,9 @@ cron "1 7-21/1 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
 
 
 const $ = new Env('京东种豆得豆');
+
 //Node.js用户请在jdCookie.js处填写京东ck;
+const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 //ios等软件用户直接用NobyDa的jd cookie
 let jdNotify = true;//是否开启静默运行。默认true开启
 let cookiesArr = [], cookie = '', jdPlantBeanShareArr = [], isBox = false, notify, newShareCodes, option, message,subTitle;
@@ -29,6 +31,17 @@ let roundList = [];
 let awardState = '';//上期活动的京豆是否收取
 let randomCount = $.isNode() ? 20 : 5;
 let num;
+
+if ($.isNode()) {
+    Object.keys(jdCookieNode).forEach((item) => {
+        cookiesArr.push(jdCookieNode[item]);
+    });
+    console.log(`如果出现提示 ?.data. 错误，请升级nodejs版本(进入容器后，apk add nodejs-current)`)
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false") console.log = () => {};
+} else {
+    cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
+}
+
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});

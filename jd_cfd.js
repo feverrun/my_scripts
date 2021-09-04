@@ -12,14 +12,16 @@ const $ = new Env("京喜财富岛");
 const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
-$.showLog = $.getdata("cfd_showLog") ? $.getdata("cfd_showLog") === "true" : false;
-$.notifyTime = $.getdata("cfd_notifyTime");
-$.result = [];
-$.shareCodes = [];
+
 let cookiesArr = [], cookie = '', token = '';
 let UA, UAInfo = {}
 let nowTimes;
 let codePool;
+
+$.showLog = $.getdata("cfd_showLog") ? $.getdata("cfd_showLog") === "true" : false;
+$.notifyTime = $.getdata("cfd_notifyTime");
+$.result = [];
+$.shareCodes = [];
 
 const randomCount = $.isNode() ? 3 : 3;
 if ($.isNode()) {
