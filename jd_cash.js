@@ -492,7 +492,7 @@ function readShareCode() {
           //console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            data = JSON.parse(data);
+            data = JSON.parse(data).data;
           }
         }
       } catch (e) {
