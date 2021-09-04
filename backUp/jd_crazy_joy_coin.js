@@ -93,7 +93,7 @@ async function jdCrazyJoy() {
 
     $.canBuy = true
     await getJoyList()
-    await $.wait(1000)
+    await $.wait(2000)
     if ($.joyIds && $.joyIds.length > 0) {
         $.log('当前JOY分布情况')
         $.log(`\n${$.joyIds[0]} ${$.joyIds[1]} ${$.joyIds[2]} ${$.joyIds[3]}`)
@@ -102,7 +102,7 @@ async function jdCrazyJoy() {
     }
 
     await getJoyShop()
-    await $.wait(1000)
+    await $.wait(2000)
 
     // 如果格子全部被占有且没有可以合并的JOY，只能回收低级的JOY (且最低等级的JOY小于30级)
     if(checkHasFullOccupied() && !checkCanMerge() && finMinJoyLevel() < 30) {
@@ -110,15 +110,15 @@ async function jdCrazyJoy() {
         const boxId = $.joyIds.indexOf(minJoyId);
         console.log(`格子全部被占有且没有可以合并的JOY，回收${boxId + 1}号位等级为${minJoyId}的JOY`)
         await sellJoy(minJoyId, boxId);
-        await $.wait(1000)
+        await $.wait(2000)
         await getJoyList();
-        await $.wait(1000)
+        await $.wait(2000)
     }
 
     await hourBenefit()
-    await $.wait(1000)
+    await $.wait(2000)
     await getCoin()
-    await $.wait(1000)
+    await $.wait(2000)
 
     for (let i = 0; i < $.joyIds.length; ++i) {
         if (!$.canBuy) {
@@ -127,9 +127,9 @@ async function jdCrazyJoy() {
         }
         if ($.joyIds[i] === 0) {
             await buyJoy($.buyJoyLevel)
-            await $.wait(1000)
+            await $.wait(2000)
             await getJoyList()
-            await $.wait(1000)
+            await $.wait(2000)
             await getCoin();
         }
     }

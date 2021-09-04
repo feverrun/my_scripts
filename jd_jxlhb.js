@@ -48,7 +48,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
 //   res = await getAuthorShareCode('')
 //   if (!res) {
 //     $.http.get({url: ''}).then((resp) => {}).catch((e) => $.log('', e));
-//     await $.wait(1000)
+//     await $.wait(2000)
 //     res = await getAuthorShareCode('')
 //   }
 //   if (res && res.activeId) $.activeId = res.activeId;

@@ -379,7 +379,7 @@ function statistic(body) {
 function join(venderId) {
   return new Promise(async resolve => {
     $.shopactivityId = ''
-    await $.wait(1000)
+    await $.wait(2000)
     await getshopactivityId(venderId)
     $.get(ruhui(`${venderId}`), async (err, resp, data) => {
       try {

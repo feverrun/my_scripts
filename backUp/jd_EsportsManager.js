@@ -64,7 +64,7 @@ let tasks = [], shareCodes = [], first = true;
       if (r !== 200)
         continue
 
-      await $.wait(1000);
+      await $.wait(2000);
 
       await main();
     }
@@ -86,10 +86,10 @@ async function main() {
         continue
       case 1:
         await getShareCode(task_vos.assist_task_detail_vo.task_token)
-        await $.wait(1000)
+        await $.wait(2000)
 
         await getAssist()
-        await $.wait(1000)
+        await $.wait(2000)
 
         console.log(`第${$.index}个账号${$.UserName}去助力第${Math.floor(($.index - 1) / 6) + 1}个账号。`)
         await doAssist()
@@ -120,7 +120,7 @@ async function main() {
       if (t.status === '1') {
         console.log(`开始任务：${task_vos.task_name}`)
         let res = await do_task(t.task_token, taskId, taskType)
-        await $.wait(1000)
+        await $.wait(2000)
       }
     }
   }

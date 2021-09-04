@@ -63,9 +63,9 @@ async function main() {
         console.log(`获取token失败`);return;
     }
     console.log(`token:${$.token}`);
-    await $.wait(1000);
+    await $.wait(2000);
     await getActCk();
-    await $.wait(1000);
+    await $.wait(2000);
     $.pin = '';
     await takePostRequest('getMyPing');
     console.log($.pin);
@@ -73,14 +73,14 @@ async function main() {
         $.hotFlag = true;
         console.log(`获取pin失败,该账号可能是黑号`);return;
     }
-    await $.wait(1000);
+    await $.wait(2000);
     await getUserInfo();
-    await $.wait(1000);
+    await $.wait(2000);
     $.cookie=$.cookie + `AUTH_C_USER=${$.pin}`
     await accessLogWithAD();
     $.cookie=$.cookie + `AUTH_C_USER=${$.pin}`
     console.log(`初始化`);
-    await $.wait(1000);
+    await $.wait(2000);
     $.activityData = {};
     await takePostRequest('activityContent');
     if(JSON.stringify($.activityData) === `{}`){
@@ -102,15 +102,15 @@ async function main() {
         await $.wait(1500);
     }
     if(scoreFlag){
-        await $.wait(1000);
+        await $.wait(2000);
         await takePostRequest('activityContent');
-        await $.wait(1000);
+        await $.wait(2000);
     }
     let score2 = $.activityData.score2;
     console.log(`可扭蛋次数：`+score2);
     if(score2 > 0){
         await takePostRequest('drawContent');
-        await $.wait(1000);
+        await $.wait(2000);
     }
     for (let i = 0; i < score2; i++) {
         console.log(`进行第${i+1}次扭蛋`);
@@ -138,7 +138,7 @@ async function doTask(){
         console.log(`去签到`);
         $.taskType=0;
         await takePostRequest('saveTask');
-        await $.wait(1000);
+        await $.wait(2000);
     }else{
         console.log(`已签到`);
     }
@@ -146,7 +146,7 @@ async function doTask(){
         console.log(`去关注店铺`);
         $.taskType=23;
         await takePostRequest('saveTask');
-        await $.wait(1000);
+        await $.wait(2000);
     }else{
         console.log(`已关注`);
     }
@@ -154,7 +154,7 @@ async function doTask(){
         console.log(`去执行加购`);
         $.taskType=21;
         await takePostRequest('saveTask');
-        await $.wait(1000);
+        await $.wait(2000);
     }else{
         console.log(`已执行加购`);
     }
@@ -165,7 +165,7 @@ async function doTask(){
             console.log(`去执行浏览会场`);
             $.taskValue = toMainData[i].value;
             await takePostRequest('saveTask');
-            await $.wait(1000);
+            await $.wait(2000);
         }
     }
     let toShopStatus = $.activityData.toShopStatus;
@@ -175,7 +175,7 @@ async function doTask(){
             console.log(`去执行浏览店铺`);
             $.taskValue = toShopStatus[i].value;
             await takePostRequest('saveTask');
-            await $.wait(1000);
+            await $.wait(2000);
         }
     }
     let viewViewData = $.activityData.viewViewData;
@@ -185,7 +185,7 @@ async function doTask(){
             console.log(`去执行浏览视频`);
             $.taskValue = viewViewData[i].value;
             await takePostRequest('saveTask');
-            await $.wait(1000);
+            await $.wait(2000);
         }
     }
 }

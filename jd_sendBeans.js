@@ -235,7 +235,7 @@ async function openTuan(){
   if(!$.rewardRecordId){
     if(!$.detail.invited){
       await invite();
-      await $.wait(1000);
+      await $.wait(2000);
       await getActivityDetail();
       await $.wait(3000);
       $.rewardRecordId = $.detail.rewardRecordId;

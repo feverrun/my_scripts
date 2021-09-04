@@ -152,14 +152,14 @@ async function jxg(){
                 //获取卡片详情
                 $.cardDetailList = [];
                 await getCardDetail($.cardList[i].type);
-                await $.wait(1000);
+                await $.wait(2000);
                 if($.cardDetailList.length>0){
                     await sendBoxCard($.cardDetailList[0].card.userCardId);
                 }
             }
         }
     }
-    await $.wait(1000);
+    await $.wait(2000);
     await getFlowList();
 }
 
@@ -324,7 +324,7 @@ async function doMission(){
             await $.wait(3000);
             //签到
             await signIn();
-            await $.wait(1000);
+            await $.wait(2000);
             flag = true;
         }else if($.missionList[i].status === 1 && $.missionList[i].jumpType === 41){
             await $.wait(3000);

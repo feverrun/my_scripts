@@ -97,7 +97,7 @@ async function helpFriends() {
     if (!code) continue
     console.log(`去助力好友${code}`)
     const helpRes = await doSupport(code);
-    await $.wait(1000)
+    await $.wait(2000)
   }
 }
 

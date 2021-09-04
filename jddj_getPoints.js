@@ -51,10 +51,10 @@ let cityid = Math.round(Math.random() * (1500 - 1000) + 1000);
         thiscookie = await taskLoginUrl(thiscookie);
 
         await userinfo();
-        await $.wait(1000);
+        await $.wait(2000);
 
         await getPoints();
-        await $.wait(1000);
+        await $.wait(2000);
 
     }
 
@@ -103,7 +103,7 @@ async function watering() {
                     console.log('\n【浇水】:' + data.msg);
                     waterStatus = data.code;
                 })
-                await $.wait(1000);
+                await $.wait(2000);
             } while (waterStatus == 0);
             resolve();
 

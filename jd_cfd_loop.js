@@ -33,7 +33,7 @@ $.appId = 10028;
     let count = 0
     $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
     await requestAlgo();
-    await $.wait(1000)
+    await $.wait(2000)
     console.log('\n')
     while (true) {
         count++

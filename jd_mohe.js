@@ -19,7 +19,7 @@ cron "5 0,1-23/3 * * *" script-path=jd_mohe.js,tag=5G超级盲盒
 ====================================小火箭=============================
 5G超级盲盒 = type=cron,script-path=jd_mohe.js, cronexpr="0 0,1-23/3 * * *", timeout=3600, enable=true
 
-from：https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/
+from：
  */
 const $ = new Env('5G超级盲盒');
 const notify = $.isNode() ? require('./sendNotify') : '';

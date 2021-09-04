@@ -1,34 +1,23 @@
 /*
 自动提交助力码，删除内置助力码。
-author: 疯疯
 东东健康社区
 更新时间：2021-8-19
 活动入口：京东APP首页搜索 "玩一玩"即可
 
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-===================quantumultx================
-[task_local]
-#东东健康社区
-13 1,6,22 * * * jd_health.js, tag=东东健康社区, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-
-=====================Loon================
 [Script]
 cron "13 1,6,22 * * *" script-path=jd_health.js, tag=东东健康社区
-
-====================Surge================
-东东健康社区 = type=cron,cronexp="13 1,6,22 * * *",wake-system=1,timeout=3600,script-path=jd_health.js
-
-============小火箭=========
-东东健康社区 = type=cron,script-path=jd_health.js, cronexpr="13 1,6,22 * * *", timeout=3600, enable=true
  */
 const $ = new Env("东东健康社区");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require('./sendNotify') : "";
-let cookiesArr = [], cookie = "", allMessage = "", message;
+const JD_API_HOST = "https://api.m.jd.com/";
 const inviteCodes = [``]
+const randomCount = $.isNode() ? 20 : 5;
+
+let cookiesArr = [], cookie = "", allMessage = "", message;
 let myInviteCode;
 let reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : '') : ($.getdata('JD_HEALTH_REWARD_NAME') ? $.getdata('JD_HEALTH_REWARD_NAME') : '');
-const randomCount = $.isNode() ? 20 : 5;
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item]);
@@ -38,13 +27,15 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
-const JD_API_HOST = "https://api.m.jd.com/";
+
+
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/", {"open-url": "https://bean.m.jd.com/"});
         return;
     }
     await requireConfig()
+
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -52,6 +43,7 @@ const JD_API_HOST = "https://api.m.jd.com/";
             $.index = i + 1;
             message = "";
             console.log(`\n******开始【京东账号${$.index}】${$.UserName}*********\n`);
+
             await shareCodesFormat()
             await main()
             await showMsg()

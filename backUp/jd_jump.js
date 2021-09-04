@@ -77,7 +77,7 @@ async function jump() {
     console.log(`获取活动列表失败，请等待下一期活动\n`);
     return;
   }
-  await $.wait(1000);
+  await $.wait(2000);
   for (let i = 0; i < $.jumpList.length; i++) {
     $.jumpId = $.jumpList[i].id;
     $.oneJumpInfo = {};
@@ -117,14 +117,14 @@ async function jump() {
       console.log(`异常`);
       continue;
     }
-    await $.wait(1000);
+    await $.wait(2000);
     await getBeanRewards();
     oldReward = await getReward();
     console.log(`已获得京豆：${oldReward}`);
-    await $.wait(1000);
+    await $.wait(2000);
     $.taskList = [];
     await getTaskList();
-    await $.wait(1000);
+    await $.wait(2000);
     await doTask();
     if ($.oneJumpInfo.userInfo.gridTaskDone === false) {
       await domission();

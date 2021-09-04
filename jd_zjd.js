@@ -158,7 +158,7 @@ async function vvipTask() {
         await pg_channel_page_data();
         if (!$.vvipFlag) return
         await vviptask_receive_list();//做任务
-        await $.wait(1000)
+        await $.wait(2000)
         await pg_channel_page_data();
     } catch (e) {
         $.logErr(e)
@@ -294,7 +294,7 @@ function vviptask_receive_list() {
                             for (let item of $.taskData) {
                                 console.log(`\n领取 ${item['title']} 任务`)
                                 await vviptask_receive_getone(item['id']);
-                                await $.wait(1000);
+                                await $.wait(2000);
                                 console.log(`去完成 ${item['title']} 任务`)
                                 await vviptask_reach_task(item['id']);
                                 console.log(`领取 ${item['title']} 任务奖励\n`)

@@ -6,17 +6,17 @@
 ============Quantumultx===============
 [task_local]
 #工业品抽奖机
-10 0 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_industryLottery.js, tag=工业品抽奖机, enabled=true
+10 0 * * * jd_industryLottery.js, tag=工业品抽奖机, enabled=true
 
 ================Loon==============
 [Script]
-cron "10 0 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_industryLottery.js,tag=工业品抽奖机
+cron "10 0 * * *" script-path=jd_industryLottery.js,tag=工业品抽奖机
 
 ===============Surge=================
-工业品抽奖机 = type=cron,cronexp="10 0 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_industryLottery.js
+工业品抽奖机 = type=cron,cronexp="10 0 * * *",wake-system=1,timeout=3600,script-path=jd_industryLottery.js
 
 ============小火箭=========
-工业品抽奖机 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_industryLottery.js, cronexpr="10 0 * * *", timeout=3600, enable=true
+工业品抽奖机 = type=cron,script-path=jd_industryLottery.js, cronexpr="10 0 * * *", timeout=3600, enable=true
  */
 const $ = new Env('工业品抽奖机');
 const notify = $.isNode() ? require('./sendNotify') : '';

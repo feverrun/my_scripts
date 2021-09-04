@@ -48,7 +48,7 @@ let thiscookie = '', deviceid = '';
         thiscookie = await taskLoginUrl(thiscookie);
 
         await userinfo();
-        await $.wait(1000);
+        await $.wait(2000);
 
         let tslist = await taskList();
         if (tslist.code == 1) {

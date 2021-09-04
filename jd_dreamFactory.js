@@ -1,34 +1,16 @@
 /*
 自动提交助力码，删除内置助力码。
-京东京喜工厂
+京喜工厂
 更新时间：2021-8-19
 修复做任务、收集电力出现火爆，不能完成任务，重新计算h5st验证
-参考自 ：https://www.orzlee.com/web-development/2021/03/03/lxk0301-jingdong-signin-scriptjingxi-factory-solves-the-problem-of-unable-to-signin.html
 活动入口：京东APP-游戏与互动-查看更多-京喜工厂
 或者: 京东APP首页搜索 "玩一玩" ,造物工厂即可
 
-已支持IOS双京东账号,Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-============Quantumultx===============
-[task_local]
-#京喜工厂
-10 * * * * jd_dreamFactory.js, tag=京喜工厂, img-url=https://github.com/58xinian/icon/raw/master/jdgc.png, enabled=true
-
-================Loon==============
 [Script]
 cron "10 * * * *" script-path=jd_dreamFactory.js,tag=京喜工厂
-
-===============Surge=================
-京喜工厂 = type=cron,cronexp="10 * * * *",wake-system=1,timeout=3600,script-path=jd_dreamFactory.js
-
-============小火箭=========
-京喜工厂 = type=cron,script-path=jd_dreamFactory.js, cronexpr="10 * * * *", timeout=3600, enable=true
-
  */
 
 const $ = new Env('京喜工厂');
-
-console.log('\n====================Hello World====================\n')
 
 const JD_API_HOST = 'https://m.jingxi.com';
 const helpAu = true; //帮作者助力 免费拿活动
@@ -43,6 +25,7 @@ let myInviteCode;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 $.tuanIds = [];
 $.appId = 10001;
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -52,14 +35,18 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
+
 !(async () => {
     $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
-    await requestAlgo();
-    await requireConfig();
+
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
+    await requestAlgo();
+    await requireConfig();
+    //cookies
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -74,28 +61,19 @@ if ($.isNode()) {
             $.friendList = [];
             $.canHelpFlag = true;//能否助力朋友(招工)
             $.tuanNum = 0;//成团人数
-            await TotalBean();
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
-                if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                }
-                continue
-            }
+            //await TotalBean()
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+
             await jdDreamFactory()
         }
     }
+
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.isLogin = true;
             $.canHelp = true;//能否参团
-            await TotalBean();
-            if (!$.isLogin) {
-                continue
-            }
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
 
             if ((cookiesArr && cookiesArr.length >= ($.tuanNum || 5)) && $.canHelp) {
@@ -104,7 +82,7 @@ if ($.isNode()) {
                     console.log(`\n${$.UserName} 去参加团 ${item}`);
                     if (!$.canHelp) break;
                     await JoinTuan(item);
-                    await $.wait(1000);
+                    await $.wait(2000);
                 }
             }
             if ($.canHelp) await joinLeaderTuan();//参团
@@ -241,7 +219,7 @@ function taskList() {
                                 if (vo.completedTimes >= vo.targetTimes) {
                                     console.log(`任务：${vo.description}可完成`)
                                     await completeTask(vo.taskId, vo.taskName)
-                                    await $.wait(1000);//延迟等待一秒
+                                    await $.wait(2000);//延迟等待一秒
                                 } else {
                                     switch (vo.taskType) {
                                         case 2: // 逛一逛任务
@@ -251,7 +229,7 @@ function taskList() {
                                                 console.log(`去做任务：${vo.taskName}`)
                                                 await doTask(vo.taskId)
                                                 await completeTask(vo.taskId, vo.taskName)
-                                                await $.wait(1000);//延迟等待一秒
+                                                await $.wait(2000);//延迟等待一秒
                                             }
                                             break
                                         case 4: // 招工
@@ -752,7 +730,7 @@ async function PickUp(encryptPin = $.encryptPin, help = false) {
             $.pickUpMyselfComponent = false;
         }
         for (let item of componentList) {
-            await $.wait(1000);
+            await $.wait(2000);
             const PickUpComponentRes = await PickUpComponent(item['placeId'], encryptPin);
             if (PickUpComponentRes) {
                 if (PickUpComponentRes['ret'] === 0) {
@@ -981,7 +959,7 @@ async function joinLeaderTuan() {
             if (!$.canHelp) break;
             console.log(`\n账号${$.UserName} 参加作者的团 【${tuanId}】`);
             await JoinTuan(tuanId);
-            await $.wait(1000);
+            await $.wait(2000);
         }
     }
 }
@@ -1414,50 +1392,7 @@ function requireConfig() {
         resolve()
     })
 }
-function TotalBean() {
-    return new Promise(async resolve => {
-        const options = {
-            "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
-            "headers": {
-                "Accept": "application/json,text/plain, */*",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Accept-Language": "zh-cn",
-                "Connection": "keep-alive",
-                "Cookie": cookie,
-                "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
-            }
-        }
-        $.post(options, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (data) {
-                        data = JSON.parse(data);
-                        if (data['retcode'] === 13) {
-                            $.isLogin = false; //cookie过期
-                            return
-                        }
-                        if (data['retcode'] === 0) {
-                            $.nickName = (data['base'] && data['base'].nickname) || $.UserName;
-                        } else {
-                            $.nickName = $.UserName
-                        }
-                    } else {
-                        console.log(`京东服务器返回空数据`)
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
-    })
-}
+
 function safeGet(data) {
     try {
         if (typeof JSON.parse(data) == "object") {

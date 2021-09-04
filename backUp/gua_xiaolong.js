@@ -98,7 +98,7 @@ async function run(){
       console.log('获取不到[actorUuid]退出执行，请重新执行')
       return
     }
-    await $.wait(1000)
+    await $.wait(2000)
     $.log("关注: " + $.hasFollowShop)
     if(!$.hasFollowShop) await followShop();
     $.log("助力: " + (typeof $.shareUser == 'undefined'))
@@ -116,14 +116,14 @@ async function run(){
       }
     }
     if(flag == 1) await myInfo();
-    if(flag == 1) await $.wait(1000)
+    if(flag == 1) await $.wait(2000)
     let drawChances = parseInt($.score/100, 10)
     console.log(`总共${$.totalScore}龙力值 剩余${$.score}龙力值 ${$.drawChance}次抽奖机会 ${drawChances}额外抽奖机会`)
     if(luckydrawStatus === 'true'){
       let num = 1
       for(j=1;$.drawChance--;j++){
         await luckydraw(0)
-        await $.wait(1000)
+        await $.wait(2000)
         num++;
         if(num>= 10) console.log('抽奖次数太多，请再次运行抽奖')
         if(num>= 10) break
@@ -133,13 +133,13 @@ async function run(){
         if(num>= 10) break
         num++;
         await luckydraw(1)
-        await $.wait(1000)
+        await $.wait(2000)
       }
     }
     await getActorUuid()
-    await $.wait(1000)
+    await $.wait(2000)
     await myprize()
-    await $.wait(1000)
+    await $.wait(2000)
     await myfriend()
     $.log($.shareUuid)
     if ($.index === 1) {

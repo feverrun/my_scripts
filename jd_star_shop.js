@@ -98,7 +98,7 @@ async function main() {
             console.log(`开始第${j + 1}个明星小店，ID：${$.uniqueId},明星：${uniqueIdList[j].name}`);
             $.linkID = uniqueIdList[j].linkID;
             await starShop();
-            await $.wait(1000);
+            await $.wait(2000);
             if (j === 0) {
                 console.log(`互助码：${$.helpCode}`);
                 $.inviteCodeList.push($.helpCode);
@@ -109,7 +109,7 @@ async function main() {
         }
     }
     console.log(`=============${$.UserName }：明星小店奖励汇总================`);
-    await $.wait(1000);
+    await $.wait(2000);
     $.rewards = [];
     await getReward();
     for (let i = 0; i < rewardList.length; i++) {

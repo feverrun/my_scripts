@@ -81,7 +81,7 @@ const JD_API_HOST = 'https://jxd.m.jd.com/';
       }
       await jxd()
       await showMsg()
-      await $.wait(1000)
+      await $.wait(2000)
     }
   }
   if (allMessage) {
@@ -107,7 +107,7 @@ const JD_API_HOST = 'https://jxd.m.jd.com/';
           if (pin !== ptPin) {
             // 跳过本人
             await helpFriend(vo, pin)
-            await $.wait(1000)
+            await $.wait(2000)
           }
         }
         await $.wait(5000)
@@ -131,11 +131,11 @@ async function jxd() {
   }
   await getUserInfo()
   await getMyLotteryInformation()
-  await $.wait(1000)
+  await $.wait(2000)
   await getWelfareInfo()
-  await $.wait(1000)
+  await $.wait(2000)
   await getMainTask()
-  await $.wait(1000)
+  await $.wait(2000)
   await getMyWinningInformation();
 }
 
@@ -190,7 +190,7 @@ function getMainTask() {
                   await $.wait(2000)
                 } else if (vo['taskId'] === 501 && vo['status'] === 0) {
                   await accomplishTask()
-                  await $.wait(1000)
+                  await $.wait(2000)
                   await awardTask()
                   await $.wait(2000)
                 } else if (vo.taskId === 4) {

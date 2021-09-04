@@ -247,7 +247,7 @@ async function petTask() {
         //已签到，领取签到后的狗粮
         const res = await getFood('SignEveryDay');
         console.log(`领取每日签到狗粮结果：${res.data}`);
-        await $.wait(1000)
+        await $.wait(2000)
       }
     }
     //每日赛跑
@@ -257,7 +257,7 @@ async function petTask() {
       } else if (item['receiveStatus'] === 'unreceive') {
         const res = await getFood('race');
         console.log(`领取每日赛跑狗粮结果：${res.data}`);
-        await $.wait(1000)
+        await $.wait(2000)
       }
     }
     //每日兑换

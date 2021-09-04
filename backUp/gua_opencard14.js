@@ -108,7 +108,7 @@ async function run(){
       return
     }
     await drawContent();
-    await $.wait(1000)
+    await $.wait(2000)
     let checkOpenCardData = await checkOpenCard();
     if (checkOpenCardData && !checkOpenCardData.allOpenCard) {
       let flag = true
@@ -118,7 +118,7 @@ async function run(){
           if(flag) flag = false
           console.log(cardList1Element.name)
           await join(cardList1Element.value)
-          await $.wait(1000)
+          await $.wait(2000)
           await drawContent();
         }
       }
@@ -129,19 +129,19 @@ async function run(){
           if(flag) flag = false
           console.log(cardList1Element.name)
           await join(cardList1Element.value)
-          await $.wait(1000)
+          await $.wait(2000)
           await drawContent();
         }
       }
-      await $.wait(1000)
+      await $.wait(2000)
       await drawContent();
       checkOpenCardData = await checkOpenCard();
-      await $.wait(1000)
+      await $.wait(2000)
     }
     if(checkOpenCardData && checkOpenCardData.score2 == 1) await startDraw(2)
     if(checkOpenCardData && checkOpenCardData.score3 == 1) await startDraw(3)
     $.log("浏览商品: " + $.visitSku)
-    if(!$.visitSku) await $.wait(1000)
+    if(!$.visitSku) await $.wait(2000)
     for(let i of $.visitSkuList){
       if(i.status === 0){
         await saveTask('浏览商品', 5, i.value);
@@ -152,19 +152,19 @@ async function run(){
     }
     $.log("关注: " + $.followShop)
     if(!$.followShop) await saveTask('关注', 23, 23);
-    if(!$.followShop) await $.wait(1000)
+    if(!$.followShop) await $.wait(2000)
     $.log("签到: " + $.sign)
     if(!$.sign) await saveTask('签到', 0, 1000098686);
-    if(!$.sign) await $.wait(1000)
+    if(!$.sign) await $.wait(2000)
     $.log("加购: " + $.addSku)
     if(!$.addSku && guaopencard_addSku+"" != "true") console.log('如需加购请设置环境变量[guaopencard_addSku14]为"true"');
     if(!$.addSku && guaopencard_addSku == "true") await saveTask('加购', 21, 21);
-    if(!$.addSku && guaopencard_addSku == "true") await $.wait(1000)
+    if(!$.addSku && guaopencard_addSku == "true") await $.wait(2000)
     await getActorUuid()
     console.log(`共${$.score}清爽值 剩余${$.score1} ${$.score5}次游戏机会`)
-    await $.wait(1000)
+    await $.wait(2000)
     await getDrawRecordHasCoupon()
-    await $.wait(1000)
+    await $.wait(2000)
     await getShareRecord()
     $.log($.shareUuid)
     if ($.index === 1) {
@@ -367,7 +367,7 @@ function shopactivityId(functionId) {
 function join(venderId) {
   return new Promise(async resolve => {
     $.shopactivityId = ''
-    await $.wait(1000)
+    await $.wait(2000)
     await getshopactivityId(venderId)
     $.get(ruhui(`${venderId}`), async (err, resp, data) => {
       try {

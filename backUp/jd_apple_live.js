@@ -156,7 +156,7 @@ async function doTask() {
           if (task.status === 1) {
             console.log(`去关注 ${task.shopName}`)
             await jdapple_collectScore(task.taskToken,item.taskId,task.itemId,1);
-            await $.wait(1000)
+            await $.wait(2000)
             await jdapple_collectScore(task.taskToken,item.taskId,task.itemId,0);
           }
         }

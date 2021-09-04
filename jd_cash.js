@@ -239,7 +239,7 @@ async function helpFriends() {
     console.log(`去帮助好友${code['inviteCode']}`)
     await helpFriend(code)
     if (!$.canHelp) break
-    await $.wait(1000)
+    await $.wait(2000)
   }
 
 }

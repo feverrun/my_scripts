@@ -54,7 +54,7 @@ let res = [];
             continue
         }
         await main();
-        await $.wait(1000);
+        await $.wait(2000);
         $.authorizationInfo[$.UserName] = $.authorization;
     }
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();});
@@ -66,13 +66,13 @@ async function main() {
         console.log(`获取token失败`);return;
     }
     console.log(`token:${$.token}`);
-    await $.wait(1000);
+    await $.wait(2000);
     $.authorization = ``;
     await getJdUserInfo();
     if($.authorization === ``){
         console.log(`获取authorization失败`);return;
     }
-    await $.wait(1000);
+    await $.wait(2000);
     $.useInfo = {};
     await takeGetRequest('get_user_info');
     if(JSON.stringify($.useInfo) === `{}` || $.useInfo.status_code === 403){

@@ -132,7 +132,7 @@ function getUserInfo(info = false) {
                 if (vo['times'] === 0) {
                   console.log(`去做任务${task['_id']}`)
                   await doTask(task['_id'])
-                  await $.wait(1000)
+                  await $.wait(2000)
                 } else {
                   console.log(`${Math.trunc(vo['times'] / 60)}分钟可后做任务${task['_id']}`)
                 }
