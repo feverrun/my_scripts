@@ -7,10 +7,26 @@ TG学习交流群：https://t.me/cdles
 30 7 * * * jd_morningSc.js
 */
 const $ = new Env("早起赢现金")
+
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
-let cookiesArr = []
 var pins = process.env.morningScPins ?? ""
+
+let notify = $.isNode() ? require('./sendNotify') : '';
+let cookiesArr = []
 let cookie = '';
+
+if ($.isNode()) {
+    Object.keys(jdCookieNode).forEach((item) => {
+        if (jdCookieNode[item]) {
+            cookiesArr.push(jdCookieNode[item])
+        }
+    })
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+} else {
+    cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
+}
+
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {
@@ -131,18 +147,7 @@ function clockIn() {
 
 function requireConfig() {
     return new Promise(resolve => {
-        notify = $.isNode() ? require('./sendNotify') : '';
-        const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-        if ($.isNode()) {
-            Object.keys(jdCookieNode).forEach((item) => {
-                if (jdCookieNode[item]) {
-                    cookiesArr.push(jdCookieNode[item])
-                }
-            })
-            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-        } else {
-            cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
-        }
+
         console.log(`共${cookiesArr.length}个京东账号\n`)
         resolve()
     })
