@@ -13,20 +13,18 @@ const $ = new Env('东东农场');
 
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const jdFruitShareCodes = $.isNode() ? require('./jdFruitShareCodes.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const retainWater = 100;//保留水滴大于多少g,默认100g;
+const JD_API_HOST = 'https://api.m.jd.com/client.action';
+const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
 
 let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
-//此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
-//下面给出两个账号的填写示例（iOS只支持2个京东账号）
 let shareCodes = [""];
-
 let message = '', subTitle = '', option = {}, isFruitFinished = false;
-const retainWater = 100;//保留水滴大于多少g,默认100g;
 let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 let jdFruitBeanCard = false;//农场使用水滴换豆卡(如果出现限时活动时100g水换20豆,此时比浇水划算,推荐换豆),true表示换豆(不浇水),false表示不换豆(继续浇水),脚本默认是浇水
 let randomCount = $.isNode() ? 20 : 5;
-const JD_API_HOST = 'https://api.m.jd.com/client.action';
-const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
+
+notify = $.isNode() ? require('./sendNotify') : '';
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
