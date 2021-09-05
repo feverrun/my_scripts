@@ -277,6 +277,7 @@ function getShareRecord() {
           if(typeof res == 'object'){
             if(res.result === true && res.data){
               $.log(`=========== 你邀请了:${res.data.length}个`)
+              $.ShareCount = res.data.length
             }else if(typeof res == 'object' && res.errorMessage){
               console.log(`${res.errorMessage || ''}`)
             }else{
@@ -406,7 +407,7 @@ function shopactivityId(functionId) {
 function join(venderId) {
   return new Promise(async resolve => {
     $.shopactivityId = ''
-    await $.wait(2000)
+    await $.wait(1000)
     await getshopactivityId(venderId)
     $.get(ruhui(`${venderId}`), async (err, resp, data) => {
       try {
