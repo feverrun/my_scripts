@@ -8,8 +8,8 @@ cron "5 0,12 * * *" script-path=jd_senbeans.js,tag=送豆得豆
 const $ = new Env('送豆得豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [];
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
