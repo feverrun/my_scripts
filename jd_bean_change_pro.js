@@ -68,7 +68,6 @@ if ($.isNode()) {
             await jdfruitRequest('taskInitForFarm', {"version":14,"channel":1,"babelChannel":"120"});
             await getjdfruit();
             await requestAlgo();
-            await cash();
             await JxmcGetRequest();
             await bean();
             await getJxFactory();   //惊喜工厂
@@ -625,74 +624,6 @@ function safeGet(data) {
         return false;
     }
 }
-
-function cash() {
-    return new Promise(resolve => {
-        $.get(taskcashUrl('MyAssetsService.execute',
-            {"method": "userCashRecord", "data": {"channel": 1, "pageNum": 1, "pageSize": 20}}),
-            async (err, resp, data) => {
-                try {
-                    if (err) {
-                        console.log(`${JSON.stringify(err)}`)
-                        console.log(`${$.name} API请求失败，请检查网路重试`)
-                    } else {
-                        if (safeGet(data)) {
-                            data = JSON.parse(data);
-                            $.JDtotalcash = data.data.goldBalance ;
-                        }
-                    }
-                } catch (e) {
-                    $.logErr(e, resp)
-                } finally {
-                    resolve(data);
-                }
-            })
-    })
-}
-
-var __Oxb24bc = ["lite-android&", "stringify", "&android&3.1.0&", "&", "&846c4c32dae910ef", "12aea658f76e453faf803d15c40a72e0", "isNode", "crypto-js", "", "api?functionId=", "&body=", "&appid=lite-android&client=android&uuid=846c4c32dae910ef&clientVersion=3.1.0&t=", "&sign=", "api.m.jd.com", "*/*", "RN", "JDMobileLite/3.1.0 (iPad; iOS 14.4; Scale/2.00)", "zh-Hans-CN;q=1, ja-CN;q=0.9", "undefined", "log", "", "", "", "", "jsjia", "mi.com"];
-
-function taskcashUrl(_0x7683x2, _0x7683x3 = {}) {
-    let _0x7683x4 = +new Date();
-    let _0x7683x5 = `${__Oxb24bc[0x0]}${JSON[__Oxb24bc[0x1]](_0x7683x3)}${__Oxb24bc[0x2]}${_0x7683x2}${__Oxb24bc[0x3]}${_0x7683x4}${__Oxb24bc[0x4]}`;
-    let _0x7683x6 = __Oxb24bc[0x5];
-    const _0x7683x7 = $[__Oxb24bc[0x6]]() ? require(__Oxb24bc[0x7]) : CryptoJS;
-    let _0x7683x8 = _0x7683x7.HmacSHA256(_0x7683x5, _0x7683x6).toString();
-    return {
-        url: `${__Oxb24bc[0x8]}${JD_API_HOST}${__Oxb24bc[0x9]}${_0x7683x2}${__Oxb24bc[0xa]}${escape(JSON[__Oxb24bc[0x1]](_0x7683x3))}${__Oxb24bc[0xb]}${_0x7683x4}${__Oxb24bc[0xc]}${_0x7683x8}${__Oxb24bc[0x8]}`,
-        headers: {
-            'Host': __Oxb24bc[0xd],
-            'accept': __Oxb24bc[0xe],
-            'kernelplatform': __Oxb24bc[0xf],
-            'user-agent': __Oxb24bc[0x10],
-            'accept-language': __Oxb24bc[0x11],
-            'Cookie': cookie
-        }
-    }
-}(function(_0x7683x9, _0x7683xa, _0x7683xb, _0x7683xc, _0x7683xd, _0x7683xe) {
-    _0x7683xe = __Oxb24bc[0x12];
-    _0x7683xc = function(_0x7683xf) {
-        if (typeof alert !== _0x7683xe) {
-            alert(_0x7683xf)
-        };
-        if (typeof console !== _0x7683xe) {
-            console[__Oxb24bc[0x13]](_0x7683xf)
-        }
-    };
-    _0x7683xb = function(_0x7683x7, _0x7683x9) {
-        return _0x7683x7 + _0x7683x9
-    };
-    _0x7683xd = _0x7683xb(__Oxb24bc[0x14], _0x7683xb(_0x7683xb(__Oxb24bc[0x15], __Oxb24bc[0x16]), __Oxb24bc[0x17]));
-    try {
-        _0x7683x9 = __encode;
-        if (!(typeof _0x7683x9 !== _0x7683xe && _0x7683x9 === _0x7683xb(__Oxb24bc[0x18], __Oxb24bc[0x19]))) {
-            _0x7683xc(_0x7683xd)
-        }
-    } catch (e) {
-        _0x7683xc(_0x7683xd)
-    }
-})({})
-
 
 async function JxmcGetRequest() {
     let url = ``;
