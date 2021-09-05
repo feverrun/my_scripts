@@ -14,13 +14,17 @@ cron "0 0-22/1 * * * script-path=jd_jdfactory.js,tag=东东工厂
  */
 const $ = new Env('东东工厂');
 
-const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
+const shareCodes = $.isNode() ? require('./jdFactoryShareCodes.js') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
 const randomCount = $.isNode() ? 20 : 5;
-//IOS等用户直接用NobyDa的jd cookie
+const JD_API_HOST = 'https://api.m.jd.com/client.action';
+const inviteCodes = [``];
+
+let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 let cookiesArr = [], cookie = '', message;
+let wantProduct = ``;//心仪商品名称
+let myInviteCode;
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -32,10 +36,7 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-let wantProduct = ``;//心仪商品名称
-const JD_API_HOST = 'https://api.m.jd.com/client.action';
-const inviteCodes = [``];
-let myInviteCode;
+
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -677,8 +678,7 @@ function shareCodesFormat() {
 function requireConfig() {
     return new Promise(resolve => {
         console.log(`开始获取${$.name}配置文件\n`);
-        //Node.js用户请在jdCookie.js处填写京东ck;
-        const shareCodes = $.isNode() ? require('./jdFactoryShareCodes.js') : '';
+
         console.log(`共${cookiesArr.length}个京东账号\n`);
         $.shareCodesArr = [];
         if ($.isNode()) {

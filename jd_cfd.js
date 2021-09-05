@@ -12,18 +12,19 @@ const $ = new Env("京喜财富岛");
 const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
+const randomCount = $.isNode() ? 10 : 10;
 
 let cookiesArr = [], cookie = '', token = '';
 let UA, UAInfo = {}
 let nowTimes;
 let codePool;
 
+$.CryptoJS = $.isNode() ? require('crypto-js') : '';
 $.showLog = $.getdata("cfd_showLog") ? $.getdata("cfd_showLog") === "true" : false;
 $.notifyTime = $.getdata("cfd_notifyTime");
 $.result = [];
 $.shareCodes = [];
 
-const randomCount = $.isNode() ? 3 : 3;
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -36,14 +37,14 @@ if ($.isNode()) {
 
 $.appId = 10028;
 !(async () => {
-  await requireConfig();
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
+
+  await requireConfig();
   await requestAlgo();
-  await $.wait(1000)
+  await $.wait(3000)
   
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
@@ -61,7 +62,7 @@ $.appId = 10028;
 
       await shareCodesFormat()
       await cfd();
-      await $.wait(2000);
+      await $.wait(5000)
       UAInfo[$.UserName] = UA
     }
   }
@@ -80,6 +81,7 @@ $.appId = 10028;
       }
     }
     if (!$.canHelp) continue
+
     await readShareCode();
     //console.log(codePool)
     if (codePool && codePool.length) {
@@ -88,7 +90,7 @@ $.appId = 10028;
         console.log(`账号${$.UserName} 去助力 ${id}`)
         await helpByStage(id)
         if (!$.canHelp) break
-        await $.wait(1000)
+        await $.wait(3000)
       }
     }else {
         console.log('助力池获取互助码失败，请稍后重试');
@@ -229,7 +231,7 @@ async function cfd() {
     await queryRubbishInfo()
 
     //雇导游
-    await $.wait(2000);
+    await $.wait(5000)
     await employTourGuideInfo();
 
     console.log(`\n做任务`)
@@ -238,18 +240,18 @@ async function cfd() {
     await getActTask()
 
     //日常任务
-    await $.wait(2000);
+    await $.wait(5000)
     await getTaskList(0);
-    await $.wait(2000);
+    await $.wait(5000)
     await browserTask(0);
 
     //成就任务
-    await $.wait(2000);
+    await $.wait(5000)
     await getTaskList(1);
-    await $.wait(2000);
+    await $.wait(5000)
     await browserTask(1);
 
-    await $.wait(2000);
+    await $.wait(5000)
     const endInfo = await getUserInfo(false);
     $.result.push(
         `【京东账号${$.index}】${$.nickName || $.UserName}`,
@@ -1349,7 +1351,7 @@ function browserTask(taskType) {
             //做任务
             console.log(`【📆日常任务】${taskinfo.taskName} 进度：${i + 1}/${end}`)
             await doTask(taskinfo.taskId);
-            await $.wait(2000);
+            await $.wait(5000)
           }
           //领取奖励
           await awardTask(0, taskinfo);
@@ -1364,7 +1366,7 @@ function browserTask(taskType) {
           } else {
             //领奖励
             await awardTask(1, taskinfo);
-            await $.wait(2000);
+            await $.wait(5000)
           }
         }
         break;
@@ -1679,10 +1681,10 @@ function shareCodesFormat() {
       // const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       //$.newShareCodes = [...$.strMyShareIds];
     }
-    // const readShareCodeRes = await readShareCode();
-    // if (readShareCodeRes && readShareCodeRes.code === 200) {
-    //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-    // }
+    let readShareCodeRes = await readShareCode();
+    if (readShareCodeRes && readShareCodeRes.code === 200) {
+      $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+    }
     //console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })

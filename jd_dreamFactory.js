@@ -13,6 +13,7 @@ cron "10 * * * *" script-path=jd_dreamFactory.js,tag=京喜工厂
 const $ = new Env('京喜工厂');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const shareCodes = $.isNode() ? require('./jdDreamFactoryShareCodes.js') : '';
 const JD_API_HOST = 'https://m.jingxi.com';
 const helpAu = true; //帮作者助力 免费拿活动
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -24,8 +25,10 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 let tuanActiveId = `yNtpovqFehHByNrt_lmb3g`, hasSend = false;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 let myInviteCode;
+
 $.tuanIds = [];
 $.appId = 10001;
+$.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -39,7 +42,6 @@ if ($.isNode()) {
 
 
 !(async () => {
-    $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
 
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -1374,9 +1376,8 @@ function requireConfig() {
             console.log(`自定义拼团活动ID: 获取成功 ${tuanActiveId}`)
         }
         console.log(`开始获取${$.name}配置文件\n`);
-        //Node.js用户请在jdCookie.js处填写京东ck;
-        const shareCodes = $.isNode() ? require('./jdDreamFactoryShareCodes.js') : '';
         console.log(`共${cookiesArr.length}个京东账号\n`);
+
         $.shareCodesArr = [];
         if ($.isNode()) {
             Object.keys(shareCodes).forEach((item) => {

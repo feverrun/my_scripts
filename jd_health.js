@@ -393,7 +393,6 @@ function shareCodesFormat() {
 function requireConfig() {
     return new Promise(resolve => {
         console.log(`开始获取${$.name}配置文件\n`);
-        //Node.js用户请在jdCookie.js处填写京东ck;
         let shareCodes = [];
         if ($.isNode()) {
             if (process.env.JDHEALTH_SHARECODES) {

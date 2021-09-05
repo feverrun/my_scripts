@@ -15,11 +15,14 @@ const $ = new Env('京东种豆得豆');
 
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
+const jdPlantBeanShareCodes = $.isNode() ? require('./jdPlantBeanShareCodes.js') : '';
+//京东接口地址
+const JD_API_HOST = 'https://api.m.jd.com/client.action';
+
 //ios等软件用户直接用NobyDa的jd cookie
 let jdNotify = true;//是否开启静默运行。默认true开启
 let cookiesArr = [], cookie = '', jdPlantBeanShareArr = [], isBox = false, notify, newShareCodes, option, message,subTitle;
-//京东接口地址
-const JD_API_HOST = 'https://api.m.jd.com/client.action';
+
 //助力好友分享码(最多3个,否则后面的助力失败)
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
@@ -31,6 +34,8 @@ let roundList = [];
 let awardState = '';//上期活动的京豆是否收取
 let randomCount = $.isNode() ? 20 : 5;
 let num;
+
+notify = $.isNode() ? require('./sendNotify') : '';
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -603,21 +608,7 @@ function shareCodesFormat() {
 function requireConfig() {
     return new Promise(resolve => {
         console.log('开始获取种豆得豆配置文件\n')
-        notify = $.isNode() ? require('./sendNotify') : '';
-        //Node.js用户请在jdCookie.js处填写京东ck;
-        const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-        const jdPlantBeanShareCodes = $.isNode() ? require('./jdPlantBeanShareCodes.js') : '';
-        //IOS等用户直接用NobyDa的jd cookie
-        if ($.isNode()) {
-            Object.keys(jdCookieNode).forEach((item) => {
-                if (jdCookieNode[item]) {
-                    cookiesArr.push(jdCookieNode[item])
-                }
-            })
-            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-        } else {
-            cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
-        }
+
         console.log(`共${cookiesArr.length}个京东账号\n`)
         $.shareCodesArr = [];
         if ($.isNode()) {
