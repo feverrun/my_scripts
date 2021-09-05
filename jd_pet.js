@@ -13,6 +13,10 @@ cron "10 6-18/6 * * *" script-path=jd_pet.js,tag=东东萌宠
 const $ = new Env('东东萌宠');
 
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
+const jdPetShareCodes = $.isNode() ? require('./jdPetShareCodes.js') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
+
+
 let cookiesArr = [], cookie = '', jdPetShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //助力好友分享码(最多5个,否则后面的助力失败),原因:京东农场每人每天只有四次助力机会
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
@@ -522,21 +526,7 @@ function shareCodesFormat() {
 function requireConfig() {
     return new Promise(resolve => {
         console.log('开始获取东东萌宠配置文件\n')
-        notify = $.isNode() ? require('./sendNotify') : '';
-        //Node.js用户请在jdCookie.js处填写京东ck;
-        const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-        const jdPetShareCodes = $.isNode() ? require('./jdPetShareCodes.js') : '';
-        //IOS等用户直接用NobyDa的jd cookie
-        if ($.isNode()) {
-            Object.keys(jdCookieNode).forEach((item) => {
-                if (jdCookieNode[item]) {
-                    cookiesArr.push(jdCookieNode[item])
-                }
-            })
-            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-        } else {
-            cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
-        }
+
         console.log(`共${cookiesArr.length}个京东账号\n`)
         $.shareCodesArr = [];
         if ($.isNode()) {

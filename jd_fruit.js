@@ -12,6 +12,9 @@ cron "5 6-18/6 * * *" script-path=jd_fruit.js,tag=东东农场
 const $ = new Env('东东农场');
 
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
+const jdFruitShareCodes = $.isNode() ? require('./jdFruitShareCodes.js') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
+
 let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
@@ -1319,22 +1322,7 @@ function shareCodesFormat() {
 function requireConfig() {
     return new Promise(resolve => {
         console.log('开始获取配置文件\n')
-        notify = $.isNode() ? require('./sendNotify') : '';
-        //Node.js用户请在jdCookie.js处填写京东ck;
-        const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-        const jdFruitShareCodes = $.isNode() ? require('./jdFruitShareCodes.js') : '';
-        //IOS等用户直接用NobyDa的jd cookie
-        if ($.isNode()) {
-            Object.keys(jdCookieNode).forEach((item) => {
-                if (jdCookieNode[item]) {
-                    cookiesArr.push(jdCookieNode[item])
-                }
-            })
-            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-        } else {
-            cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
-        }
-        console.log(`共${cookiesArr.length}个京东账号\n`)
+
         $.shareCodesArr = [];
         if ($.isNode()) {
             Object.keys(jdFruitShareCodes).forEach((item) => {
