@@ -583,6 +583,7 @@ function richManIndex() {
     $.get(taskUrl('richManIndex', {"actId":"hbdfw","needGoldToast":"true"}), async (err, resp, data) => {
       try {
         if (!err) {
+          console.log(data);return
           if (safeGet(data)) {
             data = JSON.parse(data);
             if(data.code ===0 && data.data && data.data.userInfo){
@@ -597,7 +598,6 @@ function richManIndex() {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         }
       } catch (e) {
-        console.log('error')
         $.logErr(e, resp)
       } finally {
         resolve(data);
