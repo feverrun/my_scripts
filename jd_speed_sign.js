@@ -17,7 +17,6 @@ let cookiesArr = [], cookie = '', message;
 $.score = 0
 $.total = 0
 
-
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -34,9 +33,8 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  console.log(cookiesArr);
-  return;
-  for (let i = 1; i <= cookiesArr.length; i++) {
+
+  for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -64,19 +62,19 @@ async function jdGlobal() {
     await richManIndex()
 
     await wheelsHome()
-    await apTaskList()
-    await wheelsHome()
-
-    await signInit()
-    await sign()
-    await invite()
-    await invite2()
-
-    await taskList()
-    await queryJoy()
-    await signInit()
-    await cash()
-    await showMsg()
+    // await apTaskList()
+    // await wheelsHome()
+    //
+    // await signInit()
+    // await sign()
+    // await invite()
+    // await invite2()
+    //
+    // await taskList()
+    // await queryJoy()
+    // await signInit()
+    // await cash()
+    // await showMsg()
   } catch (e) {
     $.logErr(e)
   }
