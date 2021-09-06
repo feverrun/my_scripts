@@ -61,20 +61,21 @@ async function jdGlobal() {
   try {
     await richManIndex()
 
+    return;
     await wheelsHome()
-    // await apTaskList()
-    // await wheelsHome()
-    //
-    // await signInit()
-    // await sign()
-    // await invite()
-    // await invite2()
-    //
-    // await taskList()
-    // await queryJoy()
-    // await signInit()
-    // await cash()
-    // await showMsg()
+    await apTaskList()
+    await wheelsHome()
+
+    await signInit()
+    await sign()
+    await invite()
+    await invite2()
+
+    await taskList()
+    await queryJoy()
+    await signInit()
+    await cash()
+    await showMsg()
   } catch (e) {
     $.logErr(e)
   }
