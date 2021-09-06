@@ -9,13 +9,15 @@ cron "21 3,8 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/
 */
 
 const $ = new Env('京东极速版');
-
-const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-
+const notify = $.isNode() ? require('./sendNotify') : '';
+const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
 
 let cookiesArr = [], cookie = '', message;
+$.score = 0
+$.total = 0
+
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -26,15 +28,13 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
-
 
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  for (let i = 0; i < cookiesArr.length; i++) {
+  for (let i = 1; i <= cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -69,8 +69,7 @@ async function jdGlobal() {
     await sign()
     await invite()
     await invite2()
-    $.score = 0
-    $.total = 0
+
     await taskList()
     await queryJoy()
     await signInit()
