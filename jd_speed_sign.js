@@ -60,7 +60,8 @@ if ($.isNode()) {
 async function jdGlobal() {
   try {
 
-    await richManIndex()
+    //活动过期
+    // await richManIndex()
 
     await wheelsHome()
     await apTaskList()
@@ -583,7 +584,6 @@ function richManIndex() {
     $.get(taskUrl('richManIndex', {"actId":"hbdfw","needGoldToast":"true"}), async (err, resp, data) => {
       try {
         if (!err) {
-          console.log(data);return
           if (safeGet(data)) {
             data = JSON.parse(data);
             if(data.code ===0 && data.data && data.data.userInfo){
