@@ -49,7 +49,7 @@ if ($.isNode()) {
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
       await jdGlobal()
-      await $.wait(5000)
+      await $.wait(2*1000)
     }
   }
 })()
