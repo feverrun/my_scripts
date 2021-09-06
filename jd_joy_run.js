@@ -20,23 +20,9 @@ http-request ^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/api\/user\/user\/detai
 */
 const $ = new Env('宠汪汪赛跑');
 const zooFaker = require('./utils/JDJRValidator_Pure');
-$.get = zooFaker.injectToRequest2($.get.bind($));
-$.post = zooFaker.injectToRequest2($.post.bind($));
-//宠汪汪赛跑所需token，默认读取作者服务器的
-//需自行抓包，宠汪汪小程序获取token，点击`发现`或`我的`，寻找`^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/api\/user\/user\/detail\?openId=`获取token
-let jdJoyRunToken = '';
-
-const isRequest = typeof $request != "undefined"
 const JD_BASE_API = `https://draw.jdfcloud.com//pet`;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
-//下面给出好友邀请助力的示例填写规则
-let invite_pins = ['18869988021_p'];
-//下面给出好友赛跑助力的示例填写规则
-let run_pins = ['18869988021_p'];
-//friendsArr内置太多会导致IOS端部分软件重启,可PR过来(此处目的:帮别人助力可得30g狗粮)
-let friendsArr = ['18869988021_p']
-let cookiesArr = [], cookie = '';
-let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000);
+const isRequest = typeof $request != "undefined"
 
 const headers = {
   'Connection': 'keep-alive',
@@ -55,6 +41,25 @@ const headers = {
   'Accept': '*/*',
   'LKYLToken': ''
 }
+
+
+//宠汪汪赛跑所需token，默认读取作者服务器的
+//需自行抓包，宠汪汪小程序获取token，点击`发现`或`我的`，寻找`^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/api\/user\/user\/detail\?openId=`获取token
+let jdJoyRunToken = '';
+
+
+//下面给出好友邀请助力的示例填写规则
+let invite_pins = ['18862988021_p'];
+//下面给出好友赛跑助力的示例填写规则
+let run_pins = ['18862988021_p'];
+//friendsArr内置太多会导致IOS端部分软件重启,可PR过来(此处目的:帮别人助力可得30g狗粮)
+let friendsArr = ['18862988021_p']
+let cookiesArr = [], cookie = '';
+let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000);
+
+$.get = zooFaker.injectToRequest2($.get.bind($));
+$.post = zooFaker.injectToRequest2($.post.bind($));
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
