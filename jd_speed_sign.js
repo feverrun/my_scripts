@@ -5,23 +5,17 @@
 
 活动时间：长期
 活动入口：京东极速版app-现金签到
-已支持IOS双京东账号,Node.js支持N个京东账号
-[task_local]
-#京东极速版
-21 3,8 * * * jd_speed_sign.js, tag=京东极速版, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
-
-[Script]
-cron "21 3,8 * * *" script-path=jd_speed_sign.js,tag=京东极速版
+cron "21 3,8 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js,tag=京东极速版
 */
 
 const $ = new Env('京东极速版');
 
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
 const notify = $.isNode() ? require('./sendNotify') : '';
+//Node.js用户请在jdCookie.js处填写京东ck;
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+
 
 let cookiesArr = [], cookie = '', message;
-
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -32,12 +26,14 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
+const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
+
+
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -46,10 +42,11 @@ if ($.isNode()) {
       $.isLogin = true;
       $.nickName = '';
       message = '';
+
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
       await jdGlobal()
-      await $.wait(2*1000)
+      await $.wait(5000)
     }
   }
 })()
