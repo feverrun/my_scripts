@@ -59,7 +59,7 @@ if ($.isNode()) {
 
 async function jdGlobal() {
   try {
-    return
+
     await richManIndex()
 
     await wheelsHome()
@@ -582,10 +582,7 @@ function richManIndex() {
   return new Promise(resolve => {
     $.get(taskUrl('richManIndex', {"actId":"hbdfw","needGoldToast":"true"}), async (err, resp, data) => {
       try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
+        if (!err) {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if(data.code ===0 && data.data && data.data.userInfo){
@@ -595,8 +592,12 @@ function richManIndex() {
               }
             }
           }
+        } else {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
         }
       } catch (e) {
+        console.log('error')
         $.logErr(e, resp)
       } finally {
         resolve(data);
@@ -604,6 +605,7 @@ function richManIndex() {
     })
   })
 }
+
 // 红包大富翁
 function shootRichManDice() {
   return new Promise(resolve => {
