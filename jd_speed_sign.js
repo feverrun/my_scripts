@@ -59,9 +59,9 @@ if ($.isNode()) {
 
 async function jdGlobal() {
   try {
+    return
     await richManIndex()
 
-    return;
     await wheelsHome()
     await apTaskList()
     await wheelsHome()
