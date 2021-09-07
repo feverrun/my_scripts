@@ -23,8 +23,8 @@ cron "1 7 * * *" script-path=jd_mh.js,tag=盲盒抽京豆
 const $ = new Env('盲盒抽京豆');
 const notify = $.isNode() ? require('../sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
-//IOS等用户直接用NobyDa的jd cookie
+
+
 let cookiesArr = [], cookie = '', message;
 
 if ($.isNode()) {

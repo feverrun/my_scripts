@@ -22,9 +22,9 @@ cron "10 6 * * *" script-path=jr_sign.js, tag=金融打卡领年终奖
 const $ = new Env('金融打卡领年终奖');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message;
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

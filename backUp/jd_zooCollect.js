@@ -30,7 +30,7 @@ cron "0-59/30 * * * *" script-path=jd_zooCollect.js,tag=618动物联萌收集金
 const $ = new Env('618动物联萌收集金币');
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', secretp = '', joyToken = "";
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

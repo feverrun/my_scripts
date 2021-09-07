@@ -9,10 +9,10 @@ cron "0 0,2,22 * * *" jd_ttzdq.js, tag=推推赚大钱
 */
 const $ = new Env('推推赚大钱');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message;
 let packetId = '';
 

@@ -40,7 +40,7 @@ cron "28 9,22 1-6 9 *" script-path=https://raw.githubusercontent.com/smiek2221/s
 const $ = new Env('9.1-9.6 联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 if ($.isNode()) {

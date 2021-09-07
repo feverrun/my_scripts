@@ -39,7 +39,7 @@ cron "34 10,19 3-13 9 *" script-path=https://raw.githubusercontent.com/smiek2221
 const $ = new Env('9.3-9.13 奔跑吧 开学季');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 // const notify = $.isNode() ? require('./sendNotify') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 let activityCookie = '';

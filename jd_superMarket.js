@@ -18,8 +18,8 @@ cron "11 * * * *" script-path=jd_superMarket.js,tag=东东超市
 东东超市 = type=cron,script-path=jd_superMarket.js, cronexpr="11 * * * *", timeout=3600, enable=true
  */
 const $ = new Env('东东超市');
-//Node.js用户请在jdCookie.js处填写京东ck;
-//IOS等用户直接用NobyDa的jd cookie
+
+
 let cookiesArr = [], cookie = '', jdSuperMarketShareArr = [], notify, newShareCodes;
 let helpAu = true;//给作者助力 免费拿,极速版拆红包,省钱大赢家等活动.默认true是,false不助力.
 helpAu = $.isNode() ? (process.env.HELP_AUTHOR ? process.env.HELP_AUTHOR === 'true' : helpAu) : helpAu;
@@ -1697,9 +1697,9 @@ function requireConfig() {
   return new Promise(resolve => {
     // console.log('\n开始获取东东超市配置文件\n')
     notify = $.isNode() ? require('./sendNotify') : '';
-    //Node.js用户请在jdCookie.js处填写京东ck;
+
     const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-    //IOS等用户直接用NobyDa的jd cookie
+
     if ($.isNode()) {
       Object.keys(jdCookieNode).forEach((item) => {
         if (jdCookieNode[item]) {

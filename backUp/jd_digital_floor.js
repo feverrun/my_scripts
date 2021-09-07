@@ -25,7 +25,7 @@ cron "10 7 * * *" script-path=jd_digital_floor.js, tag=数码加购京豆
 const $ = new Env('数码加购京豆');
 
 const notify = $.isNode() ? require('../sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 const randomCount = $.isNode() ? 20 : 5;
@@ -282,7 +282,7 @@ function requireConfig() {
   return new Promise(async resolve => {
     await getAuthorShareCode()
     console.log(`开始获取${$.name}配置文件\n`);
-    //Node.js用户请在jdCookie.js处填写京东ck;
+
     const shareCodes = [] //$.isNode() ? require('./jdSplitShareCodes.js') : '';
     console.log(`共${cookiesArr.length}个京东账号\n`);
     $.shareCodesArr = [];

@@ -14,7 +14,7 @@ const activityInfoList = [
   {'activityType':'luckdraw','activityCode':'1407251415377641472','title':'每日转盘'}
 ];
 $.helpCodeList = [];
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

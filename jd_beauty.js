@@ -8,7 +8,7 @@ cron 1 7,12,19 * * * jd_beauty.js
  */
 const $ = new Env('美丽研究院');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const WebSocket = require('ws');
 //const WebSocket = $.isNode() ? require('websocket').w3cwebsocket: SockJS;
@@ -17,7 +17,7 @@ const randomCount = $.isNode() ? 20 : 5;
 $.accountCheck = true;
 $.init = false;
 const bean = 500; //兑换多少豆，默认是500
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message, helpInfo, ADD_CART = false;
 
 if ($.isNode()) {

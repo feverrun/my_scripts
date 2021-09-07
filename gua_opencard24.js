@@ -39,7 +39,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const Faker=require('./utils/sign_graphics_validate.js')
 
 const notify = $.isNode() ? require('./sendNotify') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 if ($.isNode()) {

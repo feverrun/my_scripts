@@ -24,7 +24,7 @@ cron "10 7 * * *" script-path=jd_ds.js, tag=京东代属
 const $ = new Env('京东代属');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 const randomCount = $.isNode() ? 20 : 5;

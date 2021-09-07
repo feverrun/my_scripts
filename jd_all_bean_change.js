@@ -1,26 +1,17 @@
 /*
 京东月资产变动通知
 更新时间：2021-06-16 12:00
-脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
-=================================Quantumultx=========================
-[task_local]
-#京东月资产变动通知
-10 7 1-31/7 * * https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js, tag=翻翻乐提现, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-=================================Loon===================================
 [Script]
-cron "10 7 1-31/7 * *" script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js,tag=翻翻乐提现
-===================================Surge================================
-京东月资产变动通知 = type=cron,cronexp="10 7 1-31/7 * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js
-====================================小火箭=============================
-京东月资产变动通知 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_all_bean_change.js, cronexpr="10 7 1-31/7 * *", timeout=3600, enable=true
+cron "10 7 1-31/7 * *" script-path=jd_all_bean_change.js,tag=翻翻乐提现
  */
+
 const $ = new Env('京东月资产变动通知');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+
 let allMessage = '';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -29,11 +20,13 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -75,6 +68,7 @@ if ($.isNode()) {
     .finally(() => {
       $.done();
     })
+
 async function showMsg() {
   if ($.errorMsg) return
   allMessage += `账号${$.index}：${$.nickName || $.UserName}\n当月收入(截至昨日)：${$.allincomeBean}京豆 🐶\n当月支出(截至昨日)：${$.allexpenseBean}京豆 🐶\n昨日收入：${$.incomeBean}京豆 🐶\n昨日支出：${$.expenseBean}京豆 🐶\n当前京豆：${$.beanCount}(今日将过期${$.expirejingdou})京豆 🐶${$.message}${$.index !== cookiesArr.length ? '\n\n' : ''}`;
@@ -133,9 +127,6 @@ async function bean() {
     }
   }
 
-
-
-
   let time = new Date();//当前月 要计算其他时间点自己传入即可
   let year = time.getFullYear();
   let month = parseInt( time.getMonth() + 1 );
@@ -143,10 +134,10 @@ async function bean() {
   let start = new Date( year + "-" + month + "-01 00:00:00" ).getTime()
   //结束时间 时间戳
   if( month == 12 ){
-  	 //十二月的时候进位，这里直接用加减法算了
-  	 //也可以用 time.setMonth( month + 1 )去计算并获取结束时间的月份和年份
-	month = 0;
-	year += 1;
+    //十二月的时候进位，这里直接用加减法算了
+    //也可以用 time.setMonth( month + 1 )去计算并获取结束时间的月份和年份
+    month = 0;
+    year += 1;
   }
   let end = new Date( year + "-" + ( month + 1 )  + "-01 00:00:00" ).getTime()
 
@@ -191,13 +182,12 @@ async function bean() {
     }
   }
 
-
-
   await queryexpirejingdou();//过期京豆
   await redPacket();//过期红包
   // console.log(`昨日收入：${$.incomeBean}个京豆 🐶`);
   // console.log(`昨日支出：${$.expenseBean}个京豆 🐶`)
 }
+
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {

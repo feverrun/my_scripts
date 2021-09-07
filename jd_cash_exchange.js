@@ -4,7 +4,7 @@ cron "0 0 * * *" script-path=jd_cash_exchange.js,tag=领现金兑换红包
 */
 const $ = new Env('领现金兑换红包');
 const printDetail = false;
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {

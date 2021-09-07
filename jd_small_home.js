@@ -16,10 +16,10 @@ cron "16 8,20 * * *" script-path=jd_small_home.js, tag=东东小窝
 const $ = new Env('东东小窝');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const JD_API_HOST = 'https://lkyl.dianpusoft.cn/api';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message = '';
 let isPurchaseShops = true;//是否一键加购商品到购物车，默认加购
 $.helpToken = [];

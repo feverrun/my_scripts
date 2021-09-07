@@ -19,7 +19,7 @@ cron "1 0 * * *" script-path=jd_fcdyj.js tag=翻翻乐
 
  */
 const $ = new Env('发财大赢家');
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const openred = $.isNode() ? (process.env.openred ? process.env.openred : 1) : 1 //选择哪个号开包
 const dyjCode = $.isNode() ? (process.env.dyjCode ? process.env.dyjCode : null) : null //选择哪个号开包
@@ -27,7 +27,7 @@ const randomCount = $.isNode() ? 20 : 5;
 const notify = $.isNode() ? require('./sendNotify') : '';
 let merge = {}
 //let code =
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 if ($.isNode()) {

@@ -8,14 +8,14 @@
 cron "30 7 * * *" script-path=https://raw.githubusercontent.com/Wenmoux/scripts/wen/jd/jd_ddnc_farmpark.js tag=东东乐园
  */
 const $ = new Env('东东乐园');
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 const randomCount = $.isNode() ? 20 : 5;
 const notify = $.isNode() ? require('./sendNotify') : '';
 let merge = {}
 let codeList = []
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 if ($.isNode()) {

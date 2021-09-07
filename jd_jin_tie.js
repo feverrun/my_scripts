@@ -16,9 +16,9 @@ cron "10 0 * * *" script-path=jd_jin_tie.js,tag=领金贴
  */
 const $ = new Env('领金贴');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message, allMessage = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

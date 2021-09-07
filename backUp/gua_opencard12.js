@@ -34,7 +34,7 @@ cron "30 9,21 18-25 8 *" script-path=https://raw.githubusercontent.com/smiek2221
 const $ = new Env('8.18-8.25 全民818 一“促”即发');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 let activityCookie = '';

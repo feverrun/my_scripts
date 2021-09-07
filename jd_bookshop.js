@@ -10,8 +10,8 @@ cron "1 8,12,18 * * *" script-path=jd_bookshop.js,tag=口袋书店
 const $ = new Env('口袋书店');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
-//IOS等用户直接用NobyDa的jd cookie
+
+
 let cookiesArr = [], cookie = '', message;
 const ACT_ID = 'dz2010100034444201', shareUuid = 'c83144bedd404a4eb556d8b40ba6a2f4'
 let ADD_CART = false
@@ -616,7 +616,7 @@ function shareCodesFormat() {
 function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
-    //Node.js用户请在jdCookie.js处填写京东ck;
+
     let shareCodes = []
     console.log(`共${cookiesArr.length}个京东账号\n`);
     $.shareCodesArr = [];

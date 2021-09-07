@@ -5,11 +5,11 @@ cron "5 2,3 * * *" jd_syj.js
 
 const $ = new Env('赚京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 const randomCount = $.isNode() ? 20 : 5;
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message;
 $.tuanList = [];
 $.authorTuanList = [];

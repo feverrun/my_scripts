@@ -23,7 +23,7 @@ cron "15 0 * * *" script-path=jd_festival.js, tag=京东手机年终奖
 const $ = new Env('京东手机年终奖');
 
 const notify = $.isNode() ? require('../sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
@@ -634,7 +634,7 @@ function sign(t, e, n) {
 function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
-    //Node.js用户请在jdCookie.js处填写京东ck;
+
     let shareCodes = []
     console.log(`共${cookiesArr.length}个京东账号\n`);
     if ($.isNode() && process.env.JSMOBILEFESTIVAL_SHARECODES) {

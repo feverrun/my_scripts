@@ -26,7 +26,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //const WebSocket = $.isNode() ? require('websocket').w3cwebsocket: SockJS;
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message,helpInfo;
 let shareUuid = '83c6d4a80e3447b78572124e1fc3aa7c'
 if ($.isNode()) {

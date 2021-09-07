@@ -23,7 +23,7 @@ cron "0 0 * * *" script-path=jd_coupon.js, tag=源头好物红包
 const $ = new Env('源头好物红包');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;

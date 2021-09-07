@@ -5,11 +5,11 @@
 说明：1、删除优惠券名称中不含“京东”、“超市”、“生鲜”关键字的券；2、删除优惠券名称中含“XX旗舰店”的券；3、已删除的券可以在回收站中还原
  */
 const $ = new Env('删除优惠券');
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

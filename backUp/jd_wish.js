@@ -19,10 +19,10 @@ cron "40 0,2 * * *" script-path=jd_wish.js,tag=众筹许愿池
  */
 const $ = new Env('众筹许愿池');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let message = '', allMessage = '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let appIdArr = ['1E1NXxq0', '1E1xVyqw'];

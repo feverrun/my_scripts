@@ -9,7 +9,7 @@ Modified From github https://github.com/ruicky/jd_sign_bot
  */
 const $ = new Env('京东多合一签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const exec = require('child_process').execSync
 const fs = require('fs')

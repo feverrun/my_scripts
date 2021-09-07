@@ -24,8 +24,8 @@ cron "35 1,23 * * *" script-path=jd_scripts/jd_nzmh.js,tag=女装盲盒
 const $ = new Env('女装盲盒抽京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
-//IOS等用户直接用NobyDa的jd cookie
+
+
 let cookiesArr = [], cookie = '', message;
 
 if ($.isNode()) {

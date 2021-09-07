@@ -34,7 +34,7 @@ cron "30 9,21 18-26 8 *" script-path=https://raw.githubusercontent.com/smiek2221
 const $ = new Env('8.18-8.26 全民发一发 大牌狂欢趴');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 let activityCookie = '';

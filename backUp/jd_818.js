@@ -27,10 +27,10 @@ const $ = new Env('京东手机狂欢城');
 
 const notify = $.isNode() ? require('../sendNotify') : '';
 let jdNotify = false;//是否开启推送互助码
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
 
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

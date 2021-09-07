@@ -11,7 +11,7 @@ const $ = new Env('汪汪乐园养joy');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 const notify = $.isNode() ? require('./sendNotify') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 if ($.isNode()) {

@@ -19,12 +19,12 @@ cron "7 0,6-23/2 * * *" script-path=jd_summer_movement.js, tag=燃动夏季
 */
 const $ = new Env('燃动夏季');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const ShHelpFlag = true;//是否SH助力  true 助力，false 不助力
 const ShHelpAuthorFlag = true;//是否助力作者SH  true 助力，false 不助力
 const OPEN_MEMBERCARD = (process.env.OPEN_MEMBERCARD && process.env.OPEN_MEMBERCARD === "true") ? true : false //默认不开通会员卡
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], uuid = '', UA = '', joyToken = '';
 $.cookie = '';
 $.inviteList = [];

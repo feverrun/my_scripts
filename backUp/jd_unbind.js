@@ -16,11 +16,11 @@ cron "55 23 * * 6" script-path=jd_unbind.js,tag=注销京东会员卡
 注销京东会员卡 = type=cron,script-path=jd_unbind.js, cronexpr="10 23 * * 6", timeout=3600, enable=true
  */
 const $ = new Env('注销京东会员卡');
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
 const notify = $.isNode() ? require('../sendNotify') : '';
 
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

@@ -13,7 +13,7 @@ cron "1 7-21/1 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
 
 const $ = new Env('京东种豆得豆');
 
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const jdPlantBeanShareCodes = $.isNode() ? require('./jdPlantBeanShareCodes.js') : '';
 //京东接口地址

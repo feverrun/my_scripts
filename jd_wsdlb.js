@@ -13,10 +13,10 @@ export dlbtz="false" //通知关闭
 
 const $ = new Env('柠檬我是大老板农场');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message;
 let allMessage = '';
 let dlbtz = true; //通知开关

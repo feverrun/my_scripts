@@ -23,10 +23,10 @@ from：
  */
 const $ = new Env('5G超级盲盒');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message, allMessage = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

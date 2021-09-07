@@ -38,7 +38,7 @@ cron "30 9,21 1-21 9 *" script-path=https://raw.githubusercontent.com/smiek2221/
 const $ = new Env('8.31-9.21 中秋酒水');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 // const notify = $.isNode() ? require('./sendNotify') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '';
 let activityCookie = '';

@@ -9,12 +9,12 @@ export tytpacketId=""
 */
 const $ = new Env('柠檬推一推');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
 var status = 0
 
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [],
     cookie = '',
     message;

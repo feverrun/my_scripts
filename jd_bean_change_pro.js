@@ -5,11 +5,11 @@ cron "40 10,23 * * *" jd_bean_change_pro.js, tag=京东资产变动Pro
 const $ = new Env('京东资产变动Pro');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const JXUserAgent =  $.isNode() ? (process.env.JX_USER_AGENT ? process.env.JX_USER_AGENT : ``):``;
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let allMessage = '';
 let ReturnMessage = '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 

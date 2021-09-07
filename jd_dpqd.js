@@ -6,9 +6,9 @@ cron "2 0 * * *" jd_dpqd.js
 const $ = new Env('店铺签到');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', message;
 
 const JD_API_HOST = 'https://api.m.jd.com/api?appid=interCenter_shopSign';
@@ -37,7 +37,7 @@ const token=[
 'EFFD0BF4069A8B6882A55FB07ACDA60F',//10天，30豆；20天，60豆；30天，100豆;
 
 ]
-//IOS等用户直接用NobyDa的jd cookie
+
 
 $.TokenList =[];
 

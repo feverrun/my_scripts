@@ -4,11 +4,11 @@
  */
 
 const $ = new Env('清空购物车');
-//Node.js用户请在jdCookie.js处填写京东ck;
+
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
-//IOS等用户直接用NobyDa的jd cookie
+
 let cookiesArr = [], cookie = '', allMessage = '', users = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
