@@ -197,7 +197,7 @@ async function getCommodities() {
                     if (beans.length !== 0) {
                         for (let key of Object.keys(beans)) {
                             let vo = beans[key]
-                            if (vo.title === reward &&  vo.exchangePoints) {  //$.score >=
+                            if (vo.title === reward) {  //$.score >= vo.exchangePoints
                                 await $.wait(1000)
                                 await exchange(vo.type, vo.id)
                             }
@@ -214,13 +214,16 @@ async function getCommodities() {
         })
     })
 }
+
+// 换京豆
 function exchange(commodityType, commodityId) {
     return new Promise(resolve => {
-        const options = taskUrl('jdhealth_exchange', {commodityType, commodityId})
+        let options = taskUrl('jdhealth_exchange', {commodityType, commodityId})
         $.post(options, (err, resp, data) => {
             try {
                 if (safeGet(data)) {
                     data = $.toObj(data)
+                    console.log(data)
                     if (data.data.bizCode === 0 || data.data.bizMsg === "success") {
                         $.score = data.data.result.userScore
                         console.log(`兑换${data.data.result.jingBeanNum}京豆成功`)
@@ -241,7 +244,7 @@ function exchange(commodityType, commodityId) {
 
 function doTask(taskToken, taskId, actionType = 0) {
     return new Promise(resolve => {
-        const options = taskUrl('jdhealth_collectScore', {taskToken, taskId, actionType})
+        let options = taskUrl('jdhealth_collectScore', {taskToken, taskId, actionType})
         $.get(options,
             (err, resp, data) => {
                 try {
