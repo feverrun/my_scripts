@@ -79,7 +79,7 @@ async function main() {
         await getTaskDetail(-1)
 
         if (reward) {
-            console.log('兑换京豆任务开始'+"\n");
+            console.log('兑换京豆任务开始:'+"\n");
             await getCommodities()
         }
 
@@ -202,10 +202,9 @@ async function getCommodities() {
                                 await exchange(vo.type, vo.id)
                             }
                         }
+                    } else {
+                        console.log(`兑换京豆次数已达上限`)
                     }
-                    // else {
-                    //     console.log(`兑换京豆次数已达上限`)
-                    // }
                 }
             } catch (e) {
                 console.log(e)
