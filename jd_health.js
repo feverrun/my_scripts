@@ -16,7 +16,7 @@ const randomCount = $.isNode() ? 20 : 5;
 
 let cookiesArr = [], cookie = "", allMessage = "", message;
 let myInviteCode;
-let reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : '') : ($.getdata('JD_HEALTH_REWARD_NAME') ? $.getdata('JD_HEALTH_REWARD_NAME') : '');
+let reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : 20) : 20;
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -212,6 +212,8 @@ async function getCommodities() {
         })
     })
 }
+
+// 健康值换豆
 function exchange(commodityType, commodityId) {
     return new Promise(resolve => {
         const options = taskUrl('jdhealth_exchange', {commodityType, commodityId})
