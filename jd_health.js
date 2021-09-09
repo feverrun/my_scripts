@@ -197,7 +197,7 @@ async function getCommodities() {
                     if (beans.length !== 0) {
                         for (let key of Object.keys(beans)) {
                             let vo = beans[key]
-                            if (vo.title === reward && $.score >= vo.exchangePoints) {
+                            if (vo.title === reward &&  vo.exchangePoints) {  //$.score >=
                                 await $.wait(1000)
                                 await exchange(vo.type, vo.id)
                             }
