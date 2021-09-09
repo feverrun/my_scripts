@@ -16,7 +16,7 @@ const randomCount = $.isNode() ? 20 : 5;
 
 let cookiesArr = [], cookie = "", allMessage = "", message;
 let myInviteCode;
-let reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : 20) : 20;
+const reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : 20) : 20;
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
