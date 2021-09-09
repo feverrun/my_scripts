@@ -184,15 +184,16 @@ function getTaskDetail(taskId = '') {
             })
     })
 }
-
+// 产品列表
 async function getCommodities() {
     return new Promise(async resolve => {
         const options = taskUrl('jdhealth_getCommodities')
         $.post(options, async (err, resp, data) => {
             try {
                 if (safeGet(data)) {
+                    console.log(data)
                     data = $.toObj(data)
-                    let beans = data.data.result.jBeans.filter(x => x.status !== 1)
+                    let beans = data.data.result.jBeans //.filter(x => x.status !== 1)
                     if (beans.length !== 0) {
                         for (let key of Object.keys(beans)) {
                             let vo = beans[key]
