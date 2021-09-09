@@ -223,7 +223,7 @@ function exchange(commodityType, commodityId) {
             try {
                 if (safeGet(data)) {
                     data = $.toObj(data)
-                    console.log(data)
+                    // console.log(data)
                     if (data.data.bizCode === 0 || data.data.bizMsg === "success") {
                         $.score = data.data.result.userScore
                         console.log(`兑换${data.data.result.jingBeanNum}京豆成功`)
@@ -231,6 +231,8 @@ function exchange(commodityType, commodityId) {
                         if ($.isNode()) {
                             allMessage += `【京东账号${$.index}】 ${$.UserName}\n兑换${data.data.result.jingBeanNum}京豆成功🎉${$.index !== cookiesArr.length ? '\n\n' : ''}`
                         }
+                    }else {
+                        console.log(data.data.bizCode + data.data.bizMsg);
                     }
                 }
             } catch (e) {
