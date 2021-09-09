@@ -202,9 +202,10 @@ async function getCommodities() {
                                 await exchange(vo.type, vo.id)
                             }
                         }
-                    } else {
-                        console.log(`兑换京豆次数已达上限`)
                     }
+                    // else {
+                    //     console.log(`兑换京豆次数已达上限`)
+                    // }
                 }
             } catch (e) {
                 console.log(e)
