@@ -16,7 +16,7 @@ const randomCount = $.isNode() ? 20 : 5;
 
 let cookiesArr = [], cookie = "", allMessage = "", message;
 let myInviteCode;
-const reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : 20) : 20;
+let reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : '') : ($.getdata('JD_HEALTH_REWARD_NAME') ? $.getdata('JD_HEALTH_REWARD_NAME') : '');
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -79,6 +79,7 @@ async function main() {
         await getTaskDetail(-1)
 
         if (reward) {
+            console.log('兑换京豆任务开始'+"\n");
             await getCommodities()
         }
 
@@ -212,8 +213,6 @@ async function getCommodities() {
         })
     })
 }
-
-// 健康值换豆
 function exchange(commodityType, commodityId) {
     return new Promise(resolve => {
         const options = taskUrl('jdhealth_exchange', {commodityType, commodityId})
