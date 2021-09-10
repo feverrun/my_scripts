@@ -191,13 +191,13 @@ async function getCommodities() {
         $.post(options, async (err, resp, data) => {
             try {
                 if (safeGet(data)) {
-                    // console.log(data)
+                    console.log(data)
                     data = $.toObj(data)
                     let beans = data.data.result.jBeans.filter(x => x.status !== 1)
                     if (beans.length !== 0) {
                         for (let key of Object.keys(beans)) {
                             let vo = beans[key]
-                            if (vo.title === reward) {  //$.score >= vo.exchangePoints
+                            if (vo.title === reward && $.score >= vo.exchangePoints) {
                                 await $.wait(1000)
                                 await exchange(vo.type, vo.id)
                             }
