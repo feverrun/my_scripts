@@ -218,7 +218,7 @@ async function getCommodities() {
 // 换京豆
 function exchange(commodityType, commodityId) {
     return new Promise(resolve => {
-        let options = taskUrl('jdhealth_exchange', {type: commodityType, id: commodityId})
+        let options = taskUrl('jdhealth_exchange', {commodityType: commodityType, commodityId: commodityId})
         $.post(options, (err, resp, data) => {
             try {
                 if (safeGet(data)) {
