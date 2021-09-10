@@ -191,7 +191,7 @@ async function getCommodities() {
         $.post(options, async (err, resp, data) => {
             try {
                 if (safeGet(data)) {
-                    console.log(data)
+                    // console.log(data)
                     data = $.toObj(data)
                     let beans = data.data.result.jBeans.filter(x => x.status !== 1)
                     if (beans.length !== 0) {
@@ -218,7 +218,7 @@ async function getCommodities() {
 // 换京豆
 function exchange(commodityType, commodityId) {
     return new Promise(resolve => {
-        let options = taskUrl('jdhealth_exchange', {commodityType, commodityId})
+        let options = taskUrl('jdhealth_exchange', {type: commodityType, id: commodityId})
         $.post(options, (err, resp, data) => {
             try {
                 if (safeGet(data)) {
