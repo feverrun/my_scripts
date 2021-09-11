@@ -6,7 +6,7 @@
 
 */
 
-const $ = new Env('MM领京豆');
+const $ = new Env('升级赚京豆');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
