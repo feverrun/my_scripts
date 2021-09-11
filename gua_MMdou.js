@@ -111,11 +111,11 @@ async function task() {
         if($.oneTask.taskType == 9){
           $.actionType = 1
           await takePostRequest('beanDoTask');
-          await $.wait(getRndInteger(4000, 5500))
+          await $.wait(getRndInteger(5000, 6000))
           $.actionType = 0
         }
         await takePostRequest('beanDoTask');
-        await $.wait(getRndInteger(2000, 2500))
+        await $.wait(getRndInteger(3000, 5000))
       }
     }else if ($.oneTask.status === 2){
       console.log(`任务:${$.oneTask.taskName};已完成`);
