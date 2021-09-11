@@ -44,7 +44,7 @@ if ($.isNode()) {
 // 京东签到领现金提现
 function exchange_redpocket() {
     return new Promise(resolve => {
-        $.post(taskUrl('cash_getRedPacket', {type: 2, amount: 10}), (err, resp, data) => {
+        $.post(taskUrl('cash_getRedPacket', {type: 2, amount: 1000}), (err, resp, data) => {
             try {
                 if (err) {
                     data = JSON.parse(resp.body);
