@@ -104,7 +104,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
 
 async function redPacket() {
   try {
-    await doLuckDrawFun();//券后9.9抽奖
+    // await doLuckDrawFun();//券后9.9抽奖
     await taskHomePage();//查询任务列表
     await doTask();//领取任务，做任务，领取红包奖励
     await h5activityIndex();//查询红包基础信息
