@@ -6,7 +6,7 @@ cron "1 0,6 * * *" script-path=jd_cash_exchange.js,tag=领现金兑换红包
 const $ = new Env('领现金兑换红包');
 const printDetail = false;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const JD_API_HOST = `https://api.m.jd.com/client.action?functionId=cash_getRedPacket`;
+const JD_API_HOST = `https://api.m.jd.com/client.action`;
 
 let cookiesArr = [], cookie = '';
 
@@ -92,7 +92,7 @@ function safeGet(data) {
 
 function taskUrl(function_id, body) {
     return {
-        url: `https://api.m.jd.com/client.action?functionId=${function_id}`,
+        url: `${JD_API_HOST}?functionId=${function_id}`,
         body: `area=12_904_3375_62168&body=${encodeURIComponent(JSON.stringify(body))}&build=167568&client=apple&clientVersion=9.4.2&d_brand=apple&d_model=iPhone10%2C1&eid=eidI7e0881206ds1SM32L/0VTwCr9pypbIK71EjN96Ar5iWtIQ80IdYlQ%2BS9Hquok3hgImlD95zTSq6RCyVM6OOO/6bine%2BXwICjjYPHS2HNCOJRYpA3&isBackground=N&joycious=78&lang=zh_CN&networkType=4g&networklibtype=JDNetworkBaseAF&openudid=e9241834b8e0994edf39389a4d18ff6eeba990f5&osVersion=13.4.1&partner=apple&rfs=0000&scope=11&screen=750%2A1334&sign=be8cfeeadc15ec25063e3bf0b23c8647&st=1614868202765&sv=122&uts=0f31TVRjBSto9/0xW/caLvwNVtr1%2Bfw3D78ba4pjkx%2BE5nueBcxpmyJawSIY2T47vFiOAgL0RXsOi3Dy7y5AZTZXRTRKi%2BTkCxPCG2PTKNtdIugmJsxGXqAvxgVIgQsquSX%2BJvLMjDBDkb2Y%2BVWFukYFF%2BS9y3L4htiO/2pfeiBQuKmmxkGQB51p%2BaTzjj1NKmmUNrYyhK2FqufkI7fg5g%3D%3D&uuid=hjudwgohxzVu96krv/T6Hg%3D%3D&wifiBssid=unknown`,
         headers: {
             'Accept-Encoding': 'gzip, deflate, br',
