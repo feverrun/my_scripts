@@ -39,17 +39,10 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
-      await TotalBean();
-      console.log(`\n****开始【京东账号${$.index}】${$.nickName || $.UserName}****\n`);
-      if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
-        continue
-      }
       $.discount = 0;
+
+      console.log(`\n****开始【京东账号${$.index}】${$.nickName || $.UserName}****\n`);
+
       await redPacket();
       await showMsg();
     }
@@ -534,13 +527,14 @@ async function doAppTask(type = '1') {
   await $.wait(10500);
   await getCcTaskList('reportCcTask', body, type);
 }
+
 function getCcTaskList(functionId, body, type = '1') {
   let url = '';
   return new Promise(resolve => {
     if (functionId === 'getCcTaskList') {
-      url = `https://api.m.jd.com/client.action?functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}&uuid=8888888&client=apple&clientVersion=9.4.1&st=1617158358007&sign=a15f78e5846f9b0178dcabb1093a6a7f&sv=100`
+      url = `https://api.m.jd.com/client.action?functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}&uuid=9f1d035d2eedb52c&client=apple&clientVersion=9.4.1&st=1617158358007&sign=a15f78e5846f9b0178dcabb1093a6a7f&sv=100`
     } else if (functionId === 'reportCcTask') {
-      url = `https://api.m.jd.com/client.action?functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}&uuid=8888888&client=apple&clientVersion=9.4.1&st=1617158435079&sign=7eff07437dd817dbfa348c209fd5c129&sv=120`
+      url = `https://api.m.jd.com/client.action?functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}&uuid=9f1d035d2eedb52c&client=apple&clientVersion=9.4.1&st=1617158435079&sign=7eff07437dd817dbfa348c209fd5c129&sv=120`
     }
     const options = {
       url,
@@ -638,48 +632,6 @@ function taskUrl(functionId, body = {}) {
       "Accept-Language": "zh-cn"
     }
   }
-}
-
-function TotalBean() {
-  return new Promise(async resolve => {
-    const options = {
-      url: "https://wq.jd.com/user_new/info/GetJDUserInfoUnion?sceneval=2",
-      headers: {
-        Host: "wq.jd.com",
-        Accept: "*/*",
-        Connection: "keep-alive",
-        Cookie: cookie,
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-        "Accept-Language": "zh-cn",
-        "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-        "Accept-Encoding": "gzip, deflate, br"
-      }
-    }
-    $.get(options, (err, resp, data) => {
-      try {
-        if (err) {
-          $.logErr(err)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-            if (data['retcode'] === 1001) {
-              $.isLogin = false; //cookie过期
-              return;
-            }
-            if (data['retcode'] === 0 && data.data && data.data.hasOwnProperty("userInfo")) {
-              $.nickName = data.data.userInfo.baseInfo.nickname;
-            }
-          } else {
-            console.log('京东服务器返回空数据');
-          }
-        }
-      } catch (e) {
-        $.logErr(e)
-      } finally {
-        resolve();
-      }
-    })
-  })
 }
 
 function jsonParse(str) {
