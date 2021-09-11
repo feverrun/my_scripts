@@ -3,27 +3,17 @@
 活动入口：京喜app-》我的-》京喜领88元红包
 助力逻辑：自己京东账号相互助力
 温馨提示：如提示助力火爆，可尝试寻找京东客服
-脚本兼容: Quantumult X, Surge, Loon, JSBox, Node.js
-==============Quantumult X==============
-[task_local]
-#京喜领88元红包
-14 0,2 * * * jd_jxlhb.js, tag=京喜领88元红包, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
-==============Loon==============
 [Script]
 cron "14 0,2 * * *" script-path=jd_jxlhb.js,tag=京喜领88元红包
-
-================Surge===============
-京喜领88元红包 = type=cron,cronexp="14 0,2 * * *",wake-system=1,timeout=3600,script-path=jd_jxlhb.js
-
-===============小火箭==========
-京喜领88元红包 = type=cron,script-path=jd_jxlhb.js, cronexpr="14 0,2 * * *", timeout=3600, enable=true
  */
+
 const $ = new Env('京喜领88元红包');
 const notify = $.isNode() ? require('./sendNotify') : {};
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 let cookiesArr = [], cookie = '';
 let UA, UAInfo = {}, codeInfo = {}
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -32,6 +22,7 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
+
 $.packetIdArr = [];
 $.activeId = '489177';
 const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
