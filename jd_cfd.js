@@ -7,6 +7,9 @@ cron "5 * * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_
  */
 
 const $ = new Env("京喜财富岛");
+
+// import {Md5} from 'ts-md5'
+let Md5 = require('ts-md5');
 const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
@@ -2115,7 +2118,7 @@ function getJxToken(cookie) {
   let phoneId = generateStr(40);
   let timestamp = Date.now().toString();
   let nickname = cookie.match(/pt_pin=([^;]*)/)[1];
-  let jstoken = md5.hashStr('' + decodeURIComponent(nickname) + timestamp + phoneId + 'tPOamqCuk9NLgVPAljUyIHcPRmKlVxDy');
+  let jstoken = Md5.hashStr('' + decodeURIComponent(nickname) + timestamp + phoneId + 'tPOamqCuk9NLgVPAljUyIHcPRmKlVxDy');
   return {
     'strPgtimestamp': timestamp,
     'strPhoneID': phoneId,
