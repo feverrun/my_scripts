@@ -29,7 +29,9 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 $.appId = 10028;
+
 !(async () => {
     await requireConfig();
     if (!cookiesArr[0]) {
@@ -1849,7 +1851,7 @@ function readShareCode() {
                 } else {
                     if (data) {
                         data = JSON.parse(data);
-                        //console.log(`随机取10个码放到您固定的互助码后面(不影响已有固定互助)`);
+                        //console.log(`随机取20个码放到您固定的互助码后面(不影响已有固定互助)`);
                         codePool = data.data;
                         //shareCodeDic[`${currentIndex}`] = data.data;
                         //console.log(`${data.data}`);
@@ -1868,20 +1870,12 @@ function readShareCode() {
 //格式化助力码
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
         $.newShareCodes = [];
         if ($.shareCodesArr[$.index - 1]) {
             $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
         } else {
-            console.log(`由于您第${$.index}个京东账号未提供shareCode,将从助力池随机选取10个助力码\n`)
-            // const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-            //$.newShareCodes = [...$.strMyShareIds];
+            console.log(`由于您第${$.index}个京东账号未提供shareCode,将从助力池随机选取20个助力码\n`)
         }
-        // const readShareCodeRes = await readShareCode();
-        // if (readShareCodeRes && readShareCodeRes.code === 200) {
-        //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-        // }
-        //console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
         resolve();
     })
 }
