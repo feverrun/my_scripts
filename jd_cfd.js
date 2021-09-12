@@ -2115,7 +2115,7 @@ function getJxToken(cookie) {
   let phoneId = generateStr(40);
   let timestamp = Date.now().toString();
   let nickname = cookie.match(/pt_pin=([^;]*)/)[1];
-  let jstoken = Md5.hashStr('' + decodeURIComponent(nickname) + timestamp + phoneId + 'tPOamqCuk9NLgVPAljUyIHcPRmKlVxDy');
+  let jstoken = md5.hashStr('' + decodeURIComponent(nickname) + timestamp + phoneId + 'tPOamqCuk9NLgVPAljUyIHcPRmKlVxDy');
   return {
     'strPgtimestamp': timestamp,
     'strPhoneID': phoneId,
