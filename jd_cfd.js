@@ -115,17 +115,17 @@ async function cfd() {
 
     // 寻宝
     console.log(`寻宝`)
-    let XBDetail = beginInfo.XbStatus.XBDetail.filter((x) => x.dwRemainCnt !== 0)
-    if (XBDetail.length !== 0) {
-      console.log(`开始寻宝`)
-      for (let key of Object.keys(beginInfo.XbStatus.XBDetail)) {
-        let vo = beginInfo.XbStatus.XBDetail[key]
-        await $.wait(2000)
-        await TreasureHunt(vo.strIndex)
-      }
-    } else {
-      console.log(`暂无宝物`)
-    }
+    // let XBDetail = beginInfo.XbStatus.XBDetail.filter((x) => x.dwRemainCnt !== 0)
+    // if (XBDetail.length !== 0) {
+    //   console.log(`开始寻宝`)
+    //   for (let key of Object.keys(beginInfo.XbStatus.XBDetail)) {
+    //     let vo = beginInfo.XbStatus.XBDetail[key]
+    //     await $.wait(2000)
+    //     await TreasureHunt(vo.strIndex)
+    //   }
+    // } else {
+    //   console.log(`暂无宝物`)
+    // }
 
     //每日签到
     await $.wait(2000)
