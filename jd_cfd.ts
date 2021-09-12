@@ -507,8 +507,8 @@ async function task() {
 
 function makeShareCodes() {
   return new Promise<void>(async (resolve, reject) => {
-    let bean: string = await getBeanShareCode(cookie)
-    let farm: string = await getFarmShareCode(cookie)
+    let bean: string = 'o2cnxonxnt7ra5etslhl2er7ea3h7wlwy7o5jii'//await getBeanShareCode(cookie)
+    let farm: string = '9f76b0d1e171453f9898d120acb89d02'//await getFarmShareCode(cookie)
     res = await api('user/QueryUserInfo', '_cfd_t,bizCode,ddwTaskId,dwEnv,ptag,source,strPgUUNum,strPgtimestamp,strPhoneID,strShareId,strVersion,strZone', {
       ddwTaskId: '',
       strShareId: '',

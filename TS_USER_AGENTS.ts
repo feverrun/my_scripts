@@ -64,7 +64,7 @@ let USER_AGENT = USER_AGENTS[getRandomNumberByRange(0, USER_AGENTS.length)];
 
 async function getBeanShareCode(cookie: string) {
     let {data} = await axios.post('https://api.m.jd.com/client.action',
-        `functionId=plantBeanIndex&body=${escape(
+        `functionId=plantBeanIndex&body=${encodeURIComponent(
             JSON.stringify({version: "9.0.0.1", "monitor_source": "plant_app_plant_index", "monitor_refer": ""})
         )}&appid=ld&client=apple&area=5_274_49707_49973&build=167283&clientVersion=9.1.0`, {
             headers: {
@@ -82,7 +82,7 @@ else
 }
 
 async function getFarmShareCode(cookie: string) {
-    let {data} = await axios.post('https://api.m.jd.com/client.action?functionId=initForFarm', `body=${escape(JSON.stringify({"version": 4}))}&appid=wh5&clientVersion=9.1.0`, {
+    let {data} = await axios.post('https://api.m.jd.com/client.action?functionId=initForFarm', `body=${encodeURIComponent(JSON.stringify({"version": 4}))}&appid=wh5&clientVersion=9.1.0`, {
         headers: {
             "cookie": cookie,
             "origin": "https://home.m.jd.com",
@@ -170,7 +170,7 @@ function generateFp() {
 function getQueryString(url: string, name: string) {
     let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     let r = url.split('?')[1].match(reg);
-    if (r != null) return unescape(r[2]);
+    if (r != null) return decodeURIComponent(r[2]);
     return '';
 }
 
