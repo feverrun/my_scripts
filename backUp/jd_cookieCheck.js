@@ -48,6 +48,9 @@ if ($.isNode()) {
         $.index = i + 1;
 
         await check()
+
+        //通知消息
+        showmsg()
     }
 
 })()
@@ -85,9 +88,6 @@ async function check() {
         })
     })
 }
-
-//showmsg
-//boxjs设置tz=1，在12点<=20和23点>=40时间段通知，其余时间打印日志
 
 async function showmsg() {
     if (tz == 1) {
