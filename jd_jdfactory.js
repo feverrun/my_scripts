@@ -634,7 +634,7 @@ function readShareCode() {
 //提交互助码
 function submitCode() {
     return new Promise(async resolve => {
-        $.get({url: `https://hz.feverrun.top:88/share/submit/ddfactory?code=${myInviteCode}`, timeout: 60000}, (err, resp, data) => {
+        $.get({url: `https://hz.feverrun.top:88/share/submit/ddfactory?code=${myInviteCode}&user=${$.UserName}`, timeout: 60000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
