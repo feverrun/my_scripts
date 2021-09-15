@@ -146,7 +146,7 @@ message = ""
         }
     }
 
-    $.log("\n======汪汪乐园开始内部互助======\n======有剩余助力次数则帮zero205助力======\n")
+    $.log("\n======汪汪乐园开始内部互助======\n======有剩余助力次数则帮xxx助力======\n")
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -155,16 +155,8 @@ message = ""
             $.isLogin = true;
             $.nickName = '';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
-                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
-                });
-                if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                }
-                continue
-            }
-            $.newinvitePinTaskList = [...($.invitePinTaskList || []), ...(['Po5dNTlp8QMCY9HFIDOLxn7i10nrKRlYtvu1TM6DHwc','FJFTGtoy16kRT2RrGUqLpw'])]
+
+            $.newinvitePinTaskList = [...($.invitePinTaskList || []), ...([''])]
             for (const invitePinTaskListKey of $.newinvitePinTaskList) {
                 $.log(`【京东账号${$.index}】${$.nickName || $.UserName} 助力 ${invitePinTaskListKey}`)
                 let resp = await getJoyBaseInfo(167, 1, invitePinTaskListKey);
