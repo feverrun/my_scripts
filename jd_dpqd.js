@@ -22,24 +22,20 @@ let num=0
 let shopname=''
 
 const token=[
-
-  'DDDCA45A9AA902B354246C966E7B85F3',//3天，10豆；5天，20豆；7天，35豆；
-  '035ACC5ED9392EE2AF11D22DE8F1668F',//每日，3豆；15天，100豆；
-  '80F67C71A3B860BAE7F653859D49852E',//每日，6豆；7天，100豆；
-  '3B549B03920F35826F6AD6D69ADCB471',//每日，5豆；7天，200积分；
-  'CDC56C42F64CA34677E5894F28AF4871',//每日，100分；1天，200分、2豆；2天，1000分、25-3券；
-  '50A26C1B68B5596AE6F84D3952FCFBCB',//每日，2豆；10天，100豆；
-  '9C524E6E62544B4CC239CE67833BD81E',//每日，2豆；5天，10豆；10天，20豆；15天，25豆；
-  'A133DE5D8D1A5A612F49CBE1D9BCE7AA',//每日，2豆；20天，5元e卡；
-  'E9E4861F0B12E5E483C949C818E3EAB8',//每日，1豆；10天，20豆；20天，50豆；
-  '8FD67D1FD193B5C19C277B7406106EDD',//每日，5豆；7天，100分、50豆；
-  'A9F558F6789D649FEB6436A51D7A6059',//每日，10豆；3天，20分；7天100豆；
-  '83E9B38C310EB5D26657977EF8FECA0F',//7天，20积分；15天，30豆；
-  '7DE1E4B12326576BF7C5D347CC909451',//每日，10豆；7天，100豆；
-  '513B43DB672C8C7B0D975DB75328A131',//每日，5豆；26天，88豆；
-  '9BABD41E5674FD5791963D5366BEC634',//每日，1豆；5天，10豆；21天，100豆;
-  'EFFD0BF4069A8B6882A55FB07ACDA60F',//10天，30豆；20天，60豆；30天，100豆;
-
+  '39B2313DAEE915A8C5BACE275B2C18A2',
+  '1D9BC39B71C4DF268D034D4DC78B81D3',
+  'F2CD688CACC8A0F1E8140C4514538F5C',
+  'F06840A438B3C85550A5734639FD64BD',
+  '3D99640B8E65273658E3A21908FFEC4C',
+  "30413CA9406C0B5A734E33641F520F8E", //每日，5豆；10天，50豆；
+  "4C3EE43458D3603173B190B3AE67A2F2", //1天，2豆；7天，10豆；14天，15豆；
+  "795F5ACAD4972C3233AF3D36213653D7", //每日，2豆；15天，10豆；
+  "5F14FA620FA933930135F7EC0868ED1B",  //每日，3豆；5天，10豆；
+  "FB3B079FAED9DB34821081EC4F17BC34", //每日，3积分；3天，5分、5豆；7天，50分、5元e卡；
+  "8ECCB8517CD37CE0935423F7B2E5A098", //每日，1豆；3天，5豆；15天，50豆；
+  "A4469A359592ECFDF1A927B3EE6E7357", //7天，20分1元红包；14天，50分2元红包；28天，100分5元红包；
+  "5AACA01677B985F00E4DA2F968CFAFDC", //1天，100分；5天，5豆；10天，10豆；20天，1元红包；26天，5元e卡；
+  "FAC8EFA459B45C8208817F11C313C05D", //每日，2豆；28天，100豆；
 ]
 //IOS等用户直接用NobyDa的jd cookie
 
@@ -82,16 +78,10 @@ if ($.isNode()) {
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      await TotalBean();
-      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-      if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
-        continue
-      }
+
+      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+
       await babel_diy_zeus();
       await showMsg()
       //if(i  <1 ) {await showMsg()}
@@ -312,46 +302,6 @@ async function showMsg() {
   }
 }
 
-function TotalBean() {
-  return new Promise(async resolve => {
-    const options = {
-      "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
-      "headers": {
-        "Accept": "application/json,text/plain, */*",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-cn",
-        "Connection": "keep-alive",
-        "Cookie": cookie,
-        "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": `jdapp;android;9.3.5;10;3353234393134326-3673735303632613;network/wifi;model/MI 8;addressid/138719729;aid/3524914bc77506b1;oaid/274aeb3d01b03a22;osVer/29;appBuild/86390;psn/Mp0dlaZf4czQtfPNMEfpcYU9S/f2Vv4y|2255;psq/1;adk/;ads/;pap/JA2015_311210|9.3.5|ANDROID 10;osv/10;pv/2039.1;jdv/0|androidapp|t_335139774|appshare|QQfriends|1611211482018|1611211495;ref/com.jingdong.app.mall.home.JDHomeFragment;partner/jingdong;apprpd/Home_Main;eufv/1;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 10; MI 8 Build/QKQ1.190828.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045230 Mobile Safari/537.36`
-      }
-    }
-    $.post(options, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-            if (data['retcode'] === 13) {
-              $.isLogin = false; //cookie过期
-              return
-            }
-            $.nickName = (data['base'] && data['base'].nickname) || $.UserName;
-          } else {
-            console.log(`京东服务器返回空数据`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
 
 function jsonParse(str) {
   if (typeof str == "string") {
