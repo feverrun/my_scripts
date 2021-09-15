@@ -7,7 +7,7 @@ ql repo https://hub.fastgit.org/feverrun/my_scripts.git "jd_|jx_|gua|jddj|getCoo
 ```
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|gua|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
-上面的哪个拉取速度快用哪个
+以上任意选择一个，进行拉取
 
 
 ## 本仓库脚本内置助力池(需使用本仓库脚本随机选择公平第一)
