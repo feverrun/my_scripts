@@ -1,5 +1,5 @@
 /**
- cron "30 1,8 * * *"
+ cron "30 1,8 * * *"  script-path=jd_fansa.js
  **/
 
 const $ = new Env("超店会员福利社");
