@@ -13,12 +13,12 @@ cron "15 0-23/2 * * *" script-path=jd_joy.js,tag=京东宠汪汪
 
 const $ = new Env('宠汪汪');
 const zooFaker = require('./utils/JDJRValidator_Pure');
-$.get = zooFaker.injectToRequest3($.get.bind($));
-$.post = zooFaker.injectToRequest3($.post.bind($));
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let allMessage = '';
 let cookiesArr = [], cookie = '';
+$.get = zooFaker.injectToRequest2($.get.bind($));
+$.post = zooFaker.injectToRequest2($.post.bind($));
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
