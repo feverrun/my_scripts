@@ -10,7 +10,7 @@ https://3.cn/102QN9l-6
 27 11 13-23 9 * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_UnknownTask5.js
 */
 const $ = new Env('酒水中秋礼盒');
-const Faker=require('./sign_graphics_validate.js') 
+const Faker=require('./utils/sign_graphics_validate.js')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 const notify = $.isNode() ? require('./sendNotify') : '';
