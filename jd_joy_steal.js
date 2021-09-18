@@ -51,6 +51,7 @@ let lkt = 0
 if(process.env.JOY_HOST){
   JD_API_HOST = process.env.JOY_HOST
 }
+
 //是否给好友喂食
 let ctrTemp;
 if ($.isNode() && process.env.JOY_HELP_FEED) {
