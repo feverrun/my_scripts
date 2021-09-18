@@ -38,8 +38,8 @@ cron "13 1 13-27 9 *" script-path=https://raw.githubusercontent.com/smiek2221/sc
 ============小火箭=========
 9.13~9.27 京秋鲜礼季 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js, cronexpr="13 1 13-27 9 *", timeout=3600, enable=true
 */
-let guaopencard_addSku = "false"
-let guaopencard = "false"
+let guaopencard_addSku = "true"
+let guaopencard = "true"
 let guaopencard_draw = "0"
 
 const $ = new Env('9.13~9.27 京秋鲜礼季');

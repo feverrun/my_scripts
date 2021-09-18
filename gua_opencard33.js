@@ -33,8 +33,8 @@ cron "13 9 15-21 9 *" script-path=https://raw.githubusercontent.com/smiek2221/sc
 ============小火箭=========
 9.15~9.21 超店会员福利社 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard33.js, cronexpr="13 9 15-21 9 *", timeout=3600, enable=true
 */
-let guaopencard_addSku = "false"
-let guaopencard = "false"
+let guaopencard_addSku = "true"
+let guaopencard = "true"
 let guaopencard_draw = "0"
 
 const $ = new Env('9.15~9.21 超店会员福利社');

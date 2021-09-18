@@ -51,13 +51,13 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-let guaopencard_addSku = "false"
+let guaopencard_addSku = "true"
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku24 ? process.env.guaopencard_addSku24 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku24') ? $.getdata('guaopencard_addSku24') : `${guaopencard_addSku}`);
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku_All ? process.env.guaopencard_addSku_All : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku_All') ? $.getdata('guaopencard_addSku_All') : `${guaopencard_addSku}`);
-let guaopencard = "false"
+let guaopencard = "true"
 guaopencard = $.isNode() ? (process.env.guaopencard24 ? process.env.guaopencard24 : `${guaopencard}`) : ($.getdata('guaopencard24') ? $.getdata('guaopencard24') : `${guaopencard}`);
 guaopencard = $.isNode() ? (process.env.guaopencard_All ? process.env.guaopencard_All : `${guaopencard}`) : ($.getdata('guaopencard_All') ? $.getdata('guaopencard_All') : `${guaopencard}`);
-let guaopencardRun = "false"
+let guaopencardRun = "true"
 guaopencardRun = $.isNode() ? (process.env.guaopencardRun24 ? process.env.guaopencardRun24 : `${guaopencardRun}`) : ($.getdata('guaopencardRun24') ? $.getdata('guaopencardRun24') : `${guaopencardRun}`);
 guaopencardRun = $.isNode() ? (process.env.guaopencardRun_All ? process.env.guaopencardRun_All : `${guaopencardRun}`) : ($.getdata('guaopencardRun_All') ? $.getdata('guaopencardRun_All') : `${guaopencardRun}`);
 allMessage = ""

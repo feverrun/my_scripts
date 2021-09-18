@@ -32,7 +32,7 @@ cron "30 9 14-18 9 *" script-path=https://raw.githubusercontent.com/smiek2221/sc
 ============小火箭=========
 9.14~9.18 男神装备礼遇季 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard32.js, cronexpr="30 9 14-18 9 *", timeout=3600, enable=true
 */
-let guaopencard = "false"
+let guaopencard = "true"
 
 const $ = new Env('9.14~9.18 男神装备礼遇季');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

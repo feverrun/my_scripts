@@ -41,8 +41,8 @@ cron "40 2 12-21 9 *" script-path=https://raw.githubusercontent.com/smiek2221/sc
 ============小火箭=========
 9.12~9.21 中秋联合开卡 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js, cronexpr="40 2 12-21 9 *", timeout=3600, enable=true
 */
-let guaopencard_addSku = "false"
-let guaopencard = "false"
+let guaopencard_addSku = "true"
+let guaopencard = "true"
 
 const $ = new Env('9.12~9.21 中秋联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

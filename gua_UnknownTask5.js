@@ -25,10 +25,10 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let guaopencard = "false"
+let guaopencard = "true"
 guaopencard = $.isNode() ? (process.env.guaunknownTask_card5 ? process.env.guaunknownTask_card5 : `${guaopencard}`) : ($.getdata('guaunknownTask_card5') ? $.getdata('guaunknownTask_card5') : `${guaopencard}`);
 guaopencard = $.isNode() ? (process.env.guaunknownTask_card_All ? process.env.guaunknownTask_card_All : `${guaopencard}`) : ($.getdata('guaunknownTask_card_All') ? $.getdata('guaunknownTask_card_All') : `${guaopencard}`);
-let guaunknownTask_addSku = "false"
+let guaunknownTask_addSku = "true"
 guaunknownTask_addSku = $.isNode() ? (process.env.guaunknownTask_addSku5 ? process.env.guaunknownTask_addSku5 : `${guaunknownTask_addSku}`) : ($.getdata('guaunknownTask_addSku5') ? $.getdata('guaunknownTask_addSku5') : `${guaunknownTask_addSku}`);
 guaunknownTask_addSku = $.isNode() ? (process.env.guaunknownTask_addSku_All ? process.env.guaunknownTask_addSku_All : `${guaunknownTask_addSku}`) : ($.getdata('guaunknownTask_addSku_All') ? $.getdata('guaunknownTask_addSku_All') : `${guaunknownTask_addSku}`);
 allMessage = ""
