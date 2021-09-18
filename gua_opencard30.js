@@ -26,17 +26,17 @@ guaopencard30="true"
 ============Quantumultx===============
 [task_local]
 #9.13~9.27 京秋鲜礼季
-10 1 13-27 9 * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js, tag=9.13~9.27 京秋鲜礼季, enabled=true
+13 1 13-27 9 * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js, tag=9.13~9.27 京秋鲜礼季, enabled=true
 
 ================Loon==============
 [Script]
-cron "10 1 13-27 9 *" script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js, tag=9.13~9.27 京秋鲜礼季
+cron "13 1 13-27 9 *" script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js, tag=9.13~9.27 京秋鲜礼季
 
 ===============Surge=================
-9.13~9.27 京秋鲜礼季 = type=cron,cronexp="10 1 13-27 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js
+9.13~9.27 京秋鲜礼季 = type=cron,cronexp="13 1 13-27 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js
 
 ============小火箭=========
-9.13~9.27 京秋鲜礼季 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js, cronexpr="10 1 13-27 9 *", timeout=3600, enable=true
+9.13~9.27 京秋鲜礼季 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard30.js, cronexpr="13 1 13-27 9 *", timeout=3600, enable=true
 */
 let guaopencard_addSku = "false"
 let guaopencard = "false"

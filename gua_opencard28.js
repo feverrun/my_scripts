@@ -40,8 +40,8 @@ cron "47 1,20 11-13 9 *" script-path=https://raw.githubusercontent.com/smiek2221
 ============小火箭=========
 9.11~9.13 母婴有机日 好物超值购 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard28.js, cronexpr="47 1,20 11-13 9 *", timeout=3600, enable=true
 */
-let guaopencard_addSku = "false"
-let guaopencard = "false"
+let guaopencard_addSku = "true"
+let guaopencard = "true"
 
 const $ = new Env('9.11~9.13 母婴有机日 好物超值购');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

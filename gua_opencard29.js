@@ -29,17 +29,17 @@ https://3.cn/102Qwj-dR
 ============Quantumultx===============
 [task_local]
 #9.12~9.21 中秋联合开卡
-30 2 12-21 9 * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js, tag=9.12~9.21 中秋联合开卡, enabled=true
+40 2 12-21 9 * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js, tag=9.12~9.21 中秋联合开卡, enabled=true
 
 ================Loon==============
 [Script]
-cron "30 2 12-21 9 *" script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js,tag=9.12~9.21 中秋联合开卡
+cron "40 2 12-21 9 *" script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js,tag=9.12~9.21 中秋联合开卡
 
 ===============Surge=================
-9.12~9.21 中秋联合开卡 = type=cron,cronexp="30 2 12-21 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js
+9.12~9.21 中秋联合开卡 = type=cron,cronexp="40 2 12-21 9 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js
 
 ============小火箭=========
-9.12~9.21 中秋联合开卡 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js, cronexpr="30 2 12-21 9 *", timeout=3600, enable=true
+9.12~9.21 中秋联合开卡 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard29.js, cronexpr="40 2 12-21 9 *", timeout=3600, enable=true
 */
 let guaopencard_addSku = "false"
 let guaopencard = "false"
