@@ -33,8 +33,8 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
-let gua_carnivalcity_draw = "true"
 
+let gua_carnivalcity_draw = "false"
 gua_carnivalcity_draw = $.isNode() ? (process.env.gua_carnivalcity_draw ? process.env.gua_carnivalcity_draw : `${gua_carnivalcity_draw}`) : ($.getdata('gua_carnivalcity_draw') ? $.getdata('gua_carnivalcity_draw') : `${gua_carnivalcity_draw}`);
 
 if ($.isNode()) {
@@ -135,6 +135,7 @@ async function JD818() {
     await doHotProducttask();//做热销产品任务
     await doBrandTask();//做品牌手机任务
     await doBrowseshopTask();//逛好货街，做任务
+    if ($.blockAccount) return
     // await doHelp();
     await myRank();//领取往期排名奖励
     await getListRank();
@@ -150,6 +151,7 @@ async function doHotProducttask() {
   $.hotProductList = $.hotProductList.filter(v => !!v && v['status'] === "1");
   if ($.hotProductList && $.hotProductList.length) console.log(`开始 【浏览热销手机产品】任务,需等待6秒`)
   for (let item of $.hotProductList) {
+    if ($.blockAccount) break
     await doBrowse(item['id'], "", "hot", "browse", "browseHotSku");
     await $.wait(1000 * 6);
     if ($.browseId) {
@@ -175,6 +177,7 @@ function doBrowse(id = "", brandId = "", taskMark = "hot", type = "browse", logM
             $.browseId = data['data']['browseId'] || "";
           } else {
             console.log(`doBrowse异常`);
+            if (data.code && (data.code === 1002 || data.code === 1001)) $.blockAccount = true;
           }
         }
       } catch (e) {
@@ -200,6 +203,8 @@ function getBrowsePrize(browseId, brandId = '') {
           data = JSON.parse(data);
           if (data && data['code'] === 200) {
             if (data['data']['jingBean']) $.beans += data['data']['jingBean'];
+          }else{
+            if (data.code && (data.code === 1002 || data.code === 1001)) $.blockAccount = true;
           }
         }
       } catch (e) {
@@ -238,6 +243,7 @@ function followShop(browseId, brandId = '') {
 
 async function doBrandTask() {
   for (let brand of $.brandList) {
+    if ($.blockAccount) break
     await brandTaskInfo(brand['brandId']);
   }
 }
@@ -351,6 +357,7 @@ async function doBrowseshopTask() {
   $.browseshopList = $.browseshopList.filter(v => !!v && v['status'] === "6");
   if ($.browseshopList && $.browseshopList.length) console.log(`\n开始 【逛好货街，做任务】，需等待10秒`)
   for (let shop of $.browseshopList) {
+    if ($.blockAccount) break
     await doBrowse(shop['id'], "", "browseShop", "browse", "browseShop");
     await $.wait(10000);
     if ($.browseId) {
@@ -377,6 +384,7 @@ function indexInfo(flag = false) {
             $.browseshopList = data['data']['browseshopList'];
           } else {
             console.log(`异常：${JSON.stringify(data)}`)
+            if (data.code && (data.code === 1002 || data.code === 1001)) $.blockAccount = true;
           }
         }
       } catch (e) {
@@ -619,7 +627,7 @@ function getHelp() {
             $.temp.push(data.data.shareId);
           } else {
             console.log(`获取邀请码失败：${JSON.stringify(data)}`);
-            if (data.code === 1002 || data.code === 1001) $.blockAccount = true;
+            if (data.code && (data.code === 1002 || data.code === 1001)) $.blockAccount = true;
           }
         }
       } catch (e) {
