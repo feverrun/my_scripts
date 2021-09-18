@@ -61,6 +61,7 @@ if ($.isNode() && process.env.JOY_HELP_FEED) {
 } else {
   ctrTemp = `${jdJoyHelpFeed}` === 'true';
 }
+
 //是否偷好友狗粮
 let jdJoyStealCoinTemp;
 if ($.isNode() && process.env.jdJoyStealCoin) {
