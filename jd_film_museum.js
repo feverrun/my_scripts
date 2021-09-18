@@ -2,8 +2,7 @@
 动人影像馆
 抽奖貌似没水了，累计签到有豆子，5天25豆，10天50豆，14天100豆  应该能拿到
 注意*****************脚本会开一个会员卡，会加购，会助力作者********************
-///cron 23 15 13-26 9 *
-///https://raw.githubusercontent.com/star261/jd/main/scripts/jd_film_museum.js
+cron "23 10,21 13-26 9 *" https://raw.githubusercontent.com/star261/jd/main/scripts/jd_film_museum.js
 * */
 const $ = new Env('影像馆');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -21,6 +20,7 @@ if ($.isNode()) {
         $.getdata("CookieJD2"),
         ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
+
 !(async () => {
     if(Date.now() > 1632672000000){
         console.log(`活动已结束`);
@@ -30,16 +30,17 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    let res = [''];
-    // try{res = await getAuthorShareCode('https://raw.githubusercontent.com/star261/jd/main/code/museum.json');}catch (e) {}
-    // if(!res){
-    //     try{res = await getAuthorShareCode('https://gitee.com/star267/share-code/raw/master/museum.json');}catch (e) {}
-    //     if(!res){res = [];}
-    // }
-    // if(res.length === 0){
-    //     return ;
-    // }
-    $.shareUuid = getRandomArrayElements(res,1)[0];
+    let res = [];
+    try{res = await getAuthorShareCode('https://raw.githubusercontent.com/star261/jd/main/code/museum.json');}catch (e) {}
+    if(!res){
+        try{res = await getAuthorShareCode('https://gitee.com/star267/share-code/raw/master/museum.json');}catch (e) {}
+        if(!res){res = [];}
+    }
+    if(res.length === 0){
+        $.shareUuid = '';
+    }else{
+        $.shareUuid = getRandomArrayElements(res,1)[0];
+    }
     for (let i = 0; i < cookiesArr.length; i++) {
         getUA();
         $.index = i + 1;
@@ -86,7 +87,7 @@ async function main() {
     }else{
         console.log(`活动抽奖码：${$.activityInfo.lotteryCount.cuponcode}`);
     }
-    if($.activityInfo.isJoin.status === '0'){
+    if($.activityInfo.isJoin.status === '0' && $.shareUuid){
         await join('1000085868');
         await $.wait(1000);
         for (let i = 0; i < typeList.length; i++) {
@@ -117,7 +118,7 @@ async function takePost(type,body) {
             "Accept": "*/*",
             "Content-Type":"application/x-www-form-urlencoded",
             "Origin":"https://jmkj2-isv.isvjcloud.com",
-            "Referer": " https://jmkj2-isv.isvjcloud.com/",
+            "Referer": "https://jmkj2-isv.isvjcloud.com/",
             "apptoken":$.apptoken,
             "User-Agent": $.UA,
             "Accept-Language": "zh-cn",
@@ -155,7 +156,7 @@ async function takeGet(type) {
             "Accept": "*/*",
             "Content-Type":"application/x-www-form-urlencoded",
             "Origin":"https://jmkj2-isv.isvjcloud.com",
-            "Referer": " https://jmkj2-isv.isvjcloud.com/",
+            "Referer": "https://jmkj2-isv.isvjcloud.com/",
             "apptoken":$.apptoken,
             "User-Agent": $.UA,
             "Accept-Language": "zh-cn",
@@ -380,6 +381,8 @@ function randomString(e) {
         n += t.charAt(Math.floor(Math.random() * a));
     return n
 }
+
+
 function getRandomArrayElements(arr, count) {
     var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
     while (i-- > min) {
