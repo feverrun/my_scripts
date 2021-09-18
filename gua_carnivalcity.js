@@ -33,8 +33,8 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
+let gua_carnivalcity_draw = "true"
 
-let gua_carnivalcity_draw = "false"
 gua_carnivalcity_draw = $.isNode() ? (process.env.gua_carnivalcity_draw ? process.env.gua_carnivalcity_draw : `${gua_carnivalcity_draw}`) : ($.getdata('gua_carnivalcity_draw') ? $.getdata('gua_carnivalcity_draw') : `${gua_carnivalcity_draw}`);
 
 if ($.isNode()) {
