@@ -10,7 +10,7 @@ import requests
 import time
 
 ip="localhost"
-substr="shufflewzc_faker2"
+substr="feverrun_my_scripts"
 
 def loadSend():
     print("加载推送功能")
