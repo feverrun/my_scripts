@@ -1,5 +1,5 @@
 /*
-cron "18 0,6 * * *" script-path= jd_ddwj.js,tag= 东东玩家
+cron "20 0,16 * * *" script-path= jd_ddwj.js,tag= 东东玩家
 */
 const $ = new Env('东东玩家')
 const notify = $.isNode() ?require('./sendNotify') : '';
@@ -22,7 +22,6 @@ if ($.isNode()) {
     hour = (new Date()).getHours();
     minute = (new Date()).getMinutes();
 }
-
 //CK运行
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -48,12 +47,34 @@ if ($.isNode()) {
         $.isLogin = true;
         $.index = i + 1;
         console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+        if (!$.isLogin) {
+            $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
+                "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+            });
+
+            if ($.isNode()) {
+                await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+            }
+            continue
+        }
         await gethelpcode()
         await getlist()
         await getsecretp()
+        await getfeedtoken()
         await Ariszy()
         await zy()
-        //await unlock()
+        //await userScore()
+    }
+    for(let i = 0; i < cookiesArr.length; i++){
+        cookie = cookiesArr[i];
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        message = ''
+        $.isLogin = true;
+        $.index = i + 1;
+        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}助力模块*********\n`);
+        await getsecretp()
+        await control()
+        await userScore()
     }
 
 })()
@@ -170,8 +191,12 @@ async function Ariszy(){
         taskid = listtokenArr[j].match(/\d+/)
         $.log("TaskId："+taskid)
         $.log("Token："+token)
-        await doTask()
-        await DoTask()
+        if(taskid == 2 ||taskid == 4 || taskid == 8 || taskid ==14){
+            await doTask()
+            await DoTask()
+        }else{
+            await doTask()
+        }
     }
 
 }
@@ -207,8 +232,8 @@ async function control(){
     }
 }
 async function dosupport(){
-    const body = `sceneval=&callback=funny_collectScore&functionId=funny_collectScore&appid=o2_act&client=wh5&clientVersion=1.0.0&uuid=-1&body=%7B%22ss%22%3A%22%7B%5C%22extraData%5C%22%3A%7B%5C%22log%5C%22%3A%5C%22%5C%22%2C%5C%22sceneid%5C%22%3A%5C%22HWJhPagewx%5C%22%7D%2C%5C%22secretp%5C%22%3A%5C%22${secretp}%5C%22%2C%5C%22random%5C%22%3A%5C%2295854278%5C%22%7D%22%2C%22inviteId%22%3A%22${token}%22%2C%22isCommonDealError%22%3Atrue%7D&loginType=1&loginWQBiz=businesst1`
-    const MyRequest = PostRequest(``,body)
+    const body = `functionId=funny_collectScore&body=%7B%22ss%22%3A%22%7B%5C%22extraData%5C%22%3A%7B%5C%22log%5C%22%3A%5C%22%5C%22%2C%5C%22sceneid%5C%22%3A%5C%22HWJhPageh5%5C%22%7D%2C%5C%22secretp%5C%22%3A%5C%22${secretp}%5C%22%2C%5C%22random%5C%22%3A%5C%2269009870%5C%22%7D%22%2C%22inviteId%22%3A%22${helpcode}%22%2C%22isCommonDealError%22%3Atrue%7D&client=wh5&clientVersion=1.0.0&uuid=0bcbcdb2a68f16cf9c9ad7c9b944fd141646a849&appid=o2_act`
+    const MyRequest = PostRequest(`advId=funny_collectScore`,body)
     return new Promise((resolve) => {
         $.post(MyRequest,async(error, response, data) =>{
             try{
@@ -344,6 +369,39 @@ async function scan(){
         })
     })
 }
+async function getfeedtoken(){
+    for(let i = 9; i < 13;i++){
+        await getfeedlist(i)
+    }
+}
+async function getfeedlist(Taskid){
+    const Body = `functionId=funny_getFeedDetail&body=%7B%22taskId%22%3A%22${Taskid}%22%7D&client=wh5&clientVersion=1.0.0&appid=o2_act`
+    const MyRequest = PostRequest(`?advId=funny_getFeedDetail`,Body)
+    return new Promise((resolve) => {
+        $.post(MyRequest,async(error, response, data) =>{
+            try{
+                const result = JSON.parse(data)
+                if(logs)$.log(data)
+                if(result.data.bizCode == 0){
+                    let lists = result.data.result.addProductVos.find(item => item.taskId == Taskid)
+                    let maxTimes = lists.maxTimes
+                    for(let i = 0; i < maxTimes; i++){
+                        listtokenArr.push(Taskid+lists.productInfoVos[i].taskToken)
+                        list2tokenArr.push(lists.productInfoVos[i].taskToken)
+//$.log(JSON.stringify((list2tokenArr)))
+                    }
+                    //await zy()
+                }else{
+                    $.log(result.data.bizMsg+"\n")
+                }
+            }catch(e) {
+                $.logErr(e, response);
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
 async function gethelpcode(){
     const MyRequest = PostRequest(`?advId=funny_getTaskDetail`,`functionId=funny_getTaskDetail&body=%7B%22taskId%22%3A%22%22%2C%22appSign%22%3A%221%22%7D&client=wh5&clientVersion=1.0.0&uuid=0bcbcdb2a68f16cf9c9ad7c9b944fd141646a849&appid=o2_act`)
     return new Promise((resolve) => {
@@ -381,9 +439,9 @@ async function userScore(){
                 if(logs)$.log(data)
                 if(result.code == 0){
                     let userScore = result.data.result.homeMainInfo.raiseInfo.remainScore
-                    let turn = Math.floor(userScore / result.data.result.homeMainInfo.raiseInfo.curLevelStartScore)
+                    let turn = Math.floor(userScore / (result.data.result.homeMainInfo.raiseInfo.nextLevelScore - result.data.result.homeMainInfo.raiseInfo.curLevelStartScore))
                     if(turn > 0){
-                        $.log("共有好玩币："+userScore+";开始解锁🔓\n")
+                        $.log("共有好玩币："+userScore+";开始解锁🔓"+turn+"次\n")
                         for(let i = 0; i < turn; i++){
                             await unlock()
                         }
