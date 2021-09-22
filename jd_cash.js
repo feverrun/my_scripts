@@ -476,7 +476,7 @@ function randomString(e) {
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `https://hz.feverrun.top:88/share/get/cash`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `http://hz.feverrun.top:99/share/get/cash`, 'timeout': 10000}, (err, resp, data) => {
       try {
         if (err) {
           //console.log(`${JSON.stringify(err)}`)
