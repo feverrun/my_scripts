@@ -551,13 +551,13 @@ function injectToRequest3(fn,scene = 'cww', ua = '') {
       }
       if (data.search('验证') > -1) {
         console.log('JDJR验证中......');
-				let arr = opts.url.split("&")
-				let eid = ''
-				for(let i of arr){
-					if(i.indexOf("eid=")>-1){
-						eid = i.split("=") && i.split("=")[1] || ''
-					}
-				}
+        let arr = opts.url.split("&")
+        let eid = ''
+        for(let i of arr){
+          if(i.indexOf("eid=")>-1){
+            eid = i.split("=") && i.split("=")[1] || ''
+          }
+        }
         const res = await new JDJRValidator().run(scene, eid);
 
         opts.url += `&validate=${res.validate}`;
