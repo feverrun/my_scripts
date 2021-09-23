@@ -536,7 +536,7 @@ function requireConfig() {
           shareCodes = process.env.JD_CASH_SHARECODES.split('&');
         }
       } else { //没本地就读取共享池
-        shareCodes = readShareCode()
+        shareCodes = [""] //readShareCode()
       }
     }
     console.log(`共${cookiesArr.length}个京东账号\n`);
