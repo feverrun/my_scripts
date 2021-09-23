@@ -34,7 +34,7 @@ guaopencard36="true"
 30 8 * 9 * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard36.js, tag=生活有范 大牌狂欢, enabled=true
 */
 const $ = new Env('生活有范 大牌狂欢');
-const Faker=require('./sign_graphics_validate.js') 
+const Faker=require('./utils/sign_graphics_validate.js')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 const notify = $.isNode() ? require('./sendNotify') : '';
