@@ -41,7 +41,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    // await requireConfig();
+    await requireConfig();
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -1317,27 +1317,27 @@ function shareCodesFormat() {
     })
 }
 
-// function requireConfig() {
-//     return new Promise(resolve => {
-//         console.log('开始获取配置文件\n')
-//
-//         $.shareCodesArr = [];
-//         if ($.isNode()) {
-//             Object.keys(jdFruitShareCodes).forEach((item) => {
-//                 if (jdFruitShareCodes[item]) {
-//                     $.shareCodesArr.push(jdFruitShareCodes[item])
-//                 }
-//             })
-//         } else {
-//             if ($.getdata('jd_fruit_inviter')) $.shareCodesArr = $.getdata('jd_fruit_inviter').split('\n').filter(item => !!item);
-//             console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('jd_fruit_inviter') ? $.getdata('jd_fruit_inviter') : '暂无'}\n`);
-//         }
-//         // console.log(`$.shareCodesArr::${JSON.stringify($.shareCodesArr)}`)
-//         // console.log(`jdFruitShareArr账号长度::${$.shareCodesArr.length}`)
-//         console.log(`您提供了${$.shareCodesArr.length}个账号的农场助力码\n`);
-//         resolve()
-//     })
-// }
+function requireConfig() {
+    return new Promise(resolve => {
+        console.log('开始获取配置文件\n')
+
+        $.shareCodesArr = [];
+        if ($.isNode()) {
+            Object.keys(jdFruitShareCodes).forEach((item) => {
+                if (jdFruitShareCodes[item]) {
+                    $.shareCodesArr.push(jdFruitShareCodes[item])
+                }
+            })
+        } else {
+            if ($.getdata('jd_fruit_inviter')) $.shareCodesArr = $.getdata('jd_fruit_inviter').split('\n').filter(item => !!item);
+            console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('jd_fruit_inviter') ? $.getdata('jd_fruit_inviter') : '暂无'}\n`);
+        }
+        // console.log(`$.shareCodesArr::${JSON.stringify($.shareCodesArr)}`)
+        // console.log(`jdFruitShareArr账号长度::${$.shareCodesArr.length}`)
+        console.log(`您提供了${$.shareCodesArr.length}个账号的农场助力码\n`);
+        resolve()
+    })
+}
 
 function request(function_id, body = {}, timeout = 1000){
     return new Promise(resolve => {
