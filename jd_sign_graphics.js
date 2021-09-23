@@ -1,5 +1,5 @@
 /* 
-cron 14 10 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/jd_sign_graphics.js
+cron "14 10 * * *" jd_sign_graphics.js
 只支持nodejs环境
 需要安装依赖 
 npm i png-js 或者 npm i png-js -S
@@ -33,7 +33,8 @@ let signFlag = false
 let successNum = 0
 let errorNum = 0
 let JD_API_HOST = 'https://jdjoy.jd.com'
-$.invokeKey = "RtKLB8euDo7KwsO0"
+$.invokeKey = 'JL1VTNRadM68cIMQ'
+$.invokeKey = $.isNode() ? (process.env.JD_invokeKey ? process.env.JD_invokeKey : `${$.invokeKey}`) : ($.getdata('JD_invokeKey') ? $.getdata('JD_invokeKey') : `${$.invokeKey}`);
 let lkt = 0
 if(process.env.JOY_HOST){
   JD_API_HOST = process.env.JOY_HOST
@@ -51,8 +52,8 @@ const turnTableId = [
   { "name": "京东超市", "id": 1204, "url": "https://pro.m.jd.com/mall/active/QPwDgLSops2bcsYqQ57hENGrjgj/index.html" },
 ]
 getUA()
-$.get = validator.injectToRequest3($.get.bind($), 'channelSign', $.UA)
-$.post = validator.injectToRequest3($.post.bind($), 'channelSign', $.UA)
+$.get = validator.injectToRequest($.get.bind($), 'channelSign', $.UA)
+$.post = validator.injectToRequest($.post.bind($), 'channelSign', $.UA)
 
 !(async () => {
   if (!cookiesArr[0]) {
@@ -83,12 +84,12 @@ $.post = validator.injectToRequest3($.post.bind($), 'channelSign', $.UA)
   }
   await showMsg();
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 async function showMsg() {
   $.msg($.name, `【签到数量】:  ${turnTableId.length}个\n` + subTitle + message);
