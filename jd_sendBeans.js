@@ -27,7 +27,7 @@ let lkt = 0
   }
   $.activityId = '';
   $.completeNumbers = '';
-  $.invokeKey = 'RtKLB8euDo7KwsO0'
+  $.invokeKey = 'JL1VTNRadM68cIMQ'
   MD5()
   console.log(`开始获取活动信息`);
   for (let i = 0; i < cookiesArr.length && $.activityId === '' && i < 3; i++) {
