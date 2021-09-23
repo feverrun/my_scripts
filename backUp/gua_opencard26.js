@@ -37,8 +37,8 @@ cron "27 2 * 9,10 *" script-path=https://raw.githubusercontent.com/smiek2221/scr
 ============小火箭=========
 9.8-10.8 京粮食品 京秋放价 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard26.js, cronexpr="27 2 * 9,10 *", timeout=3600, enable=true
 */
-let guaopencard_addSku = "false"
-let guaopencard = "false"
+let guaopencard_addSku = "true"
+let guaopencard = "true"
 
 
 const $ = new Env('9.8~10.8 京粮食品 京秋放价');
