@@ -37,7 +37,7 @@ if($.isNode()){
             $.index = i + 1;
             $.jdSpeedGoldBalance = 0;
             $.jdzzNum = 0;
-            console.log(`[京东账号${$.index} ${$.UserName}] 获取数据中...`)
+            console.log(`[京东账号${$.index} ${$.UserName}]`)
             await bean();
             await totalBean();
             message += `[京东账号${$.index}]\n`
@@ -79,13 +79,14 @@ if($.isNode()){
             }
         }
     }
-    if($.isNode()){
-        if((cookiesArr.length - ($.sentNum * $.sendNum)) < $.sendNum){
-            console.log(`正在进行最后一次发送通知，发送数量：${(cookiesArr.length - ($.sentNum * $.sendNum))}`)
-            await notify.sendNotify(`${$.name}`, `${message}`)
-            message = "";
-        }
-    }
+    //删除多余的通知
+    // if($.isNode()){
+    //     if((cookiesArr.length - ($.sentNum * $.sendNum)) < $.sendNum){
+    //         console.log(`正在进行最后一次发送通知，发送数量：${(cookiesArr.length - ($.sentNum * $.sendNum))}`)
+    //         await notify.sendNotify(`${$.name}`, `${message}`)
+    //         message = "";
+    //     }
+    // }
 })().catch((e) => {
     $.log("", `❌ ${$.name}, 失败! 原因: ${e}!`, "");
 }).finally(() => {
