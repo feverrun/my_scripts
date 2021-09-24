@@ -16,7 +16,7 @@ $.yestodayExpenditure = 0
 $.beanCount = 0;
 $.beanFlag = true;
 $.jdName = ``
-$.sendNum = process.env.JD_BEAN_CHANGE_SENDNUM * 1 || 2
+$.sendNum = process.env.JD_BEAN_CHANGE_SENDNUM * 1 || 3
 $.sentNum = 0;
 if($.isNode()){
     Object.keys(jdCookieNode).forEach((item) => {cookiesArr.push(jdCookieNode[item]);});
