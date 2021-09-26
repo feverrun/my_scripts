@@ -7,7 +7,7 @@
 一天只能帮助5个人。多出的助力码无效
 
 [Script]
-cron "10 6-18/6 * * *" script-path=jd_pet.js,tag=东东萌宠
+cron "9 6,7,12,18,20 * * *" script-path=jd_pet.js,tag=东东萌宠
 */
 
 const $ = new Env('东东萌宠');
