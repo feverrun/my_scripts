@@ -3,7 +3,7 @@
 cron 5 * * * * jd_cfd.js
 更新时间：2021-9-10
 活动入口：京喜APP-我的-京喜财富岛
-cron "5 * * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_cfd.js,tag=京喜财富岛
+cron "3 * * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_cfd.js,tag=京喜财富岛
  */
 
 const $ = new Env("京喜财富岛");

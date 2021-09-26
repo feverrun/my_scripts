@@ -6,7 +6,7 @@
 东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
 一天只能帮助3个人。多出的助力码无效
 [Script]
-cron "5 6-18/6 * * *" script-path=jd_fruit.js,tag=东东农场
+cron "5 6,7,12,18,20 * * *" script-path=jd_fruit.js,tag=东东农场
 */
 
 const $ = new Env('东东农场');
