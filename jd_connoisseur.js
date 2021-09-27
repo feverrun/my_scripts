@@ -1,17 +1,18 @@
 /*
 内容鉴赏官
 更新时间：2021-09-09
-cron "15 3,6 * * *" script-path=jd_connoisseur.js,tag=内容鉴赏官
+已支持IOS双京东账号,Node.js支持N个京东账号
+cron "15 3,6 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js,tag=内容鉴赏官
  */
+
 const $ = new Env('内容鉴赏官');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let isLoginInfo = {}
 $.shareCodes = []
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -20,6 +21,7 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 const JD_API_HOST = 'https://api.m.jd.com/';
 let agid = [], pageId, encodeActivityId, paginationFlrs, activityId
 let allMessage = '';
@@ -165,11 +167,15 @@ async function getTaskInfo(type, projectId, assignmentId, helpType = '1', itemId
                         if ((assignmentId === "2PbAu1BAT79RxrM5V7c2VAPUQDSd" || assignmentId === "3dw9N5yB18RaN9T1p5dKHLrWrsX" || assignmentId === "2gWnJADG8JXMpp1WXiNHgSy4xUSv" || assignmentId === "CtXTxzkh4ExFCrGf8si3ePxGnPy" || assignmentId === "26KhtkXmoaj6f37bE43W5kF8a9EL" || assignmentId === "bWE8RTJm5XnooFr4wwdDM5EYcKP") && !body['helpType']) {
                             if (assignmentId !== "2PbAu1BAT79RxrM5V7c2VAPUQDSd") console.log(`去做【${data.data[0].title}】`)
                             if (data.code === "0" && data.data) {
-                                if (data.data[0].status !== "2") {
-                                    await interactive_done(type, data.data[0].projectId, data.data[0].assignmentId, data.data[0].itemId)
-                                    await $.wait(data.data[0].waitDuration || 2000)
+                                if (data.data[0]) {
+                                    if (data.data[0].status !== "2") {
+                                        await interactive_done(type, data.data[0].projectId, data.data[0].assignmentId, data.data[0].itemId)
+                                        await $.wait((data.data[0].waitDuration * 1000) || 2000)
+                                    } else {
+                                        console.log(assignmentId === "2PbAu1BAT79RxrM5V7c2VAPUQDSd" ? `今日已签到` : `任务已完成`)
+                                    }
                                 } else {
-                                    console.log(assignmentId === "2PbAu1BAT79RxrM5V7c2VAPUQDSd" ? `今日已签到` : `任务已完成`)
+                                    console.log(`无当前任务`)
                                 }
                             } else {
                                 console.log(data.message)
@@ -178,7 +184,7 @@ async function getTaskInfo(type, projectId, assignmentId, helpType = '1', itemId
                             if (data.code === "0" && data.data) {
                                 if (data.data[0].status !== "2") {
                                     await sign_interactive_done(type, data.data[0].projectId, data.data[0].assignmentId)
-                                    await $.wait(2000)
+                                    await $.wait((data.data[0].waitDuration * 1000) || 2000)
                                     await interactive_reward(type, data.data[0].projectId, data.data[0].assignmentId)
                                 } else {
                                     console.log(`任务已完成`)
@@ -191,7 +197,7 @@ async function getTaskInfo(type, projectId, assignmentId, helpType = '1', itemId
                                 console.log(`去做【${data.data[0].title}】`)
                                 if (data.data[0].status !== "2") {
                                     await interactive_accept(type, data.data[0].projectId, data.data[0].assignmentId, data.data[0].itemId)
-                                    await $.wait(data.data[0].waitDuration)
+                                    await $.wait((data.data[0].waitDuration * 1000) || 2000)
                                     await qryViewkitCallbackResult(data.data[0].projectId, data.data[0].assignmentId, data.data[0].itemId)
                                 } else {
                                     console.log(`任务已完成`)
@@ -363,7 +369,9 @@ async function qryViewkitCallbackResult(encryptProjectId, encryptAssignmentId, i
                 } else {
                     if (data) {
                         data = JSON.parse(data)
-                        console.log(`恭喜获得2个京豆`)
+                        if (data.code === "0" || data.msg === "query success!") {
+                            console.log(`恭喜获得2个京豆`)
+                        }
                     }
                 }
             } catch (e) {
