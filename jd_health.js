@@ -18,7 +18,7 @@ let cookiesArr = [], cookie = "", allMessage = "", message;
 let myInviteCode;
 let reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : '') : ($.getdata('JD_HEALTH_REWARD_NAME') ? $.getdata('JD_HEALTH_REWARD_NAME') : '');
 
-$.shareCodes = [];
+$.shareCodesArr = [];
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -92,7 +92,7 @@ async function main() {
 }
 
 async function helpFriends() {
-    for (let code of $.shareCodes) {
+    for (let code of $.newShareCodes) {
         if (!code) continue
         console.log(`去助力好友${code}`)
         let res = await doTask(code, 6)
@@ -383,20 +383,20 @@ function submitCode() {
 function shareCodesFormat() {
     return new Promise(async resolve => {
         // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
-        // $.shareCodes = [];
+        $.newShareCodes = [];
         if ($.shareCodesArr[$.index - 1]) {
-            $.shareCodes = $.shareCodesArr[$.index - 1].split('@');
+            $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
         } else {
             //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
             console.log(`互助开始\n`)
             const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-            $.shareCodes = inviteCodes[tempIndex].split('@');
+            $.newShareCodes = inviteCodes[tempIndex].split('@');
         }
         const readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
-            $.shareCodes = [...new Set([...$.shareCodes, ...(readShareCodeRes.data || [])])];
+            $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
         }
-        console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.shareCodes)}`)
+        console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
         resolve();
     })
 }
