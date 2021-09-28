@@ -18,6 +18,8 @@ let cookiesArr = [], cookie = "", allMessage = "", message;
 let myInviteCode;
 let reward = $.isNode() ? (process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : '') : ($.getdata('JD_HEALTH_REWARD_NAME') ? $.getdata('JD_HEALTH_REWARD_NAME') : '');
 
+$.shareCodes = [];
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item]);
@@ -34,7 +36,8 @@ if ($.isNode()) {
         $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/", {"open-url": "https://bean.m.jd.com/"});
         return;
     }
-    await requireConfig()
+    //remove internal help
+    // await requireConfig()
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -89,7 +92,7 @@ async function main() {
 }
 
 async function helpFriends() {
-    for (let code of $.newShareCodes) {
+    for (let code of $.shareCodes) {
         if (!code) continue
         console.log(`去助力好友${code}`)
         let res = await doTask(code, 6)
@@ -380,19 +383,20 @@ function submitCode() {
 function shareCodesFormat() {
     return new Promise(async resolve => {
         // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
-        $.newShareCodes = [];
+        // $.shareCodes = [];
         if ($.shareCodesArr[$.index - 1]) {
-            $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
+            $.shareCodes = $.shareCodesArr[$.index - 1].split('@');
         } else {
-            console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
+            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
+            console.log(`互助开始\n`)
             const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-            $.newShareCodes = inviteCodes[tempIndex].split('@');
+            $.shareCodes = inviteCodes[tempIndex].split('@');
         }
         const readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
-            $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+            $.shareCodes = [...new Set([...$.shareCodes, ...(readShareCodeRes.data || [])])];
         }
-        console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+        console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.shareCodes)}`)
         resolve();
     })
 }
