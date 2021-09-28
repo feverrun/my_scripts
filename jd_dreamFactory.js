@@ -26,6 +26,7 @@ let tuanActiveId = `yNtpovqFehHByNrt_lmb3g`, hasSend = false;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 let myInviteCode;
 
+$.shareCodesArr = [];
 $.tuanIds = [];
 $.appId = 10001;
 $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
@@ -48,7 +49,7 @@ if ($.isNode()) {
         return;
     }
     await requestAlgo();
-    await requireConfig();
+    // await requireConfig();
     //cookies
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -1343,7 +1344,8 @@ function shareCodesFormat() {
         if ($.shareCodesArr[$.index - 1]) {
             $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
         } else {
-            console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
+            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
+            console.log(`互助开始\n`)
             const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
             $.newShareCodes = inviteCodes[tempIndex].split('@');
         }
