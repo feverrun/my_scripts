@@ -26,6 +26,8 @@ let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭
 let goodsUrl = '', taskInfoKey = [];
 let randomCount = $.isNode() ? 20 : 5;
 
+$.shareCodesArr = [];
+
 notify = $.isNode() ? require('./sendNotify') : '';
 
 if ($.isNode()) {
@@ -44,7 +46,8 @@ if ($.isNode()) {
         return;
     }
 
-    await requireConfig();
+    // remove internal help
+    // await requireConfig();
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -507,7 +510,8 @@ function shareCodesFormat() {
         if ($.shareCodesArr[$.index - 1]) {
             newShareCodes = $.shareCodesArr[$.index - 1].split('@');
         } else {
-            console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
+            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
+            console.log(`互助开始\n`)
             const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
             newShareCodes = shareCodes[tempIndex].split('@');
         }
@@ -521,6 +525,7 @@ function shareCodesFormat() {
         resolve();
     })
 }
+
 function requireConfig() {
     return new Promise(resolve => {
         console.log('开始获取东东萌宠配置文件\n')
@@ -543,8 +548,6 @@ function requireConfig() {
         resolve()
     })
 }
-
-
 
 // 请求
 async function request(function_id, body = {}) {
