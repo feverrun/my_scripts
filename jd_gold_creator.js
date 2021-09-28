@@ -2,28 +2,12 @@
 金榜创造营
 活动入口：https://h5.m.jd.com/babelDiy/Zeus/2H5Ng86mUJLXToEo57qWkJkjFPxw/index.html
 活动时间：2021-05-21至2021-12-31
-脚本更新时间：2021-05-28 14:20
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-===================quantumultx================
-[task_local]
-#金榜创造营
-13 1,22 * * * jd_gold_creator.js, tag=金榜创造营, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-
-=====================Loon================
-[Script]
 cron "13 1,22 * * *" script-path=jd_gold_creator.js, tag=金榜创造营
-
-====================Surge================
-金榜创造营 = type=cron,cronexp="13 1,22 * * *",wake-system=1,timeout=3600,script-path=jd_gold_creator.js
-
-============小火箭=========
-金榜创造营 = type=cron,script-path=jd_gold_creator.js, cronexpr="13 1,22 * * *", timeout=3600, enable=true
  */
+
 const $ = new Env('金榜创造营');
 const notify = $.isNode() ? require('./sendNotify') : '';
-
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-
 let cookiesArr = [], cookie = '', message;
 
 if ($.isNode()) {
@@ -48,7 +32,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
       $.index = i + 1;
       $.isLogin = true;
       $.beans = 0
@@ -57,6 +41,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
       await main()
+
     }
   }
 })()
@@ -154,6 +139,7 @@ function goldCreatorDetail(groupId, subTitleId, taskId, batchId, flag = false) {
               $.remainVotes = data.result.remainVotes || 0;
               $.skuList = data.result.skuList || [];
               $.taskList = data.result.taskList || [];
+              $.signTask = data.result.signTask
               if (flag) {
                 await doTask2(batchId);
               } else {
@@ -201,6 +187,10 @@ async function doTask2(batchId) {
       await goldCreatorDoTask(body);
       await $.wait(2000);
     }
+  }
+  if ($.signTask['taskStatus'] === 1) {
+    const body = {"taskId": $.signTask['taskId'], "itemId": $.signTask['taskItemInfo']['itemId'], "type": $.signTask['taskType'], batchId};
+    await goldCreatorDoTask(body);
   }
 }
 function goldCreatorDoTask(body) {
