@@ -23,7 +23,7 @@ let message = '', subTitle = '', option = {}, isFruitFinished = false;
 let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 let jdFruitBeanCard = false;//农场使用水滴换豆卡(如果出现限时活动时100g水换20豆,此时比浇水划算,推荐换豆),true表示换豆(不浇水),false表示不换豆(继续浇水),脚本默认是浇水
 let randomCount = $.isNode() ? 20 : 5;
-
+$.shareCodesArr = [];
 notify = $.isNode() ? require('./sendNotify') : '';
 
 if ($.isNode()) {
@@ -42,7 +42,8 @@ if ($.isNode()) {
         return;
     }
 
-    await requireConfig();
+    // remove 内置助力
+    // await requireConfig();
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -1304,7 +1305,8 @@ function shareCodesFormat() {
         if ($.shareCodesArr[$.index - 1]) {
             newShareCodes = $.shareCodesArr[$.index - 1].split('@');
         } else {
-            console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
+            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
+            console.log(`互助开始\n`)
             const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
             newShareCodes = shareCodes[tempIndex].split('@');
         }
