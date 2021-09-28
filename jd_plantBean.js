@@ -35,6 +35,8 @@ let awardState = '';//上期活动的京豆是否收取
 let randomCount = $.isNode() ? 20 : 5;
 let num;
 
+$.shareCodesArr = [];
+
 notify = $.isNode() ? require('./sendNotify') : '';
 
 if ($.isNode()) {
@@ -52,7 +54,8 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    await requireConfig();
+    // remove内部互助
+    // await requireConfig();
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -593,7 +596,8 @@ function shareCodesFormat() {
         if ($.shareCodesArr[$.index - 1]) {
             newShareCodes = $.shareCodesArr[$.index - 1].split('@');
         } else {
-            console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
+            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
+            console.log(`互助开始\n`)
             const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
             newShareCodes = shareCodes[tempIndex].split('@');
         }
