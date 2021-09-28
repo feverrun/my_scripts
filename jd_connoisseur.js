@@ -1,10 +1,8 @@
 /*
 内容鉴赏官
 更新时间：2021-09-09
-已支持IOS双京东账号,Node.js支持N个京东账号
-cron "15 3,6 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js,tag=内容鉴赏官
+cron "15 3,6 * * *" script-path=jd_connoisseur.js,tag=内容鉴赏官
  */
-
 const $ = new Env('内容鉴赏官');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -261,14 +259,14 @@ function interactive_done(type, projectId, assignmentId, itemId) {
                     if (data) {
                         data = JSON.parse(data)
                         if (type === "2") {
-                            if (data.code === "0") {
+                            if (data.code === "0" && data.busiCode === "0") {
                                 console.log(data.data.msg)
                                 if (!data.data.success) $.canHelp = false
                             } else {
                                 console.log(data.message)
                             }
                         } else {
-                            if (data.code === "0") {
+                            if (data.code === "0" && data.busiCode === "0") {
                                 console.log(data.data.rewardMsg)
                             } else {
                                 console.log(data.message)
@@ -319,7 +317,7 @@ function interactive_reward(type, projectId, assignmentId) {
                 } else {
                     if (data) {
                         data = JSON.parse(data)
-                        if (data.code === "0") {
+                        if (data.code === "0" && data.busiCode === "0") {
                             console.log(data.data.rewardMsg)
                         } else {
                             console.log(data.message)
