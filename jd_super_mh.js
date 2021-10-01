@@ -22,7 +22,7 @@ if ($.isNode()) {
         return;
     }
 
-    // let url = mhUrl()
+    let url = mhUrl()
     console.log(`召唤锦鲤`)
     let code = await mhId(url)
     console.log(`召唤完成`)
@@ -108,7 +108,7 @@ function mhId(url) {
 }
 
 function mhUrl() {
-    let url = ''
+    let url = 'http://r0a79r6l0.hb-bkt.clouddn.com/jd-half-mh.json'
     if ($.isNode() && process.env.JD_MH_URL) {
         url = process.env.JD_MH_URL
     } else if ($.getdata('jdMHUrl')) {

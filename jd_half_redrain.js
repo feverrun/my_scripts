@@ -23,7 +23,7 @@ const JD_API_HOST = "https://api.m.jd.com/api";
         return;
     }
 
-    // let url = rraUrl();
+    let url = rraUrl();
     console.log(`召唤龙王`);
     let code = await redRainId(url);
     console.log(`召唤完成`);
@@ -152,7 +152,7 @@ function redRainId(url) {
 }
 
 function rraUrl() {
-    let url = "";
+    let url = "http://r0a79r6l0.hb-bkt.clouddn.com/jd-half-rain.json";
     if ($.isNode() && process.env.JD_HALF_RRA_URL) {
         url = process.env.JD_HALF_RRA_URL;
     } else if ($.getdata("jdHalfRRAUrl")) {
