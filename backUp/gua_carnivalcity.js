@@ -1,6 +1,6 @@
 /*
 京东手机狂欢城活动
-活动时间: 2021-8-9至2021-8-28
+活动时间: 2021-9-16至2021-10-1
 活动入口：暂无 [活动地址](https://carnivalcity.m.jd.com)
 
 往期奖励：
@@ -30,10 +30,12 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
-
+//IOS等用户直接用NobyDa的jd cookie
 
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 
+let gua_carnivalcity_draw = "true"
+gua_carnivalcity_draw = $.isNode() ? (process.env.gua_carnivalcity_draw ? process.env.gua_carnivalcity_draw : `${gua_carnivalcity_draw}`) : ($.getdata('gua_carnivalcity_draw') ? $.getdata('gua_carnivalcity_draw') : `${gua_carnivalcity_draw}`);
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -47,7 +49,7 @@ if ($.isNode()) {
 let inviteCodes = [];
 $.shareCodesArr = [];
 const JD_API_HOST = 'https://api.m.jd.com/api';
-const activeEndTime = '2021/08/28 00:00:00+08:00';//活动结束时间
+const activeEndTime = '2021/10/02 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 !(async () => {
   if (!cookiesArr[0]) {
@@ -61,8 +63,8 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     if ($.isNode()) await notify.sendNotify($.name + '活动已结束', `请删除此脚本\n咱江湖再见`);
     return
   }
-  await updateShareCodesCDN();
-  await requireConfig();
+  // await updateShareCodesCDN();
+  // await requireConfig();
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -80,34 +82,35 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
       message = '';
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
       getUA()
-      await shareCodesFormat();
+      // await shareCodesFormat();
       await JD818();
     }
   }
-  for (let i = 0; i < cookiesArr.length; i++) {
-    if (cookiesArr[i]) {
-      cookie = cookiesArr[i];
-      $.canHelp = true;//能否助力
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-      if ((cookiesArr && cookiesArr.length >= 1) && $.canHelp) {
-        console.log(`\n先自己账号内部相互邀请助力\n`);
-        for (let item of $.temp) {
-          console.log(`\n${$.UserName} 去参助力 ${item}`);
-          const helpRes = await toHelp(item.trim());
-          if (helpRes.data.status === 5) {
-            console.log(`助力机会已耗尽，跳出助力`);
-            $.canHelp = false;
-            break;
+  if($.temp.length > 0){
+    for (let i = 0; i < cookiesArr.length; i++) {
+      if (cookiesArr[i]) {
+        cookie = cookiesArr[i];
+        $.canHelp = true;//能否助力
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        if ((cookiesArr && cookiesArr.length >= 1) && $.canHelp) {
+          console.log(`\n先自己账号内部相互邀请助力\n`);
+          for (let item of $.temp) {
+            console.log(`\n${$.UserName} 去参助力 ${item}`);
+            const helpRes = await toHelp(item.trim());
+            if (helpRes.data.status === 5) {
+              console.log(`助力机会已耗尽，跳出助力`);
+              $.canHelp = false;
+              break;
+            }
           }
         }
-      }
-      if ($.canHelp) {
-        console.log(`\n\n如果有剩余助力机会，则给作者以及随机码助力`)
-        await doHelp();
+        if ($.canHelp) {
+          console.log(`\n\n如果有剩余助力机会，则给作者以及随机码助力`)
+          await doHelp();
+        }
       }
     }
   }
-  // console.log(JSON.stringify($.temp))
   if (allMessage) {
     if ($.isNode()) {
       await notify.sendNotify($.name, allMessage, { url: "https://carnivalcity.m.jd.com" });
@@ -125,13 +128,14 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
 async function JD818() {
   try {
     await indexInfo();//获取任务
-    await supportList();//助力情况
-    await getHelp();//获取邀请码
+    // await supportList();//助力情况
+    // await getHelp();//获取邀请码
     if ($.blockAccount) return
     // await indexInfo(true);//获取任务
     await doHotProducttask();//做热销产品任务
     await doBrandTask();//做品牌手机任务
     await doBrowseshopTask();//逛好货街，做任务
+    if ($.blockAccount) return
     // await doHelp();
     await myRank();//领取往期排名奖励
     await getListRank();
@@ -147,6 +151,7 @@ async function doHotProducttask() {
   $.hotProductList = $.hotProductList.filter(v => !!v && v['status'] === "1");
   if ($.hotProductList && $.hotProductList.length) console.log(`开始 【浏览热销手机产品】任务,需等待6秒`)
   for (let item of $.hotProductList) {
+    if ($.blockAccount) break
     await doBrowse(item['id'], "", "hot", "browse", "browseHotSku");
     await $.wait(1000 * 6);
     if ($.browseId) {
@@ -172,6 +177,7 @@ function doBrowse(id = "", brandId = "", taskMark = "hot", type = "browse", logM
             $.browseId = data['data']['browseId'] || "";
           } else {
             console.log(`doBrowse异常`);
+            if (data.code && (data.code === 1002 || data.code === 1001)) $.blockAccount = true;
           }
         }
       } catch (e) {
@@ -197,6 +203,8 @@ function getBrowsePrize(browseId, brandId = '') {
           data = JSON.parse(data);
           if (data && data['code'] === 200) {
             if (data['data']['jingBean']) $.beans += data['data']['jingBean'];
+          }else{
+            if (data.code && (data.code === 1002 || data.code === 1001)) $.blockAccount = true;
           }
         }
       } catch (e) {
@@ -235,6 +243,7 @@ function followShop(browseId, brandId = '') {
 
 async function doBrandTask() {
   for (let brand of $.brandList) {
+    if ($.blockAccount) break
     await brandTaskInfo(brand['brandId']);
   }
 }
@@ -348,6 +357,7 @@ async function doBrowseshopTask() {
   $.browseshopList = $.browseshopList.filter(v => !!v && v['status'] === "6");
   if ($.browseshopList && $.browseshopList.length) console.log(`\n开始 【逛好货街，做任务】，需等待10秒`)
   for (let shop of $.browseshopList) {
+    if ($.blockAccount) break
     await doBrowse(shop['id'], "", "browseShop", "browse", "browseShop");
     await $.wait(10000);
     if ($.browseId) {
@@ -374,6 +384,7 @@ function indexInfo(flag = false) {
             $.browseshopList = data['data']['browseshopList'];
           } else {
             console.log(`异常：${JSON.stringify(data)}`)
+            if (data.code && (data.code === 1002 || data.code === 1001)) $.blockAccount = true;
           }
         }
       } catch (e) {
@@ -428,7 +439,7 @@ function lottery() {
               $.msg($.name, '', `京东账号 ${$.index} ${$.nickName || $.UserName}\n积分抽奖获得：${data.data.prizeName}\n兑换地址：${url}`, { 'open-url': url });
               if ($.isNode()) await notify.sendNotify($.name, `京东账号 ${$.index} ${$.nickName || $.UserName}\n积分抽奖获得：${data.data.prizeName}\n兑换地址：${url}`);
             } else {
-              console.log(`积分抽奖结果:${data['data']['prizeName']}}`);
+              console.log(`积分抽奖结果:${data['data']['prizeName']}`);
             }
           }
         }
@@ -499,7 +510,7 @@ function myRank() {
                   }
                   await $.wait(500);
                 } else if (data.data[i].status === '3') {
-                  console.log(`${data.data[i]['date']}日 【${data.data[i]['prizeName']}】往期京豆奖励已领取~`)
+                  console.log(`${data.data[i]['date']}日 名次:${data.data[i]['rank']} 【${data.data[i]['prizeName']}】往期京豆奖励已领取~`)
                 } else {
                   console.log(`${data.data[i]['date']}日 【${data.data[i]['status']}】往期京豆奖励，今日争取进入前30000名哦~`)
                 }
@@ -616,7 +627,7 @@ function getHelp() {
             $.temp.push(data.data.shareId);
           } else {
             console.log(`获取邀请码失败：${JSON.stringify(data)}`);
-            if (data.code === 1002 || data.code === 1001) $.blockAccount = true;
+            if (data.code && (data.code === 1002 || data.code === 1001)) $.blockAccount = true;
           }
         }
       } catch (e) {
@@ -674,7 +685,7 @@ function getListIntegral() {
             $.integralCount = data.data.integralNum || 0;//累计活动积分
             message += `累计获得积分：${$.integralCount}\n`;
             console.log(`开始抽奖，当前积分可抽奖${parseInt($.integralCount / 50)}次\n`);
-            for (let i = 0; i < parseInt($.integralCount / 50); i ++) {
+            for (let i = 0; i < parseInt($.integralCount / 50) && gua_carnivalcity_draw+"" === "true"; i ++) {
               await lottery();
               await $.wait(500);
             }
