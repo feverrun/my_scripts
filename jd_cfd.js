@@ -34,7 +34,8 @@ if ($.isNode()) {
 $.appId = 10028;
 
 !(async () => {
-    // await requireConfig();
+    //
+
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
@@ -1880,32 +1881,8 @@ function shareCodesFormat() {
         resolve();
     })
 }
-function requireConfig() {
-    return new Promise(resolve => {
-        console.log(`开始获取${$.name}配置文件\n`);
-        let shareCodes = [];
-        if ($.isNode() && process.env.JDCFD_SHARECODES) {
-            if (process.env.JDCFD_SHARECODES.indexOf('\n') > -1) {
-                shareCodes = process.env.JDCFD_SHARECODES.split('\n');
-            } else {
-                shareCodes = process.env.JDCFD_SHARECODES.split('&');
-            }
-        }
-        $.shareCodesArr = [];
-        if ($.isNode()) {
-            Object.keys(shareCodes).forEach((item) => {
-                if (shareCodes[item]) {
-                    $.shareCodesArr.push(shareCodes[item])
-                }
-            })
-        } else {
-            if ($.getdata('jd_jxCFD')) $.shareCodesArr = $.getdata('jd_jxCFD').split('\n').filter(item => !!item);
-            console.log(`\nBoxJs设置的京喜财富岛邀请码:${$.getdata('jd_jxCFD')}\n`);
-        }
-        console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
-        resolve()
-    })
-}
+
+//
 
 function jsonParse(str) {
     if (typeof str == "string") {
