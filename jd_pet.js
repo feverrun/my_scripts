@@ -46,9 +46,6 @@ if ($.isNode()) {
         return;
     }
 
-    // remove internal help
-    // await requireConfig();
-
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -526,28 +523,7 @@ function shareCodesFormat() {
     })
 }
 
-function requireConfig() {
-    return new Promise(resolve => {
-        console.log('开始获取东东萌宠配置文件\n')
-
-        console.log(`共${cookiesArr.length}个京东账号\n`)
-        $.shareCodesArr = [];
-        if ($.isNode()) {
-            Object.keys(jdPetShareCodes).forEach((item) => {
-                if (jdPetShareCodes[item]) {
-                    $.shareCodesArr.push(jdPetShareCodes[item])
-                }
-            })
-        } else {
-            if ($.getdata('jd_pet_inviter')) $.shareCodesArr = $.getdata('jd_pet_inviter').split('\n').filter(item => !!item);
-            console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('jd_pet_inviter') ? $.getdata('jd_pet_inviter') : '暂无'}\n`);
-        }
-        // console.log(`$.shareCodesArr::${JSON.stringify($.shareCodesArr)}`)
-        // console.log(`jdPetShareArr账号长度::${$.shareCodesArr.length}`)
-        console.log(`您提供了${$.shareCodesArr.length}个账号的东东萌宠助力码\n`);
-        resolve()
-    })
-}
+//
 
 // 请求
 async function request(function_id, body = {}) {

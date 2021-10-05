@@ -41,7 +41,8 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
         return;
     }
-    // await requireConfig();
+
+    //
 
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
@@ -250,31 +251,7 @@ function showMsg() {
     })
 }
 
-function requireConfig() {
-    return new Promise(async resolve => {
-        console.log(`开始获取${$.name}配置文件\n`);
-        console.log(`共${cookiesArr.length}个京东账号\n`);
-
-        let shareCodes = []
-        if ($.isNode() && process.env.JDSGMH_SHARECODES) {
-            if (process.env.JDSGMH_SHARECODES.indexOf('\n') > -1) {
-                shareCodes = process.env.JDSGMH_SHARECODES.split('\n');
-            } else {
-                shareCodes = process.env.JDSGMH_SHARECODES.split('&');
-            }
-        }
-        $.shareCodesArr = [];
-        if ($.isNode()) {
-            Object.keys(shareCodes).forEach((item) => {
-                if (shareCodes[item]) {
-                    $.shareCodesArr.push(shareCodes[item])
-                }
-            })
-        }
-        console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
-        resolve()
-    })
-}
+//
 
 //格式化助力码
 function shareCodesFormat() {

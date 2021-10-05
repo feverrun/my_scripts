@@ -54,9 +54,8 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    // remove内部互助
-    // await requireConfig();
 
+    //
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -609,27 +608,7 @@ function shareCodesFormat() {
         resolve();
     })
 }
-function requireConfig() {
-    return new Promise(resolve => {
-        console.log('开始获取种豆得豆配置文件\n')
-
-        console.log(`共${cookiesArr.length}个京东账号\n`)
-        $.shareCodesArr = [];
-        if ($.isNode()) {
-            Object.keys(jdPlantBeanShareCodes).forEach((item) => {
-                if (jdPlantBeanShareCodes[item]) {
-                    $.shareCodesArr.push(jdPlantBeanShareCodes[item])
-                }
-            })
-        } else {
-            if ($.getdata('jd_plantbean_inviter')) $.shareCodesArr = $.getdata('jd_plantbean_inviter').split('\n').filter(item => !!item);
-            console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('jd_plantbean_inviter') ? $.getdata('jd_plantbean_inviter') : '暂无'}\n`);
-        }
-        // console.log(`\n种豆得豆助力码::${JSON.stringify($.shareCodesArr)}`);
-        console.log(`您提供了${$.shareCodesArr.length}个账号的种豆得豆助力码\n`);
-        resolve()
-    })
-}
+//
 function requestGet(function_id, body = {}) {
     if (!body.version) {
         body["version"] = "9.0.0.1";

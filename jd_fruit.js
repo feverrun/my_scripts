@@ -42,8 +42,7 @@ if ($.isNode()) {
         return;
     }
 
-    // remove 内置助力
-    // await requireConfig();
+    //
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -1250,6 +1249,8 @@ function timeFormat(time) {
     return date.getFullYear() + '-' + ((date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1)) + '-' + (date.getDate() >= 10 ? date.getDate() : '0' + date.getDate());
 }
 
+//
+
 function readShareCode() {
     return new Promise(async resolve => {
         $.get({url: `http://hz.feverrun.top:99/share/get/farm?codeNum=${randomCount}`, timeout: 10000,}, (err, resp, data) => {
@@ -1317,28 +1318,6 @@ function shareCodesFormat() {
         }
         // console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
         resolve();
-    })
-}
-
-function requireConfig() {
-    return new Promise(resolve => {
-        console.log('开始获取配置文件\n')
-
-        $.shareCodesArr = [];
-        if ($.isNode()) {
-            Object.keys(jdFruitShareCodes).forEach((item) => {
-                if (jdFruitShareCodes[item]) {
-                    $.shareCodesArr.push(jdFruitShareCodes[item])
-                }
-            })
-        } else {
-            if ($.getdata('jd_fruit_inviter')) $.shareCodesArr = $.getdata('jd_fruit_inviter').split('\n').filter(item => !!item);
-            console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('jd_fruit_inviter') ? $.getdata('jd_fruit_inviter') : '暂无'}\n`);
-        }
-        // console.log(`$.shareCodesArr::${JSON.stringify($.shareCodesArr)}`)
-        // console.log(`jdFruitShareArr账号长度::${$.shareCodesArr.length}`)
-        // console.log(`您提供了${$.shareCodesArr.length}个账号的农场助力码\n`);
-        resolve()
     })
 }
 
