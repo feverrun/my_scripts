@@ -1,17 +1,17 @@
 /*
 特物Z|万物皆可国创
-[Script]
-cron "1,10 0 * * *" script-path=jd_superBrand.js tag=特物Z|万物皆可国创
+cron "37 0,6 * * *" script-path=jd_superBrand.js tag=特物Z|万物皆可国创
  */
+
 const $ = new Env('特物Z|万物皆可国创');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const randomCount = $.isNode() ? 20 : 5;
 const Opencardtw = $.isNode() ? (process.env.Opencardtw?process.env.Opencardtw:false):false
 const notify = $.isNode() ? require('./sendNotify') : '';
+
 let merge = {}
 let codeList = []
-let cookiesArr = [],
-    cookie = '';
+let cookiesArr = [], cookie = '';
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -45,18 +45,9 @@ const JD_API_HOST = `https://api.m.jd.com/client.action`;
             $.beans = 0
             message = ''
             $.cando = true
-            //   await shareCodesFormat();
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
-                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
-                });
 
-                if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                }
-                continue
-            }
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+
             await getid("superBrandSecondFloorMainPage", "secondfloor")
             if ($.cando && $.enpid) {
                 await getCode("secondfloor", $.actid)
@@ -284,15 +275,15 @@ function taskPostUrl(functionid, body) {
         url: `https://api.m.jd.com/api?functionId=${functionid}&appid=ProductZ4Brand&client=wh5&t=${time}&body=${encodeURIComponent(body)}`,
         body: "",
         headers: {
-            Accept: "application/json,text/plain, */*",
+            "Accept": "application/json,text/plain, */*",
             "Content-Type": "application/x-www-form-urlencoded",
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-cn",
-            Connection: "keep-alive",
-            Cookie: cookie,
-            Host: "api.m.jd.com",
-            Referer: "https://prodev.m.jd.com/mall/active/NrHM6Egy96gxeG4eb7vFX7fYXf3/index.html?activityId=1000007&encryptProjectId=cUNnf3E6aMLQcEQbTVxn8AyhjXb&assistEncryptAssignmentId=2jpJFvC9MBNC7Qsqrt8WzEEcVoiT&assistItemId=S5ijz_8ukVww&tttparams=GgS7lUeyJnTGF0IjoiMzMuMjUyNzYyIiwiZ0xuZyI6IjEwNy4xNjA1MDcifQ6%3D%3D&lng=107.147022&lat=33.255229&sid=e5150a3fdd017952350b4b41294b145w&un_area=27_2442_2444_31912",
-            "User-Agent": "jdapp;android;9.4.4;10;3b78ecc3f490c7ba;network/UNKNOWN;model/M2006J10C;addressid/138543439;aid/3b78ecc3f490c7ba;oaid/7d5870c5a1696881;osVer/29;appBuild/85576;psn/3b78ecc3f490c7ba|541;psq/2;uid/3b78ecc3f490c7ba;adk/;ads/;pap/JA2015_311210|9.2.4|ANDROID 10;osv/10;pv/548.2;jdv/0|iosapp|t_335139774|appshare|CopyURL|1606277982178|1606277986;ref/com.jd.lib.personal.view.fragment.JDPersonalFragment;partner/xiaomi001;apprpd/MyJD_Main;Mozilla/5.0 (Linux; Android 10; M2006J10C Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045227 Mobile Safari/537.36",
+            "Connection": "keep-alive",
+            "Cookie": cookie,
+            "Host": "api.m.jd.com",
+            "Referer": "https://prodev.m.jd.com/mall/active/NrHM6Egy96gxeG4eb7vFX7fYXf3/index.html?activityId=1000007&encryptProjectId=cUNnf3E6aMLQcEQbTVxn8AyhjXb&assistEncryptAssignmentId=2jpJFvC9MBNC7Qsqrt8WzEEcVoiT&assistItemId=S5ijz_8ukVww&tttparams=GgS7lUeyJnTGF0IjoiMzMuMjUyNzYyIiwiZ0xuZyI6IjEwNy4xNjA1MDcifQ6%3D%3D&lng=107.147022&lat=33.255229&sid=e5150a3fdd017952350b4b41294b145w&un_area=27_2442_2444_31912",
+            "User-Agent": "jdapp;iPhone;10.1.0;14.3;network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
         }
     }
 }
