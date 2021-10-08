@@ -2,9 +2,9 @@
 金榜创造营
 活动入口：https://h5.m.jd.com/babelDiy/Zeus/2H5Ng86mUJLXToEo57qWkJkjFPxw/index.html
 活动时间：2021-05-21至2021-12-31
+脚本更新时间：2021-05-28 14:20
 cron "13 1,22 * * *" script-path=jd_gold_creator.js, tag=金榜创造营
  */
-
 const $ = new Env('金榜创造营');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -38,10 +38,10 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       $.beans = 0
       $.nickName = '';
       message = '';
+
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
       await main()
-
     }
   }
 })()
@@ -55,6 +55,7 @@ async function main() {
   try {
     await goldCreatorTab();//获取顶部主题
     await getDetail();
+    await goldCreatorPublish();
     await showMsg();
   } catch (e) {
     $.logErr(e)
@@ -213,6 +214,33 @@ function goldCreatorDoTask(body) {
               }
             } else {
               console.log(`失败：${JSON.stringify(data)}\n`);
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function goldCreatorPublish() {
+  return new Promise(resolve => {
+    $.get(taskUrl('goldCreatorPublish'), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} goldCreatorPublish API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data)
+            if (data.code === '0') {
+              if (data.result.subCode === '0') {
+                console.log(data.result.lotteryResult.lotteryCode === '0' ? `揭榜成功：获得${data.result.lotteryResult.lotteryScore}京豆` : `揭榜成功：获得空气~`)
+              }
+            } else {
+              console.log(`揭榜失败：${JSON.stringify(data)}`)
             }
           }
         }
