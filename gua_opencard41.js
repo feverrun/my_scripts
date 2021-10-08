@@ -35,7 +35,7 @@ All变量适用
 
 ================Loon==============
 [Script]
-cron "47 2 8-14 10 *" script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard41.js,tag=10.8~10.14 超店会员福利社
+cron "47 2 8-14 10 *" script-path=gua_opencard41.js,tag=超店会员福利社
 
 ===============Surge=================
 10.8~10.14 超店会员福利社 = type=cron,cronexp="47 2 8-14 10 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard41.js
