@@ -46,7 +46,7 @@ cron "47 2 8-14 10 *" script-path=gua_opencard41.js,tag=超店会员福利社
 */
 let guaopencard_addSku = "true"
 let guaopencard = "true"
-let guaopenwait = "0"
+let guaopenwait = "1"
 
 const $ = new Env('10.8~10.14 超店会员福利社');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
