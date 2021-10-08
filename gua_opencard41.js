@@ -28,27 +28,13 @@ All变量适用
 请求太频繁会被黑ip
 过10分钟再执行
 
-============Quantumultx===============
-[task_local]
-#10.8~10.14 超店会员福利社
-47 2 8-14 10 * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard41.js, tag=10.8~10.14 超店会员福利社, enabled=true
-
-================Loon==============
-[Script]
-cron "47 2 8-14 10 *" script-path=gua_opencard41.js,tag=超店会员福利社
-
-===============Surge=================
-10.8~10.14 超店会员福利社 = type=cron,cronexp="47 2 8-14 10 *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard41.js
-
-============小火箭=========
-10.8~10.14 超店会员福利社 = type=cron,script-path=https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard41.js, cronexpr="47 2 8-14 10 *", timeout=3600, enable=true
-
+cron "47 2 8-14 10 *" script-path=gua_opencard41.js
 */
 let guaopencard_addSku = "true"
 let guaopencard = "true"
 let guaopenwait = "1"
 
-const $ = new Env('10.8~10.14 超店会员福利社');
+const $ = new Env('超店会员福利社');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
