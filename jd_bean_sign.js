@@ -1,19 +1,18 @@
 /*
 京东多合一签到,自用,可N个京东账号
 活动入口：各处的签到汇总
-Node.JS专用
-IOS软件用户请使用 https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js
 更新时间：2021-6-18
-推送通知默认简洁模式(多账号只发送一次)。如需详细通知，设置环境变量 JD_BEAN_SIGN_NOTIFY_SIMPLE 为false即可(N账号推送N次通知)。
-Modified From github https://github.com/ruicky/jd_sign_bot
+
+cron "0 0,7 * * *" script-path= jd_bean_sign.js,tag= 京东多合一签到
  */
+
 const $ = new Env('京东多合一签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
-
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const exec = require('child_process').execSync
 const fs = require('fs')
 const download = require('download');
+
 let resultPath = "./result.txt";
 let JD_DailyBonusPath = "./utils/JD_DailyBonus.js";
 let outPutUrl = './utils';
@@ -35,6 +34,7 @@ if ($.isNode()) {
   }
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 }
+
 !(async() => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
