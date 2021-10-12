@@ -1,20 +1,19 @@
 /*
-入口 极速版 赚金币 
+入口 极速版 赚金币
 分享到QQ查看邀请码 packetId就是
 #自定义变量
 export tytpacketId=""
  [task_local]
 #柠檬推一推
-0 0 * * * http://nm66.top/jd_tyt.js, tag=柠檬推一推, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+0 0 * * * jd_tyt.js, tag=柠檬推一推
 */
 const $ = new Env('柠檬推一推');
 const notify = $.isNode() ? require('./sendNotify') : '';
-
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
 var status = 0
 
-
+//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [],
     cookie = '',
     message;
@@ -48,7 +47,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
             $.isLogin = true;
             $.nickName = '';
             message = '';
-            console.log(`\n******开始【京东账号${$.index}】*********\n`);
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+
             if (status == 1) {
                 break
             }
@@ -57,7 +57,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         }
     }
 })()
-.catch((e) => {
+    .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
     })
     .finally(() => {
@@ -82,11 +82,16 @@ function tythelp() {
 
         $.post(options, async(err, resp, data) => {
             try {
+
                 data = JSON.parse(data);
+
+                console.log(data.msg)
+
                 if (data.code == 0) {
                     console.log("帮砍：" + data.data.amount)
 
-                } else if (data && data.msg && data.msg.indexOf("完成") != -1) {
+                } else
+                if (data.msg.indexOf("完成") != -1) {
                     status = 1
                 }
                 console.log(data.msg)
@@ -123,6 +128,7 @@ async function taskPostUrl(functionId, body) {
         }
     }
 }
+
 
 async function safeGet(data) {
     try {

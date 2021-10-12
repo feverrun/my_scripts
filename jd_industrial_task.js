@@ -7,8 +7,6 @@ const $ = new Env('京东工业品');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const listUrl = `https://prodev.m.jd.com/mall/active/2w43r74mJQjiHmXB3dnsx7mznuMV/index.html`;
-//Node.js用户请在jdCookie.js处填写京东ck;
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 
 if ($.isNode()) {
@@ -20,6 +18,7 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 const rd_char = "0123456789abcdefghijklmnopqrstuvwxyz"
 !(async () => {
     if (!cookiesArr[0]) {
@@ -36,9 +35,10 @@ const rd_char = "0123456789abcdefghijklmnopqrstuvwxyz"
             message = '';
             $.exit = false;
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+
             $.configCode = `f11f0375da524037a3e7e1da6cb4510b`
             $.eid = randomEid()
-            $.fp = randomString(32,rd_char)
+            $.fp = randomString(32, rd_char)
             if ($.eid !== null || $.eid !== undefined || $.eid !== '') {
                 await get_tasklist($.configCode);
             }
@@ -58,16 +58,16 @@ function get_tasklist(code) {
         let url = {
             url: `https://jdjoy.jd.com/module/task/v2/getActivity?configCode=${code}&eid=${$.eid}&fp=${$.fp}`,
             headers: {
-                'Origin' : `https://prodev.m.jd.com`,
-                'Cookie' : cookie,
-                'Connection' : `keep-alive`,
-                'Content-Type' : `application/json;charset=utf-8`,
-                'Accept' : `application/json, text/plain, */*`,
-                'Referer' : `${listUrl}`,
-                'Host' : `jdjoy.jd.com`,
-                'User-Agent' : $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.1.6;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-                'Accept-Encoding' : `gzip, deflate, br`,
-                'Accept-Language' : `zh-cn`
+                'Origin': `https://prodev.m.jd.com`,
+                'Cookie': cookie,
+                'Connection': `keep-alive`,
+                'Content-Type': `application/json;charset=utf-8`,
+                'Accept': `application/json, text/plain, */*`,
+                'Referer': `${listUrl}`,
+                'Host': `jdjoy.jd.com`,
+                'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.1.6;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                'Accept-Encoding': `gzip, deflate, br`,
+                'Accept-Language': `zh-cn`
             }
         };
         $.get(url, async (err, resp, data) => {
@@ -89,7 +89,7 @@ function get_tasklist(code) {
                                 itemName = vo.item.itemName
                                 itemId = vo.item.itemId
                                 groupType = vo.groupType
-                                if (groupType == 2 && !['card','car'].includes(process.env.FS_LEVEL)) {
+                                if (groupType == 2 && !['card', 'car'].includes(process.env.FS_LEVEL)) {
                                     console.log("默认不加购,请设置通用加购变量FS_LEVEL=car")
                                     continue
                                 }
@@ -128,7 +128,7 @@ function do_task(body) {
                         //console.log(`do_task：${JSON.stringify(result)}`)
                         if (result.success == true) {
                             console.log(`做任务成功！`)
-                        }else {
+                        } else {
                             console.log(`做任务失败：${JSON.stringify(result)}`)
                         }
                     }
@@ -148,14 +148,14 @@ function taskUrl(body) {
         url: `https://jdjoy.jd.com/module/task/v2/doTask`,
         headers: {
             'Cookie': cookie,
-            'Origin' : `https://prodev.m.jd.com`,
-            'Accept-Encoding' : `gzip, deflate, br`,
-            'Connection' : `keep-alive`,
-            'Content-Type' : `application/json;charset=utf-8`,
-            'Host' : `jdjoy.jd.com`,
-            'Accept' : `application/json, text/plain, */*`,
-            'User-Agent' : $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.1.6;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-            'Referer' : `${listUrl}`,
+            'Origin': `https://prodev.m.jd.com`,
+            'Accept-Encoding': `gzip, deflate, br`,
+            'Connection': `keep-alive`,
+            'Content-Type': `application/json;charset=utf-8`,
+            'Host': `jdjoy.jd.com`,
+            'Accept': `application/json, text/plain, */*`,
+            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.1.6;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'Referer': `${listUrl}`,
             'Accept-Language': `zh-cn`
         },
         body: body
@@ -168,18 +168,18 @@ function origin() {
         url: listUrl,
         headers: {
             'Cookie': cookie,
-            'Accept-Encoding' : `gzip, deflate, br`,
-            'Connection' : `keep-alive`,
-            'Content-Type' : `application/x-www-form-urlencoded`,
+            'Accept-Encoding': `gzip, deflate, br`,
+            'Connection': `keep-alive`,
+            'Content-Type': `application/x-www-form-urlencoded`,
             'Host': `prodev.m.jd.com`,
             'Accept': `text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8`,
-            'User-Agent' : $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.1.6;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.1.6;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             'Accept-Language': `zh-cn`
         }
     }
 }
 
-function randomString(len,char) {
+function randomString(len, char) {
     let res = ""
     let a = char.length
     for (let i = 0; i < len; i++) {
@@ -192,7 +192,7 @@ function randomEid() {
     const is_num = '000000110000001010000100000010010010000100010000100100010001101000011001000100000001000000'
     const eid = []
     for (const flag of is_num) {
-        eid.push((flag == '1') ? randomString(1,'0123456789'):randomString(1,'ABCDEFGHIJKLMNOPQRSTUVWXYZ'))
+        eid.push((flag == '1') ? randomString(1, '0123456789') : randomString(1, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'))
     }
     return eid.join('')
 }
