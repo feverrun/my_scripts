@@ -93,6 +93,7 @@ function toGoldExchange() {
     })
   })
 }
+
 function toWithdraw() {
   return new Promise(async resolve => {
     const body = getBody()
