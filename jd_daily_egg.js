@@ -126,6 +126,7 @@ function toWithdraw() {
     })
   })
 }
+
 function toDailyHome() {
   return new Promise(async resolve => {
     const body = getBody(false)
