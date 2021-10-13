@@ -1,7 +1,6 @@
 /*
 京东小魔方
-已支持IOS双京东账号,Node.js支持N个京东账号
-cron "31 2,8 * * *" script-path=jd_mofang.js,tag=京东小魔方
+cron "29 2,8 * * *" script-path=jd_mofang.js,tag=京东小魔方
  */
 const $ = new Env('京东小魔方');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -19,6 +18,7 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let allMessage = '';
 !(async () => {
@@ -26,11 +26,11 @@ let allMessage = '';
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    // $.authorCode = await getAuthorShareCode('jd_updateCash.json')
+    // $.authorCode = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/jd_updateCash.json')
     // if (!$.authorCode) {
-    //   $.http.get({url: 'jd_updateCash.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
+    //   $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_updateCash.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
     //   await $.wait(1000)
-    //   $.authorCode = await getAuthorShareCode('jd_updateCash.json') || []
+    //   $.authorCode = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_updateCash.json') || []
     // }
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -41,6 +41,7 @@ let allMessage = '';
             $.nickName = '';
             message = '';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+
             $.sku = []
             uuid = randomString(40)
             await jdMofang()
@@ -140,28 +141,30 @@ async function queryInteractiveInfo(encryptProjectId, sourceCode) {
                                     console.log(`助力已满`)
                                 }
                             } else if (vo.ext.extraType !== "brandMemberList") {
-                                console.log(`去做【${vo.assignmentName}】`)
-                                if (vo.completionCnt < vo.assignmentTimesLimit) {
-                                    $.type = vo.rewards[0].rewardType
-                                    for (let key of Object.keys(vo.ext[vo.ext.extraType])) {
-                                        let task = vo.ext[vo.ext.extraType][key]
-                                        if (task.status !== 2) {
-                                            if (vo.ext.extraType !== "productsInfo" && vo.ext.extraType !== "addCart") {
-                                                await doInteractiveAssignment(vo.ext.extraType, encryptProjectId, sourceCode, vo.encryptAssignmentId, task.itemId, "1")
-                                                await $.wait((vo.ext.waitDuration * 1000) || 2000)
-                                            }
-                                            if (vo.ext.extraType === "browseShop") {
-                                                $.rewardmsg = `完成成功：获得${vo.rewards[0].rewardValue}${vo.rewards[0].rewardName}`
-                                                await qryViewkitCallbackResult(encryptProjectId, vo.encryptAssignmentId, task.itemId)
-                                            } else {
-                                                $.complete = false
-                                                await doInteractiveAssignment(vo.ext.extraType, encryptProjectId, sourceCode, vo.encryptAssignmentId, task.itemId, "0")
-                                                if ($.complete) break
+                                if (Object.keys(vo.ext).length && Object.keys(vo.ext[vo.ext.extraType]).length) {
+                                    console.log(`去做【${vo.assignmentName}】`)
+                                    if (vo.completionCnt < vo.assignmentTimesLimit) {
+                                        $.type = vo.rewards[0].rewardType
+                                        for (let key of Object.keys(vo.ext[vo.ext.extraType])) {
+                                            let task = vo.ext[vo.ext.extraType][key]
+                                            if (task.status !== 2) {
+                                                if (vo.ext.extraType !== "productsInfo" && vo.ext.extraType !== "addCart") {
+                                                    await doInteractiveAssignment(vo.ext.extraType, encryptProjectId, sourceCode, vo.encryptAssignmentId, task.itemId, "1")
+                                                    await $.wait((vo.ext.waitDuration * 1000) || 2000)
+                                                }
+                                                if (vo.ext.extraType === "browseShop") {
+                                                    $.rewardmsg = `完成成功：获得${vo.rewards[0].rewardValue}${vo.rewards[0].rewardName}`
+                                                    await qryViewkitCallbackResult(encryptProjectId, vo.encryptAssignmentId, task.itemId)
+                                                } else {
+                                                    $.complete = false
+                                                    await doInteractiveAssignment(vo.ext.extraType, encryptProjectId, sourceCode, vo.encryptAssignmentId, task.itemId, "0")
+                                                    if ($.complete) break
+                                                }
                                             }
                                         }
+                                    } else {
+                                        console.log(`任务已完成`)
                                     }
-                                } else {
-                                    console.log(`任务已完成`)
                                 }
                             }
                         }
