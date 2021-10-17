@@ -34,7 +34,7 @@ All变量适用
 ============Quantumultx===============
 [task_local]
 #10.15~10.21 联合开卡
-47 6 15-21 10 * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_opencard45.js, tag=10.15~10.21 联合开卡, enabled=true
+cron "47 7 15-21 10 *" gua_opencard45.js, tag=10.15~10.21 联合开卡, enabled=true
 
 
 */
