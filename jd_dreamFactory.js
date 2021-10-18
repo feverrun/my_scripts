@@ -22,7 +22,7 @@ const jxOpenUrl = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%2
 const inviteCodes = [''];
 
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
-let tuanActiveId = `yNtpovqFehHByNrt_lmb3g`, hasSend = false;
+let tuanActiveId = `F6rXulYb3XefM4-O691DHQ==`, hasSend = false;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 let myInviteCode;
 
