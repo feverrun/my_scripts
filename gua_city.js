@@ -77,6 +77,15 @@ $.shareCodesArr = [];
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       await getUA()
       await shareCodesFormat()
+
+      let inviteId = $.inviteIdCodesArr[i];
+      let submitRes = await submitCode(inviteId, ${$.UserName})
+      if (submitRes && submitRes.code === 0) {
+        console.log(`互助码已提交！`);
+      } else {
+        console.log(`互助码提交失败！`);
+      }
+
       for (let i = 0; i < $.newShareCodes.length && true; ++i) {
         console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
         let res = await getInfo($.newShareCodes[i])
@@ -158,9 +167,7 @@ function getInviteId() {
               if (data.data && data['data']['bizCode'] === 0) {
                 if (data.data && data.data.result.userActBaseInfo.inviteId) {
                   console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
-
                   $.inviteIdCodesArr[$.index - 1] = data.data.result.userActBaseInfo.inviteId
-
                 }
               } else {
                 console.log(`\n\n获取邀请码失败:${data.data.bizMsg}`)
