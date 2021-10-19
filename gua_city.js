@@ -79,7 +79,7 @@ $.shareCodesArr = [];
       await shareCodesFormat()
 
       let inviteId = $.inviteIdCodesArr[i];
-      let submitRes = await submitCode(inviteId, ${$.UserName})
+      let submitRes = submitCode(inviteId, ${$.UserName})
       if (submitRes && submitRes.code === 0) {
         console.log(`互助码已提交！`);
       } else {
