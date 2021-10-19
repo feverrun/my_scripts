@@ -158,14 +158,17 @@ function getInviteId() {
               if (data.data && data['data']['bizCode'] === 0) {
                 if (data.data && data.data.result.userActBaseInfo.inviteId) {
                   console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
-                  $.inviteIdCodesArr[$.index - 1] = data.data.result.userActBaseInfo.inviteId
+
                   //data.data.result.userActBaseInfo.inviteId
-                  let submitCodeRes = submitCode(data.data.result.userActBaseInfo.inviteId, ${$.UserName});
+                  let inviteId = data.data.result.userActBaseInfo.inviteId
+                  submitCodeRes = submitCode(inviteId, ${$.UserName})
                   if (submitCodeRes && submitCodeRes.code === 0) {
                     console.log(`互助码已提交`);
-                  }else {
+                  } else {
                     console.log(`互助码提交失败！`);
                   }
+
+                  $.inviteIdCodesArr[$.index - 1] = data.data.result.userActBaseInfo.inviteId
 
                 }
               } else {
