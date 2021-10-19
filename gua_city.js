@@ -3,7 +3,7 @@
 =================================Quantumultx=========================
 [task_local]
 #城城领现金
-cron "0 0-23/5,22 * 10" * gua_city.js, tag=城城领现金, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+cron "0 0-23/5,22 * 10 *" gua_city.js, tag=城城领现金, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
  */
 
 const $ = new Env('城城领现金');
