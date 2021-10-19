@@ -160,7 +160,7 @@ function getInviteId() {
                   console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
                   $.inviteIdCodesArr[$.index - 1] = data.data.result.userActBaseInfo.inviteId
                   //data.data.result.userActBaseInfo.inviteId
-                  const submitCodeRes = await submitCode(data.data.result.userActBaseInfo.inviteId, ${$.UserName});
+                  let submitCodeRes = submitCode(data.data.result.userActBaseInfo.inviteId, ${$.UserName});
                   if (submitCodeRes && submitCodeRes.code === 0) {
                     console.log(`互助码已提交`);
                   }else {
@@ -346,6 +346,7 @@ function submitCode(code, user) {
     resolve({"code":500})
   })
 }
+
 //读取互助码
 function readShareCode() {
   console.log(`开始`)
