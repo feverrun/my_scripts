@@ -159,15 +159,6 @@ function getInviteId() {
                 if (data.data && data.data.result.userActBaseInfo.inviteId) {
                   console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
 
-                  //data.data.result.userActBaseInfo.inviteId
-                  let inviteId = data.data.result.userActBaseInfo.inviteId
-                  submitCodeRes = submitCode(inviteId, ${$.UserName})
-                  if (submitCodeRes && submitCodeRes.code === 0) {
-                    console.log(`互助码已提交`);
-                  } else {
-                    console.log(`互助码提交失败！`);
-                  }
-
                   $.inviteIdCodesArr[$.index - 1] = data.data.result.userActBaseInfo.inviteId
 
                 }
@@ -326,7 +317,7 @@ function city_lotteryAward() {
 }
 
 //提交互助码
-function submitCode(code, user) {
+function submitCode(code='', user='') {
   return new Promise(async resolve => {
     $.get({url: `http://hz.feverrun.top:99/share/submit/city?code=${code}&user=${user}`, timeout: 50000}, (err, resp, data) => {
       try {
