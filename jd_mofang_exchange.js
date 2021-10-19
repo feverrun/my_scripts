@@ -24,9 +24,9 @@ const JD_API_HOST = `https://api.m.jd.com/client.action?functionId=doInteractive
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
-        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
         cookie = cookiesArr[i];
         if (cookie) {
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.index = i + 1;
             if (i + 1) console.log(`\n***************开始京东账号${i + 1}【${$.UserName}】***************`)
             //initial();
