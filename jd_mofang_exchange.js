@@ -70,7 +70,7 @@ function exchange_redpocket(){
 }
 function msgShow() {
     return new Promise(resolve => {
-        $.msg($.name, '', `【京东账号${$.index}】${$.nickname}\n${$.message}`);
+        $.msg($.name, '', `【京东账号${$.index}】${$.UserName}\n${$.message}`);
         resolve()
     })
 }
