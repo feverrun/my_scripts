@@ -310,7 +310,7 @@ async function getInteractionInfo(type = true) {
 }
 function queryPanamaPage(groupId) {
     return new Promise((resolve) => {
-        $.post(taskPostUrl("queryPanamaPage", {"activityId":"2umkvbpZCUtyN6gcymN88ew8WLeU","dynamicParam":{},"geo":{"lng":"","lat":""},"previewTime":""}), (err, resp, data) => {
+        $.post(taskPostUrl("queryPanamaPage", {"activityId":"3v2Wu9KsgwzW92931wj7sYCRjueP","dynamicParam":{},"geo":{"lng":"","lat":""},"previewTime":""}), (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
