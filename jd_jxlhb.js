@@ -206,7 +206,13 @@ function getUserInfo() {
                   userName: $.UserName
                 })
 
-                submitCode(data.Data.strUserPin, $.UserName)
+                let submitRes =  submitCode(data.Data.strUserPin, $.UserName)
+                if (submitRes && submitRes.code === 0) {
+                  console.log(`互助码已提交！`);
+                } else {
+                  console.log(`互助码提交失败！`);
+                }
+
               }
             }
             if (data.Data.strUserPin) {
