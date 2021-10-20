@@ -3,7 +3,7 @@
 活动入口：京喜app-》我的-》京喜领88元红包
 助力逻辑：先自己京东账号相互助力，如有剩余助力机会，则助力作者
 温馨提示：如提示助力火爆，可尝试寻找京东客服
-cron "3 2,10 * * *" script-path=jd_jxlhb.js,tag=京喜领88元红包
+cron "2 0,7,9,12 * * *" script-path=jd_jxlhb.js,tag=京喜领88元红包
  */
 
 const $ = new Env('京喜领88元红包');
@@ -11,6 +11,7 @@ const notify = $.isNode() ? require('./sendNotify') : {};
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 let cookiesArr = [], cookie = '';
 let UA, UAInfo = {}, codeInfo = {}
+let shareCodePool = []
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -38,9 +39,9 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   //   await $.wait(1000)
   //   res = await getAuthorShareCode('')
   // }
-  res = JSON.parse('{"activeId":525597,"codes":["sxqJP9GEgnrAof9OUuoIbvXT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
-  if (res && res.activeId) $.activeId = res.activeId;
-  $.authorMyShareIds = [...((res && res.codes) || [])];
+  // res = JSON.parse('{"activeId":525597,"codes":["sxqJP9GEgnrAof9OUuoIbvXT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
+  // if (res && res.activeId) $.activeId = res.activeId;
+  // $.authorMyShareIds = [...((res && res.codes) || [])];
   //开启红包,获取互助码
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
@@ -56,7 +57,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   }
   //互助
   console.log(`\n\n自己京东账号助力码：\n${JSON.stringify($.packetIdArr)}\n\n`);
-  console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，则助力作者\n`)
+  console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，则助力作者 最后助力助力池\n`)
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
@@ -77,12 +78,29 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
         continue
       }
     }
-    if ($.canHelp && ($.authorMyShareIds && $.authorMyShareIds.length)) {
-      console.log(`\n【${$.UserName}】有剩余助力机会，开始助力作者\n`)
-      for (let j = 0; j < $.authorMyShareIds.length && $.canHelp; j++) {
-        console.log(`【${$.UserName}】去助力作者的邀请码：${$.authorMyShareIds[j]}`);
+
+    // if ($.canHelp && ($.authorMyShareIds && $.authorMyShareIds.length)) {
+    //   console.log(`\n【${$.UserName}】有剩余助力机会，开始助力作者\n`)
+    //   for (let j = 0; j < $.authorMyShareIds.length && $.canHelp; j++) {
+    //     console.log(`【${$.UserName}】去助力作者的邀请码：${$.authorMyShareIds[j]}`);
+    //     $.max = false;
+    //     await enrollFriend($.authorMyShareIds[j]);
+    //     await $.wait(5000);
+    //     if ($.max) {
+    //       $.authorMyShareIds.splice(j, 1)
+    //       j--
+    //       continue
+    //     }
+    //   }
+    // }
+
+    //助力助力池
+    if ($.canHelp && (shareCodePool && shareCodePool.length)) {
+      console.log(`\n【${$.UserName}】有剩余助力机会，开始助力助力池\n`)
+      for (let j = 0; j < shareCodePool.length && $.canHelp; j++) {
+        // console.log(`【${$.UserName}】去助力助力池的邀请码：${$.authorMyShareIds[j]}`);
         $.max = false;
-        await enrollFriend($.authorMyShareIds[j]);
+        await enrollFriend(shareCodePool[j]);
         await $.wait(5000);
         if ($.max) {
           $.authorMyShareIds.splice(j, 1)
@@ -91,6 +109,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
         }
       }
     }
+
   }
   //拆红包
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -113,7 +132,17 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     .finally(() => {
       $.done();
     })
+
 async function main() {
+  try {
+    const readShareCodeRes = await readShareCode();
+    if (readShareCodeRes && readShareCodeRes.code === 0) {
+      shareCodePool = readShareCodeRes.data;
+    }
+  }catch (e) {
+    console.log(e);
+  }
+  console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
   await joinActive();
   await $.wait(2000)
   await getUserInfo()
@@ -145,6 +174,7 @@ function joinActive() {
     })
   })
 }
+
 //获取助力码
 function getUserInfo() {
   return new Promise(resolve => {
@@ -176,6 +206,8 @@ function getUserInfo() {
                   strUserPin: data.Data.strUserPin,
                   userName: $.UserName
                 })
+
+                submitCode(data.Data.strUserPin, $.UserName)
               }
             }
             if (data.Data.strUserPin) {
@@ -319,6 +351,58 @@ function taskurl(function_path, body = '', stk) {
     }
   }
 }
+
+//提交互助码
+function submitCode(code='', user='') {
+  return new Promise(async resolve => {
+    $.get({url: `http://hz.feverrun.top:99/share/submit/jxlhb?code=${code}&user=${user}`, timeout: 50000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data || {"code":500});
+      }
+    })
+    await $.wait(10000);
+    resolve({"code":500})
+  })
+}
+
+//读取互助码
+function readShareCode() {
+  console.log(`开始`)
+  return new Promise(async resolve => {
+    $.get({url: `http://hz.feverrun.top:99/share/get/jxlhb`, 'timeout': 50000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`助力池 API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(10000);
+    resolve()
+  })
+}
+
+
 function randomString(e) {
   e = e || 32;
   let t = "0123456789abcdef", a = t.length, n = "";
