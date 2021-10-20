@@ -20,7 +20,7 @@ if ($.isNode()) {
   cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 $.packetIdArr = [];
-$.activeId = '489177';
+$.activeId = '525597';
 const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
 !(async () => {
   if (!cookiesArr[0]) {
@@ -38,7 +38,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   //   await $.wait(1000)
   //   res = await getAuthorShareCode('')
   // }
-  res = JSON.parse('{"activeId":489177,"codes":["ZTyaJgktU6xhiQYiOuP4T_XT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
+  res = JSON.parse('{"activeId":525597,"codes":["ZTyaJgktU6xhiQYiOuP4T_XT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
   if (res && res.activeId) $.activeId = res.activeId;
   $.authorMyShareIds = [...((res && res.codes) || [])];
   //开启红包,获取互助码
