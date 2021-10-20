@@ -12,8 +12,9 @@ const $ = new Env('京东极速版红包');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const linkId = "AkOULcXbUA_8EAPbYLLMgg";
+const linkIdArr = ["9wdf1YTT2L59Vr-meKskLA", "7ya6o83WSbNhrbYJqsMfFA"];
 const signLinkId = '9WA12jYGulArzWS7vcrwhw';
+let linkId;
 
 let cookiesArr = [], cookie = '', message;
 
@@ -44,7 +45,10 @@ if ($.isNode()) {
       message = '';
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
-      await jxRedPacket()
+      for (let j = 0; j < linkIdArr.length; j++) {
+        linkId = linkIdArr[j]
+        await jsRedPacket()
+      }
     }
   }
 })()
@@ -55,7 +59,7 @@ if ($.isNode()) {
       $.done();
     })
 
-async function jxRedPacket() {
+async function jsRedPacket() {
   try {
     // 邀请
     // await invite();
@@ -65,7 +69,7 @@ async function jxRedPacket() {
     for (let i = 0; i < 3; ++i) {
       // 开红包
       await redPacket();
-      await $.wait(500)
+      await $.wait(2500)
     }
     // 领红包提现
     await getPacketList();
