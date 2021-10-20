@@ -38,9 +38,9 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   //   res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jxhb.json')
   // }
 
-  res = JSON.parse('{"codes":["ZTyaJgktU6xhiQYiOuP4T_XT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
+  res = JSON.parse('{"codes":["ZTyaJgktU6xhiQYiOuP4T_XT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"],"activeId":"489177"}');
 
-  // if (res && res.activeId) $.activeId = res.activeId;
+  if (res && res.activeId) $.activeId = res.activeId;
   $.authorMyShareIds = [...((res && res.codes) || [])];
   //开启红包,获取互助码
   for (let i = 0; i < cookiesArr.length; i++) {
