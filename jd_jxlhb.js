@@ -38,7 +38,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   //   await $.wait(1000)
   //   res = await getAuthorShareCode('')
   // }
-  res = JSON.parse('{"activeId":525597,"codes":["ZTyaJgktU6xhiQYiOuP4T_XT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
+  res = JSON.parse('{"activeId":525597,"codes":["sxqJP9GEgnrAof9OUuoIbvXT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
   if (res && res.activeId) $.activeId = res.activeId;
   $.authorMyShareIds = [...((res && res.codes) || [])];
   //开启红包,获取互助码
