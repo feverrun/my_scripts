@@ -38,7 +38,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   //   res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jxhb.json')
   // }
 
-  res = json.parse('{"codes":["ZTyaJgktU6xhiQYiOuP4T_XT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
+  res = JSON.parse('{"codes":["ZTyaJgktU6xhiQYiOuP4T_XT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
 
   // if (res && res.activeId) $.activeId = res.activeId;
   $.authorMyShareIds = [...((res && res.codes) || [])];
