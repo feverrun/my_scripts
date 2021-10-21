@@ -36,7 +36,7 @@ All变量适用
 ============Quantumultx===============
 [task_local]
 #10.20~11.3 惠聚京东 好物连连
-cron "47 4 1-3,20-31 10,11" * gua_opencard48.js, tag=10.20~11.3 惠聚京东 好物连连, enabled=true
+cron "47 4 1-3,20-31 10,11 *" gua_opencard48.js, tag=10.20~11.3 惠聚京东 好物连连, enabled=true
 
 */
 let guaopencard_addSku = "true"
