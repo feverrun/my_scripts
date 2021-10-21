@@ -64,12 +64,6 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     $.canHelp = true;
     UA = UAInfo[$.UserName]
     for (let j = 0; j < $.packetIdArr.length && $.canHelp; j++) {
-      console.log(`【${$.UserName}】去助力【${$.packetIdArr[j].userName}】邀请码：${$.packetIdArr[j].strUserPin}`);
-      if ($.UserName === $.packetIdArr[j].userName) {
-        console.log(`助力失败：不能助力自己`)
-        continue
-      }
-      $.max = false;
 
       //submit
       let submitRes =  await submitCode($.packetIdArr[j].strUserPin, $.UserName)
@@ -78,6 +72,13 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
       } else {
         console.log(`互助码提交失败！`);
       }
+
+      console.log(`【${$.UserName}】去助力【${$.packetIdArr[j].userName}】邀请码：${$.packetIdArr[j].strUserPin}`);
+      if ($.UserName === $.packetIdArr[j].userName) {
+        console.log(`助力失败：不能助力自己`)
+        continue
+      }
+      $.max = false;
 
       await enrollFriend($.packetIdArr[j].strUserPin);
       await $.wait(5000);
