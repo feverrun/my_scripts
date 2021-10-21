@@ -46,6 +46,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   //开启红包,获取互助码
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
+    $.cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
     $.index = i + 1;
     $.isLogin = true
@@ -71,10 +72,12 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，助力助力池\n`)
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
+    $.cookie = cookiesArr[i];
+
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     $.canHelp = true;
     UA = UAInfo[$.UserName]
-    // token = await getJxToken()
+    token = await getJxToken()
 
     for (let j = 0; j < $.packetIdArr.length && $.canHelp; j++) {
       console.log(`【${$.UserName}】去助力【${$.packetIdArr[j].userName}】邀请码：${$.packetIdArr[j].strUserPin}`);
@@ -129,11 +132,13 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
   //拆红包
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
+    $.cookie = cookiesArr[i];
+
     $.canOpenGrade = true;
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
     UA = UAInfo[$.UserName]
 
-    // token = await getJxToken()
+    token = await getJxToken()
     for (let grade of $.grades) {
       if (!codeInfo[$.UserName]) continue;
       console.log(`\n【${$.UserName}】去拆第${grade}个红包`);
