@@ -10,7 +10,7 @@ const $ = new Env('京喜领88元红包');
 const notify = $.isNode() ? require('./sendNotify') : {};
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 let cookiesArr = [], cookie = '';
-let UA, UAInfo = {}, codeInfo = {}, token;
+let UA, UAInfo = {}, codeInfo = {}, token = '';
 let shareCodePool = []
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
