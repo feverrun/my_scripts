@@ -54,24 +54,25 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
 
     await main();
+
+    //submit
+    let submitRes =  await submitCode($.packetIdArr[i].strUserPin, $.UserName)
+    if (submitRes && submitRes.code === 0) {
+      console.log(`互助码已提交！`);
+    } else {
+      console.log(`互助码提交失败！`);
+    }
+
   }
   //互助
-  console.log(`\n\n自己京东账号助力码：\n${JSON.stringify($.packetIdArr)}\n\n`);
-  console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，则助力作者 最后助力助力池\n`)
+  // console.log(`\n\n自己京东账号助力码：\n${JSON.stringify($.packetIdArr)}\n\n`);
+  console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，助力助力池\n`)
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     $.canHelp = true;
     UA = UAInfo[$.UserName]
     for (let j = 0; j < $.packetIdArr.length && $.canHelp; j++) {
-
-      //submit
-      let submitRes =  await submitCode($.packetIdArr[j].strUserPin, $.UserName)
-      if (submitRes && submitRes.code === 0) {
-        console.log(`互助码已提交！`);
-      } else {
-        console.log(`互助码提交失败！`);
-      }
 
       console.log(`【${$.UserName}】去助力【${$.packetIdArr[j].userName}】邀请码：${$.packetIdArr[j].strUserPin}`);
       if ($.UserName === $.packetIdArr[j].userName) {
