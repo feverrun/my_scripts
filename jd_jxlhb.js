@@ -70,13 +70,6 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
         continue
       }
       $.max = false;
-      await enrollFriend($.packetIdArr[j].strUserPin);
-      await $.wait(5000);
-      if ($.max) {
-        $.packetIdArr.splice(j, 1)
-        j--
-        continue
-      }
 
       //submit
       let submitRes =  await submitCode($.packetIdArr[j].userName, $.UserName)
@@ -84,6 +77,14 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
         console.log(`互助码已提交！`);
       } else {
         console.log(`互助码提交失败！`);
+      }
+
+      await enrollFriend($.packetIdArr[j].strUserPin);
+      await $.wait(5000);
+      if ($.max) {
+        $.packetIdArr.splice(j, 1)
+        j--
+        continue
       }
 
     }
