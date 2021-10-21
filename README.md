@@ -5,17 +5,26 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|gua|jddj|getCookie|g
 ```
 
 ## 仓库内置互助池
-### 只收稳定真实互助,号越多越好,账号个数不限
+## 只收稳定真实互助,号越多越好,账号个数不限
+
+### 长久活动(已接入助力池)
 ```
-farm
-bean
-pet
-ddfactory
-jxfactory
-health
-cfd
-sgmh
+东东农场
+种豆得豆
+京东萌宠
+东东工厂
+惊喜工厂
+京东健康
+惊喜财富岛   (优先内部互助)
+闪购盲盒
 ```
+
+### 临时活动(已接入助力池)
+```
+城城分金    (优先内部互助)
+惊喜领取88  (优先内部互助)
+```
+
 ## 水群
 https://t.me/joinchat/s2VXArKMn5JlNjg1
 
