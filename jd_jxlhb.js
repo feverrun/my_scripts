@@ -80,7 +80,8 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     token = await getJxToken()
 
     for (let j = 0; j < $.packetIdArr.length && $.canHelp; j++) {
-      console.log(`【${$.UserName}】去助力【${$.packetIdArr[j].userName}】邀请码：${$.packetIdArr[j].strUserPin}`);
+      //邀请码：${$.packetIdArr[j].strUserPin
+      console.log(`【${$.UserName}】去助力【${$.packetIdArr[j].userName}}`);
       if ($.UserName === $.packetIdArr[j].userName) {
         console.log(`助力失败：不能助力自己`)
         continue
@@ -97,6 +98,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
 
     }
 
+    // 助力作者
     // if ($.canHelp && ($.authorMyShareIds && $.authorMyShareIds.length)) {
     //   console.log(`\n【${$.UserName}】有剩余助力机会，开始助力作者\n`)
     //   for (let j = 0; j < $.authorMyShareIds.length && $.canHelp; j++) {
@@ -116,7 +118,8 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     if ($.canHelp && (shareCodePool && shareCodePool.length)) {
       console.log(`\n【${$.UserName}】有剩余助力机会，开始助力助力池\n`)
       for (let j = 0; j < shareCodePool.length && $.canHelp; j++) {
-        // console.log(`【${$.UserName}】去助力助力池的邀请码：${$.authorMyShareIds[j]}`);
+        //去助力助力池的邀请码：${shareCodePool[j]}
+        console.log(`【${$.UserName}】`);
         $.max = false;
         await enrollFriend(shareCodePool[j]);
         await $.wait(5000);
@@ -314,39 +317,39 @@ function openRedPack(strPin, grade) {
   })
 }
 
-function getAuthorShareCode(url) {
-  return new Promise(resolve => {
-    const options = {
-      url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-      }
-    };
-    if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-      const tunnel = require("tunnel");
-      const agent = {
-        https: tunnel.httpsOverHttp({
-          proxy: {
-            host: process.env.TG_PROXY_HOST,
-            port: process.env.TG_PROXY_PORT * 1
-          }
-        })
-      }
-      Object.assign(options, { agent })
-    }
-    $.get(options, async (err, resp, data) => {
-      try {
-        if (err) {
-        } else {
-          if (data) data = JSON.parse(data)
-        }
-      } catch (e) {
-        // $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-  })
-}
+// function getAuthorShareCode(url) {
+//   return new Promise(resolve => {
+//     const options = {
+//       url: `${url}?${new Date()}`, "timeout": 10000, headers: {
+//         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+//       }
+//     };
+//     if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
+//       const tunnel = require("tunnel");
+//       const agent = {
+//         https: tunnel.httpsOverHttp({
+//           proxy: {
+//             host: process.env.TG_PROXY_HOST,
+//             port: process.env.TG_PROXY_PORT * 1
+//           }
+//         })
+//       }
+//       Object.assign(options, { agent })
+//     }
+//     $.get(options, async (err, resp, data) => {
+//       try {
+//         if (err) {
+//         } else {
+//           if (data) data = JSON.parse(data)
+//         }
+//       } catch (e) {
+//         // $.logErr(e, resp)
+//       } finally {
+//         resolve(data);
+//       }
+//     })
+//   })
+// }
 
 function taskurl(function_path, body = '', stk) {
   // let url = `${BASE_URL}/${function_path}?activeId=${$.activeId}&publishFlag=1&channel=7&${body}&sceneval=2&g_login_type=1&timestamp=${Date.now()}&_=${Date.now() + 2}&_ste=1`
