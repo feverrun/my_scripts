@@ -77,6 +77,15 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
         j--
         continue
       }
+
+      //submit
+      let submitRes =  await submitCode($.packetIdArr[j].userName, $.UserName)
+      if (submitRes && submitRes.code === 0) {
+        console.log(`互助码已提交！`);
+      } else {
+        console.log(`互助码提交失败！`);
+      }
+
     }
 
     // if ($.canHelp && ($.authorMyShareIds && $.authorMyShareIds.length)) {
@@ -145,6 +154,7 @@ async function main() {
   await joinActive();
   await $.wait(2000)
   await getUserInfo()
+
 }
 //参与活动
 function joinActive() {
@@ -200,18 +210,12 @@ function getUserInfo() {
               console.log(`${$.grades[$.grades.length - 1]}个阶梯红包已全部拆完\n`)
             } else {
               console.log(`获取助力码成功：${data.Data.strUserPin}\n`);
+
               if (data.Data.strUserPin) {
                 $.packetIdArr.push({
                   strUserPin: data.Data.strUserPin,
                   userName: $.UserName
                 })
-
-                let submitRes =  submitCode(data.Data.strUserPin, $.UserName)
-                if (submitRes && submitRes.code === 0) {
-                  console.log(`互助码已提交！`);
-                } else {
-                  console.log(`互助码提交失败！`);
-                }
 
               }
             }
