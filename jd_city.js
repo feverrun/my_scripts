@@ -3,7 +3,7 @@
 =================================Quantumultx=========================
 [task_local]
 #城城领现金
-cron "0 0-23/5,22 * 10 *" gua_city.js, tag=城城领现金, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+cron "0 0-23/5,22 * 10 *" jd_city.js, tag=城城领现金, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
  */
 
 const $ = new Env('城城领现金');
@@ -252,6 +252,7 @@ function getInfo(inviteId, flag = false) {
 function receiveCash(roundNum = '') {
   let body = {"cashType":2}
   if(roundNum) body = {"cashType":1,"roundNum":roundNum}
+  if(roundNum == -1) body = {"cashType":4}
   return new Promise((resolve) => {
     $.post(taskPostUrl("city_receiveCash",body), async (err, resp, data) => {
       try {
@@ -287,6 +288,10 @@ function getInviteInfo() {
           if (safeGet(data)) {
             // console.log(data)
             data = JSON.parse(data);
+            if(data.data.result.masterData.actStatus == 2){
+              console.log('领取赚赏金')
+              await receiveCash(-1)
+            }
           }
         }
       } catch (e) {
