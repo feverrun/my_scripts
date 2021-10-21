@@ -5,7 +5,7 @@
 
 活动时间：长期
 活动入口：京东极速版app-现金签到
-cron "21 7 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js,tag=京东极速版
+cron "21 7 * * *" script-path=jd_speed_sign.js,tag=京东极速版
 */
 
 const $ = new Env('京东极速版');
