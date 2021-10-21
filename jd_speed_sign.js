@@ -5,7 +5,7 @@
 
 活动时间：长期
 活动入口：京东极速版app-现金签到
-cron "21 3,8 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js,tag=京东极速版
+cron "21 7 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js,tag=京东极速版
 */
 
 const $ = new Env('京东极速版');
@@ -96,7 +96,7 @@ async function signInit() {
     $.get(taskUrl('speedSignInit', {
       "activityId": "8a8fabf3cccb417f8e691b6774938bc2",
       "kernelPlatform": "RN",
-      "inviterId":"faqX32osjzl+RReW4mpyy1mSPidvqjQWOec35XdfO5E="
+      "inviterId":""
     }), async (err, resp, data) => {
       try {
         if (err) {
@@ -655,7 +655,7 @@ function taskGetUrl(function_id, body) {
 function invite2() {
   let t = +new Date()
   let inviterId = [
-    "faqX32osjzl+RReW4mpyy1mSPidvqjQWOec35XdfO5E=",
+    "",
   ][Math.floor((Math.random() * 1))]
   let headers = {
     'Host': 'api.m.jd.com',
@@ -683,7 +683,7 @@ function invite2() {
 function invite() {
   let t = +new Date()
   let inviterId = [
-    "faqX32osjzl+RReW4mpyy1mSPidvqjQWOec35XdfO5E="
+    ""
   ][Math.floor((Math.random() * 1))]
   var headers = {
     'Host': 'api.m.jd.com',
