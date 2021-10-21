@@ -72,7 +72,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
       $.max = false;
 
       //submit
-      let submitRes =  await submitCode($.packetIdArr[j].userName, $.UserName)
+      let submitRes =  await submitCode($.packetIdArr[j].strUserPin, $.UserName)
       if (submitRes && submitRes.code === 0) {
         console.log(`互助码已提交！`);
       } else {
