@@ -1,17 +1,14 @@
 /*
 城城领现金
-=================================Quantumultx=========================
-[task_local]
-#城城领现金
-cron "0 0-23/5,22 * 10 *" jd_city.js, tag=城城领现金, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+cron "0 0-23/5,22 * 10 *" jd_city.js, tag=城城领现金, img-url=jd_city.png, enabled=true
  */
 
 const $ = new Env('城城领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //自动抽奖 ，环境变量  JD_CITY_EXCHANGE
-let exchangeFlag = $.getdata('jdJxdExchange') || "false";//是否开启自动抽奖，建议活动快结束开启，默认关闭
-exchangeFlag = $.isNode() ? (process.env.jdJxdExchange ? process.env.jdJxdExchange : `${exchangeFlag}`) : ($.getdata('jdJxdExchange') ? $.getdata('jdJxdExchange') : `${exchangeFlag}`);
+let exchangeFlag = $.getdata('JD_CITY_EXCHANGE ') || "false";//是否开启自动抽奖，建议活动快结束开启，默认关闭
+exchangeFlag = $.isNode() ? (process.env.JD_CITY_EXCHANGE  ? process.env.JD_CITY_EXCHANGE  : `${exchangeFlag}`) : ($.getdata('JD_CITY_EXCHANGE ') ? $.getdata('JD_CITY_EXCHANGE ') : `${exchangeFlag}`);
 
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
@@ -25,9 +22,11 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = [
-    'HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw',
-]
+// let inviteCodes = [
+//     'HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw',
+// ]
+let firstCode = "";
+let authorCode="HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw";
 $.shareCodesArr = [];
 
 !(async () => {
@@ -58,10 +57,14 @@ $.shareCodesArr = [];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
         $.index = i + 1;
         let code = []
-        for (let s = 0; s < cookiesArr.length && true; s++) {
-          if(s != $.index - 1 && $.inviteIdCodesArr[s]) code.push($.inviteIdCodesArr[s])
+        if (i == 0) {
+          firstCode = $.inviteIdCodesArr[0];
         }
-        if(code.length > 0) $.shareCodesArr.push(code.join('@'))
+        // for (let s = 0; s < cookiesArr.length && true; s++) {
+        //   if(s != $.index - 1 && $.inviteIdCodesArr[s]) code.push($.inviteIdCodesArr[s])
+        // }
+
+        // if(code.length > 0) $.shareCodesArr.push(code.join('@'))
       }
     }
 
@@ -383,13 +386,15 @@ function shareCodesFormat() {
   return new Promise(async resolve => {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     $.newShareCodes = [];
-    if ($.shareCodesArr[$.index - 1]) {
-      $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-    }
-    if($.index == 1) $.newShareCodes = [...inviteCodes,...$.newShareCodes]
+    // if ($.shareCodesArr[$.index - 1]) {
+    //   $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
+    // }
+    // if($.index == 1) $.newShareCodes = [...inviteCodes,...$.newShareCodes]
     try{
       const readShareCodeRes = await readShareCode();
       if (readShareCodeRes && readShareCodeRes.code === 0) {
+        // 只助力作者和自己第一个账号
+        $.newShareCodes = [authorCode, firstCode];
         $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
       }
     } catch (e) {
