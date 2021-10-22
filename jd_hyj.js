@@ -1,6 +1,6 @@
 //0 * * * * 环游记 自动入会、签到、任务、升级、开宝箱、捡金币
 //半残品随便跑跑
-//cron "9 0,8,18 * * *" jd_hyj.js, tag=环游记, enabled=true
+//cron "9 8,12,19 * * *" jd_hyj.js, tag=环游记, enabled=true
 
 const $ = new Env('环游记');
 
