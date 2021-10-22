@@ -7,7 +7,7 @@ const $ = new Env('环游记');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 let cookiesArr = [], cookie = '', message;
-let secretp = '', inviteId = []
+let secretp = '', inviteId = ["ZXASTT018v_V7RhwQ_VzXIhub1AFjRWn6u7zB55awQ"]
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
