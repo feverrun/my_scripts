@@ -59,6 +59,7 @@ $.shareCodesArr = [];
         let code = []
         if (i == 0) {
           firstCode = $.inviteIdCodesArr[0];
+          console.log("打印看看"+firstCode);
         }
         // for (let s = 0; s < cookiesArr.length && true; s++) {
         //   if(s != $.index - 1 && $.inviteIdCodesArr[s]) code.push($.inviteIdCodesArr[s])
