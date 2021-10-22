@@ -13,7 +13,8 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 let cookiesArr = [], cookie = '', message;
 let joinIdInfo = {}, AuthorizationInfo = {};
 
-$.shareCodes = [];
+//如果有剩余机会放在最后助力
+$.shareCodes = ['1451330538770333698'];
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
