@@ -67,6 +67,13 @@ $.appId = 10028;
             token = await getJxToken()
             await shareCodesFormat()
             await cfd();
+
+            let user = $.UserName;
+            let code = $.shareCodes[i];
+            if (i == 0) {
+                await submitCode(code, user);
+            }
+
             await $.wait(2000);
             UAInfo[$.UserName] = UA
         }
@@ -1413,10 +1420,9 @@ function getUserInfo(showInvite = true) {
                         console.log(`\n当前等级:${dwLandLvl},金币:${ddwCoinBalance},财富值:${ddwRichBalance},连续营业天数:${Business.dwBussDayNum},离线收益:${Business.ddwCoin}\n`)
                     }
                     if (showInvite && strMyShareId) {
-                        console.log(`财富岛好友互助码每次运行都变化,旧的可继续使用`);
+                        console.log(`财富岛好友互助码每次运行都变化,当天可继续使用`);
                         console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${strMyShareId}\n\n`);
                         $.shareCodes.push(strMyShareId)
-                        submitCode(strMyShareId, $.UserName);
                     }
                     $.info = {
                         ...$.info,
@@ -1876,7 +1882,7 @@ function shareCodesFormat() {
         if ($.shareCodesArr[$.index - 1]) {
             $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
         } else {
-            console.log(`由于您第${$.index}个京东账号未提供shareCode,将从助力池随机选取20个助力码\n`)
+            // console.log(`由于您第${$.index}个京东账号未提供shareCode,将从助力池随机选取助力码\n`)
         }
         resolve();
     })
