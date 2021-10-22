@@ -26,7 +26,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 //     'HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw',
 // ]
 let firstCode = "";
-let authorCode="HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw";
+let authorCode="RtGKoar2K1XfP_Dkf69ymmHFksocU8f08WnjFKeR64O3wyRW";//"HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw";
 $.shareCodesArr = [];
 
 !(async () => {
@@ -59,7 +59,6 @@ $.shareCodesArr = [];
         let code = []
         if (i == 0) {
           firstCode = $.inviteIdCodesArr[0];
-          console.log("打印看看"+firstCode);
         }
         // for (let s = 0; s < cookiesArr.length && true; s++) {
         //   if(s != $.index - 1 && $.inviteIdCodesArr[s]) code.push($.inviteIdCodesArr[s])
