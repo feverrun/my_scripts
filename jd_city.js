@@ -83,12 +83,15 @@ $.shareCodesArr = [];
 
       let inviteId = $.inviteIdCodesArr[i];
       let user = $.UserName;
-      let submitRes = await submitCode(inviteId, user)
-      if (submitRes && submitRes.code === 0) {
-        console.log(`互助码已提交！`);
-      } else {
-        console.log(`互助码提交失败！`);
+      if (i == 0) {
+        let submitRes = await submitCode(inviteId, user)
+        if (submitRes && submitRes.code === 0) {
+          console.log(`互助码已提交！`);
+        } else {
+          console.log(`互助码提交失败！`);
+        }
       }
+
 
       for (let i = 0; i < $.newShareCodes.length && true; ++i) {
         console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
