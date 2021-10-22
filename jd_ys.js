@@ -13,8 +13,7 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 let cookiesArr = [], cookie = '', message;
 let joinIdInfo = {}, AuthorizationInfo = {};
 
-//如果有剩余机会放在最后助力
-$.shareCodes = ['1451330538770333698'];
+$.shareCodes = [];
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -49,7 +48,7 @@ let allMessage = '';
             AuthorizationInfo[$.UserName] = $.Authorization
         }
     }
-    let res = [''];
+    let res = ['1451330538770333698'];
     $.shareCodes = [...new Set([...$.shareCodes, ...(res || [])])]
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
