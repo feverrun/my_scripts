@@ -1,5 +1,7 @@
 //0 * * * * 环游记 自动入会、签到、任务、升级、开宝箱、捡金币
 //半残品随便跑跑
+//cron "9 0,8,18 * * *" jd_hyj.js, tag=环游记, enabled=true
+
 const $ = new Env('环游记');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -102,7 +104,7 @@ $.shareCodesArr = [];
                                     }
 
                                 }
-                                await $.wait(8000)
+                                await $.wait(9000)
                                 for (var o = 0; o < tmp.length; o++) {
                                     if (tmp[o].status == 1) {
                                         conti = true
@@ -623,7 +625,7 @@ function requireConfig() {
 }
 
 function getUA() {
-    $.UA = `jdapp;android;10.0.6;11;9363537336739353-2636733333439346;network/wifi;model/KB2000;addressid/138121554;aid/9657c795bc73349d;oaid/;osVer/30;appBuild/88852;partner/oppo;eufv/1;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; KB2000 Build/RP1A.201005.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045537 Mobile Safari/537.36`
+    $.UA = `jdapp;iPhone;10.2.0;13.1.2;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone8,1;addressid/2308460611;appBuild/167853;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
 }
 
 function randomString(e) {
