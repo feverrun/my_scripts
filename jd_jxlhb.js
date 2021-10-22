@@ -59,14 +59,16 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     await main();
 
     //submit
-    let submitRes =  await submitCode($.packetIdArr[i].strUserPin, $.UserName)
-    if (submitRes && submitRes.code === 0) {
-      console.log(`互助码已提交！`);
-    } else {
-      console.log(`互助码提交失败！`);
+    if (i == 0) {
+      let submitRes = await submitCode($.packetIdArr[i].strUserPin, $.UserName)
+      if (submitRes && submitRes.code === 0) {
+        console.log(`互助码已提交！`);
+      } else {
+        console.log(`互助码提交失败！`);
+      }
     }
-
   }
+
   //互助
   // console.log(`\n\n自己京东账号助力码：\n${JSON.stringify($.packetIdArr)}\n\n`);
   console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，助力助力池\n`)
