@@ -69,6 +69,12 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
             $.canHelp = true;//能否助力
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             if (!isLoginInfo[$.UserName]) continue
+
+            if (i === 0) {
+                let code = $.temp[0];
+                let user = $.UserName;
+                await submitCode($.canHelp, $.UserName);
+            }
             if ((cookiesArr && cookiesArr.length >= 1) && ($.temp && $.temp.length)) {
                 console.log(`\n先自己账号内部相互邀请助力`);
                 for (let j = 0; j < $.temp.length && $.canHelp; j++) {
@@ -254,6 +260,36 @@ function getAuthorShareCode(url) {
         })
         await $.wait(10000)
         resolve();
+    })
+}
+
+//提交互助码
+function submitCode(code='', user='') {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/carnivalcity?code=${code}&user=${user}`, timeout: 50000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+                        data = JSON.parse(data);
+                        if (data.code == 0) {
+                            console.log('互助码已提交!');
+                        }else {
+                            console.log('互助码提交失败!');
+                        }
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data || {"code":500});
+            }
+        })
+        await $.wait(10000);
+        resolve({"code":500})
     })
 }
 
