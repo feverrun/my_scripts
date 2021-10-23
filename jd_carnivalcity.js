@@ -60,7 +60,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
       message = '';
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
 
-
+      getUA();
       await shareCodesFormat();
       await JD818();
     }
@@ -666,7 +666,7 @@ function taskUrl(body = {}) {
       "Content-Type": "application/x-www-form-urlencoded",
       "Origin": "https://carnivalcity.m.jd.com",
       "Accept-Language": "zh-CN,zh-Hans;q=0.9",
-      "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      "User-Agent": $.UA,
       "Referer": "https://carnivalcity.m.jd.com/",
       "Accept-Encoding": "gzip, deflate, br",
       "Cookie": cookie
@@ -679,6 +679,17 @@ async function showMsg() {
     allMessage += `京东账号${$.index} ${$.nickName || $.UserName}\n本次运行获得：${$.beans}京豆\n${message}活动地址：https://carnivalcity.m.jd.com/${$.index !== cookiesArr.length ? '\n\n' : ''}`
   }
   $.msg($.name, `京东账号${$.index} ${$.nickName || $.UserName}`, `${message}具体详情点击弹窗跳转后即可查看`, {"open-url": "https://carnivalcity.m.jd.com/"});
+}
+
+function getUA(){
+  $.UA = `jdapp;iPhone;10.0.10;14.3;${randomString(40)};network/wifi;model/iPhone12,1;addressid/4199175193;appBuild/167741;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`
+}
+function randomString(e) {
+  e = e || 32;
+  let t = "abcdef0123456789", a = t.length, n = "";
+  for (i = 0; i < e; i++)
+    n += t.charAt(Math.floor(Math.random() * a));
+  return n
 }
 
 function jsonParse(str) {
