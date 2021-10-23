@@ -42,8 +42,7 @@ if ($.isNode()) {
   }
   process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE = process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE ? process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE : 'true';
   await requireConfig();
-  // 下载最新代码
-  // await downFile();
+
   if (!await fs.existsSync(JD_DailyBonusPath)) {
     console.log(`\nJD_DailyBonus.js 文件不存在，停止执行${$.name}\n`);
     await notify.sendNotify($.name, `本次执行${$.name}失败，JD_DailyBonus.js 文件下载异常，详情请查看日志`)
@@ -86,14 +85,6 @@ if ($.isNode()) {
 async function execSign() {
   console.log(`\n开始执行 ${$.name} 签到，请稍等...\n`);
   try {
-    // if (notify.SCKEY || notify.BARK_PUSH || notify.DD_BOT_TOKEN || (notify.TG_BOT_TOKEN && notify.TG_USER_ID) || notify.IGOT_PUSH_KEY || notify.QQ_SKEY) {
-    //   await exec(`${process.execPath} ${JD_DailyBonusPath} >> ${resultPath}`);
-    //   const notifyContent = await fs.readFileSync(resultPath, "utf8");
-    //   console.log(`👇👇👇👇👇👇👇👇👇👇👇LOG记录👇👇👇👇👇👇👇👇👇👇👇\n${notifyContent}\n👆👆👆👆👆👆👆👆👆LOG记录👆👆👆👆👆👆👆👆👆👆👆`);
-    // } else {
-    //   console.log('没有提供通知推送，则打印脚本执行日志')
-    //   await exec(`${process.execPath} ${JD_DailyBonusPath}`, { stdio: "inherit" });
-    // }
     await exec(`${process.execPath} ${JD_DailyBonusPath} >> ${resultPath}`);
     const notifyContent = await fs.readFileSync(resultPath, "utf8");
     console.error(`👇👇👇👇👇👇👇👇👇👇👇签到详情👇👇👇👇👇👇👇👇👇👇👇\n${notifyContent}\n👆👆👆👆👆👆👆👆👆签到详情👆👆👆👆👆👆👆👆👆👆👆`);
@@ -193,12 +184,12 @@ async function deleteFile(path) {
   }
 }
 
-function downloadUrl(url = 'https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js') {
+function downloadUrl(url = 'https://cdn.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js') {
   return new Promise(resolve => {
-    const options = { url, "timeout": 10000 };
+    let options = { url, "timeout": 20000 };
     if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-      const tunnel = require("tunnel");
-      const agent = {
+      let tunnel = require("tunnel");
+      let agent = {
         https: tunnel.httpsOverHttp({
           proxy: {
             host: process.env.TG_PROXY_HOST,
@@ -208,43 +199,12 @@ function downloadUrl(url = 'https://raw.githubusercontent.com/NobyDa/Script/mast
       }
       Object.assign(options, { agent })
     }
-    $.get(options, async (err, resp, data) => {
-      try {
-        if (err) {
-          // console.log(`${JSON.stringify(err)}`)
-          console.log(`检测到您当前网络环境不能访问外网,将使用jsdelivr CDN下载JD_DailyBonus.js文件`);
-          await $.http.get({url: `https://purge.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js`, timeout: 10000}).then((resp) => {
-            if (resp.statusCode === 200) {
-              let { body } = resp;
-              body = JSON.parse(body);
-              if (body['success']) {
-                console.log(`JD_DailyBonus.js文件  CDN刷新成功`)
-              } else {
-                console.log(`JD_DailyBonus.js文件 CDN刷新失败`)
-              }
-            }
-          });
-        } else {
-          $.body = data;
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
+
   })
 }
+
 function requireConfig() {
   return new Promise(resolve => {
-    // const file = 'jd_bean_sign.js';
-    // fs.access(file, fs.constants.W_OK, (err) => {
-    //   resultPath = err ? '/tmp/result.txt' : resultPath;
-    //   JD_DailyBonusPath = err ? '/tmp/JD_DailyBonus.js' : JD_DailyBonusPath;
-    //   outPutUrl = err ? '/tmp/' : outPutUrl;
-    //   NodeSet = err ? '/tmp/CookieSet.json' : NodeSet;
-    //   resolve()
-    // });
     //判断是否是云函数环境。原函数跟目录目录没有可写入权限，文件只能放到根目录下虚拟的/temp/文件夹（具有可写入权限）
     resultPath = process.env.TENCENTCLOUD_RUNENV === 'SCF' ? '/tmp/result.txt' : resultPath;
     JD_DailyBonusPath = process.env.TENCENTCLOUD_RUNENV === 'SCF' ? '/tmp/JD_DailyBonus.js' : JD_DailyBonusPath;
@@ -253,6 +213,7 @@ function requireConfig() {
     resolve()
   })
 }
+
 function timeFormat(time) {
   let date;
   if (time) {
