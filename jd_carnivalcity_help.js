@@ -260,7 +260,7 @@ function getAuthorShareCode(url) {
 function readShareCode() {
     console.log(`开始`)
     return new Promise(async resolve => {
-        $.get({url: ``, 'timeout': 20000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/carnivalcity`, 'timeout': 20000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -293,11 +293,13 @@ function shareCodesFormat() {
             $.newShareCodes = inviteCodes[tempIndex] && inviteCodes[tempIndex].split('@') || [];
             if ($.updatePkActivityIdRes && $.updatePkActivityIdRes.length) $.newShareCodes = [...$.updatePkActivityIdRes, ...$.newShareCodes];
         }
-        // const readShareCodeRes = await readShareCode();
-        // if (readShareCodeRes && readShareCodeRes.code === 200) {
-        //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-        // }
-        // console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+
+        const readShareCodeRes = await readShareCode();
+        if (readShareCodeRes && readShareCodeRes.code === 0) {
+          $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+        }
+        console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+
         resolve();
     })
 }
