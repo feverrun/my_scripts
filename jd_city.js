@@ -30,8 +30,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let inviteCodes = [
     //'HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw',
 ]
-// let firstCode = "";
-// let authorCode = "";
+let firstCode = "";
+let authorCode = "HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw";
 $.shareCodesArr = [];
 
 !(async () => {
@@ -67,9 +67,9 @@ $.shareCodesArr = [];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
         $.index = i + 1;
         let code = []
-        // if (i == 0) {
-        //   firstCode = $.inviteIdCodesArr[0];
-        // }
+        if (i == 0) {
+          firstCode = $.inviteIdCodesArr[0];
+        }
         // for (let s = 0; s < cookiesArr.length && true; s++) {
         //   if(s != $.index - 1 && $.inviteIdCodesArr[s]) code.push($.inviteIdCodesArr[s])
         // }
@@ -404,12 +404,12 @@ function shareCodesFormat() {
     //     $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
     //   }
     // }
-    if($.index == 1) $.newShareCodes = [...inviteCodes,...$.newShareCodes]
+    // if($.index == 1) $.newShareCodes = [...inviteCodes,...$.newShareCodes]
     try{
       const readShareCodeRes = await readShareCode();
       if (readShareCodeRes && readShareCodeRes.code === 0) {
         // 只助力作者和自己第一个账号
-        $.newShareCodes = []; //[authorCode, firstCode];
+        $.newShareCodes = [authorCode, firstCode];
         $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
       }
     } catch (e) {
