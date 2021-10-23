@@ -32,7 +32,7 @@ if ($.isNode()) {
 let inviteCodes = [];
 $.shareCodesArr = [];
 const JD_API_HOST = 'https://api.m.jd.com/api';
-const activeEndTime = '2021/10/02 00:00:00+08:00';//活动结束时间
+const activeEndTime = '2021-11-14 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 !(async () => {
   if (!cookiesArr[0]) {
