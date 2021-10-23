@@ -60,6 +60,12 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
             }
             await shareCodesFormat();
             await JD818();
+
+            if (i === 0) {
+                let code = $.temp[0];
+                let user = $.UserName;
+                await submitCode(code, user);
+            }
             await $.wait(1000)
         }
     }
@@ -70,11 +76,6 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             if (!isLoginInfo[$.UserName]) continue
 
-            if (i === 0) {
-                let code = $.temp[0];
-                let user = $.UserName;
-                await submitCode($.canHelp, $.UserName);
-            }
             if ((cookiesArr && cookiesArr.length >= 1) && ($.temp && $.temp.length)) {
                 console.log(`\n先自己账号内部相互邀请助力`);
                 for (let j = 0; j < $.temp.length && $.canHelp; j++) {
