@@ -34,7 +34,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
     //     await $.wait(1000)
     //     $.updateAuthorCodesRes = await updateAuthorCodes('')
     // }
-    updateAuthorCodesRes = ['bf2a438b-073d-4f95-a62e-cc15b930aa2d'];
+    updateAuthorCodesRes = [''];
     await requireConfig();
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
