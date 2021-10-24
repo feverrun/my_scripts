@@ -63,7 +63,7 @@ let invitelist = [];
             }
             console.log(`\n${$.UserName}去助力${$.oneInvite.user},助力码:${$.oneInvite.inviter_id}`);
             await takePostRequest('invite_friend');
-            await $.wait(1000);
+            await $.wait(3000);
         }
     }
 })()
@@ -116,9 +116,9 @@ async function main() {
     }
     $.taskList = [];
     await takeGetRequest('task_list');
-    await $.wait(1000);
+    await $.wait(3000);
     await doTask();
-    await $.wait(1000);
+    await $.wait(3000);
     console.log(`可以抽奖：${$.drawTime}次`);
     for (let i = 0; i < $.drawTime; i++) {
         console.log(`进行第${i+1}次抽奖`);
@@ -142,7 +142,7 @@ async function doTask(){
             for (let j = 0; j < subList.length; j++) {
                 console.log(`任务：${subList[j].title},去执行`);
                 await takePostRequest('sign');
-                await $.wait(1000);
+                await $.wait(3000);
             }
         }
         if($.oneTask.type === 3){
@@ -151,7 +151,7 @@ async function doTask(){
                 $.subListInfo = subList[j];
                 console.log(`任务：${subList[j].title},去执行`);
                 await takePostRequest('view_meeting');
-                await $.wait(1000);
+                await $.wait(3000);
             }
         }
         if($.oneTask.type === 7){
@@ -160,7 +160,7 @@ async function doTask(){
                 $.subListInfo = subList[j];
                 console.log(`任务：${subList[j].title},去执行`);
                 await takePostRequest('shop_follow');
-                await $.wait(1000);
+                await $.wait(3000);
             }
         }
         if($.oneTask.type === 8){
@@ -169,7 +169,7 @@ async function doTask(){
                 $.subListInfo = subList[j];
                 console.log(`任务：${subList[j].title},去执行`);
                 await takePostRequest('add_product');
-                await $.wait(1000);
+                await $.wait(3000);
             }
         }
         if($.oneTask.type === 5){
@@ -178,7 +178,7 @@ async function doTask(){
                 $.subListInfo = subList[j];
                 console.log(`任务：${subList[j].title},去执行`);
                 await takePostRequest('view_shop');
-                await $.wait(1000);
+                await $.wait(3000);
             }
         }
         if($.oneTask.type === 6){
@@ -187,7 +187,7 @@ async function doTask(){
                 $.subListInfo = subList[j];
                 console.log(`任务：${subList[j].title},去执行`);
                 await takePostRequest('view_product');
-                await $.wait(1000);
+                await $.wait(3000);
             }
         }
     }
