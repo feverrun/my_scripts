@@ -11,8 +11,6 @@ const $ = new Env("东东健康社区");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require('./sendNotify') : "";
 const JD_API_HOST = "https://api.m.jd.com/";
-const inviteCodes = [``]
-const randomCount = $.isNode() ? 20 : 5;
 
 let cookiesArr = [], cookie = "", allMessage = "", message;
 let myInviteCode;
@@ -331,8 +329,8 @@ function readShareCode() {
     console.log(`开始`)
     return new Promise(async resolve => {
         $.get({
-            url: `http://hz.feverrun.top:99/share/get/health?codeNum=${randomCount}`,
-            'timeout': 10000
+            url: `http://hz.feverrun.top:99/share/get/health`,
+            'timeout': 50000
         }, (err, resp, data) => {
             try {
                 if (err) {
@@ -340,7 +338,7 @@ function readShareCode() {
                     console.log(`${$.name} health/read API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
+                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -364,7 +362,6 @@ function submitCode() {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -382,17 +379,9 @@ function submitCode() {
 //格式化助力码
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
         $.newShareCodes = [];
-        if ($.shareCodesArr[$.index - 1]) {
-            $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-        } else {
-            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
-            console.log(`互助开始\n`)
-            const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-            $.newShareCodes = inviteCodes[tempIndex].split('@');
-        }
-        const readShareCodeRes = await readShareCode();
+        console.log(`互助开始\n`);
+        let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
             $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
         }

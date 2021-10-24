@@ -13,7 +13,6 @@ cron "9 6,7,12,18,20 * * *" script-path=jd_pet.js,tag=东东萌宠
 const $ = new Env('东东萌宠');
 
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
-const jdPetShareCodes = $.isNode() ? require('./jdPetShareCodes.js') : '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
 let cookiesArr = [], cookie = '', jdPetShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
@@ -24,7 +23,6 @@ let shareCodes = [''];
 let message = '', subTitle = '', option = {};
 let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 let goodsUrl = '', taskInfoKey = [];
-let randomCount = $.isNode() ? 20 : 5;
 
 $.shareCodesArr = [];
 
@@ -453,16 +451,17 @@ async function showMsg() {
         $.log(`\n${message}\n`);
     }
 }
+
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/pet?codeNum=${randomCount}`, 'timeout': 10000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/pet`, 'timeout': 50000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -486,7 +485,6 @@ function submitCode() {
                     console.log(`${$.name} submitCode API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -502,19 +500,11 @@ function submitCode() {
 }
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
         newShareCodes = [];
-        if ($.shareCodesArr[$.index - 1]) {
-            newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-        } else {
-            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
-            console.log(`互助开始\n`)
-            const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
-            newShareCodes = shareCodes[tempIndex].split('@');
-        }
+        console.log(`互助开始\n`);
         //因好友助力功能下线。故暂时屏蔽
-        try{readShareCodeRes = await readShareCode();}catch(e){}
-        //const readShareCodeRes = null;
+
+        let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
             newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
         }
@@ -522,8 +512,6 @@ function shareCodesFormat() {
         resolve();
     })
 }
-
-//
 
 // 请求
 async function request(function_id, body = {}) {

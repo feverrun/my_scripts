@@ -541,7 +541,7 @@ async function plantBeanIndex() {
 
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/bean`, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/bean`, timeout: 50000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -572,7 +572,6 @@ function submitCode() {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -589,11 +588,10 @@ function submitCode() {
 //格式化助力码
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
         newShareCodes = [];
         console.log(`互助开始\n`)
         //删除内部互助
-        const readShareCodeRes = await readShareCode();
+        let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
             newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
         }

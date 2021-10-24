@@ -12,17 +12,14 @@ cron "5 6,7,12,18,20 * * *" script-path=jd_fruit.js,tag=东东农场
 const $ = new Env('东东农场');
 
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
-const jdFruitShareCodes = $.isNode() ? require('./jdFruitShareCodes.js') : '';
 const retainWater = 100;//保留水滴大于多少g,默认100g;
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
 
 let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
-let shareCodes = [""];
 let message = '', subTitle = '', option = {}, isFruitFinished = false;
 let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 let jdFruitBeanCard = false;//农场使用水滴换豆卡(如果出现限时活动时100g水换20豆,此时比浇水划算,推荐换豆),true表示换豆(不浇水),false表示不换豆(继续浇水),脚本默认是浇水
-let randomCount = $.isNode() ? 20 : 5;
 $.shareCodesArr = [];
 notify = $.isNode() ? require('./sendNotify') : '';
 
@@ -41,8 +38,6 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-
-    //
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -1249,18 +1244,16 @@ function timeFormat(time) {
     return date.getFullYear() + '-' + ((date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1)) + '-' + (date.getDate() >= 10 ? date.getDate() : '0' + date.getDate());
 }
 
-//
-
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/farm?codeNum=${randomCount}`, timeout: 10000,}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/farm`, timeout: 50000,}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -1284,7 +1277,6 @@ function submitCode() {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -1301,21 +1293,14 @@ function submitCode() {
 
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
         newShareCodes = [];
-        if ($.shareCodesArr[$.index - 1]) {
-            newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-        } else {
-            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
-            console.log(`互助开始\n`)
-            const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
-            newShareCodes = shareCodes[tempIndex].split('@');
-        }
-        try{readShareCodeRes = await readShareCode();}catch(e){}
+        console.log(`互助开始\n`)
+
+        let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
-            // newShareCodes = newShareCodes.concat(readShareCodeRes.data || []);
             newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
         }
+
         // console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
         resolve();
     })
