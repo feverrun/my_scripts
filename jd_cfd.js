@@ -20,7 +20,6 @@ let UA, UAInfo = {}
 let nowTimes;
 let codePool;
 
-const randomCount = $.isNode() ? 3 : 3;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -1827,7 +1826,6 @@ function submitCode(myInviteCode, user) {
                     console.log(`${$.name} 提交助力码 API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                         if (data.code === 0) {
                             console.log("🏝互助码已提交🏝");
@@ -1846,11 +1844,12 @@ function submitCode(myInviteCode, user) {
         resolve({"code":500})
     })
 }
+
 function readShareCode() {
     return new Promise(async resolve => {
         $.get({
-            url: `http://hz.feverrun.top:99/share/get/cfd?codeNum=20`,
-            'timeout': 10000
+            url: `http://hz.feverrun.top:99/share/get/cfd`,
+            'timeout': 50000
         }, (err, resp, data) => {
             try {
                 if (err) {
@@ -1859,10 +1858,8 @@ function readShareCode() {
                 } else {
                     if (data) {
                         data = JSON.parse(data);
-                        //console.log(`随机取20个码放到您固定的互助码后面(不影响已有固定互助)`);
+                        // console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`);
                         codePool = data.data;
-                        //shareCodeDic[`${currentIndex}`] = data.data;
-                        //console.log(`${data.data}`);
                     }
                 }
             } catch (e) {
