@@ -10,16 +10,9 @@
 cron "1 7-21/1 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
 */
 
-
 const $ = new Env('京东种豆得豆');
-
-
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
-const jdPlantBeanShareCodes = $.isNode() ? require('./jdPlantBeanShareCodes.js') : '';
-//京东接口地址
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-
-//ios等软件用户直接用NobyDa的jd cookie
 let jdNotify = true;//是否开启静默运行。默认true开启
 let cookiesArr = [], cookie = '', jdPlantBeanShareArr = [], isBox = false, notify, newShareCodes, option, message,subTitle;
 
@@ -32,7 +25,6 @@ let currentRoundId = null;//本期活动id
 let lastRoundId = null;//上期id
 let roundList = [];
 let awardState = '';//上期活动的京豆是否收取
-let randomCount = $.isNode() ? 20 : 5;
 let num;
 
 $.shareCodesArr = [];
@@ -131,6 +123,7 @@ async function jdPlantBean() {
         $.msg($.name, '', `${errMsg}`)
     }
 }
+
 async function doGetReward() {
     console.log(`【上轮京豆】${awardState === '4' ? '采摘中' : awardState === '5' ? '可收获了' : '已领取'}`);
     if (awardState === '4') {
@@ -145,9 +138,6 @@ async function doGetReward() {
             message += `【上期兑换京豆】${$.getReward.data.awardBean}个\n`;
             $.msg($.name, subTitle, message);
             allMessage += `京东账号${$.index} ${$.nickName}\n${message}${$.index !== cookiesArr.length ? '\n\n' : ''}`
-            // if ($.isNode()) {
-            //   await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}`, `京东账号${$.index} ${$.nickName}\n${message}`);
-            // }
         } else {
             console.log(`$.getReward 异常：${JSON.stringify($.getReward)}`)
         }
@@ -161,6 +151,7 @@ async function doGetReward() {
     message += `【本期时间】${roundList[num].dateDesc}\n`;
     message += `【本期成长值】${roundList[num].growth}\n`;
 }
+
 async function doCultureBean() {
     await plantBeanIndex();
     if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0') {
@@ -178,6 +169,7 @@ async function doCultureBean() {
         console.log(`plantBeanIndexResult:${JSON.stringify($.plantBeanIndexResult)}`)
     }
 }
+
 async function stealFriendWater() {
     await stealFriendList();
     if ($.stealFriendList && $.stealFriendList.code === '0') {
@@ -233,6 +225,7 @@ async function doEgg() {
         console.log('查询天天扭蛋的机会失败' + JSON.stringify($.plantEggLotteryRes))
     }
 }
+
 async function doTask() {
     if ($.taskList && $.taskList.length > 0) {
         for (let item of $.taskList) {
@@ -383,6 +376,7 @@ async function doTask() {
         }
     }
 }
+
 function showTaskProcess() {
     return new Promise(async resolve => {
         await plantBeanIndex();
@@ -396,6 +390,7 @@ function showTaskProcess() {
         resolve()
     })
 }
+
 //助力好友
 async function doHelp() {
     for (let plantUuid of newShareCodes) {
@@ -428,6 +423,7 @@ async function doHelp() {
         }
     }
 }
+
 function showMsg() {
     $.log(`\n${message}\n`);
     jdNotify = $.getdata('jdPlantBeanNotify') ? $.getdata('jdPlantBeanNotify') : jdNotify;
@@ -435,6 +431,7 @@ function showMsg() {
         $.msg($.name, subTitle, message);
     }
 }
+
 // ================================================此处是API=================================
 //每轮种豆活动获取结束后,自动收取京豆
 async function getReward() {
@@ -443,6 +440,7 @@ async function getReward() {
     }
     $.getReward = await request('receivedBean', body);
 }
+
 //收取营养液
 async function cultureBean(currentRoundId, nutrientsType) {
     let functionId = arguments.callee.name.toString();
@@ -452,6 +450,7 @@ async function cultureBean(currentRoundId, nutrientsType) {
     }
     $.cultureBeanRes = await request(functionId, body);
 }
+
 //偷营养液大于等于3瓶的好友
 //①查询好友列表
 async function stealFriendList() {
@@ -542,14 +541,14 @@ async function plantBeanIndex() {
 
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/bean?codeNum=${randomCount}`, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/bean`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -592,14 +591,8 @@ function shareCodesFormat() {
     return new Promise(async resolve => {
         // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
         newShareCodes = [];
-        if ($.shareCodesArr[$.index - 1]) {
-            newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-        } else {
-            //由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码
-            console.log(`互助开始\n`)
-            const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
-            newShareCodes = shareCodes[tempIndex].split('@');
-        }
+        console.log(`互助开始\n`)
+        //删除内部互助
         const readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
             newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];

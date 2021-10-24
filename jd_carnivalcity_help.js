@@ -31,7 +31,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
     // $.updateAuthorCodesRes = await updateAuthorCodes('')
     // if (!$.updateAuthorCodesRes) {
     //     $.http.get({url: ''}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
-    //     await $.wait(1000)
+    //     await $.wait(3000)
     //     $.updateAuthorCodesRes = await updateAuthorCodes('')
     // }
     updateAuthorCodesRes = [''];
@@ -57,7 +57,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                 let user = $.UserName;
                 await submitCode(code, user);
             }
-            await $.wait(1000)
+            await $.wait(3000)
         }
     }
     for (let i = 0; i < cookiesArr.length; i++) {

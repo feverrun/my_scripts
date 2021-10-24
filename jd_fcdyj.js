@@ -1,23 +1,8 @@
 /*
 活动入口： 京东极速版-我的-发财大赢家
-已支持IOS双京东账号, Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
-============Quantumultx===============
-[task_local]
-#发财大赢家
-1 0 * * * jd_fcdyj.js, tag=新潮品牌狂欢, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-
-================Loon==============
-[Script]
 cron "1 0 * * *" script-path=jd_fcdyj.js tag=翻翻乐
-
-===============Surge=================
-发财大赢家 = type=cron,cronexp="1 0 * * *",wake-system=1,timeout=3600,script-path=jd_fcdyj.js
-
-============小火箭=========
-发财大赢家 = type=cron,script-path=jd_fcdyj.js, cronexpr="1 0 * * *", timeout=3600, enable=true
-
  */
+
 const $ = new Env('发财大赢家');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
