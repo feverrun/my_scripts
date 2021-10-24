@@ -124,7 +124,7 @@ async function main() {
         console.log(`进行第${i+1}次抽奖`);
         await takePostRequest('draw_prize');
         console.log('\n');
-        await $.wait(1000);
+        await $.wait(3000);
     }
     await takeGetRequest('get_my_prize?type=2&page=1&page_num=10');
 }
