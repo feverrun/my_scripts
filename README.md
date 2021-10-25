@@ -5,8 +5,7 @@
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|gua|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
-## 仓库内置互助池
-## 只收稳定真实互助,号越多越好,账号个数不限
+## 只收稳定真实互助 账号个数不限
 
 ### 长久活动(已接入助力池)
 ```
