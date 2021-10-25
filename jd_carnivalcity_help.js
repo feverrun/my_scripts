@@ -57,6 +57,17 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                 let user = $.UserName;
                 await submitCode(code, user);
             }
+            if (i === 6) {
+                let code = $.temp[1];
+                let user = $.UserName;
+                await submitCode(code, user);
+            }
+            if (i == 12) {
+                let code = $.temp[2];
+                let user = $.UserName;
+                await submitCode(code, user);
+            }
+
             await $.wait(3000)
         }
     }
