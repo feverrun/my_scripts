@@ -22,9 +22,10 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|gua|jddj|getCookie|g
 
 ### 临时活动(已接入助力池)
 ```
-城城分金      (第一次运行优先内部互助后来改成优先池子)
+城城分金      (优先内部第一个账号后助力池)
 惊喜领取88    (优先内部互助)
 手机狂欢城活动 (优先内部互助)
+锦鲤红包      (优先内部互助)
 ```
 
 ## nodejs模块安装
