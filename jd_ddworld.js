@@ -1,7 +1,7 @@
 /*
 
 https://3.cn/102TmB-4K
-cron "17 6 * * *" gua_ddworld.js
+cron "17 6 * * *" jd_ddworld.js
 */
 
 const $ = new Env('东东世界');
