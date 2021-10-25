@@ -31,7 +31,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let inviteCodes = [
 ]
 let firstCode = "";
-let authorCode = "RtGKz7mjRgqqfdWcF4A20Eb9KV2J4QlOKRr9WtUZ3NKw9g4w2A";
+let authorCode = "HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw";
 $.shareCodesArr = [];
 
 !(async () => {
