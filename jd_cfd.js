@@ -67,9 +67,19 @@ $.appId = 10028;
             await shareCodesFormat()
             await cfd();
 
-            let user = $.UserName;
-            let code = $.shareCodes[i];
-            if (i == 0) {
+            if (i === 0) {
+                let user = $.UserName;
+                let code = $.shareCodes[0];
+                await submitCode(code, user);
+            }
+            if (i === 6) {
+                let user = $.UserName;
+                let code = $.shareCodes[1];
+                await submitCode(code, user);
+            }
+            if (i === 12) {
+                let user = $.UserName;
+                let code = $.shareCodes[2];
                 await submitCode(code, user);
             }
 
