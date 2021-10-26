@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*
 '''
-项目名称: JD-Script / jd_hyj
-Author: Curtin
+项目名称: jd_hyj
 功能：环游记
     1、好友助力，默认按顺序助力，每个号6次助力机会
     2、浏览并关注任务
-    3、待完成
+    3、膨胀红包助力
+    4、不建议跑，容易黑号。
 Date: 2021/10/24 下午6:52
-Update: 2021/10/24 下午11:52
+Update: 2021/10/26 下午11:52
 cron: 0 0,23 * 10-11 *
 new Env('环游记');
 '''
 
-
+##
 # UA 可自定义你的, 默认随机生成UA。
 UserAgent = ''
 
@@ -330,7 +330,6 @@ def travel_pk_receiveAward(ck):
 # 膨胀红包助力
 def travel_pk_collectPkExpandScore(ck, inviteId, secretp):
     url = 'https://api.m.jd.com/client.action?functionId=travel_pk_collectPkExpandScore'
-    # body = 'functionId=travel_pk_collectPkExpandScore&body={"ss":"{\"extraData\":{\"log\":\"\",\"sceneid\":\"HYGJZYh5\"},\"secretp\":\"E7CRMI6DTcSTrabHO4r8_5la-GQ\",\"random\":\"35074436\"}","inviteId":"PKASTT018v_53RR4Y9lHfIBub1ACjRWnIaRzT0jeQOc"}&client=wh5&clientVersion=1.0.0'
     body = 'functionId=travel_pk_collectPkExpandScore&body={"ss":"%7B%5C%22extraData%5C%22:%7B%5C%22log%5C%22:%5C%22%5C%22,%5C%22sceneid%5C%22:%5C%22HYGJZYh5%5C%22%7D,%5C%22secretp%5C%22:%5C%22' + secretp + '%5C%22,%5C%22random%5C%22:%5C%22%5C%22%7D","inviteId":"' + inviteId + '"}&client=wh5&clientVersion=1.0.0'
     resp = requests.post(url=url, headers=buildHeaders(ck), data=body, timeout=10).json()
     bizCode = resp['data']['bizCode']
@@ -341,16 +340,32 @@ def travel_pk_collectPkExpandScore(ck, inviteId, secretp):
     else:
         return False
 
+
+def travel_pk_getExpandDetail(ck):
+    try:
+        url = 'https://api.m.jd.com/client.action?functionId=travel_pk_getExpandDetail'
+        body = 'functionId=travel_pk_getExpandDetail&body={}&client=wh5&clientVersion=1.0.0'
+        resp = requests.post(url=url, headers=buildHeaders(ck), data=body, timeout=10).json()
+        inviteId = resp['data']['result']['inviteId']
+        userAwardExpand = resp['data']['result']['pkExpandDetailResult']['userAwardExpand']
+        return True, inviteId, userAwardExpand
+    except:
+        return False, False, None
+
+
 def start():
     try:
         scriptName = '### 环游记 ###'
         print(scriptName)
         cookiesList, userNameList, pinNameList = getCk.iscookie()
-        # for ck in cookiesList:
-        #     ss = 'PKASTT018v_53RR4Y9lHfIBub1ACjRWnIaRzT0jeQOc'
-        #     if travel_pk_collectPkExpandScore(ck, ss, getHomeData(ck)):
-        #         travel_pk_receiveAward(ck)
-        # exit(3)
+        for ck,master in zip(cookiesList,userNameList):
+            x,y,z = travel_pk_getExpandDetail(ck)
+            if x:
+                print(f"☺️{[master]}获得膨胀红包助力机会：{z} 元")
+                for i in cookiesList:
+                    if travel_pk_collectPkExpandScore(i, y, getHomeData(buildHeaders(ck))):
+                        travel_pk_receiveAward(ck)
+        sys.exit(2)
         for c,masterName in zip(cookiesList,userNameList):
             print(f"\n### ☺️开始助力 {masterName}")
             sharecode = getinviteId(c)
@@ -362,8 +377,10 @@ def start():
                     print(f"\t└👌用户【{masterName}】助力任务已完成。")
                     break
             task(c)
+
     except Exception as e:
         print(e)
 
 if __name__ == '__main__':
     start()
+
