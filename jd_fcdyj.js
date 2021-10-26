@@ -5,15 +5,13 @@
  * 助力逻辑：优先助力互助码环境变量，中午10点之后再给我助力
  * /
 https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
-
 cron "1 6-22/3 * * *" script-path=jd_fcdyj.js tag=发财大赢家助力
  */
 
 const $ = new Env('发财大赢家助力');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const dyjCode = $.isNode() ? (process.env.dyjCode ? process.env.dyjCode : null) : null //邀请码变量，不支持多账号，格式：redEnvelopeId@markedPin
-let cookiesArr = [],
-    cookie = '';
+let cookiesArr = [], cookie = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -31,7 +29,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
         });
         return;
     }
-    console.log(`\n发财大赢家助力逻辑：优先助力填写的互助码环境变量，中午10点之后再给我助力\n`)
+    console.log(`\n发财大赢家助力逻辑：优先助力填写的互助码环境变量,格式:redEnvelopeId@markedPin，中午10点之后再给我助力\n`)
     message = ''
     $.helptype = 1
     $.needhelp = true
@@ -207,7 +205,7 @@ function getinfo() {
                     console.log(`${$.name} API请求失败，请检查网路重试`);
                 } else {
                     data = JSON.parse(data);
-                    console.log(data.data.state)
+                    if(data.data.state !=null) console.log(data.data.state)
                     if (data.data.state !== 0) {
                         if (data.success && data.data) {
                             if (data.data.state === 3) {
