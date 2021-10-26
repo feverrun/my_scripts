@@ -56,15 +56,15 @@ const JD_API_HOST = `https://api.m.jd.com`;
             dyjStr = dyjCode.split("@")
             if (dyjStr[0]) {
                 $.rid = dyjStr[0]
-                $.inviterId = dyjStr[1]
+                $.inviter = dyjStr[1]
                 $.canRun = true
                 console.log(`\n检测到您已填助力码${$.rid}，开始助力\n`)
-                await help($.rid, $.inviterId, 1)
+                await help($.rid, $.inviter, 1)
                 if (!$.canRun) {
                     continue;
                 }
                 await $.wait(3000)
-                await help($.rid, $.inviterId, 2)
+                await help($.rid, $.inviter, 2)
             }
         }
     }
@@ -78,12 +78,12 @@ const JD_API_HOST = `https://api.m.jd.com`;
                 console.log(`\n${$.UserName} 剩余助力去助力作者\n`)
                 for (let j = 0; j < $.authorCode.length; j++) {
                     let item = $.authorCode[j];
-                    await help(item.redEnvelopeId, item.inviterId, 1)
+                    await help(item.redEnvelopeId, item.inviter, 1)
                     if (!$.canRun) {
                         break;
                     }
                     await $.wait(3000)
-                    await help(item.redEnvelopeId, item.inviterId, 2)
+                    await help(item.redEnvelopeId, item.inviter, 2)
                 }
             }
         }
@@ -166,7 +166,7 @@ function open() {
 
 function getid() {
     return new Promise(async (resolve) => {
-        let options = taskUrl("redEnvelopeInteractHome", `{"linkId":"${$.linkid}","redEnvelopeId":"","inviterId":"","helpType":""}`)
+        let options = taskUrl("redEnvelopeInteractHome", `{"linkId":"${$.linkid}","redEnvelopeId":"","inviter":"","helpType":""}`)
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {
@@ -197,7 +197,7 @@ function getid() {
 
 function getinfo() {
     return new Promise(async (resolve) => {
-        let options = taskUrl("redEnvelopeInteractHome", `{"linkId":"${$.linkid}","redEnvelopeId":"","inviterId":"","helpType":""}`)
+        let options = taskUrl("redEnvelopeInteractHome", `{"linkId":"${$.linkid}","redEnvelopeId":"","inviter":"","helpType":""}`)
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {
@@ -263,9 +263,9 @@ function getrewardIndex() {
     });
 }
 
-function help(rid, inviterId, type) {
+function help(rid, inviter, type) {
     return new Promise(async (resolve) => {
-        let options = taskUrl("openRedEnvelopeInteract", `{"linkId":"${$.linkid}","redEnvelopeId":"${rid}","inviterId":"${inviterId}","helpType":"${type}"}`)
+        let options = taskUrl("openRedEnvelopeInteract", `{"linkId":"${$.linkid}","redEnvelopeId":"${rid}","inviter":"${inviter}","helpType":"${type}"}`)
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {
@@ -330,7 +330,7 @@ function taskUrl(function_id, body) {
             "Connection": "keep-alive",
             "Content-Type": "application/x-www-form-urlencoded",
             "Host": "api.m.jd.com",
-            "Referer": "https://618redpacket.jd.com/?activityId=DA4SkG7NXupA9sksI00L0g&channel=wjicon&sid=0a1ec8fa2455796af69028f8410996aw&un_area=1_2803_2829_0",
+            "Referer": `https://618redpacket.jd.com/?activityId=${$.linkId}&channel=wjicon&sid=0a1ec8fa2455796af69028f8410996aw&un_area=1_2803_2829_0`,
             "Cookie": cookie,
             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdltapp;android;3.5.6;9;8363532363230343238303836333-43D2468336563316936636265356;network/wifi;model/MI 8;addressid/2688971613;aid/059b2009dc5afb88;oaid/665d225a3f96764;osVer/28;appBuild/1656;psn/gB6yf l3bIcXHm 4uTHuFZIigUClYKza5OsTPc6vgTc=|932;psq/11;adk/;ads/;pap/JA2020_3112531|3.5.6|ANDROID 9;osv/9;pv/712.12;jdv/0|direct|-|none|-|1613884468974|1613884552;ref/HomeFragment;partner/xiaomi;apprpd/Home_Main;eufv/1;Mozilla/5.0 (Linux; Android 9; MI 8 Build/PKQ1-wesley_iui-19.08.25; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045513 Mobile Safari/537.36"),
         }
