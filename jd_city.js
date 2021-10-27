@@ -31,7 +31,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let inviteCodes = [
 ]
 let firstCode = "";
-let authorCode = "HY3tzu6tSQKjfIL1V5h_mgHZD4Rr6_PVtHAXKNnsEZ5fVw";
+let authorCode = "";
 $.shareCodesArr = [];
 
 !(async () => {
@@ -91,9 +91,9 @@ $.shareCodesArr = [];
       await getUA()
       await shareCodesFormat()
 
-      let inviteId = $.inviteIdCodesArr[i];
-      let user = $.UserName;
       if (i == 0) {
+        let inviteId = $.inviteIdCodesArr[0];
+        let user = $.UserName;
         let submitRes = await submitCode(inviteId, user)
         if (submitRes && submitRes.code === 0) {
           console.log(`互助码已提交！`);
@@ -425,7 +425,7 @@ function shareCodesFormat() {
       const readShareCodeRes = await readShareCode();
       if (readShareCodeRes && readShareCodeRes.code === 0) {
         // 只助力作者和自己第一个账号
-        $.newShareCodes = [firstCode, authorCode];
+        $.newShareCodes = []; //[firstCode, authorCode];
         $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
       }
     } catch (e) {
