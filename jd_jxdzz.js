@@ -48,7 +48,7 @@ if ($.isNode()) {
         message = ''
         $.isLogin = true;
         $.index = i + 1;
-        console.log(`\n******开始【京东账号${$.index}】${$.$.UserName || $.UserName}*********\n`);
+        console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
 
         await gethelpcode()
         await getlist()
