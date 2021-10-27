@@ -58,10 +58,20 @@ if ($.isNode()) {
         }
         await $.wait(3000);
     }
-    if(new Date().getHours() !== 9 && new Date().getHours() !== 10){
-        console.log('\n脚本早上9点到10点直接执行，才会执行账号内互助');
-        return ;
+
+    //时间限制
+    // if(new Date().getHours() !== 9 && new Date().getHours() !== 10){
+    //     console.log('\n脚本早上9点到10点直接执行，才会执行账号内互助');
+    //     return ;
+    // }
+
+    await getAuthorShareCode();
+    if($.authorCode){
+        //优先内部助力剩余机会给作者助力
+        $.inviteCodeList.push($.authorCode);
     }
+
+    // console.log($.authorCode);
     console.log('\n##################开始账号内互助#################\n');
     for (let j = 0; j < cookiesArr.length; j++) {
         $.cookie = cookiesArr[j];
@@ -529,6 +539,29 @@ async function requestAlgo() {
                     } else {
                         console.log(`京东服务器返回空数据`)
                     }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
+function getAuthorShareCode() {
+    return new Promise(resolve => {
+        $.get({
+            url: "http://hz.feverrun.top:99/share/author/jxmc",
+            headers: {
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+            }
+        }, async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`);
+                    console.log(`${$.name} API请求失败，请检查网路重试`);
+                } else {
+                    $.authorCode = JSON.parse(data);
                 }
             } catch (e) {
                 $.logErr(e, resp)
