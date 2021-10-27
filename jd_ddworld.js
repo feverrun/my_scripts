@@ -25,7 +25,7 @@ message = ""
 let UA = ''
 $.hotFlag = false
 $.outFlag = false
-$.assistToken = 'T0225KkcRkoc91DVIx2hkfALcgCjRVmIaV5kRrbA'
+$.assistToken = 'T018v_V7RhwQ_VzXIhub1ACjRVmIaV5kRrbA'
 $.assistInviter = 'GQLsVI3Vio0hkBTzp9Tjezy4hGNih04Xlh7PJi9fxTM'
 $.temp = [];
 
