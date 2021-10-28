@@ -11,11 +11,13 @@ const $ = new Env('推推赚大钱');
 // const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random() * 4 + 10)}.${Math.ceil(Math.random() * 4)};${randomString(40)}`
-var status = 0
+$.status = 0
 
 let cookiesArr = [], cookie = '', message;
 $.tytpacketId = '';
-if (process.env.tytpacketId) {
+if (!process.env.tytpacketId) {
+    console.log("需设置推一推环境变量tytpacketId,可抓包获取\n");
+} else {
     $.tytpacketId = process.env.tytpacketId;
 }
 
@@ -38,7 +40,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         return;
     }
 
-    for (let i = cookiesArr.length - 1; i > 0; i--) {
+    for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -47,7 +49,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
             message = '';
             console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
 
-            if (status == 1) {
+            if ($.status == 1) {
                 break
             }
             await tythelp()
@@ -56,7 +58,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     }
     //剩余机会帮助
     $.tytpacketId = '6720f278e0c549e194ac9bc6969a599b-MTg4NjI5ODgwMjFfcA!!';
-    for (let i = 0; i < cookiesArr.length - 1; i++) {
+    for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -65,7 +67,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
             message = '';
             // console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
 
-            if (status == 1) {
+            if ($.status == 1) {
                 break
             }
             await tythelp()
@@ -108,7 +110,7 @@ function tythelp() {
                     console.log("帮砍：" + data.data.amount)
 
                 } else if (data.msg.indexOf("完成") != -1) {
-                    status = 1
+                    $.status = 1
                 }
                 console.log(data.msg)
             } catch (e) {
