@@ -39,6 +39,7 @@ if ($.isNode()) {
             console.log(JSON.stringify(e));
         }
     }
+    //优先内部助力，剩余机会助力作者
     cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
     for (let i = 0; i < cookiesArr.length ; i++) {
         $.canHelp = true;
@@ -53,6 +54,14 @@ if ($.isNode()) {
             await  takeGetRequest('necklacecard_assist');
             await $.wait(3000);
         }
+    }
+    for (let i = 0; i < cookiesArr.length; i++) {
+        $.canHelp = true
+        $.cookie = cookiesArr[i];
+        $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+        $.oneInvite = {groupId: 6613598, user: '18862988021_p', max: false};
+        await takeGetRequest('necklacecard_assist');
+        await $.wait(3000);
     }
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();})
 
