@@ -27,9 +27,9 @@ const JD_BASE_API = `https://draw.jdfcloud.com//pet`;
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 //下面给出好友邀请助力的示例填写规则
-let invite_pins = [''];
+let invite_pins = ['18862988021_p'];
 //下面给出好友赛跑助力的示例填写规则
-let run_pins = [''];
+let run_pins = ['18862988021_p'];
 //friendsArr内置太多会导致IOS端部分软件重启,可PR过来(此处目的:帮别人助力可得30g狗粮)
 let friendsArr = ['18862988021_p']
 
@@ -92,11 +92,12 @@ async function main() {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    const readTokenRes = await readToken();
+    let readTokenRes = await readToken();
+    console.log(readTokenRes);
     if (readTokenRes && readTokenRes.code === 0 && readTokenRes.data) {
-        $.LKYLToken = readTokenRes.data.lkyltoken || ($.isNode() ? (process.env.JOY_RUN_TOKEN ? process.env.JOY_RUN_TOKEN : jdJoyRunToken) : ($.getdata('jdJoyRunToken') || jdJoyRunToken));
+        $.LKYLToken = readTokenRes.data || ($.isNode() ? (process.env.JOY_RUN_TOKEN ? process.env.JOY_RUN_TOKEN : jdJoyRunToken) : ($.getdata('jdJoyRunToken') || jdJoyRunToken));
     } else {
-        // $.LKYLToken = $.isNode() ? (process.env.JOY_RUN_TOKEN ? process.env.JOY_RUN_TOKEN : jdJoyRunToken) : ($.getdata('jdJoyRunToken') || jdJoyRunToken);
+        $.LKYLToken = $.isNode() ? (process.env.JOY_RUN_TOKEN ? process.env.JOY_RUN_TOKEN : jdJoyRunToken) : ($.getdata('jdJoyRunToken') || jdJoyRunToken);
     }
     console.log(`打印token：${$.LKYLToken ? $.LKYLToken : '暂无token'}\n`)
     if (!$.LKYLToken) {
