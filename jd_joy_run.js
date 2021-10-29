@@ -12,7 +12,7 @@ token获取途径：
 
 docker 设置环境变量 JOY_RUN_HELP_MYSELF 为true,则开启账号内部互助.默认关闭(即给脚本作者内置的助力).
 
-cron "15 10 * * *" script-path=jd_joy_run.js, tag=宠汪汪邀请助力与赛跑助力
+cron "15 10,14,19 * * *" script-path=jd_joy_run.js, tag=宠汪汪邀请助力与赛跑助力
 */
 const $ = new Env('宠汪汪赛跑');
 const zooFaker = require('./utils/JDJRValidator_Pure');
