@@ -170,7 +170,7 @@ async function getToken() {
             $.msg($.name, '更新Token: 成功🎉', ``);
             console.log(`\nToken，${LKYLToken}\n`)
             $.http.post({
-                url: `http://hz.feverrun.top:99/share/submit/token?flag=joy`,
+                url: `http://hz.feverrun.top:99/share/submit/token`,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     "activity_name": "joy",
@@ -217,7 +217,7 @@ async function getToken() {
 function readToken() {
     return new Promise(resolve => {
         $.get({
-            url: ``,
+            url: `http://hz.feverrun.top:99/share/get/token?flag=joy`,
             headers: {
                 'Host': 'jdsign.cf',
                 'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88'
