@@ -170,7 +170,7 @@ async function getToken() {
             $.msg($.name, '更新Token: 成功🎉', ``);
             console.log(`\nToken，${LKYLToken}\n`)
             $.http.post({
-                url: `http://share.turinglabs.net/api/v3/create/sharecode/`,
+                url: `http://hz.feverrun.top:99/share/submit/token?flag=joy`,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     "activity_name": "joy",
@@ -231,7 +231,7 @@ function readToken() {
                 } else {
                     if (data) {
                         // if ($.isNode() && !run_pins[0].includes("被折叠的记忆33")) resolve(null);
-                        console.log(`\n\n搬运我脚本修改我内置互助码的，请不要盗取我服务器token\n\n\n`)
+                        // console.log(`\n\n搬运我脚本修改我内置互助码的，请不要盗取我服务器token\n\n\n`)
                         data = JSON.parse(data);
                     }
                 }
@@ -342,6 +342,7 @@ function enterRoom(invitePin) {
         });
     })
 }
+
 function helpInviteFriend(friendPin) {
     return new Promise((resolve) => {
         let lkt = new Date().getTime()
