@@ -109,7 +109,7 @@ async function run() {
     // 倒垃圾
     await RubbishOper()
     // 导游
-    await Guide()
+    // await Guide()
     // 撸珍珠
     await Pearl()
     // 牛牛任务
