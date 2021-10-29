@@ -93,8 +93,8 @@ async function main() {
         return;
     }
     const readTokenRes = await readToken();
-    if (readTokenRes && readTokenRes.code === 200) {
-        $.LKYLToken = readTokenRes.data[0] || ($.isNode() ? (process.env.JOY_RUN_TOKEN ? process.env.JOY_RUN_TOKEN : jdJoyRunToken) : ($.getdata('jdJoyRunToken') || jdJoyRunToken));
+    if (readTokenRes && readTokenRes.code === 0 && readTokenRes.data) {
+        $.LKYLToken = readTokenRes.data.lkyltoken || ($.isNode() ? (process.env.JOY_RUN_TOKEN ? process.env.JOY_RUN_TOKEN : jdJoyRunToken) : ($.getdata('jdJoyRunToken') || jdJoyRunToken));
     } else {
         $.LKYLToken = $.isNode() ? (process.env.JOY_RUN_TOKEN ? process.env.JOY_RUN_TOKEN : jdJoyRunToken) : ($.getdata('jdJoyRunToken') || jdJoyRunToken);
     }
@@ -173,8 +173,8 @@ async function getToken() {
                 url: `http://hz.feverrun.top:99/share/submit/token`,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    "activity_name": "joy",
-                    "share_code": LKYLToken,
+                    "name": "joy",
+                    "lkyltoken": LKYLToken,
                 }),
                 timeout: 30000
             }).then((resp) => {
@@ -195,18 +195,8 @@ async function getToken() {
     } else if (isURL(url, /^https:\/\/draw\.jdfcloud\.com(\/mirror)?\/\/api\/user\/user\/detail\?openId=/)){
         if ($request && $request.method !== 'OPTIONS') {
             const LKYLToken = $request.headers['LKYLToken'];
-            //if ($.getdata('jdJoyRunToken')) {
-            //if ($.getdata('jdJoyRunToken') !== LKYLToken) {
-
-            //}
-            //$.msg($.name, '更新获取Token: 成功🎉', `\n${LKYLToken}\n`);
-            //} else {
-            //$.msg($.name, '获取Token: 成功🎉', `\n${LKYLToken}\n`);
-            //}
             $.setdata(LKYLToken, 'jdJoyRunToken');
-
             $.msg($.name, '获取Token: 成功🎉', ``);
-
             // $.done({ body: JSON.stringify(body) })
             $.done({ url: url })
         }
