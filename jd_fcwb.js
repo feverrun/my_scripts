@@ -76,7 +76,7 @@ if ($.isNode()) {
             })
             console.log(`共${fcwbinviteCodeArr.length}个邀请码`)
             //先内部如果有多余机会帮我最后助力
-            fcwbinviteCodeArr.push({fcwbinviter:"fJzA5RAXoXQTaWV_OS6-qQ",fcwbinviteCode:"451cdd83bb5c4d58b4be5de1028b9f6867091635576149136"});
+            // fcwbinviteCodeArr.push({fcwbinviter:"fJzA5RAXoXQTaWV_OS6-qQ",fcwbinviteCode:"451cdd83bb5c4d58b4be5de1028b9f6867091635576149136"});
             for (let k = 0; k < fcwbinviteCodeArr.length; k++) {
                 $.message = ""
                 fcwbinviteCode = fcwbinviteCodeArr[k]
