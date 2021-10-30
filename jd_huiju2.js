@@ -34,7 +34,7 @@ if ($.isNode()) {
     //     ]
     // }
     // console.log(authorCodeList)
-    let authorCode = '';
+    let authorCode = '0aa5b782ae5c4d36ae09767e95256a80';
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]

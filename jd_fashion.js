@@ -30,7 +30,7 @@ if ($.isNode()) {
     }
     // authorCodeList = await getAuthorCodeList('')
 
-    let authorCode = '';
+    let authorCode = '4b19479f76f7478d926a7aac59b26183';
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
