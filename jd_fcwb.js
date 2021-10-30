@@ -86,10 +86,7 @@ if ($.isNode()) {
         if (i === 0) {
             //仅限制第一个账号玩游戏允许自动挖宝
             await home()
-            await BROWSE_CHANNEL(1)
-            await BROWSE_CHANNEL(2)
-            await BROWSE_CHANNEL(3)
-            await BROWSE_CHANNEL(4)
+            await apTaskDetail(4);
 
             let flag = 0;
             switch (curRound) {
@@ -146,7 +143,7 @@ function wb(round,rowIdx,colIdx) {
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88",
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             }
         }
         $.get(nm, async (err, resp, data) => {
@@ -202,9 +199,10 @@ function home() {
     })
 }
 
-function BROWSE_CHANNEL(taskId) {
+//任务
+function apTaskDetail(channel) {
     return new Promise((resolve) => {
-        let body = {"linkId":"SS55rTBOHtnLCm3n9UMk7Q","taskType":"BROWSE_CHANNEL","taskId":357,"channel":`${taskId}`}
+        let body = {"linkId":"SS55rTBOHtnLCm3n9UMk7Q","taskType":"BROWSE_CHANNEL","taskId":357,"channel":`${channel}`}
         $.get(taskurl('apTaskDetail',body), async (err, resp, data) => {
             try {
                 if (err) {
@@ -213,8 +211,20 @@ function BROWSE_CHANNEL(taskId) {
                 } else {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
-                        if(data.success==true){
-                            console.log('任务：'+data.errMsg)
+                        if(data.success==true && data.data.taskItemList){
+                            if (Array.isArray(data.data.taskItemList)) {
+                                for (let i=0; i<data.data.taskItemList.length; i++) {
+                                    let itemId = data.data.taskItemList[i].itemId;
+                                    let itemName = data.data.taskItemList[i].itemName;
+                                    console.log(`浏览任务开始\n${itemName}`);
+                                    apDoTask();
+                                    //浏览任务15秒一次懂的自己修改吧
+                                    console.log('浏览中');
+                                    console.log('浏览失败请手动操作');
+                                }
+                            }
+
+                            // console.log('任务：'+data.errMsg)
                         }else if(data.success==false){
                             console.log('任务已经完成')}
                     }
@@ -235,7 +245,7 @@ function help() {
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             }
         }
         $.get(nm, async (err, resp, data) => {
@@ -285,13 +295,48 @@ function jsonParse(str) {
     }
 }
 
-function taskurl(functionId,body) {
+function apDoTask(itemId) {
+    return new Promise(resolve => {
+        const body = {"channel":"4","checkVersion":true,"itemId":itemId,"linkId":"SS55rTBOHtnLCm3n9UMk7Q","taskId":357,"taskType":"BROWSE_CHANNEL"};
+        $.post(postUrl('apDoTask', body), (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        // console.log(data)
+                        data = JSON.parse(data);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
+
+function postUrl(functionId,body) {
     return {
-        url: `${JD_API_HOST}/?functionId=${functionId}&body=${escape(JSON.stringify(body))}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+        //需要签名验证不可用
+        url: `https://api.m.jd.com/api?functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}&t=1635591336967&appid=lite-android&=3.7.2&build=1958&client=android&partner=oppo&eid=&sign=`,
         headers: {
             "Cookie": cookie,
             "Origin": "https://api.m.jd.com",
-            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88",
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        }
+    }
+}
+
+function taskurl(functionId,body) {
+    return {
+        url: `${JD_API_HOST}/?functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+        headers: {
+            "Cookie": cookie,
+            "Origin": "https://api.m.jd.com",
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         }
     }
 }
