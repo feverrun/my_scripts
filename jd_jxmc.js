@@ -23,7 +23,7 @@ let cookiesArr = [];
 let UA, token, UAInfo = {}
 $.appId = 10028;
 $.helpCkList = [];
-$.authorCode = '';
+$.authorCode = {};
 let cardinfo = {
     "16": "小黄鸡",
     "17": "辣子鸡",
