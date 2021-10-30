@@ -601,7 +601,7 @@ function qywxamNotify(text, desp) {
                 articles: [
                   {
                     title: `${text}`,
-                    thumb_media_id: `${QYWX_AM_AY[4]}`,
+                    thumb_media_id: '',
                     author: `智能助手`,
                     content_source_url: ``,
                     content: `${html}`,
