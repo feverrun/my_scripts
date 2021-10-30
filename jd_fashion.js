@@ -28,12 +28,10 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    authorCodeList = await getAuthorCodeList('')
-    if(authorCodeList === '404: Not Found'){
-        authorCodeList = [
-            'ee',
-        ]
-    }
+    // authorCodeList = await getAuthorCodeList('')
+
+    let authorCode = '';
+
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
@@ -45,13 +43,13 @@ if ($.isNode()) {
             $.nickName = '';
             console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
             // authorCodeList = [
-            //     'b3b3f59c9015493a9d8e2f1d5d9b92ea',
+            //     '',
             // ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = ownCode ? ownCode : authorCode;//authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.activityId = '1ad06f0cb93e4928a894e3b984c2fa4b'
             $.activityShopId = '59809'

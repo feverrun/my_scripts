@@ -40,16 +40,16 @@ if ($.isNode()) {
             $.isLogin = true;
             $.nickName = '';
             console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
-            authorCodeList = [
-                'ee'
-            ]
+            // authorCodeList = []
+            let authorCode = '';
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             $.appkey = "51B59BB805903DA4CE513D29EC448375"
             $.userId = "10299171"
             $.actId = "uniteOpenCard_788"
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            // authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = ownCode ? ownCode : authorCode
             console.log('去助力 -> '+$.authorCode+'\n');
             await rush();
             if ($.bean > 0) {

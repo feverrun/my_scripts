@@ -35,12 +35,11 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
         return;
     }
 
-    authorCodeList = await getAuthorCodeList('')
-    if(authorCodeList === '404: Not Found'){
-        authorCodeList = [
-            'ee',
-        ]
-    }
+    // authorCodeList = await getAuthorCodeList('')
+    // if(authorCodeList === '404: Not Found'){
+    //     authorCodeList = []
+    // }
+    let authorCode = '';
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -56,8 +55,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-            $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
+            $.authorCode = ownCode ? ownCode : authorCode;//authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`
             $.randomCode = random(1000000, 9999999)
             $.activityId = '946hf38m5d4vqjgs5ctfuickj65s69l528'
