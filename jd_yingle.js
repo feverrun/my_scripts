@@ -41,6 +41,7 @@ if ($.isNode()) {
             $.nickName = '';
             console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
             authorCodeList = [
+                'ee'
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);

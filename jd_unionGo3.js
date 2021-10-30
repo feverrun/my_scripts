@@ -38,7 +38,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
     authorCodeList = await getAuthorCodeList('')
     if(authorCodeList === '404: Not Found'){
         authorCodeList = [
-            '',
+            'ee',
         ]
     }
 

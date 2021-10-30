@@ -31,7 +31,7 @@ if ($.isNode()) {
     authorCodeList = await getAuthorCodeList('')
     if(authorCodeList === '404: Not Found'){
         authorCodeList = [
-            '',
+            'ee',
         ]
     }
 
