@@ -6,7 +6,6 @@
  * @param author 作者仓库等信息  例：`本脚本免费使用 By：xxx`
  * @returns {Promise<unknown>}
  */
- 
 const querystring = require("querystring");
 const fs = require('fs');
 const $ = new Env();
@@ -602,7 +601,7 @@ function qywxamNotify(text, desp) {
                 articles: [
                   {
                     title: `${text}`,
-                    thumb_media_id: '',
+                    thumb_media_id: `${QYWX_AM_AY[4]}`,
                     author: `智能助手`,
                     content_source_url: ``,
                     content: `${html}`,
@@ -864,7 +863,7 @@ function Env(t, e) {
       {
         this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
         const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile),
-          s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e);
+            s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e);
         if (!s && !i) return {};
         {
           const i = s ? t : e;
@@ -881,7 +880,7 @@ function Env(t, e) {
       if (this.isNode()) {
         this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
         const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile),
-          s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e), r = JSON.stringify(this.data);
+            s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e), r = JSON.stringify(this.data);
         s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r)
       }
     }
