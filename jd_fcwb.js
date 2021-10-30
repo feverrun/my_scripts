@@ -18,8 +18,6 @@ let fcwbinviterArr= []
 let fcwbinviteCodes=''
 let fcwbinviters=''
 
-$.linkId = 'SS55rTBOHtnLCm3n9UMk7Q';
-
 if (process.env.fcwbinviteCode) {
     fcwbinviteCode = process.env.fcwbinviteCode;
 }
@@ -117,7 +115,7 @@ function wb(round,rowIdx,colIdx) {
         //let body = {"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}
 
         const nm= {
-            url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":${$.linkId}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+            url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
@@ -150,7 +148,7 @@ function wb(round,rowIdx,colIdx) {
 }
 function home() {
     return new Promise((resolve) => {
-        let body = {"linkId":$.linkId}
+        let body = {"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}
         $.get(taskurl('happyDigHome',body), async (err, resp, data) => {
             //console.log(data)
             try {
@@ -180,7 +178,7 @@ function home() {
 
 function BROWSE_CHANNEL(taskId) {
     return new Promise((resolve) => {
-        let body = {"linkId":$.linkId,"taskType":"BROWSE_CHANNEL","taskId":357,"channel":`${taskId}`}
+        let body = {"linkId":"SS55rTBOHtnLCm3n9UMk7Q","taskType":"BROWSE_CHANNEL","taskId":357,"channel":`${taskId}`}
         $.get(taskurl('apTaskDetail',body), async (err, resp, data) => {
             try {
                 if (err) {
@@ -207,7 +205,7 @@ function BROWSE_CHANNEL(taskId) {
 function help() {
     return new Promise((resolve) => {
         const nm = {
-            url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":${$.linkId},"inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+            url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":"SS55rTBOHtnLCm3n9UMk7Q","inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
