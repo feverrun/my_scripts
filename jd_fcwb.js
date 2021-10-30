@@ -18,6 +18,8 @@ let fcwbinviterArr= []
 let fcwbinviteCodes=''
 let fcwbinviters=''
 
+$.curRound = ''
+
 if (process.env.fcwbinviteCode) {
     fcwbinviteCode = process.env.fcwbinviteCode;
 }
@@ -77,7 +79,7 @@ if ($.isNode()) {
             })
             console.log(`共${fcwbinviteCodeArr.length}个邀请码`)
             //先内部如果有多余机会帮我最后助力
-            // fcwbinviteCodeArr.push({fcwbinviter:"fJzA5RAXoXQTaWV_OS6-qQ",fcwbinviteCode:"451cdd83bb5c4d58b4be5de1028b9f6867091635576149136"});
+            fcwbinviteCodeArr.push({fcwbinviter:"fJzA5RAXoXQTaWV_OS6-qQ",fcwbinviteCode:"451cdd83bb5c4d58b4be5de1028b9f6867091635576149136"});
             for (let k = 0; k < fcwbinviteCodeArr.length; k++) {
                 $.message = ""
                 fcwbinviteCode = fcwbinviteCodeArr[k]
@@ -96,8 +98,8 @@ if ($.isNode()) {
         for (let i = 0; i < 5; i++) {
             console.log(`挖宝${i}次`)
             await $.wait(3000)
-            await wb(curRound,i,i)
-            console.log('第'+curRound+'关')
+            await wb($.curRound,i,i)
+            console.log('第'+$.curRound+'关')
 
         }
     }
@@ -109,13 +111,12 @@ if ($.isNode()) {
     .finally(() => {
         $.done();
     })
-function wb(round,rowIdx,colIdx) {
 
+function wb(round,rowIdx,colIdx) {
     return new Promise((resolve) => {
         //let body = {"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}
-
         const nm= {
-            url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+            url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
@@ -159,10 +160,10 @@ function home() {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
                         if(data.success==true){
-                            curRound = data.data.curRound
-                            console.log('第'+curRound+'关')}
-                        console.log(`export fcwbinviteCode='${data.data.inviteCode}'`)
-                        console.log(`export fcwbinviter='${data.data.markedPin}'`)
+                            $.curRound = data.data.curRound
+                            console.log('第'+$.curRound+'关')}
+                            console.log(`export fcwbinviteCode='${data.data.inviteCode}'`)
+                            console.log(`export fcwbinviter='${data.data.markedPin}'`)
                     }else if(data.success==false){
                         console.log('黑号 快去买吧 叼毛')
                     }
