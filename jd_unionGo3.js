@@ -39,7 +39,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
     // if(authorCodeList === '404: Not Found'){
     //     authorCodeList = []
     // }
-    let authorCode = '';
+    let authorCode = '7582e1d18e344584952fabd0e6448c56';
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {

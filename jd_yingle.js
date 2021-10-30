@@ -41,7 +41,7 @@ if ($.isNode()) {
             $.nickName = '';
             console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
             // authorCodeList = []
-            let authorCode = '7582e1d18e344584952fabd0e6448c56';
+            let authorCode = '92B34E50D160D6B49BDB70B50AEAA6C488161A8D5CE69C0524ADD1F5F04D51F2652DFCA338160A7673C5812A45C0EC3FEB6090E56CFD81F696A17988574F70D0DDDA672BF446E2FCC0D1D6B4E52826D1';
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
