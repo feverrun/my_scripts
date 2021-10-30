@@ -2,7 +2,6 @@
  *活动入口: 京东极速版 - 发财挖宝
  * cron "31 6-22/3 * * *" script-path=jd_fcwb.js tag=发财挖宝助力
  */
-
 const $ = new Env('发财挖宝助力');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -17,8 +16,6 @@ let fcwbinviteCodeArr = []
 let fcwbinviterArr= []
 let fcwbinviteCodes=''
 let fcwbinviters=''
-
-$.curRound = ''
 
 if (process.env.fcwbinviteCode) {
     fcwbinviteCode = process.env.fcwbinviteCode;
@@ -95,12 +92,32 @@ if ($.isNode()) {
         await BROWSE_CHANNEL(3)
         await BROWSE_CHANNEL(4)
 
-        for (let i = 0; i < 5; i++) {
-            console.log(`挖宝${i}次`)
-            await $.wait(3000)
-            await wb($.curRound,i,i)
-            console.log('第'+$.curRound+'关')
+        let flag = 0;
+        switch (curRound) {
+            case 1:
+                flag = 5;
+                break;
+            case 2:
+                flag = 5;
+                break;
+            case 3:
+                flag = 5;
+                break;
+            case 4:
+                flag = 5;
+                break;
+            default:
+                flag = 5;
+                break;
+        }
 
+        for (let i = 0; i < flag; i++) {
+            for(let j=0; j < flag; j++){
+                console.log(`挖宝位置坐标(${i},${j})`)
+                await $.wait(3000)
+                await wb(curRound,i,j)
+                console.log('第'+curRound+'关')
+            }
         }
     }
 
@@ -112,18 +129,18 @@ if ($.isNode()) {
         $.done();
     })
 
+//挖宝
 function wb(round,rowIdx,colIdx) {
     return new Promise((resolve) => {
         //let body = {"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}
         const nm= {
-            url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+            url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${round},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
                 "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88",
             }
         }
-
         $.get(nm, async (err, resp, data) => {
             try {
                 if (err) {
@@ -160,8 +177,8 @@ function home() {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
                         if(data.success==true){
-                            $.curRound = data.data.curRound
-                            console.log('第'+$.curRound+'关')}
+                            curRound = data.data.curRound
+                            console.log('第'+curRound+'关')}
                             console.log(`export fcwbinviteCode='${data.data.inviteCode}'`)
                             console.log(`export fcwbinviter='${data.data.markedPin}'`)
                     }else if(data.success==false){
