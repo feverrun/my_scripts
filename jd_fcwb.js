@@ -118,19 +118,14 @@ function wb(round,rowIdx,colIdx) {
 
         const nm= {
             url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":${$.linkId}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
-
             headers: {
-
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88",
             }
         }
 
-
         $.get(nm, async (err, resp, data) => {
-
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -211,12 +206,12 @@ function BROWSE_CHANNEL(taskId) {
 
 function help() {
     return new Promise((resolve) => {
-        const nm= {
+        const nm = {
             url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":${$.linkId},"inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
             }
         }
         $.get(nm, async (err, resp, data) => {
@@ -272,7 +267,7 @@ function taskurl(functionId,body) {
         headers: {
             "Cookie": cookie,
             "Origin": "https://api.m.jd.com",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88",
         }
     }
 }
