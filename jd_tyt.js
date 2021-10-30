@@ -40,6 +40,11 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         return;
     }
 
+    if (cookiesArr.length < 20) {
+        //如果ck很少为作者助力
+        $.tytpacketId = '6720f278e0c549e194ac9bc6969a599b-MTg4NjI5ODgwMjFfcA!!';
+    }
+
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -57,23 +62,21 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         }
     }
     //剩余机会帮助
-    $.tytpacketId = '6720f278e0c549e194ac9bc6969a599b-MTg4NjI5ODgwMjFfcA!!';
-    for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            message = '';
-            // console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
-
-            if ($.status == 1) {
-                break
-            }
-            await tythelp()
-            await $.wait(10000)
-        }
-    }
+    //$.tytpacketId = '6720f278e0c549e194ac9bc6969a599b-MTg4NjI5ODgwMjFfcA!!';
+    // for (let i = 0; i < cookiesArr.length; i++) {
+    //     if (cookiesArr[i]) {
+    //         cookie = cookiesArr[i];
+    //         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    //         $.index = i + 1;
+    //         $.isLogin = true;
+    //         message = '';
+    //         if ($.status == 1) {
+    //             break
+    //         }
+    //         await tythelp()
+    //         await $.wait(10000)
+    //     }
+    // }
 
 })()
     .catch((e) => {

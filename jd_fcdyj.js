@@ -1,10 +1,5 @@
 /*
 活动入口： 京东极速版-我的-发财大赢家
- * /
- * 基于温某人大佬的脚本修改
- * 助力逻辑：优先助力互助码环境变量，中午10点之后再给我助力
- * /
-https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
 cron "1 6-22/3 * * *" script-path=jd_fcdyj.js tag=发财大赢家助力
  */
 
@@ -36,6 +31,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
     $.canDraw = false
     $.canHelp = true;
     $.linkid = "PFbUR7wtwUcQ860Sn8WRfw"
+
     //开红包查询
     for (let i = 0; i < cookiesArr.length && $.needhelp; i++) {
         cookie = cookiesArr[i];
@@ -45,8 +41,9 @@ const JD_API_HOST = `https://api.m.jd.com`;
             $.index = i + 1;
             $.isLogin = true;
             $.message = `【京东账号${$.index}】${$.UserName}\n`
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
         }
+
         if (!dyjCode) {
             console.log(`\n环境变量中没有检测到助力码,开始获取【京东账号${$.index}】助力码\n`)
             await open()
@@ -68,6 +65,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
             }
         }
     }
+
     if (new Date().getHours() >= 10) {
         await getAuthorShareCode()
         if ($.authorCode && $.authorCode.length) {
@@ -88,6 +86,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
             }
         }
     }
+
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         $.canWx = true
@@ -105,6 +104,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
             }
         }
     }
+
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
