@@ -189,9 +189,9 @@ async function pasture() {
                     }
                     $.cardType = vo.cardtype
                     for (let i = vo.currnum; i >= vo.neednum; i -= vo.neednum) {
-                        console.log(`${cardinfo[vo.cardtype]}卡片已满${vo.neednum}张，去兑换...`)
-                        await $.wait(6000)
-                        await takeGetRequest("Combine")
+                        console.log(`${cardinfo[vo.cardtype]}卡片已满${vo.neednum}张，去app手动兑换...`)
+                        // await $.wait(6000)
+                        // await takeGetRequest("Combine")
                     }
                 }
                 console.log(`\n可抽奖次数：${$.GetCardInfo.times}${msg ? `,拥有卡片：${msg}` : ''}\n`)
