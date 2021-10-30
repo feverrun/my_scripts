@@ -221,7 +221,7 @@ function help() {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
                         if(data.success==true){
-                            console.log('助力：'+data)
+                            console.log('助力：'+data.errMsg)
                         }else if(data.success==false){
                             console.log('助力：'+data.errMsg)}
                     }
