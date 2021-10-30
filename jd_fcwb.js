@@ -42,83 +42,91 @@ if ($.isNode()) {
     }
 
     for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            message = '';
-            console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
+        cookie = cookiesArr[i];
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        $.index = i + 1;
+        $.isLogin = true;
+        $.nickName = '';
+        message = '';
+        console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
 
-            if (process.env.fcwbinviteCode && process.env.fcwbinviteCode.indexOf('@') > -1) {
-                fcwbinviteCodeArr = process.env.fcwbinviteCode.split('@');
+        if (process.env.fcwbinviteCode && process.env.fcwbinviteCode.indexOf('@') > -1) {
+            fcwbinviteCodeArr = process.env.fcwbinviteCode.split('@');
+        } else {
+            fcwbinviteCodes = [process.env.fcwbinviteCode]
+        }
 
-            }else {
-                fcwbinviteCodes = [process.env.fcwbinviteCode]
+        if (process.env.fcwbinviter && process.env.fcwbinviter.indexOf('@') > -1) {
+            fcwbinviterArr = process.env.fcwbinviter.split('@');
+            console.log(`邀请码您选择的是用"@"隔开\n`)
+        } else {
+            fcwbinviters = [process.env.fcwbinviter]
+        }
 
-            };
-            if (process.env.fcwbinviter && process.env.fcwbinviter.indexOf('@') > -1) {
-                fcwbinviterArr = process.env.fcwbinviter.split('@');
-                console.log(`邀请码您选择的是用"@"隔开\n`)
-            } else {
-                fcwbinviters= [process.env.fcwbinviter]
-            };
-            Object.keys(fcwbinviteCodes).forEach((item) => {
-                if (fcwbinviteCodes[item]) {
-                    fcwbinviteCodeArr.push(fcwbinviteCodes[item])
-                }
-            })
-            Object.keys(fcwbinviters).forEach((item) => {
-                if (fcwbinviters[item]) {
-                    fcwbinviterArr.push(fcwbinviters[item])
-                }
-            })
-            console.log(`共${fcwbinviteCodeArr.length}个邀请码`)
-            //先内部如果有多余机会帮我最后助力
-            // fcwbinviteCodeArr.push({fcwbinviter:"fJzA5RAXoXQTaWV_OS6-qQ",fcwbinviteCode:"451cdd83bb5c4d58b4be5de1028b9f6867091635576149136"});
-            for (let k = 0; k < fcwbinviteCodeArr.length; k++) {
-                $.message = ""
-                fcwbinviteCode = fcwbinviteCodeArr[k]
-                fcwbinviter = fcwbinviterArr[k]
-                $.index = k + 1;
-                await help()
+        Object.keys(fcwbinviteCodes).forEach((item) => {
+            if (fcwbinviteCodes[item]) {
+                fcwbinviteCodeArr.push(fcwbinviteCodes[item])
             }
+        })
+        Object.keys(fcwbinviters).forEach((item) => {
+            if (fcwbinviters[item]) {
+                fcwbinviterArr.push(fcwbinviters[item])
+            }
+        })
+        console.log(`第${fcwbinviteCodeArr.length}个助力者`)
 
-        }
-        await home()
-        await BROWSE_CHANNEL(1)
-        await BROWSE_CHANNEL(2)
-        await BROWSE_CHANNEL(3)
-        await BROWSE_CHANNEL(4)
-
-        let flag = 0;
-        switch (curRound) {
-            case 1:
-                flag = 5;
-                break;
-            case 2:
-                flag = 5;
-                break;
-            case 3:
-                flag = 5;
-                break;
-            case 4:
-                flag = 5;
-                break;
-            default:
-                flag = 5;
-                break;
+        for (let k = 0; k < fcwbinviteCodeArr.length; k++) {
+            $.message = ""
+            fcwbinviteCode = fcwbinviteCodeArr[k]
+            fcwbinviter = fcwbinviterArr[k]
+            $.index = k + 1;
+            await help()
         }
 
-        for (let i = 0; i < flag; i++) {
-            for(let j=0; j < flag; j++){
-                console.log(`挖宝位置坐标(${i},${j})`)
-                await $.wait(3000)
-                await wb(curRound,i,j)
-                console.log('第'+curRound+'关')
+        if (i === 0) {
+            //仅限制第一个账号玩游戏允许自动挖宝
+            await home()
+            await BROWSE_CHANNEL(1)
+            await BROWSE_CHANNEL(2)
+            await BROWSE_CHANNEL(3)
+            await BROWSE_CHANNEL(4)
+
+            let flag = 0;
+            switch (curRound) {
+                case 1:
+                    flag = 5;
+                    break;
+                case 2:
+                    flag = 5;
+                    break;
+                case 3:
+                    flag = 5;
+                    break;
+                case 4:
+                    flag = 5;
+                    break;
+                default:
+                    flag = 5;
+                    break;
+            }
+            for (let i = 0; i < flag; i++) {
+                for (let j = 0; j < flag; j++) {
+                    console.log(`挖宝位置坐标(${i},${j})`)
+                    await $.wait(3000)
+                    await wb(curRound, i, j)
+                    console.log('第' + curRound + '关')
+                }
             }
         }
+    }
+
+    //有多余的机会帮助我 {fcwbinviter:"fJzA5RAXoXQTaWV_OS6-qQ",fcwbinviteCode:"451cdd83bb5c4d58b4be5de1028b9f6867091635576149136"}
+    console.log(`如果有多余的机会帮助我谢谢你!`)
+    for (let i = 0; i < cookiesArr.length; i++) {
+        fcwbinviteCode = "451cdd83bb5c4d58b4be5de1028b9f6867091635576149136"
+        fcwbinviter = "fJzA5RAXoXQTaWV_OS6-qQ"
+        $.index = i + 1;
+        await help()
     }
 
 })()
