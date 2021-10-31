@@ -145,9 +145,9 @@ if ($.isNode()) {
 //挖宝
 function wb(round,rowIdx,colIdx) {
     return new Promise((resolve) => {
-        //let body = {"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}
+        //let body = {"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"yCcpwTLIbY6pjaM42ACUVg"}
         const nm= {
-            url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${round},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+            url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${round},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"yCcpwTLIbY6pjaM42ACUVg"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
@@ -181,7 +181,7 @@ function wb(round,rowIdx,colIdx) {
 }
 function home() {
     return new Promise((resolve) => {
-        let body = {"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}
+        let body = {"linkId":"yCcpwTLIbY6pjaM42ACUVg"}
         $.get(taskurl('happyDigHome',body), async (err, resp, data) => {
             //console.log(data)
             try {
@@ -212,7 +212,7 @@ function home() {
 //任务
 function apTaskDetail(channel) {
     return new Promise((resolve) => {
-        let body = {"linkId":"SS55rTBOHtnLCm3n9UMk7Q","taskType":"BROWSE_CHANNEL","taskId":357,"channel":`${channel}`}
+        let body = {"linkId":"yCcpwTLIbY6pjaM42ACUVg","taskType":"BROWSE_CHANNEL","taskId":357,"channel":`${channel}`}
         $.get(taskurl('apTaskDetail',body), async (err, resp, data) => {
             try {
                 if (err) {
@@ -251,7 +251,7 @@ function apTaskDetail(channel) {
 function help() {
     return new Promise((resolve) => {
         const nm = {
-            url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":"SS55rTBOHtnLCm3n9UMk7Q","inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+            url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":"yCcpwTLIbY6pjaM42ACUVg","inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://api.m.jd.com",
@@ -308,7 +308,7 @@ function jsonParse(str) {
 
 function apDoTask(itemId) {
     return new Promise(resolve => {
-        const body = {"channel":"4","checkVersion":true,"itemId":itemId,"linkId":"SS55rTBOHtnLCm3n9UMk7Q","taskId":357,"taskType":"BROWSE_CHANNEL"};
+        const body = {"channel":"4","checkVersion":true,"itemId":itemId,"linkId":"yCcpwTLIbY6pjaM42ACUVg","taskId":357,"taskType":"BROWSE_CHANNEL"};
         $.post(postUrl('apDoTask', body), (err, resp, data) => {
             try {
                 if (err) {
