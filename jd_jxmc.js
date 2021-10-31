@@ -88,43 +88,44 @@ if ($.isNode()) {
         await $.wait(3000);
     }
 
-    console.log('\n##################开始账号内互助#################\n');
-    let newCookiesArr = [];
-    for (let i = 0; i < $.helpCkList.length; i += 4) {
-        newCookiesArr.push($.helpCkList.slice(i, i + 4))
-    }
-    for (let i = 0; i < newCookiesArr.length; i++) {
-        let thisCookiesArr = newCookiesArr[i];
-        let codeList = [];
-        for (let j = 0; j < thisCookiesArr.length; j++) {
-            $.cookie = thisCookiesArr[j];
-            $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
-            for (let k = 0; k < $.inviteCodeList.length; k++) {
-                if ($.UserName === $.inviteCodeList[k].use) {
-                    codeList.push({
-                        'name': $.inviteCodeList[k].use,
-                        'code': $.inviteCodeList[k].code
-                    });
-                }
-            }
-        }
-        for (let j = 0; j < thisCookiesArr.length; j++) {
-            $.cookie = thisCookiesArr[j];
-            $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
-            UA = UAInfo[$.UserName]
-            token = await getJxToken()
-            for (let k = 0; k < codeList.length; k++) {
-                $.oneCodeInfo = codeList[k];
-                if (codeList[k].name === $.UserName) {
-                    continue;
-                } else {
-                    console.log(`\n${$.UserName}去助力${codeList[k].name},助力码：${codeList[k].code}\n`);
-                    await takeGetRequest('help');
-                    await $.wait(3000);
-                }
-            }
-        }
-    }
+    // 助力单独走文件jd_jxmc_help
+    // console.log('\n##################开始账号内互助#################\n');
+    // let newCookiesArr = [];
+    // for (let i = 0; i < $.helpCkList.length; i += 4) {
+    //     newCookiesArr.push($.helpCkList.slice(i, i + 4))
+    // }
+    // for (let i = 0; i < newCookiesArr.length; i++) {
+    //     let thisCookiesArr = newCookiesArr[i];
+    //     let codeList = [];
+    //     for (let j = 0; j < thisCookiesArr.length; j++) {
+    //         $.cookie = thisCookiesArr[j];
+    //         $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+    //         for (let k = 0; k < $.inviteCodeList.length; k++) {
+    //             if ($.UserName === $.inviteCodeList[k].use) {
+    //                 codeList.push({
+    //                     'name': $.inviteCodeList[k].use,
+    //                     'code': $.inviteCodeList[k].code
+    //                 });
+    //             }
+    //         }
+    //     }
+    //     for (let j = 0; j < thisCookiesArr.length; j++) {
+    //         $.cookie = thisCookiesArr[j];
+    //         $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+    //         UA = UAInfo[$.UserName]
+    //         token = await getJxToken()
+    //         for (let k = 0; k < codeList.length; k++) {
+    //             $.oneCodeInfo = codeList[k];
+    //             if (codeList[k].name === $.UserName) {
+    //                 continue;
+    //             } else {
+    //                 console.log(`\n${$.UserName}去助力${codeList[k].name},助力码：${codeList[k].code}\n`);
+    //                 await takeGetRequest('help');
+    //                 await $.wait(3000);
+    //             }
+    //         }
+    //     }
+    // }
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
