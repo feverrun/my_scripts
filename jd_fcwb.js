@@ -84,9 +84,9 @@ if ($.isNode()) {
             await help()
         }
 
+        await home()
         if (i === 0) {
             //仅限制第一个账号玩游戏允许自动挖宝
-            await home()
             await apTaskDetail(4);
 
             let flag = 0;
