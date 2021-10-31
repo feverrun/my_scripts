@@ -2,7 +2,7 @@
 京东超级盒子
 更新时间：2021-10-30
 活动入口：京东APP-搜索-超级盒子
-cron "13 3,13,17 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_cjhz.js,tag=京东超级盒子
+cron "13 3,13,17 * * *" script-path=jd_cjhz.js,tag=京东超级盒子
  */
 
 const $ = new Env('京东超级盒子');
@@ -56,6 +56,14 @@ const JD_API_HOST = `https://api.m.jd.com/client.action`;
                     await helpShare({"taskId":$.helpId,"linkId":"DQFdr1ttvWWzn0wsQ7JDZQ","encryptPin":$.shareCoseList[y]});
                     await $.wait(1000);
                 }
+            }
+
+            //如果有多余机会给我助力
+            let authorCode = 'qAf6h9ICP1RpgjofFd0XDw';
+            for (let y = 0; y < $.shareCoseList.length; y++){
+                console.log(`京东账号${$.index} ${$.UserName || $.UserName}去助力${authorCode}`)
+                await helpShare({"taskId":$.helpId,"linkId":"DQFdr1ttvWWzn0wsQ7JDZQ","encryptPin":$.authorCode});
+                await $.wait(1000);
             }
 
             //开箱
