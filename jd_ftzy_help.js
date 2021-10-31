@@ -1,6 +1,6 @@
 /**
  *
- * cron "0 0,6 * * *" script-path=jd_ftzy_help.js tag=京东沸腾之夜助力
+ * cron "0 0,6,12,23 * * *" script-path=jd_ftzy_help.js tag=京东沸腾之夜助力
  */
 let common = require("./utils/common");
 let $ = new common.env('京东沸腾之夜助力');
@@ -27,6 +27,8 @@ async function prepare() {
         },'s')
         try {
             $.sharecode.push($.compact($.s.data.result, ['inviteCode']))
+            //有多余机会帮我助力谢谢
+            $.sharecode.push($.compact('-5o5XeRBqINXAeNedw', ['inviteCode']))
         } catch (e) {}
     }
 }
