@@ -27,9 +27,12 @@ async function prepare() {
         },'s')
         try {
             $.sharecode.push($.compact($.s.data.result, ['inviteCode']))
-            //有多余机会帮我助力谢谢
-            $.sharecode.push($.compact('-5o5XeRBqINXAeNedw', ['inviteCode']))
         } catch (e) {}
+    }
+    let flag = false;
+    if (flag === false) {
+        $.sharecode.push({inviteCode:"-5o5XeRBqINXAeNedw"})
+        flag = true;
     }
 }
 async function main(p) {
