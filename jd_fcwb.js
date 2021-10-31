@@ -16,6 +16,7 @@ let fcwbinviteCodeArr = []
 let fcwbinviterArr= []
 let fcwbinviteCodes=''
 let fcwbinviters=''
+let breakFlag = 0;
 
 if (process.env.fcwbinviteCode) {
     fcwbinviteCode = process.env.fcwbinviteCode;
@@ -105,10 +106,14 @@ if ($.isNode()) {
             }
             for (let i = 0; i < flag; i++) {
                 for (let j = 0; j < flag; j++) {
-                    console.log(`挖宝位置坐标(${i},${j})`)
-                    await $.wait(3000)
-                    await wb(curRound, i, j)
-                    console.log('第' + curRound + '关')
+                    if (breakFlag === 1) {
+                        break;
+                    }else {
+                        await $.wait(3000)
+                        console.log('第' + curRound + '关')
+                        console.log(`挖宝位置坐标(${i},${j})`)
+                        await wb(curRound, i, j)
+                    }
                 }
             }
         }
@@ -161,7 +166,9 @@ function wb(round,rowIdx,colIdx) {
                             console.log(`挖到${data.data.chunk.value}`)
                             // console.log(`export fcwbinviter='${data.data.markedPin}'`)
                         }else if(data.success==false){
-                            console.log(data.errMsg)}
+                            console.log(data.errMsg)
+                            breakFlag = 1;
+                        }
                     }
                 }
             } catch (e) {
@@ -259,10 +266,11 @@ function help() {
                 } else {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
-                        if(data.success==true){
-                            console.log('助力：'+data.errMsg)
-                        }else if(data.success==false){
-                            console.log('助力：'+data.errMsg)}
+                        if (data.success == true) {
+                            console.log('助力：' + data.errMsg)
+                        } else if (data.success == false) {
+                            console.log('助力：' + data.errMsg)
+                        }
                     }
                 }
             } catch (e) {
