@@ -1,6 +1,6 @@
 /**
- cron 15 6,14 * * * jd_aid_ftzy.js
- new Env('京东沸腾之夜助力');
+ *
+ * cron "0 0,6 * * *" script-path=jd_ftzy_help.js tag=京东沸腾之夜助力
  */
 let common = require("./utils/common");
 let $ = new common.env('京东沸腾之夜助力');
@@ -13,8 +13,8 @@ $.setOptions({
         'referer': 'https://happy.m.jd.com/babelDiy/Zeus/3ugedFa7yA6NhxLN5gw2L3PF9sQC/index.html',
     }
 });
+//0 0 * * * task ${$.runfile}
 $.readme = `
-0 0 * * * task ${$.runfile}
 exprot ${$.runfile}=40  # 如需修改被助力账号个数,请自行修改环境变量
 `
 eval(common.eval.mainEval($));
