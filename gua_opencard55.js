@@ -386,7 +386,7 @@ async function dealReturn(type, data) {
                 if(type == "followShop") title = '关注'
                 if(type == "addCart") title = '加购'
                 if(typeof res == 'object'){
-                    if(res.success && res.success === true && res.data){
+                    if(res.success && res.status == 200 && res.data){
                         res = res.data
                         if(res.status && res.status == 200){
                             if(type != "setMixNick" && (res.msg || res.data.isOpenCard || res.data.remark)) console.log(`${title && title+":" || ""}${res.msg || res.data.isOpenCard || res.data.remark || ''}`)
@@ -433,6 +433,9 @@ async function dealReturn(type, data) {
                             console.log(`${title || type} ${data}`)
                         }
                     }else if(res.errorMessage){
+                        if(res.errorMessage.indexOf('火爆') >-1 ){
+                            $.hotFlag = true
+                        }
                         console.log(`${title || type} ${res.errorMessage || ''}`)
                     }else{
                         console.log(`${title || type} ${data}`)
