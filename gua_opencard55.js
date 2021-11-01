@@ -36,7 +36,7 @@ All变量适用
 ============Quantumultx===============
 [task_local]
 #11.1~11.11 联合开卡
-47 6 1-11 11 * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard55.js, tag=11.1~11.11 联合开卡, enabled=true
+47 6 1-11 11 * gua_opencard55.js, tag=11.1~11.11 联合开卡, enabled=true
 
 */
 let guaopencard_addSku = "true"
@@ -106,7 +106,7 @@ let activityCookie =''
     $.userId = '10299171'
     $.actId = '5256d57baccc480f94_11012'
     $.MixNicks = ''
-    $.inviteNick = 'jJngxInVOgsjftAvjP1dgF4tLNYA4seuA67MOIYQxEk3Vl9+AVo4NF+tgyeIc6A6kdK3rLBQpEQH9V4tdrrh0w=='
+    $.inviteNick = 'JnGd3fFQ9edqNXqS3kHNFFs/ye9oluZX4nOTK56TeMXbR7I2OlzZch4hTs22oCUS'
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -197,11 +197,11 @@ async function run() {
             $.missionType = 'uniteAddCart'
             let goodsArr = []
             if(cleanCart){
-                goodsArr = await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717','')
+                goodsArr = await cleanCart.clean(cookie,'','')
                 await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
                 if(cleanCart && goodsArr !== false){
                     await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
-                    await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717',goodsArr || [ ])
+                    await cleanCart.clean(cookie,'',goodsArr || [ ])
                 }
             }
             await takePostRequest('mission');
