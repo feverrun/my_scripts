@@ -2,9 +2,13 @@
 
 */
 let jdSignUrl = '' // 算法url
-const got = require('got');
+try{
+    const got = require('got');
+}catch(e){
+    console.log('请添加依赖"got"')
+}
 
-jdSignUrl = process.env.gua_cleancart_SignUrl ? process.env.gua_cleancart_SignUrl : `${jdSignUrl}`
+jdSignUrl = process.env.CLEANCART_SIGNURL ? process.env.CLEANCART_SIGNURL : `${jdSignUrl}`
 let cookie = ''
 let out = false
 
@@ -161,8 +165,8 @@ function jdSign(fn,body) {
     let flag = false
     try{
         const fs = require('fs');
-        if (fs.existsSync('./gua_encryption_sign.js')) {
-            const encryptionSign = require('./gua_encryption_sign');
+        if (fs.existsSync('./encryption_sign.js')) {
+            const encryptionSign = require('./encryption_sign');
             sign = encryptionSign.getSign(fn, body)
         }else{
             flag = true
