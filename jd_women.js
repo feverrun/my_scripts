@@ -2,7 +2,7 @@
 品质女装 年终狂欢
 
 https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dzkbblntbt20211101A&shareUuid=0f38ece139354e3e9b849034d3c6b6fd
-cron "0 0,12,21 * * *"
+cron "0 0,12,21 * * *" jd_women.js
 默认执行脚本。如果需要不执行
 环境变量 NO_RUSH=false
 */
