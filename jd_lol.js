@@ -2,12 +2,13 @@
  电竞预言家瓜分京豆，链接： u.jd.com/3wyVFhp
  必须得做完任务才能参与竞猜，有加购，没开卡，参与竞猜后，如果猜对了，第二天可以瓜分京豆（蚊子腿。。。）
  暂时还有24号和25号  2场，，，
- cron 23 7,10 * * * jd_lol.js
+ cron 23 10,11 * * * jd_lol.js
  环境变量：ANSWERCODE, 选择哪一个队伍,默认随机； 例：ANSWERCODE="A" 选择第一个队伍，ANSWERCODE="B" 选择第二个队伍
  PS:只有押对队伍才能在第二天瓜分豆子。如果觉得哪个队伍胜率大，可以自己修改环境变量，梭哈一个队伍
  */
 const $ = new Env('电竞预言家');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 // 环境变量：ANSWERCODE, 选择哪一个队伍,默认随机； 例：ANSWERCODE="A" 选择第一个队伍，ANSWERCODE="B" 选择第二个队伍
 let answerCode = $.isNode() ? (process.env.ANSWERCODE ? process.env.ANSWERCODE : `999`):`999`;
