@@ -153,6 +153,7 @@ async function run() {
             return
         }
         await takePostRequest('activity_load');
+        if($.hotFlag) return
         if(Date.now() > $.endTime){
             $.MixNick = ''
             $.activityEnd = true
