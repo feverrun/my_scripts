@@ -37,8 +37,8 @@ All变量适用
 [task_local]
 #11.1~11.11 联合开卡
 47 6 1-11 11 * gua_opencard55.js, tag=11.1~11.11 联合开卡, enabled=true
-
 */
+
 let guaopencard_addSku = "true"
 let guaopencard = "true"
 let guaopenwait = "0"
@@ -386,7 +386,7 @@ async function dealReturn(type, data) {
                 if(type == "followShop") title = '关注'
                 if(type == "addCart") title = '加购'
                 if(typeof res == 'object'){
-                    if(res.success && res.status == 200 && res.data){
+                    if(res.success && res.success === true && res.data){
                         res = res.data
                         if(res.status && res.status == 200){
                             if(type != "setMixNick" && (res.msg || res.data.isOpenCard || res.data.remark)) console.log(`${title && title+":" || ""}${res.msg || res.data.isOpenCard || res.data.remark || ''}`)
@@ -429,13 +429,15 @@ async function dealReturn(type, data) {
                             }
                         }else if(res.msg){
                             console.log(`${title || type} ${res.msg || ''}`)
+                        }else if(res.errorMessage){
+                            if(res.errorMessage.indexOf('火爆') >-1 ){
+                                $.hotFlag = true
+                            }
+                            console.log(`${title || type} ${res.errorMessage || ''}`)
                         }else{
                             console.log(`${title || type} ${data}`)
                         }
                     }else if(res.errorMessage){
-                        if(res.errorMessage.indexOf('火爆') >-1 ){
-                            $.hotFlag = true
-                        }
                         console.log(`${title || type} ${res.errorMessage || ''}`)
                     }else{
                         console.log(`${title || type} ${data}`)
