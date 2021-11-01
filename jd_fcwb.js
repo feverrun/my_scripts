@@ -74,15 +74,6 @@ if ($.isNode()) {
                 fcwbinviterArr.push(fcwbinviters[item])
             }
         })
-        console.log(`第${fcwbinviteCodeArr.length}个助力者`)
-
-        for (let k = 0; k < fcwbinviteCodeArr.length; k++) {
-            $.message = ""
-            fcwbinviteCode = fcwbinviteCodeArr[k]
-            fcwbinviter = fcwbinviterArr[k]
-            $.index = k + 1;
-            await help()
-        }
 
         await home()
         if (i === 0) {
@@ -117,6 +108,21 @@ if ($.isNode()) {
                 }
             }
         }
+    }
+
+    if (fcwbinviteCode) {
+        console.log(`\n助力开始`);
+        for (let k = 0; k < cookiesArr.length; k++) {
+            cookie = cookiesArr[k];
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            fcwbinviteCode = fcwbinviteCode;
+            fcwbinviter = fcwbinviter;
+            $.index = k + 1;
+            console.log(`${$.UserName} => 帮助 ${fcwbinviter}`);
+            await help()
+        }
+    }else {
+        console.log(`\n请先设置环境变量`);
     }
 
     //有多余的机会帮助我 {fcwbinviter:"fJzA5RAXoXQTaWV_OS6-qQ",fcwbinviteCode:"451cdd83bb5c4d58b4be5de1028b9f6867091635576149136"}
