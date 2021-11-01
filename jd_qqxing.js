@@ -13,6 +13,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let merge = {}
 let codeList = []
+let continueFlag = false;
 Exchange = true;
 
 let cookiesArr = [],
@@ -62,6 +63,7 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
             if ($.cando) {
                 await getinfo()
                 await getUid($.shareuuid)
+                if (continueFlag == true) continue;
                 taskList = [...$.taskList, ...$.taskList2]
                 for (j = 0; j < taskList.length; j++) {
                     task = taskList[j]
@@ -360,9 +362,12 @@ function getUid() {
                     if (data.result) {
                         if(data.data.openCardStatus !=3){
                             console.log("当前未开卡,无法助力和兑换奖励哦")
+                            $.shareuuid = '';
+                            continueFlag = 1;
+                        }else {
+                            $.shareuuid = data.data.uid
+                            console.log(`${$.UserName}互助码${$.shareuuid}\n`);
                         }
-                        $.shareuuid = data.data.uid
-                        console.log(`${$.UserName}互助码${$.shareuuid}\n`);
                     }
                 }
             } catch (e) {
