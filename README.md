@@ -42,6 +42,7 @@ npm install -g jsdom
 npm install -g download
 npm install -g tunnel
 npm install -g ws
+npm install -g js-base64
 ```
 ## 水群
 https://t.me/joinchat/s2VXArKMn5JlNjg1
