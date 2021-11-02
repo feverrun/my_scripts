@@ -22,7 +22,7 @@ $.notifyTime = $.getdata("cfd_notifyTime");
 $.result = [];
 $.shareCodes = [];
 $.shareCodesArr = [];
-codePool = [];
+let codePool = [];
 let cookiesArr = [], cookie = '', token = '';
 let UA, UAInfo = {};
 let nowTimes;
