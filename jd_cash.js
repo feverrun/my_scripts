@@ -4,7 +4,7 @@
 可互助，助力码每日不变，只变日期
 活动入口：京东APP搜索领现金进入
 更新时间：2021-06-07
-cron "32 0,1,2 * * *" jd_cash.js
+cron "29 0,6 * * *" jd_cash.js
 
  */
 const $ = new Env('签到领现金');
@@ -80,7 +80,7 @@ async function jdCash() {
   // 领现金入口进入看不到互助界面先隐藏
   // await helpFriends()
   await getReward()
-  await getReward('2');
+  // await getReward('2');
   $.exchangeBeanNum = 0;
   cash_exchange = $.isNode() ? (process.env.CASH_EXCHANGE ? process.env.CASH_EXCHANGE : `${cash_exchange}`) : ($.getdata('cash_exchange') ? $.getdata('cash_exchange') : `${cash_exchange}`);
   // if (cash_exchange === 'true') {
@@ -347,10 +347,12 @@ function getReward(source = 1) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (safeGet(data)) {
+            // console.log(data);
             data = JSON.parse(data);
             if (data.code === 0 && data.data.bizCode === 0) {
-              console.log(`领奖成功，${data.data.result.shareRewardTip}【${data.data.result.shareRewardAmount}】`)
-              message += `领奖成功，${data.data.result.shareRewardTip}【${data.data.result.shareRewardAmount}元】\n`;
+              console.log('签到成功！');
+              // console.log(`领奖成功，${data.data.result.shareRewardTip}【${data.data.result.shareRewardAmount}】`)
+              // message += `领奖成功，${data.data.result.shareRewardTip}【${data.data.result.shareRewardAmount}元】\n`;
               // console.log(data.data.result.taskInfos)
             } else {
               // console.log(`领奖失败，${data.data.bizMsg}`)
@@ -518,7 +520,7 @@ function shareCodesFormat() {
       $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes || [])])];
     }
     $.newShareCodes.map((item, index) => $.newShareCodes[index] = {"inviteCode": item, "shareDate": $.shareDate})
-    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+    // console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
 }
