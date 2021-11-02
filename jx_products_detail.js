@@ -1,40 +1,33 @@
 /*
- * @Author: kenji
- * 多谢：tg @kenji
- * @Date: 2020-12-04 13:14:19
- * @LastEditors: whyour
- * @LastEditTime: 2020-12-05 13:54:03
- * @Github: https://github.com/whyour
-
-  quanx:
-  [task_local]
-  10 10 * * * https://raw.githubusercontent.com/whyour/hundun/master/quanx/jx_products_detail.js, tag=京喜工厂商品列表详情, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdgc.png, enabled=true
-
-  Loon:
-  [Script]
-  cron "10 10 * * *" script-path=https://raw.githubusercontent.com/whyour/hundun/master/quanx/jx_products_detail.js,tag=京喜工厂商品列表详情
-
-  Surge:
-  京喜工厂商品列表详情 = type=cron,cronexp="10 10 * * *",wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/whyour/hundun/master/quanx/jx_products_detail.js
-*
+cron "10 10 * * *" script-path=jx_products_detail.js,tag=京喜工厂商品列表详情
 **/
-
 const $ = new Env('京喜工厂商品列表详情');
 const JD_API_HOST = 'https://m.jingxi.com/';
+const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 $.cookieArr = [];
 $.currentCookie = '';
-
+let showMsg = '';
 !(async () => {
     if (!getCookies()) return;
     for (let i = 0; i < $.cookieArr.length; i++) {
         $.currentCookie = $.cookieArr[i];
+        $.index = i + 1;
         if ($.currentCookie) {
             const userName = decodeURIComponent(
                 $.currentCookie.match(/pt_pin=(.+?);/) && $.currentCookie.match(/pt_pin=(.+?);/)[1],
             );
             $.log(`\n开始【京东账号${i + 1}】${userName}`);
             await getCommodityList();
+
+            console.log(showMsg);
+
+            //只发送给第一个号
+            if (i ===0) {
+                // 账号${$.index} - ${$.UserName}
+                await notify.sendNotify(`${$.name}`, `${showMsg}`);
+            }
+
         }
     }
 })()
@@ -62,7 +55,7 @@ function getCommodityList() {
         $.get(taskUrl('diminfo/GetCommodityList', `flag=2&pageNo=1&pageSize=10000`), async (err, resp, data) => {
             try {
                 const { ret, data: { commodityList = [] } = {}, msg } = JSON.parse(data);
-                $.log(`\n获取商品详情：${msg}\n${$.showLog ? data : ''}`);
+                // $.log(`\n获取商品详情：${msg}\n${$.showLog ? data : ''}`);
                 for (let index = 0; index < commodityList.length; index++) {
                     const { commodityId, stockNum } = commodityList[index];
                     await getCommodityDetail(commodityId, stockNum);
@@ -84,13 +77,12 @@ function getCommodityDetail(commodityId, num) {
             (err, resp, data) => {
                 try {
                     const { ret, data: { commodityList = [] } = {}, msg } = JSON.parse(data);
-                    $.log(`\n获取商品详情：${msg}\n${$.showLog ? data : ''}`);
+                    // $.log(`\n获取商品详情：${msg}\n${$.showLog ? data : ''}`);
                     const { starLevel, name, price, productLimSeconds } = commodityList[0];
-                    $.log(
-                        `⭐️商品--${name}, 所需等级 ${starLevel}，所需电力: ${price / 100} 万，限时 ${
+                        showMsg += `⭐️商品--${name}, 所需等级 ${starLevel}，所需电力: ${price / 100} 万，限时 ${
                             productLimSeconds / 60 / 60 / 24
-                        } 天，📦库存：${num}，最短需要 ${(price / 864 / 2).toFixed(2)} \n`,
-                    );
+                        } 天，📦库存：${num}，最短需要 ${(price / 864 / 2).toFixed(2)} \n`;
+                    ;
                 } catch (e) {
                     $.logErr(e, resp);
                 } finally {
