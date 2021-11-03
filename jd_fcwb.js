@@ -83,7 +83,7 @@ if ($.isNode()) {
             let flag = 0;
             switch (curRound) {
                 case 1:
-                    flag = 5;
+                    flag = 4;
                     break;
                 case 2:
                     flag = 6;
@@ -92,7 +92,7 @@ if ($.isNode()) {
                     flag = 7;
                     break;
                 default:
-                    flag = 5;
+                    flag = 4;
                     break;
             }
             for (let i = 0; i < flag; i++) {
@@ -197,13 +197,15 @@ function home() {
                 } else {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
-                        if(data.success==true){
+                        if (data.success == true) {
                             curRound = data.data.curRound
-                            console.log('第'+curRound+'关')}
+                            console.log('第' + curRound + '关')
                             console.log(`export fcwbinviteCode='${data.data.inviteCode}'`)
                             console.log(`export fcwbinviter='${data.data.markedPin}'`)
-                    }else if(data.success==false){
-                        console.log('黑号 快去买吧 叼毛')
+                        }else {
+                            console.log('黑号 快去买买买！')
+                        }
+
                     }
                 }
             } catch (e) {
