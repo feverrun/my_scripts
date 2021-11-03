@@ -12,7 +12,7 @@ $.get = zooFaker.injectToRequest2($.get.bind($));
 $.post = zooFaker.injectToRequest2($.post.bind($));
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const invoke_key = "JL1VTNRadM68cIMQ";
+const invoke_key = "q8DNJdpcfRQ69gIx";
 
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {

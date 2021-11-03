@@ -265,10 +265,10 @@ async function helpFriendsFeed() {
 }
 function enterRoom() {
   return new Promise(resolve => {
-    const url = `https://draw.jdfcloud.com//common/pet/enterRoom/h5?invitePin=&openId=&reqSource=weapp&invokeKey=JL1VTNRadM68cIMQ` + $.validate;
+    const url = `https://draw.jdfcloud.com//common/pet/enterRoom/h5?invitePin=&openId=&reqSource=weapp&invokeKey=q8DNJdpcfRQ69gIx` + $.validate;
     const body = {}
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+    let lks = $.md5('' + 'q8DNJdpcfRQ69gIx' + lkt).toString()
     const options = {
       url,
       body: JSON.stringify(body),
@@ -302,9 +302,9 @@ function enterRoom() {
 }
 function getFriends(currentPage = '1') {
   return new Promise(resolve => {
-    const url = `https://draw.jdfcloud.com//common/pet/api/getFriends?itemsPerPage=20&currentPage=${currentPage * 1}&reqSource=weapp&invokeKey=JL1VTNRadM68cIMQ` + $.validate;
+    const url = `https://draw.jdfcloud.com//common/pet/api/getFriends?itemsPerPage=20&currentPage=${currentPage * 1}&reqSource=weapp&invokeKey=q8DNJdpcfRQ69gIx` + $.validate;
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+    let lks = $.md5('' + 'q8DNJdpcfRQ69gIx' + lkt).toString()
     const options = {
       url,
       headers: {
@@ -479,9 +479,9 @@ function getRandomFood(friendPin) {
 }
 function getCoinChanges() {
   return new Promise(resolve => {
-    const url = `https://jdjoy.jd.com/common/pet/getCoinChanges?changeDate=${Date.now()}&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ` + $.validate;
+    const url = `https://jdjoy.jd.com/common/pet/getCoinChanges?changeDate=${Date.now()}&reqSource=h5&invokeKey=q8DNJdpcfRQ69gIx` + $.validate;
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+    let lks = $.md5('' + 'q8DNJdpcfRQ69gIx' + lkt).toString()
     const options = {
       url,
       headers: {
@@ -555,9 +555,9 @@ function showMsg() {
 }
 
 function taskUrl(functionId, friendPin) {
-  const url = `https://jdjoy.jd.com/common/pet/${functionId}?friendPin=${encodeURIComponent(friendPin)}&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ` + $.validate;
+  const url = `https://jdjoy.jd.com/common/pet/${functionId}?friendPin=${encodeURIComponent(friendPin)}&reqSource=h5&invokeKey=q8DNJdpcfRQ69gIx` + $.validate;
   let lkt = new Date().getTime()
-  let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
+  let lks = $.md5('' + 'q8DNJdpcfRQ69gIx' + lkt).toString()
   return {
     url,
     headers: {
