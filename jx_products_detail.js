@@ -13,21 +13,16 @@ let showMsg = '';
     for (let i = 0; i < $.cookieArr.length; i++) {
         $.currentCookie = $.cookieArr[i];
         $.index = i + 1;
-        if ($.currentCookie) {
+
+        if (i === 0) {
             const userName = decodeURIComponent(
                 $.currentCookie.match(/pt_pin=(.+?);/) && $.currentCookie.match(/pt_pin=(.+?);/)[1],
             );
             $.log(`\n开始【京东账号${i + 1}】${userName}`);
             await getCommodityList();
-
             console.log(showMsg);
-
-            //只发送给第一个号
-            if (i ===0) {
-                // 账号${$.index} - ${$.UserName}
-                await notify.sendNotify(`${$.name}`, `${showMsg}`);
-            }
-
+            // 账号${$.index} - ${$.UserName}
+            await notify.sendNotify(`${$.name}`, `${showMsg}`);
         }
     }
 })()
