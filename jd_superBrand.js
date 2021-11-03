@@ -33,6 +33,7 @@ let shareList = [];
             $.isLogin = true;
             $.nickName = '';
             console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
+
             try{
                 await main($.cookie)
             }catch (e) {
@@ -40,6 +41,7 @@ let shareList = [];
             }
         }
     }
+
     if(shareList.length === 0){return;}
     let allShareList = [];
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -167,13 +169,28 @@ async function main(cookie) {
             if(signList.length === 0){
                 console.log(`任务：${oneTask.assignmentName},信息异常`);
             }
-            for (let j = 0; j < signList.length; j++) {
-                if(signList[j].status === 1){
-                    console.log(`任务：${oneTask.assignmentName},去执行,请稍稍`);
-                    let itemId = signList[j].itemId;
-                    let doInfo = await takeRequest(cookie,'superBrandDoTask',`{"source":"card","activityId":${activityId},"encryptProjectId":"${encryptProjectId}","encryptAssignmentId":"${oneTask.encryptAssignmentId}","assignmentType":${oneTask.assignmentType},"itemId":"${itemId}","actionType":0,"dropDownChannel":1}`);
-                    console.log(`执行结果：${JSON.stringify(doInfo)}`);
-                    await $.wait(3000);
+            if(oneTask.assignmentName === '首页限时下拉'){
+                for (let j = 0; j < signList.length; j++) {
+                    if(signList[j].status === 1){
+                        console.log(`任务：${oneTask.assignmentName},去执行,请稍稍`);
+                        let itemId = signList[j].itemId;
+                        let doInfo = await takeRequest(cookie,'superBrandDoTask',`{"source":"card","activityId":${activityId},"encryptProjectId":"${encryptProjectId}","encryptAssignmentId":"${oneTask.encryptAssignmentId}","assignmentType":${oneTask.assignmentType},"itemId":"${itemId}","actionType":0,"dropDownChannel":1}`);
+                        console.log(`执行结果：${JSON.stringify(doInfo)}`);
+                        await $.wait(3000);
+                    }
+                }
+            }else if(oneTask.assignmentName === '去首页下拉参与小游戏'){
+                for (let j = 0; j < signList.length; j++) {
+                    if(signList[j].status === 1){
+                        console.log(`任务：${oneTask.assignmentName},去执行,请稍稍`);
+                        let gameInfo = await takeRequest(cookie,'showSecondFloorGameInfo',`{"source":"card"}`);
+                        let secCode = gameInfo.result.activityGameInfo.gameCurrentRewardInfo.secCode;
+                        let gameEncryptAssignmentId = gameInfo.result.activityGameInfo.gameCurrentRewardInfo.encryptAssignmentId;
+                        await $.wait(3000);
+                        let doInfo = await takeRequest(cookie,'superBrandTaskLottery',`{"source":"card","activityId":${activityId},"encryptProjectId":"${encryptProjectId}","encryptAssignmentId":"${gameEncryptAssignmentId}","secCode":"${secCode}"}`);
+                        console.log(`执行结果：${JSON.stringify(doInfo)}`);
+                        await $.wait(3000);
+                    }
                 }
             }
         }
