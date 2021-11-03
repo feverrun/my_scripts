@@ -319,9 +319,9 @@ function getUA(){
     $.UA = `jdapp;iPhone;10.2.0;13.1.2;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone8,1;addressid/2308460611;appBuild/167853;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
     rebateCode = '3wxf1Ug'
     if($.index != 1){
-        let arr = [rebateCodes,'3wxf1Ug']
+        let arr = [rebateCodes,'3wxf1Ug','ywDFAni','ydD4stG']
         rebateCode = arr[Math.floor(Math.random() * arr.length)] || rebateCode
-        if(!rebateCode) rebateCode = '3wxf1Ug'
+        if(!rebateCode) rebateCode = 'ywDFAni'
     }
     console.log(rebateCode)
 }

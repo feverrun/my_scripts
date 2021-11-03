@@ -106,7 +106,6 @@ function getGroupDetail(id){
                     // console.log(data);
                     data = JSON.parse(data);
                     if (data.data) {
-                        data.data.groupinfo;
                         if (data.data.groupinfo !=undefined) {
                             groupDetail = data.data.groupinfo;
                             let now = parseInt(new Date() / 1000)
