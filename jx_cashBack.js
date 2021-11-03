@@ -1,35 +1,23 @@
 /*
-入口 极速版 赚金币
-分享到QQ查看邀请码 packetId就是
-#自定义变量
-export tytpacketId=""
-#推推赚大钱
-cron "20 0,6,12,21 * * *" jd_tyt.js, tag=推推赚大钱
+cron "44 0-23/6 * * *" jx_cashback.js
+new Env('京喜购物返红包助力');
 */
-const $ = new Env('推推赚大钱');
-// const notify = $.isNode() ? require('./sendNotify') : '';
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random() * 4 + 10)}.${Math.ceil(Math.random() * 4)};${randomString(40)}`
-$.status = 0
 
-let cookiesArr = [], cookie = '', message;
-$.tytpacketId = '';
-if (!process.env.tytpacketId) {
-    console.log("需设置推一推环境变量tytpacketId,可抓包获取\n");
-} else {
-    $.tytpacketId = process.env.tytpacketId;
-}
+const $ = new Env('京喜购物返红包助力');
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+let cookiesArr = [], cookie = '';
+let orderList = [];
+let groupDetail = {};
+let groupArr = [];
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-    };
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
 !(async () => {
     if (!cookiesArr[0]) {
@@ -38,44 +26,44 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         });
         return;
     }
+    console.log(`\n************************内部互助开始************************\n`)
+    message = ''
+    $.needhelp = true
+    $.canHelp = true;
 
-    if (cookiesArr.length < 10) {
-        //如果ck很少为我助力
-        $.tytpacketId = 'ff719e1217a34a2f98d6bb8641f37288-MTg4NjI5ODgwMjFfcA!!';
-    }
-
-    for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
+    for (let i = 0; i < cookiesArr.length && $.needhelp; i++) {
+        cookie = cookiesArr[i];
+        $.hotFlag = false;
+        if (cookie) {
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.index = i + 1;
             $.isLogin = true;
-            message = '';
+            $.message = `【京东账号${$.index}】${$.UserName}\n`
             console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
 
-            if ($.status == 1) {
-                break
+            //助力只针对第一个账号 或者环境变量中的指定账号
+            if (i === 0) {
+                await getOrderList();
+                for (let k of orderList) {
+                    try {
+                        let orderid = k.parentId != '0' ? k.parentId : k.orderId
+                        await getGroupDetail(orderid, 1);
+                        await $.wait(500);
+                        // console.log(JSON.stringify(groupDetail));
+                    } catch (e) {}
+                }
             }
-            await tythelp()
-            await $.wait(10000)
+
+            //help
+            if (groupArr && groupArr.length >0) {
+                for (j = 0; j< groupArr.length; j++) {
+                    await $.wait(2000);
+                    await help(groupArr[i]);
+                }
+            }
         }
     }
-    //剩余机会帮助
-    //$.tytpacketId = '6720f278e0c549e194ac9bc6969a599b-MTg4NjI5ODgwMjFfcA!!';
-    // for (let i = 0; i < cookiesArr.length; i++) {
-    //     if (cookiesArr[i]) {
-    //         cookie = cookiesArr[i];
-    //         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-    //         $.index = i + 1;
-    //         $.isLogin = true;
-    //         message = '';
-    //         if ($.status == 1) {
-    //             break
-    //         }
-    //         await tythelp()
-    //         await $.wait(10000)
-    //     }
-    // }
+
 
 })()
     .catch((e) => {
@@ -85,31 +73,18 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         $.done();
     })
 
-function tythelp() {
+function help(id) {
     return new Promise(async (resolve) => {
-        let options = {
-            url: `https://api.m.jd.com/?t=1623066557140`,
-            body: `functionId=helpCoinDozer&appid=station-soa-h5&client=H5&clientVersion=1.0.0&t=1623120183787&body={"actId":"d5a8c7198ee54de093d2adb04089d3ec","channel":"coin_dozer","antiToken":"mmkajtm9eqonssy6xoi1623119406463ic84~NmZeSyVEbFNSd3V+dVNdA3pxAABkRHpTBiUjb35DFm5vLUROOBEzLUF7G28iAAFBKBgVFA1EPwIVKDclGENXbm8iVlQiAwpTTx1lKSsTCG5vfmsaDUR6LUEnG29+PU9ReSdSWTNTNxICI3V0dlYOV3p0Bwg3UW9IVnd+KSdUC1E3KQFkc0oKUwoyKhFmWzEQOTZCXQ1Eei1BKTQ5GENXbm80Qks5ATkdB28tKWoCAl8RZhtkcxY4LUF7G29rPU8eEWZHTA1EbC1BKTM5NBJXbm9oaxohDwpTWR1lf3RNWR56aAcUYUpnQFcdZTBmTU9XKSBEX3NcdEEFMDdvaEMOQW9+FV82CDAUAXhzfTEDXV07I0VUZx49F1MucyosBwIHeTFSDycPIlNPYyRvfkMDQCwiBFo1VWFHBzsuPnVZB185dQEKYlZkRFR3cnVxUAFFf3QVFHMCJR9Be2U3MwkVQC8nWBp9RD8CQXtlfGZNT1gkJxUCc19vSFpjOg==|~1623120183785~1~20201218~eyJ2aXdlIjoiMCIsImJhaW4iOnt9fQ==~2~281~1pl4|5563f-70,aa,,;751e-,,,;359-70,aa,40,u;b512-70,aa,40,u;058-70,aa,40,u;doei:,1,0,0,0,0,1000,-1000,1000,-1000;dmei:,1,0,0,1000,-1000,1000,-1000,1000,-1000;emc:,5:1;emmm:;emcf:,5:1;ivli:;iivl:;ivcvj:;scvje:;ewhi:,5:197-49;1623120175774,1623120183784,0,1,5,5,0,1,0,0,0;u5ge","referer":"-1","frontendInitStatus":"s","packetId":"${$.tytpacketId}","helperStatus":"0"}&_ste=1&_stk=appid,body,client,clientVersion,functionId,t&h5st=20210608104303790;8489907903583162;10005;tk01w89681aa9a8nZDdIanIyWnVuWFLK4gnqY+05WKcPY3NWU2dcfa73B7PBM7ufJEN0U+4MyHW5N2mT/RNMq72ycJxH;7e6b956f1a8a71b269a0038bbb4abd24bcfb834a88910818cf1bdfc55b7b96e5`,
-            headers: {
-                "Origin": "https://pushgold.jd.com",
-                "Host": "api.m.jd.com",
-                "Accept": "application/json, text/plain, */*",
-                "User-Agent": ua,
-                "Cookie": cookie,
-            }
-        }
-
-        $.post(options, async (err, resp, data) => {
+        let options = taskUrl(id, 2);
+        $.get(options, async (err, resp, data) => {
             try {
-
-                data = JSON.parse(data);
-                console.log(data.msg)
-                if (data.code == 0) {
-                    console.log("帮砍：" + data.data.amount)
-                } else if (data.msg.indexOf("完成") != -1) {
-                    $.status = 1
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`);
+                    console.log(`${$.name} API请求失败，请检查网路重试`);
+                } else {
+                    console.log(data);
+                    data = JSON.parse(data);
                 }
-                console.log(data.msg)
             } catch (e) {
                 $.logErr(e, resp);
             } finally {
@@ -119,53 +94,85 @@ function tythelp() {
     });
 }
 
-function randomString(e) {
-    e = e || 32;
-    let t = "abcdefhijkmnprstwxyz2345678",
-        a = t.length,
-        n = "";
-    for (i = 0; i < e; i++)
-        n += t.charAt(Math.floor(Math.random() * a));
-    return n
+function getGroupDetail(id){
+    return new Promise(async (resolve) => {
+        let options = taskUrl(id, 1);
+        $.get(options, async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`);
+                    console.log(`${$.name} API请求失败，请检查网路重试`);
+                } else {
+                    // console.log(data);
+                    data = JSON.parse(data);
+                    if (data.data) {
+                        data.data.groupinfo;
+                        if (data.data.groupinfo !=undefined) {
+                            groupDetail = data.data.groupinfo;
+                            let now = parseInt(new Date() / 1000)
+                            let end = groupDetail.end_time
+                            if (end > now && groupDetail.openhongbaosum != groupDetail.totalhongbaosum) {
+                                let groupid = groupDetail.groupid;
+                                groupArr.push(groupid)
+                            }
+                        }else {
+                            groupDetail = {}
+                        }
+                    }else {
+                        console.log('快去买买买！');
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp);
+            } finally {
+                resolve();
+            }
+        });
+    });
 }
 
-async function taskPostUrl(functionId, body) {
+function getOrderList(){
+    return new Promise(async (resolve) => {
+        let options = taskUrl('',3)
+        $.get(options, async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`);
+                    console.log(`${$.name} API请求失败，请检查网路重试`);
+                } else {
+                    // console.log(data);
+                    data = JSON.parse(data);
+                    if (data.errCode == '0' && data.orderList.length >0) {
+                        orderList = data.orderList;
+                    }else {
+                        console.log('快去买买买！');
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp);
+            } finally {
+                resolve();
+            }
+        });
+    });
+}
+
+function taskUrl(id, type) {
+    if (type === 1) url = `https://wq.jd.com/fanxianzl/zhuli/QueryGroupDetail?isquerydraw=1&orderid=${id}&groupid=&sceneval=2&g_login_type=1&g_ty=ls`
+    if (type === 2) url = `http://wq.jd.com/fanxianzl/zhuli/Help?groupid=${id}&_stk=groupid&_ste=2&g_ty=ls&g_tk=1710198667&sceneval=2&g_login_type=1`;
+    if (type === 3) url = `https://wq.jd.com/bases/orderlist/list?order_type=3&start_page=1&last_page=0&page_size=10&callersource=newbiz&t=${Date.now()}&traceid=&g_ty=ls&g_tk=606717070`;
     return {
-        url: `${JD_API_HOST}`,
-        body: `functionId=${functionId}&body=${escape(JSON.stringify(body))}&client=wh5&clientVersion=1.0.0&appid=content_ecology&uuid=6898c30638c55142969304c8e2167997fa59eb54&t=1622588448365`,
+        url: url,
         headers: {
-            'Cookie': cookie,
-            'Host': 'api.m.jd.com',
-            'Connection': 'keep-alive',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-            'Accept-Language': 'zh-cn',
-            'Accept-Encoding': 'gzip, deflate, br',
-        }
-    }
-}
-
-
-async function safeGet(data) {
-    try {
-        if (typeof JSON.parse(data) == "object") {
-            return true;
-        }
-    } catch (e) {
-        console.log(e);
-        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
-        return false;
-    }
-}
-
-function jsonParse(str) {
-    if (typeof str == "string") {
-        try {
-            return JSON.parse(str);
-        } catch (e) {
-            console.log(e);
-            $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
-            return [];
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "zh-cn",
+            "Connection": "keep-alive",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Host": "wq.jd.com",
+            "Referer": `https://happy.m.jd.com/babelDiy/Zeus/3ugedFa7yA6NhxLN5gw2L3PF9sQC/index.html?asid=287215626&un_area=12_904_905_57901&lng=121.477665&lat=31.239634`,
+            "Cookie": cookie,
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdltapp;android;3.5.6;9;8363532363230343238303836333-43D2468336563316936636265356;network/wifi;model/MI 8;addressid/2688971613;aid/059b2009dc5afb88;oaid/665d225a3f96764;osVer/28;appBuild/1656;psn/gB6yf l3bIcXHm 4uTHuFZIigUClYKza5OsTPc6vgTc=|932;psq/11;adk/;ads/;pap/JA2020_3112531|3.5.6|ANDROID 9;osv/9;pv/712.12;jdv/0|direct|-|none|-|1613884468974|1613884552;ref/HomeFragment;partner/xiaomi;apprpd/Home_Main;eufv/1;Mozilla/5.0 (Linux; Android 9; MI 8 Build/PKQ1-wesley_iui-19.08.25; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045513 Mobile Safari/537.36"),
         }
     }
 }
