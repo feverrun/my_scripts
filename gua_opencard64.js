@@ -1,5 +1,5 @@
 /*
-11.1~11.11 联合开卡 [gua_opencard58.js]
+10.29~11.3 联合开卡 [gua_opencard64.js]
 新增开卡脚本
 一次性脚本
 
@@ -7,10 +7,10 @@
 2.开18张 成功开1张 可能获得5京豆
   全部开完获得1次抽奖
 3.关注10京豆 获得1次抽奖
-4.加购5京豆 获得1次抽奖(默认不加购 如需加购请设置环境变量[guaopencard_addSku58]为"true"
-5.抽奖 (默认不抽奖 如需抽奖请设置环境变量[guaopencard_draw58]为"3"
+4.加购5京豆 获得1次抽奖(默认不加购 如需加购请设置环境变量[guaopencard_addSku64]为"true"
+5.抽奖 (默认不抽奖 如需抽奖请设置环境变量[guaopencard_draw64]为"3"
 填写要抽奖的次数 不足已自身次数为准
-guaopencard_draw58="3"
+guaopencard_draw64="3"
 填非数字会全都抽奖
 
 第一个账号助力作者 其他依次助力CK1
@@ -18,25 +18,25 @@ guaopencard_draw58="3"
 
 默认脚本不执行
 如需执行脚本请设置环境变量
-guaopencard58="true"
+guaopencard64="true"
 每个账号之间延迟 100=延迟100秒 0=延迟0秒会使用每3个账号延迟60秒
 guaopenwait_All 所有
-guaopenwait58="0"
+guaopenwait64="0"
 
 
 All变量适用
 ————————————————
-入口：[ 11.1~11.11 联合开卡 (https://3.cn/103iJ-0uz)]
+入口：[ 10.29~11.3 联合开卡 (https://3.cn/103jBB2-0)]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
-13:/￥R5LgN8puqDAxLm￥
+18:/￥R0mkcE4Qg2uhKH￥
 
 ============Quantumultx===============
 [task_local]
-#11.1~11.11 联合开卡
-cron "7 1,12 1-11 11 *" gua_opencard58.js, tag=11.1~11.11 联合开卡, enabled=true
+#10.29~11.3 联合开卡
+cron "18 1,10 1-3 11 *" gua_opencard64.js, tag=10.29~11.3 联合开卡, enabled=true
 
 */
 let guaopencard_addSku = "true"
@@ -44,7 +44,7 @@ let guaopencard = "true"
 let guaopenwait = "0"
 let guaopencard_draw = "3"
 
-const $ = new Env('11.1~11.11 联合开卡');
+const $ = new Env('10.29~11.3 联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cleanCart = ''
@@ -69,14 +69,14 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku58 ? process.env.guaopencard_addSku58 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku58') ? $.getdata('guaopencard_addSku58') : `${guaopencard_addSku}`);
+guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku64 ? process.env.guaopencard_addSku64 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku64') ? $.getdata('guaopencard_addSku64') : `${guaopencard_addSku}`);
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku_All ? process.env.guaopencard_addSku_All : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku_All') ? $.getdata('guaopencard_addSku_All') : `${guaopencard_addSku}`);
-guaopencard = $.isNode() ? (process.env.guaopencard58 ? process.env.guaopencard58 : `${guaopencard}`) : ($.getdata('guaopencard58') ? $.getdata('guaopencard58') : `${guaopencard}`);
+guaopencard = $.isNode() ? (process.env.guaopencard64 ? process.env.guaopencard64 : `${guaopencard}`) : ($.getdata('guaopencard64') ? $.getdata('guaopencard64') : `${guaopencard}`);
 guaopencard = $.isNode() ? (process.env.guaopencard_All ? process.env.guaopencard_All : `${guaopencard}`) : ($.getdata('guaopencard_All') ? $.getdata('guaopencard_All') : `${guaopencard}`);
-guaopenwait = $.isNode() ? (process.env.guaopenwait58 ? process.env.guaopenwait58 : `${guaopenwait}`) : ($.getdata('guaopenwait58') ? $.getdata('guaopenwait58') : `${guaopenwait}`);
+guaopenwait = $.isNode() ? (process.env.guaopenwait64 ? process.env.guaopenwait64 : `${guaopenwait}`) : ($.getdata('guaopenwait64') ? $.getdata('guaopenwait64') : `${guaopenwait}`);
 guaopenwait = $.isNode() ? (process.env.guaopenwait_All ? process.env.guaopenwait_All : `${guaopenwait}`) : ($.getdata('guaopenwait_All') ? $.getdata('guaopenwait_All') : `${guaopenwait}`);
 guaopenwait = parseInt(guaopenwait, 10) || 0
-guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw58 ? process.env.guaopencard_draw58 : guaopencard_draw) : ($.getdata('guaopencard_draw58') ? $.getdata('guaopencard_draw58') : guaopencard_draw);
+guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw64 ? process.env.guaopencard_draw64 : guaopencard_draw) : ($.getdata('guaopencard_draw64') ? $.getdata('guaopencard_draw64') : guaopencard_draw);
 guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw ? process.env.guaopencard_draw : guaopencard_draw) : ($.getdata('guaopencard_draw') ? $.getdata('guaopencard_draw') : guaopencard_draw);
 guaopenwait = parseInt(guaopenwait, 10) || 0
 allMessage = ""
@@ -89,7 +89,7 @@ let activityCookie =''
 !(async () => {
     if ($.isNode()) {
         if(guaopencard+"" != "true"){
-            console.log('如需执行脚本请设置环境变量[guaopencard58]为"true"')
+            console.log('如需执行脚本请设置环境变量[guaopencard64]为"true"')
         }
         if(guaopencard+"" != "true"){
             return
@@ -104,7 +104,7 @@ let activityCookie =''
     // return
     $.appkey = '51B59BB805903DA4CE513D29EC448375'
     $.userId = '10299171'
-    $.actId = 'c3860ccdb6a24de5b773ea_11014'
+    $.actId = '26d52498bc034abbb91521_1029'
     $.MixNicks = ''
     $.inviteNick = 'JnGd3fFQ9edqNXqS3kHNFFs/ye9oluZX4nOTK56TeMXbR7I2OlzZch4hTs22oCUS'
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -207,7 +207,7 @@ async function run() {
                 }
             }
         }else{
-            console.log('如需加购请设置环境变量[guaopencard_addSku58]为"true"');
+            console.log('如需加购请设置环境变量[guaopencard_addSku64]为"true"');
         }
         await takePostRequest('activity_load');
         if(guaopencard_draw+"" !== "0"){
@@ -227,7 +227,7 @@ async function run() {
                 }
                 await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
             }
-        }else console.log('如需抽奖请设置环境变量[guaopencard_draw58]为"3" 3为次数');
+        }else console.log('如需抽奖请设置环境变量[guaopencard_draw64]为"3" 3为次数');
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
         console.log($.MixNick)

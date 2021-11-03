@@ -36,7 +36,7 @@ All变量适用
 ============Quantumultx===============
 [task_local]
 #11.1~11.11 联合开卡
-cron "27 0,9 1-11 11 *" gua_opencard60.js, tag=11.1~11.11 联合开卡, enabled=true
+cron "37 0,12  1-11 11 *" gua_opencard60.js, tag=11.1~11.11 联合开卡, enabled=true
 
 */
 let guaopencard_addSku = "true"
@@ -199,14 +199,13 @@ async function run() {
             let goodsArr = []
             if(cleanCart){
                 goodsArr = await cleanCart.clean(cookie,'','')
-                await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
+                await takePostRequest('mission');
+                await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
                 if(cleanCart && goodsArr !== false){
-                    await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
+                    await $.wait(parseInt(Math.random() * 1000 + 7000, 10))
                     await cleanCart.clean(cookie,'',goodsArr || [ ])
                 }
             }
-            await takePostRequest('mission');
-            await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
         }else{
             console.log('如需加购请设置环境变量[guaopencard_addSku60]为"true"');
         }
