@@ -4,7 +4,7 @@ ck1助力 作者
 其余助力ck1
 https://u.jd.com/3wxf1Ug
 跳转到app 可查看助力情况
-cron 0 0,12,18 * * * jd_rebateRed.js
+cron 0 0,8,12,20,22 * * * jd_rebateRed.js
 */
 
 let rebateCodes = ''
@@ -45,7 +45,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
         if ($.isNode()) await notify.sendNotify($.name + '活动已结束', `请删除此脚本\n咱江湖再见`);
         return
     }
-    $.shareCode = 'sq9bZ'
+    $.shareCode = 'OjSOv'
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -321,7 +321,7 @@ function getUA(){
     if($.index != 1){
         let arr = [rebateCodes,'3wxf1Ug','ywDFAni']
         rebateCode = arr[Math.floor(Math.random() * arr.length)] || rebateCode
-        if(!rebateCode) rebateCode = 'ywDFAni'
+        if(!rebateCode) rebateCode = '3wxf1Ug'
     }
     console.log(rebateCode)
 }
