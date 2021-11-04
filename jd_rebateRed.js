@@ -2,7 +2,6 @@
 双十一无门槛红包🧧
 ck1助力 作者
 其余助力ck1
-https://u.jd.com/3wxf1Ug
 跳转到app 可查看助力情况
 cron 0 0,8,12,20,22 * * * jd_rebateRed.js
 */
@@ -14,8 +13,8 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const Faker = $.isNode() ? require('./utils/sign_graphics_validate.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [],
-    cookie = '';
+let cookiesArr = [], cookie = '';
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -24,14 +23,16 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-rebateCodes = $.isNode() ? (process.env.jd_redEnvelope_rebateCode ? process.env.jd_redEnvelope_rebateCode : `${rebateCodes}`) : ($.getdata('jd_redEnvelope_rebateCode') ? $.getdata('jd_redEnvelope_rebateCode') : `${rebateCodes}`);
+
+rebateCodes = $.isNode() ? (process.env.jd_rebateCode ? process.env.jd_rebateCode : `${rebateCodes}`) : ($.getdata('jd_rebateCode') ? $.getdata('jd_rebateCode') : `${rebateCodes}`);
 
 rebateCode = ''
 message = ''
 newCookie = ''
 resMsg = ''
-const activeEndTime = '2021/11/12 00:00:00+08:00';//活动结束时间
+const activeEndTime = '2021/11/30 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
+
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
@@ -41,8 +42,8 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     }
     if (nowTime > new Date(activeEndTime).getTime()) {
         //活动结束后弹窗提醒
-        $.msg($.name, '活动已结束', `请删除此脚本\n咱江湖再见`);
-        if ($.isNode()) await notify.sendNotify($.name + '活动已结束', `请删除此脚本\n咱江湖再见`);
+        $.msg($.name, '活动已结束', ``);
+        if ($.isNode()) await notify.sendNotify($.name + '活动已结束', ``);
         return
     }
     $.shareCode = 'OjSOv'
@@ -51,15 +52,16 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
         if (cookie) {
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.index = i + 1;
+            $.nickName = '';
             console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             await getUA()
             await run();
         }
     }
     if(message){
-        $.msg($.name, ``, `${message}\nhttps://u.jd.com/3wxf1Ug\n\n跳转到app 可查看助力情况`);
+        $.msg($.name, ``, `${message}\nhttps://u.jd.com/ywYm7HY\n\n跳转到app 可查看助力情况`);
         if ($.isNode()){
-            await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/3wxf1Ug\n跳转到app 可查看助力情况`);
+            await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/ywYm7HY\n跳转到app 可查看助力情况`);
         }
     }
 })()
@@ -317,13 +319,13 @@ function getEid(arr) {
 
 function getUA(){
     $.UA = `jdapp;iPhone;10.2.0;13.1.2;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone8,1;addressid/2308460611;appBuild/167853;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
-    rebateCode = '3wxf1Ug'
+    rebateCode = 'ywYm7HY'
     if($.index != 1){
-        let arr = [rebateCodes,'3wxf1Ug','ywDFAni']
+        let arr = [rebateCodes,'ywYm7HY']
         rebateCode = arr[Math.floor(Math.random() * arr.length)] || rebateCode
-        if(!rebateCode) rebateCode = '3wxf1Ug'
+        console.log(Math.floor(Math.random() * arr.length));
+        if(!rebateCode) rebateCode = 'ywYm7HY'
     }
-    console.log(rebateCode)
 }
 function randomString(e) {
     e = e || 32;
