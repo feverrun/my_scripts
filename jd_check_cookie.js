@@ -40,6 +40,7 @@ if ($.isNode()) {
         $.nickName = '';
         message = '';
         await UserInfo();
+        await $.wait(200);
 
         console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
         if (!$.isLogin) {
@@ -88,15 +89,17 @@ function TotalBean() {
     }).catch(function (err) {
         console.log(err);
     }).then(function (res) {
-        if (res.data && res.data.status === 200) {
-            // console.log(res.data);
-            data = JSON.parse(res.data);
-            if (data['retcode'] === 13) {
+        if (res.status === 200 && res.data) {
+            let data = getObject(res.data);
+            // console.log(data)
+            if (data.retcode === 13) {
                 $.isLogin = false; //cookie过期
                 console.log('cookie过期');
-                return
+
             }
         }
+    }).catch(function (err) {
+        console.log(err)
     })
 }
 
@@ -120,19 +123,31 @@ function UserInfo() {
     }).catch(function (err) {
         console.log(err)
     }).then(function (res) {
-        if (res.data) {
-            data = res.data;
+        if (res.status == 200 && res.data) {
+            let data = getObject(res.data);
+            // console.log(data)
             if (data.retcode === "1001") {
                 $.isLogin = false; //cookie过期
-                return;
+                console.log('cookie过期');
             }
             //data.userInfo
             // if (data.retcode === "0") {
             //     let nickName = data.data.userInfo.baseInfo.nickname;
-                // $.nickName = nickName;
+            // $.nickName = nickName;
             // }
         }
+    }).catch(function (err) {
+        console.log(err)
     })
+}
+
+function getObject(data) {
+    if (typeof data == 'string') {
+        return JSON.parse(data);
+    }
+    if (typeof data == 'object') {
+        return data;
+    }
 }
 
 // prettier-ignore

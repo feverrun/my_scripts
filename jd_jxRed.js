@@ -1,14 +1,14 @@
 /*
-双十一无门槛红包🧧
+京享红包
 ck1助力 作者
 其余助力ck1
 跳转到app 可查看助力情况
-cron 0 0,8,12,20,22 * * * jd_rebateRed.js
+cron 0 0,8,12,20,22 * * * jd_jxRed.js
 */
 
 let rebateCodes = ''
 
-const $ = new Env('双十一无门槛红包🧧');
+const $ = new Env('京享红包');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const Faker = $.isNode() ? require('./utils/sign_graphics_validate.js') : '';
