@@ -20,15 +20,15 @@ let shareCodes = [];
         $.nickName = '';
         var data = await requestApi('h5launch');
         if (data?.data?.result?.status == 1) {
-            console.log(`账号${$.index}`, 火爆)
+            console.log(`账号${$.index}`, '火爆')
             continue;
         }
         console.log(`\n京东账号【${$.index}】${$.UserName}`);
         data = await requestApi('h5activityIndex');
         if (data?.data?.code == 20002) {
-            console.log(`账号${$.index}`, 已达拆红包数量限制)
+            console.log(`账号${$.index}`, '已达拆红包数量限制')
         }else if (data?.data?.code == 10002) {
-            console.log(`账号${$.index}`, 火爆)
+            console.log(`账号${$.index}`, '火爆')
         }else if (data?.data?.code == 20001) {//红包活动正在进行，可拆
             console.log(`互助码: ${data.data.result.redpacketInfo.id}`);
             shareCodes.push(data.data.result.redpacketInfo.id);

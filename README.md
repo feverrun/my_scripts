@@ -33,6 +33,7 @@ npm install -g png-js
 npm install -g date-fns
 npm install -g axios
 npm install -g crypto-js
+npm install -g md5
 npm install -g ts-md5
 npm install -g tslib
 npm install -g @types/node

@@ -2,27 +2,12 @@
 
 请确保新用户助力过开工位，否则开启游戏了就不算新用户，后面就不能助力开工位了！！！！！！！！！！
 
-更新地址：https://github.com/Tsukasa007/my_script
-============Quantumultx===============
-[task_local]
-#汪汪乐园每日任务
-20 7,9,17,20 * * * jd_joypark_task.js, tag=汪汪乐园每日任务, img-url=https://raw.githubusercontent.com/tsukasa007/icon/master/jd_joypark_task.png, enabled=true
-
-================Loon==============
-[Script]
 cron "20 7,9,17,20 * * *" script-path=jd_joypark_task.js,tag=汪汪乐园每日任务
-
-===============Surge=================
-汪汪乐园每日任务 = type=cron,cronexp="20 7,9,17,20 * * *",wake-system=1,timeout=3600,script-path=jd_joypark_task.js
-
-============小火箭=========
-汪汪乐园每日任务 = type=cron,script-path=jd_joypark_task.js, cronexpr="20 7,9,17,20 * * *", timeout=3600, enable=true
 */
 
 const $ = new Env('汪汪乐园每日任务');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 
 if ($.isNode()) {
