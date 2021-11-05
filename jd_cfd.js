@@ -68,9 +68,7 @@ if ($.isNode()) {
                 let user = $.UserName;
                 let code = $.shareCodes[0];
                 await submitCode(code, user);
-                await $.wait(500);
             }
-
         }
     }
 
@@ -1514,7 +1512,7 @@ function showMsg() {
 function shareCodesFormat() {
     return new Promise(async resolve => {
         $.newShareCodes = []
-        await readShareCode();
+        await readShareCode()
         if (codePool && codePool.code === 0) {
             $.newShareCodes = [...new Set([...$.shareCodes,  ...(codePool.data || [])])];
         } else {
@@ -1527,7 +1525,7 @@ function shareCodesFormat() {
 
 //提交互助码
 function submitCode(myInviteCode, user) {
-    axios({
+    return axios({
         url: `http://hz.feverrun.top:99/share/submit/cfd`,
         params: {
             code: myInviteCode,
@@ -1557,7 +1555,7 @@ function submitCode(myInviteCode, user) {
 }
 
 function readShareCode() {
-    axios({
+    return axios({
         url: `http://hz.feverrun.top:99/share/get/cfd`,
         params: {},
         data: {},
