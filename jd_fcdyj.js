@@ -1,6 +1,6 @@
 /*
 活动入口： 京东极速版-我的-发财大赢家
-cron "1 6-22/3 * * *" script-path=jd_fcdyj.js tag=发财大赢家助力
+cron "7 7,9,12,18,22 * * *" script-path=jd_fcdyj.js tag=发财大赢家助力
  */
 
 const $ = new Env('发财大赢家助力');
