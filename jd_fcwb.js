@@ -157,7 +157,7 @@ function wb(round, rowIdx, colIdx) {
         params: {
             functionId: 'happyDigDo',
             body: body,
-            t: '1635561607124',
+            t: Date.now(),
             appid: 'activities_platform',
             client: 'H5',
             clientVersion: '1.0.0',
@@ -195,7 +195,7 @@ function home() {
         params: {
             functionId: 'happyDigHome',
             body: body,
-            t: '1635561607124',
+            t: Date.now(),
             appid: 'activities_platform',
             client: 'H5',
             clientVersion: '1.0.0',
@@ -234,7 +234,7 @@ function help() {
         params: {
             functionId: 'happyDigHelp',
             body: body,
-            t: '1635561607124',
+            t: Date.now(),
             appid: 'activities_platform',
             client: 'H5',
             clientVersion: '1.0.0',
