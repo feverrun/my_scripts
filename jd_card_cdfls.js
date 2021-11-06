@@ -43,7 +43,7 @@ if ($.isNode()) {
         return;
     }
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity/6898593?activityId=dz211026100001616201shop&shareUuid=2cabb72f239a41329c3d8ffc5deb40e7`)
-    let authorCodeList = ['eee']
+    let authorCodeList = ['2cabb72f239a41329c3d8ffc5deb40e7']
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
