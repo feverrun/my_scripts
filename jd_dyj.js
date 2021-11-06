@@ -1,6 +1,6 @@
 /*
 活动入口： 京东极速版-我的-发财大赢家
-cron "7 7,9,12,18,22 * * *" script-path=jd_fcdyj.js tag=发财大赢家助力
+cron "7 7,9,12,18 * * *" script-path=jd_dyj.js tag=发财大赢家助力
  */
 
 const $ = new Env('发财大赢家助力');
@@ -40,6 +40,7 @@ const JD_API_HOST = `https://api.m.jd.com`;
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.index = i + 1;
             $.isLogin = true;
+            $.nickName = '';
             $.message = `【京东账号${$.index}】${$.UserName}\n`
             console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
         }
