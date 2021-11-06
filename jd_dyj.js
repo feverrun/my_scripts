@@ -36,10 +36,6 @@ if ($.isNode()) {
     $.canDraw = false
     $.canHelp = true;
 
-    //开红包查询
-    cookie = cookiesArr[0];
-    $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         $.hotFlag = false;
