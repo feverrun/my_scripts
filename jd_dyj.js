@@ -3,10 +3,15 @@
 cron "7 7,9,12,18 * * *" script-path=jd_dyj.js tag=发财大赢家助力
  */
 
-const $ = new Env('发财大赢家助力');
+const $ = new Env('发财大赢家');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const axios = $.isNode() ? require('axios') : '';
 const dyjCode = $.isNode() ? (process.env.dyjCode ? process.env.dyjCode : null) : null //邀请码变量，不支持多账号，格式：redEnvelopeId@markedPin
 let cookiesArr = [], cookie = '';
+
+const JD_API_HOST = `https://api.m.jd.com`;
+const LINKID = "PFbUR7wtwUcQ860Sn8WRfw";
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -16,24 +21,26 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-const JD_API_HOST = `https://api.m.jd.com`;
 !(async () => {
+
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {
             "open-url": "https://bean.m.jd.com/bean/signIndex.action"
         });
         return;
     }
-    console.log(`\n发财大赢家助力逻辑：优先助力填写的互助码环境变量,格式:redEnvelopeId@markedPin，中午10点之后再给我助力\n`)
+    console.log(`\n发财大赢家助力逻辑：优先助力填写的互助码环境变量,格式:redEnvelopeId@markedPin \n`)
     message = ''
     $.helptype = 1
     $.needhelp = true
     $.canDraw = false
     $.canHelp = true;
-    $.linkid = "PFbUR7wtwUcQ860Sn8WRfw"
 
     //开红包查询
-    for (let i = 0; i < cookiesArr.length && $.needhelp; i++) {
+    cookie = cookiesArr[0];
+    $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+
+    for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         $.hotFlag = false;
         if (cookie) {
@@ -74,12 +81,12 @@ const JD_API_HOST = `https://api.m.jd.com`;
                 cookie = cookiesArr[i];
                 $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
                 $.canRun = true
-                console.log(`\n${$.UserName} 剩余助力去助力作者\n`)
+                console.log(`\n${$.UserName} 有剩余机会帮助我\n`)
                 for (let j = 0; j < $.authorCode.length; j++) {
                     let item = $.authorCode[j];
                     await help(item.redEnvelopeId, item.inviter, 1)
                     if (!$.canRun) {
-                        break;
+                        continue;
                     }
                     await $.wait(3000)
                     await help(item.redEnvelopeId, item.inviter, 2)
@@ -115,186 +122,120 @@ const JD_API_HOST = `https://api.m.jd.com`;
     })
 
 async function exchange() {
-    return new Promise(async (resolve) => {
-        let options = taskUrl("exchange", `{"linkId":"${$.linkid}", "rewardType":${$.rewardType}}`)
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    data = JSON.parse(data);
-                    if (data.success && data.data.chatEnvelopeVo.status == 50059) {
-                        console.log(`【京东账号${$.index}】${data.data.chatEnvelopeVo.message} ，尝试兑换红包...`)
-                        $.rewardType = 1
-                        await exchange()
-                    } else {
-                        console.log(`【京东账号${$.index}】提现成功`)
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve();
-            }
-        });
-    });
+    try {
+        let data = await get('exchange', `{"linkId":"${LINKID}", "rewardType":${$.rewardType}}`)
+
+        if (data.success && data.data.chatEnvelopeVo.status == 50059) {
+            console.log(`【京东账号${$.UserName}】${data.data.chatEnvelopeVo.message} ，尝试兑换红包...`)
+            $.rewardType = 1
+            await exchange()
+        } else {
+            console.log(`【京东账号${$.UserName}】提现成功`)
+        }
+
+    }catch (e) {
+        console.log(e.message)
+    }
 }
 
-function open() {
-    return new Promise(async (resolve) => {
-        let options = taskUrl("openRedEnvelopeInteract", `{"linkId":"${$.linkid}"}`)
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    data = JSON.parse(data);
-                    if (data.code === 16020) {
-                        $.hotFlag = true
-                        console.log(data.errMsg);
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve();
-            }
-        });
-    });
+async function open() {
+    try {
+        let data = await get('openRedEnvelopeInteract', `{"linkId":'${LINKID}'}`)
+        if (data.code === 16020) {
+            $.hotFlag = true
+            console.log(data.errMsg);
+        }
+    } catch (e) {
+        console.log(e.message)
+    }
 }
 
-function getid() {
-    return new Promise(async (resolve) => {
-        let options = taskUrl("redEnvelopeInteractHome", `{"linkId":"${$.linkid}","redEnvelopeId":"","inviter":"","helpType":""}`)
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    data = JSON.parse(data);
-                    // console.log(data.data.state)
-                    if (data.data.state !== 0) {
-                        if (data.success && data.data) {
-                            console.log(`\n【您的redEnvelopeId】：${data.data.redEnvelopeId}`)
-                            console.log(`\n【您的markPin】：${data.data.markedPin}`)
-                        } else {
-                            console.log(data)
-                        }
-                    } else {
-                        console.log(`【京东账号${$.index}】为黑号，跳过`)
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve();
+async function getid() {
+    try {
+        let data = await get('redEnvelopeInteractHome', `{"linkId":'${LINKID}',"redEnvelopeId":"","inviter":"","helpType":""}`)
+        if (data.data.state !== 0) {
+            if (data.success && data.data) {
+                console.log(`\n【您的redEnvelopeId】：${data.data.redEnvelopeId}`)
+                console.log(`\n【您的markPin】：${data.data.markedPin}`)
+            } else {
+                console.log(data)
             }
-        });
-    });
+        } else {
+            console.log(`【京东账号${$.index}】为黑号，跳过`)
+        }
+    }catch (e) {
+        console.log(e.message)
+    }
 }
 
-function getinfo() {
-    return new Promise(async (resolve) => {
-        let options = taskUrl("redEnvelopeInteractHome", `{"linkId":"${$.linkid}","redEnvelopeId":"","inviter":"","helpType":""}`)
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    data = JSON.parse(data);
-                    if(data.data.state !=null) console.log(data.data.state)
-                    if (data.data.state !== 0) {
-                        if (data.success && data.data) {
-                            if (data.data.state === 3) {
-                                console.log("今日已成功兑换")
-                                $.needhelp = false
-                                $.canDraw = false
-                            }
-                            if (data.data.state === 6 || data.data.state === 4) {
-                                $.needhelp = false
-                                $.canDraw = true
-                            }
-                        } else {
-                            console.log(`当前余额：${data.data.amount} 还需 ${data.data.needAmount} `)
-                        }
-                    } else {
-                        $.canDraw = false
-                        console.log(`【京东账号${$.index}】为黑号，跳过`)
-                    }
+async function getinfo() {
+    try {
+        let data = await get('redEnvelopeInteractHome', `{"linkId":"${LINKID}","redEnvelopeId":"","inviter":"","helpType":""}`);
+
+        if (data.data.state !== 0) {
+            if (data.success && data.data) {
+                if (data.data.state === 3) {
+                    console.log("今日已成功兑换")
+                    $.needhelp = false
+                    $.canDraw = false
                 }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve();
+                if (data.data.state === 6 || data.data.state === 4) {
+                    $.needhelp = false
+                    $.canDraw = true
+                }
+            } else {
+                console.log(`当前余额：${data.data.amount} 还需 ${data.data.needAmount} `)
             }
-        });
-    });
+        } else {
+            $.canDraw = false
+            console.log(data.data.state)
+            console.log(`【京东账号${$.index} - ${$.UserName}】为黑号，跳过`)
+        }
+    }catch (e) {
+        console.log(e.message)
+    }
 }
 
-function getrewardIndex() {
-    return new Promise(async (resolve) => {
-        let options = taskUrl("rewardIndex", `{"linkId":"${$.linkid}"}`)
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    data = JSON.parse(data);
-                    if (data.success && data.data) {
-                        if (data.data.haveHelpNum === 10) {
-                            console.log(`\n【京东账号${$.index}】已满足微信提现要求，开始提现\n`)
-                            $.canWx = true
-                        }
-                    } else {
-                        console.log(`当前已有 ${data.data.haveHelpNum} 人助力，还需 ${data.data.diffNum} 人`)
-                        $.canWx = false
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve();
+async function getrewardIndex() {
+    try {
+        let data = await get('rewardIndex', `{"linkId":"${LINKID}"}`)
+
+        if (data.success && data.data) {
+            if (data.data.haveHelpNum === 10) {
+                console.log(`\n【京东账号${$.index}-${$.UserName}】已满足微信提现要求，开始提现\n`)
+                $.canWx = true
+            }else {
+                console.log(`当前已有 ${data.data.haveHelpNum} 人助力，还需 ${data.data.diffNum} 人`)
+                $.canWx = false
             }
-        });
-    });
+        }else {
+            console.log('黑号')
+            $.canWx = false
+        }
+    }catch (e) {
+        console.log(e.message)
+    }
 }
 
-function help(rid, inviter, type) {
-    return new Promise(async (resolve) => {
-        let options = taskUrl("openRedEnvelopeInteract", `{"linkId":"${$.linkid}","redEnvelopeId":"${rid}","inviter":"${inviter}","helpType":"${type}"}`)
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    data = JSON.parse(data);
-                    if (data.data && data.data.helpResult) {
-                        console.log(JSON.stringify(data.data.helpResult))
-                        if (data.data.helpResult.code === 16005 || data.data.helpResult.code === 16007) {
-                            $.needhelp = false
-                            $.canDraw = true
-                        } else if (data.data.helpResult.code === 16011) {
-                            $.needhelp = false
-                        }
-                    } else {
-                        console.log(JSON.stringify(data))
-                        console.log(`【京东账号${$.UserName}】为黑号，跳过助力`)
-                        $.canRun = false
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve();
+async function help(rid, inviter, type) {
+    try {
+        let data = await get('openRedEnvelopeInteract', `{"linkId":"${LINKID}","redEnvelopeId":"${rid}","inviter":"${inviter}","helpType":"${type}"}`);
+        if (data.data && data.data.helpResult) {
+            console.log(JSON.stringify(data.data.helpResult))
+            if (data.data.helpResult.code === 16005 || data.data.helpResult.code === 16007) {
+                $.needhelp = false
+                $.canDraw = true
+            } else if (data.data.helpResult.code === 16011) {
+                $.needhelp = false
             }
-        });
-    });
+        } else {
+            console.log(JSON.stringify(data))
+            console.log(`【京东账号${$.UserName}】为黑号，跳过助力`)
+            $.canRun = false
+        }
+    }catch (e) {
+        console.log(e.message)
+    }
 }
 
 function getAuthorShareCode() {
@@ -321,6 +262,44 @@ function getAuthorShareCode() {
     })
 }
 
+function get(function_id, body) {
+    return axios({
+        url: JD_API_HOST,
+        params: {
+            functionId: function_id,
+            body: body,
+            t: Date.now(),
+            appid: 'activities_platform',
+            client: 'H5',
+            clientVersion: '1.0.0',
+        },
+        data: {},
+        method: 'get',
+        timeout: 5000,
+        headers: {
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "zh-CN,en-US;q=0.9",
+            "Connection": "keep-alive",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "origin": "https://618redpacket.jd.com",
+            "Host": "api.m.jd.com",
+            "Referer": `https://618redpacket.jd.com/?activityId=${LINKID}&sid=5bb462f4d59c11e6a3d1bf3761ce7adw&un_area=12_984_13989_47891`,
+            "Cookie": cookie,
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdltapp;android;3.5.6;9;8363532363230343238303836333-43D2468336563316936636265356;network/wifi;model/MI 8;addressid/2688971613;aid/059b2009dc5afb88;oaid/665d225a3f96764;osVer/28;appBuild/1656;psn/gB6yf l3bIcXHm 4uTHuFZIigUClYKza5OsTPc6vgTc=|932;psq/11;adk/;ads/;pap/JA2020_3112531|3.5.6|ANDROID 9;osv/9;pv/712.12;jdv/0|direct|-|none|-|1613884468974|1613884552;ref/HomeFragment;partner/xiaomi;apprpd/Home_Main;eufv/1;Mozilla/5.0 (Linux; Android 9; MI 8 Build/PKQ1-wesley_iui-19.08.25; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045513 Mobile Safari/537.36"),
+        },
+    }).catch(err => {
+        console.log(err)
+    })
+        .then(res => {
+            if (res.status == 200 && res.data) {
+                return getObject(res.data);
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+}
+
 function taskUrl(function_id, body) {
     return {
         url: `${JD_API_HOST}/?functionId=${function_id}&body=${encodeURIComponent(body)}&t=${Date.now()}&appid=activities_platform&clientVersion=3.5.2`,
@@ -331,10 +310,19 @@ function taskUrl(function_id, body) {
             "Connection": "keep-alive",
             "Content-Type": "application/x-www-form-urlencoded",
             "Host": "api.m.jd.com",
-            "Referer": `https://618redpacket.jd.com/?activityId=${$.linkId}&channel=wjicon&sid=0a1ec8fa2455796af69028f8410996aw&un_area=1_2803_2829_0`,
+            "Referer": `https://618redpacket.jd.com/?activityId=${LINKID}&channel=wjicon&sid=0a1ec8fa2455796af69028f8410996aw&un_area=1_2803_2829_0`,
             "Cookie": cookie,
             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdltapp;android;3.5.6;9;8363532363230343238303836333-43D2468336563316936636265356;network/wifi;model/MI 8;addressid/2688971613;aid/059b2009dc5afb88;oaid/665d225a3f96764;osVer/28;appBuild/1656;psn/gB6yf l3bIcXHm 4uTHuFZIigUClYKza5OsTPc6vgTc=|932;psq/11;adk/;ads/;pap/JA2020_3112531|3.5.6|ANDROID 9;osv/9;pv/712.12;jdv/0|direct|-|none|-|1613884468974|1613884552;ref/HomeFragment;partner/xiaomi;apprpd/Home_Main;eufv/1;Mozilla/5.0 (Linux; Android 9; MI 8 Build/PKQ1-wesley_iui-19.08.25; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045513 Mobile Safari/537.36"),
         }
+    }
+}
+
+function getObject(data) {
+    if (typeof data == 'string') {
+        return JSON.parse(data);
+    }
+    if (typeof data == 'object') {
+        return data;
     }
 }
 
