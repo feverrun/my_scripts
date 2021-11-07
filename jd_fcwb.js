@@ -75,7 +75,7 @@ if ($.isNode()) {
         })
 
         await home()
-        await $.wait(1000)
+        await $.wait(2000)
 
         if (i === 0) {
             //仅限制第一个账号玩游戏允许自动挖宝
@@ -95,6 +95,7 @@ if ($.isNode()) {
                     flag = 4;
                     break;
             }
+            //自动挖宝可能挖不到现金，所以现在只助力需要手动挖
             for (let i = 0; i < flag; i++) {
                 for (let j = 0; j < flag; j++) {
                     if (breakFlag === 1) {
@@ -103,7 +104,7 @@ if ($.isNode()) {
                         console.log('第' + curRound + '关')
                         console.log(`挖宝位置坐标(${i},${j})`)
                         await wb(curRound, i, j)
-                        await $.wait(3000)
+                        await $.wait(5000)
                     }
                 }
             }
@@ -120,10 +121,10 @@ if ($.isNode()) {
             $.index = k + 1;
             console.log(`${$.UserName} => 帮助 ${fcwbinviter}`);
             await help()
-            await $.wait(1000)
+            await $.wait(2000)
         }
     } else {
-        console.log(`\n请先设置环境变量`);
+        console.log(`\n请先设置需要助力账号的环境变量\n`);
     }
 
     console.log('\n');
@@ -137,7 +138,7 @@ if ($.isNode()) {
             fcwbinviter = inviter;
             $.index = i + 1;
             await help()
-            await $.wait(1000)
+            await $.wait(2000)
         }
     }
 
@@ -152,7 +153,7 @@ if ($.isNode()) {
 //挖宝
 function wb(round, rowIdx, colIdx) {
     let body = `{"round":${round},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"yCcpwTLIbY6pjaM42ACUVg"}`
-    axios({
+    return axios({
         url: JD_API_HOST,
         params: {
             functionId: 'happyDigDo',
@@ -190,7 +191,7 @@ function wb(round, rowIdx, colIdx) {
 
 function home() {
     let body = {"linkId": "yCcpwTLIbY6pjaM42ACUVg"}
-    axios({
+    return axios({
         url: JD_API_HOST,
         params: {
             functionId: 'happyDigHome',
@@ -229,7 +230,7 @@ function home() {
 
 function help() {
     let body = `{"linkId":"yCcpwTLIbY6pjaM42ACUVg","inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}`
-    axios({
+    return axios({
         url: JD_API_HOST,
         params: {
             functionId: 'happyDigHelp',
@@ -270,7 +271,7 @@ function getObject(data) {
 }
 
 function getAuthorShareCode() {
-    axios({
+    return axios({
         url: `http://hz.feverrun.top:99/share/author/fcwb`,
         params: {},
         data: {},

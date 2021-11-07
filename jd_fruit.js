@@ -5,7 +5,6 @@
 活动入口：京东APP我的-更多工具-东东农场
 东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
 一天只能帮助3个人。多出的助力码无效
-[Script]
 cron "5 6,7,12,18,20 * * *" script-path=jd_fruit.js,tag=东东农场
 */
 
@@ -73,6 +72,18 @@ if ($.isNode()) {
 async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName}`;
     try {
+
+        //新版领取水滴
+        try {
+            for (let index = 0; index < 5; index++) {
+                await $.get(taskUrl("receiveStageEnergy", '%7B%22version%22%3A14%2C%22channel%22%3A1%2C%22babelChannel%22%3A%22120%22%7D&appid=wh5'), function (err, resp, data) {
+                    console.log('领助力奖励:' + resp.body);
+                })
+                await $.wait(2000);
+            }
+
+        } catch (error) { }
+
         await initForFarm();
         if ($.farmInfo.farmUserPro) {
             // option['media-url'] = $.farmInfo.farmUserPro.goodsImage;
@@ -1137,9 +1148,9 @@ async function gotThreeMealForFarm() {
 async function browseAdTaskForFarm(advertId, type) {
     const functionId = arguments.callee.name.toString();
     if (type === 0) {
-        $.browseResult = await request(functionId, {advertId, type});
+        $.browseResult = await request(functionId, { advertId, type, "version": 14, "channel": 1, "babelChannel": "45" });
     } else if (type === 1) {
-        $.browseRwardResult = await request(functionId, {advertId, type});
+        $.browseRwardResult = await request(functionId, { advertId, type, "version": 14, "channel": 1, "babelChannel": "45" });
     }
 }
 // 被水滴砸中API
@@ -1157,7 +1168,7 @@ async function initForFarm() {
     return new Promise(resolve => {
         const option =  {
             url: `${JD_API_HOST}?functionId=initForFarm`,
-            body: `body=${escape(JSON.stringify({"version":4}))}&appid=wh5&clientVersion=9.1.0`,
+            body: `body=${encodeURIComponent(JSON.stringify({"version":14}))}&appid=wh5&clientVersion=9.1.0`,
             headers: {
                 "accept": "*/*",
                 "accept-encoding": "gzip, deflate, br",
@@ -1199,7 +1210,7 @@ async function initForFarm() {
 async function taskInitForFarm() {
     console.log('\n初始化任务列表')
     const functionId = arguments.callee.name.toString();
-    $.farmTask = await request(functionId);
+    $.farmTask = await request(functionId, { "version": 14, "channel": 1, "babelChannel": "45" });
 }
 //获取好友列表API
 async function friendListInitForFarm() {
@@ -1253,7 +1264,7 @@ function readShareCode() {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
+                        // console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -1294,7 +1305,7 @@ function submitCode() {
 function shareCodesFormat() {
     return new Promise(async resolve => {
         newShareCodes = [];
-        console.log(`互助开始\n`)
+        // console.log(`互助开始\n`)
 
         let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
@@ -1343,7 +1354,7 @@ function safeGet(data) {
 }
 function taskUrl(function_id, body = {}) {
     return {
-        url: `${JD_API_HOST}?functionId=${function_id}&appid=wh5&body=${escape(JSON.stringify(body))}`,
+        url: `${JD_API_HOST}?functionId=${function_id}&appid=wh5&body=${encodeURIComponent(JSON.stringify(body))}`,
         headers: {
             Cookie: cookie,
             UserAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
