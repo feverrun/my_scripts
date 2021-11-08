@@ -1469,6 +1469,7 @@ function taskListUrl(function_path, body = '', bizCode = 'jxbfd') {
             "Accept": "*/*",
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+            "User-Agent": UA,
             "Referer": "https://st.jingxi.com/",
             "Cookie": cookie
         }
