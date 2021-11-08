@@ -8,8 +8,7 @@ Last Modified time: 2021-8-19
 不会每次运行脚本都投入电力
 只有当心仪的商品存在，并且收集起来的电量满足当前商品所需电力，才投入
 
-[Script]
-cron "0 0-22/1 * * * script-path=jd_jdfactory.js,tag=东东工厂
+cron "10 8,11,20 * * * script-path=jd_factory.js,tag=东东工厂
  */
 
 const $ = new Env('东东工厂');
