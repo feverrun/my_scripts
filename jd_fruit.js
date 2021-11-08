@@ -692,7 +692,7 @@ async function masterHelpShare() {
             } else if ($.helpResult.helpResult.code === '9') {
                 console.log(`【助力好友结果】: 之前给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
             } else if ($.helpResult.helpResult.code === '10') {
-                console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
+                console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满八人助力`);
             } else {
                 console.log(`助力其他情况：${JSON.stringify($.helpResult.helpResult)}`);
             }
