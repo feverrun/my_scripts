@@ -17,7 +17,6 @@ const JD_API_HOST = 'https://m.jingxi.com';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const openTuanCK = $.isNode() ? (process.env.OPEN_DREAMFACTORY_TUAN ? process.env.OPEN_DREAMFACTORY_TUAN : '1'):'1';
-const helpFlag = false;//是否参考作者团
 let tuanActiveId = ``;
 let cookiesArr = [], cookie = '', message = '';
 $.tuanIds = [];
@@ -33,6 +32,7 @@ if ($.isNode()) {
         $.getdata("CookieJD2"),
         ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
+
 !(async () => {
     let openTuanCKList = openTuanCK.split(',');
     $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
@@ -107,15 +107,12 @@ if ($.isNode()) {
         }
     }
     let res = [];
-    if(helpFlag){
-        res = await getAuthorShareCode('https://raw.githubusercontent.com/star261/jd/main/code/dreamFactory_tuan.json');
-        if(!res){
-            res = [];
-        }
-        if(res.length === 0){
-            return ;
-        }
-        console.log(`\n===============开始助力作者团===================`);
+
+    if (cookiesArr.length < 5) {
+        res = await getAuthorShareCode();
+        if(!res){res = [];}
+        if(res.length === 0){return ;}
+        // console.log(`\n===============开始助力作者团===================`);
         let thisTuanID = getRandomArrayElements(res, 1)[0];
         $.tuanMax = false;
         for (let i = 0; i < cookiesArr.length && !$.tuanMax; i++) {
@@ -123,7 +120,7 @@ if ($.isNode()) {
                 $.index = i + 1;
                 cookie = cookiesArr[i];
                 $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
-                console.log(`账号${$.UserName} 去参加作者团： ${thisTuanID}`);
+                console.log(`账号${$.UserName} 去参团： ${thisTuanID}`);
                 await JoinTuan(thisTuanID);
                 await $.wait(2000);
             }
@@ -169,27 +166,15 @@ async function getTuanActiveId() {
 }
 
 
-function getAuthorShareCode(url) {
+function getAuthorShareCode() {
     return new Promise(async resolve => {
         const options = {
-            "url": `${url}?${new Date()}`,
+            "url": `http://hz.feverrun.top:99/share/author/jxtuan`,
             "timeout": 10000,
             "headers": {
                 "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
             }
         };
-        if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-            const tunnel = require("tunnel");
-            const agent = {
-                https: tunnel.httpsOverHttp({
-                    proxy: {
-                        host: process.env.TG_PROXY_HOST,
-                        port: process.env.TG_PROXY_PORT * 1
-                    }
-                })
-            };
-            Object.assign(options, { agent })
-        }
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {

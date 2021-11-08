@@ -77,38 +77,36 @@ if ($.isNode()) {
         await home()
         await $.wait(2000)
 
-        if (i === 0) {
-            //仅限制第一个账号玩游戏允许自动挖宝
-
-            let flag = 0;
-            switch (curRound) {
-                case 1:
-                    flag = 4;
-                    break;
-                case 2:
-                    flag = 6;
-                    break;
-                case 3:
-                    flag = 7;
-                    break;
-                default:
-                    flag = 4;
-                    break;
-            }
-            //自动挖宝可能挖不到现金，所以现在只助力需要手动挖
-            for (let i = 0; i < flag; i++) {
-                for (let j = 0; j < flag; j++) {
-                    if (breakFlag === 1) {
-                        break;
-                    } else {
-                        console.log('第' + curRound + '关')
-                        console.log(`挖宝位置坐标(${i},${j})`)
-                        await wb(curRound, i, j)
-                        await $.wait(5000)
-                    }
-                }
-            }
-        }
+        console.log('\n去京东极速版app手动挖宝\n');
+        // if (i === 0) {
+        //     let flag = 0;
+        //     switch (curRound) {
+        //         case 1:
+        //             flag = 4;
+        //             break;
+        //         case 2:
+        //             flag = 6;
+        //             break;
+        //         case 3:
+        //             flag = 7;
+        //             break;
+        //         default:
+        //             flag = 4;
+        //             break;
+        //     }
+        //     for (let i = 0; i < flag; i++) {
+        //         for (let j = 0; j < flag; j++) {
+        //             if (breakFlag === 1) {
+        //                 break;
+        //             } else {
+        //                 console.log('第' + curRound + '关')
+        //                 console.log(`挖宝位置坐标(${i},${j})`)
+        //                 await wb(curRound, i, j)
+        //                 await $.wait(5000)
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     if (fcwbinviteCode) {
