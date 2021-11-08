@@ -84,6 +84,7 @@ async function jdFruit() {
             message = `【水果名称】${$.farmInfo.farmUserPro.name}\n`;
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
 
+            let submitCodeRes = await submitCode();
             if (submitCodeRes && submitCodeRes.code === 0) {
                 console.log(`🐔东东农场-互助码已提交！🐔`);
             }else {
