@@ -722,6 +722,9 @@ function dealReturn(type, data) {
                     console.log(`助力成功`);
                 } else if (data.data.result === 1) {
                     console.log(`不能助力自己`);
+                } else if (data.data.result === 3) {
+                    console.log(`该好友助力已满`);
+                    $.delcode = true;
                 } else if (data.data.result === 4) {
                     console.log(`助力次数已用完`);
                     $.canHelp = false;
