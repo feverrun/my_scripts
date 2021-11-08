@@ -410,14 +410,22 @@ function dealReturn(type, data) {
             }
             break;
         case 'help':
-            if (data.ret === 0 && data.data.result === 0 ) {
-                console.log(`助力成功`);
-            }else if (data.ret === 0 && data.data.result === 4){
-                console.log(`助力次数已用完 或者已助力`);
-                //$.canHelp = false;
-            }else if(data.ret === 0 && data.data.result === 5){
-                console.log(`助力已满`);
-                $.oneCodeInfo.max = true;
+            if (data.ret === 0) {
+                if (data.data.result === 0) {
+                    console.log(`助力成功`);
+                } else if (data.data.result === 1) {
+                    console.log(`不能助力自己`);
+                } else if (data.data.result === 4) {
+                    console.log(`助力次数已用完`);
+                    $.canHelp = false;
+                } else if (data.data.result === 5) {
+                    console.log(`已经助力过此好友`);
+                } else {
+                    console.log(JSON.stringify(data))
+                }
+            } else if (data.ret === 1016) {
+                console.log(`活动太火爆了，还是去买买买吧~`);
+                $.canHelp = false;
             }else{
                 console.log(JSON.stringify(data))
             }
