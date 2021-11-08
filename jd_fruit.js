@@ -6,7 +6,7 @@
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 互助码shareCode请先手动运行脚本查看打印可看到
 一天只能帮助3个人。多出的助力码无效
-cron "5 6-18/6 * * *" script-path=jd_fruit.js,tag=东东农场
+cron "5 6,8,12,18,20 * * *" script-path=jd_fruit.js,tag=东东农场
 export DO_TEN_WATER_AGAIN="" 默认再次浇水
 */
 
