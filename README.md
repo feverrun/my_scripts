@@ -19,6 +19,7 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|gua|jddj|getCookie|g
 闪购盲盒
 京喜牧场    (优先内部)
 ```
+## 互助池提提交仅限ip白名单内(可入群联系我加入白名单)
 
 ### 临时活动(已接入助力池)
 ```
