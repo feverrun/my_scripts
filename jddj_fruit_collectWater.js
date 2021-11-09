@@ -1,26 +1,17 @@
-/*
-京东到家果园水车收水滴任务脚本,支持qx,loon,shadowrocket,surge,nodejs
-兼容京东jdCookie.js
-手机设备在boxjs里填写cookie
-boxjs订阅地址:https://gitee.com/passerby-b/javascript/raw/master/JD/passerby-b.boxjs.json
-TG群:https://t.me/passerbyb2021
+/**
+ * 京东到家果园水车收水滴任务脚本,支持qx,loon,shadowrocket,surge,nodejs
+ 兼容京东jdCookie.js
+ cron "5 0-23/1 * * *" script-path=jddj_fruit_collectWater.js,tag=京东到家果园水车收水滴
 */
 
-//[task_local]
-// 5 */1 * * * https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_fruit_collectWater.js
-
-//================Loon==============
-//[Script]
-//cron "5 */1 * * *" script-path=https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_fruit_collectWater.js,tag=京东到家果园水车收水滴
-//
-
-const $ = new API("jddj_fruit_collectWater");
+const $ = new API("京东到家果园水车收水滴");
 let ckPath = './jdCookie.js';//ck路径,环境变量:JDDJ_CKPATH
 let cookies = [];
 let thiscookie = '', deviceid = '';
 let lat = '30.' + Math.round(Math.random() * (99999 - 10000) + 10000);
 let lng = '114.' + Math.round(Math.random() * (99999 - 10000) + 10000);
 let cityid = Math.round(Math.random() * (1500 - 1000) + 1000);
+
 !(async () => {
     if (cookies.length == 0) {
         if ($.env.isNode) {
@@ -53,10 +44,10 @@ let cityid = Math.round(Math.random() * (1500 - 1000) + 1000);
         thiscookie = await taskLoginUrl(thiscookie);
 
         await userinfo();
-        await $.wait(2000);
+        await $.wait(1000);
 
         await treeInfo();
-        await $.wait(2000);
+        await $.wait(1000);
 
         let tslist = await taskList();
         if (tslist.code == 1) {
@@ -65,13 +56,13 @@ let cityid = Math.round(Math.random() * (1500 - 1000) + 1000);
         }
 
         await collectWater();
-        await $.wait(2000);
+        await $.wait(1000);
 
         // await water();
-        // await $.wait(2000);
+        // await $.wait(1000);
 
         // await treeInfo();
-        // await $.wait(2000);
+        // await $.wait(1000);
 
     }
 
@@ -169,7 +160,7 @@ async function water() {
                     console.log('\n【浇水】:' + data.msg);
                     waterStatus = data.code;
                 })
-                await $.wait(2000);
+                await $.wait(1000);
             } while (waterStatus == 0);
             resolve();
 
@@ -265,13 +256,17 @@ async function taskLoginUrl(thiscookie) {
                 let ckstr = '';
                 await $.http.get(option).then(async response => {
                     //console.log(response);
-                    if (response.body.indexOf('请求成功') > -1) {
+                    let body = JSON.parse(response.body);
+                    if (body.code == 0) {
                         for (const key in response.headers) {
                             if (key.toLowerCase().indexOf('cookie') > -1) {
                                 ckstr = response.headers[key].toString();
                             }
                         }
                         ckstr += ';deviceid_pdj_jd=' + deviceid;
+                    }
+                    else {
+                        console.log(body.msg);
                     }
                 });
                 resolve(ckstr);

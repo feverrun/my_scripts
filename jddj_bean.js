@@ -1,19 +1,10 @@
 /*
 京东到家鲜豆任务脚本,支持qx,loon,shadowrocket,surge,nodejs
 兼容京东jdCookie.js
-手机设备在boxjs里填写cookie
-boxjs订阅地址:https://gitee.com/passerby-b/javascript/raw/master/JD/passerby-b.boxjs.json
-TG群:https://t.me/passerbyb2021
-
-[task_local]
-10 0 * * * https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_bean.js
-
-[Script]
-cron "10 0 * * *" script-path=https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_bean.js,tag=京东到家鲜豆任务
-
+cron "6 0,9 * * *" script-path=jddj_bean.js,tag=京东到家鲜豆任务
 */
 
-const $ = new API("jddj_bean");
+const $ = new API("京东到家鲜豆任务");
 let ckPath = './jdCookie.js';//ck路径,环境变量:JDDJ_CKPATH
 let cookies = [];
 let thiscookie = '', deviceid = '';
@@ -48,7 +39,7 @@ let thiscookie = '', deviceid = '';
         thiscookie = await taskLoginUrl(thiscookie);
 
         await userinfo();
-        await $.wait(2000);
+        await $.wait(1000);
 
         let tslist = await taskList();
         if (tslist.code == 1) {
@@ -213,13 +204,17 @@ async function taskLoginUrl(thiscookie) {
                 let ckstr = '';
                 await $.http.get(option).then(async response => {
                     //console.log(response);
-                    if (response.body.indexOf('请求成功') > -1) {
+                    let body = JSON.parse(response.body);
+                    if (body.code == 0) {
                         for (const key in response.headers) {
                             if (key.toLowerCase().indexOf('cookie') > -1) {
                                 ckstr = response.headers[key].toString();
                             }
                         }
                         ckstr += ';deviceid_pdj_jd=' + deviceid;
+                    }
+                    else {
+                        console.log(body.msg);
                     }
                 });
                 resolve(ckstr);

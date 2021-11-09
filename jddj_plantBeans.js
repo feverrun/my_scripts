@@ -1,11 +1,10 @@
 /*
 京东到家鲜豆庄园脚本,支持qx,loon,shadowrocket,surge,nodejs
-兼容京东jdCookie.js
-cron "10 0,8 * * *" script-path=jddj_plantBeans.js,tag=京东到家鲜豆庄园
+cron "18 0,9 * * *" script-path=jddj_plantBeans.js,tag=京东到家鲜豆庄园
 
 */
 
-const $ = new API("jddj_plantBeans");
+const $ = new API("京东到家鲜豆庄园");
 let ckPath = './jdCookie.js';//ck路径,环境变量:JDDJ_CKPATH
 
 let cookies = [];
@@ -338,13 +337,17 @@ async function taskLoginUrl(thiscookie) {
                 let ckstr = '';
                 await $.http.get(option).then(async response => {
                     //console.log(response);
-                    if (response.body.indexOf('请求成功') > -1) {
+                    let body = JSON.parse(response.body);
+                    if (body.code == 0) {
                         for (const key in response.headers) {
                             if (key.toLowerCase().indexOf('cookie') > -1) {
                                 ckstr = response.headers[key].toString();
                             }
                         }
                         ckstr += ';deviceid_pdj_jd=' + deviceid;
+                    }
+                    else {
+                        console.log(body.msg);
                     }
                 });
                 resolve(ckstr);

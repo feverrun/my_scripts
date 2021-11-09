@@ -1,25 +1,18 @@
-
-//京东到家鲜豆庄园收水滴脚本,支持qx,loon,shadowrocket,surge,nodejs
-// 兼容京东jdCookie.js
-// 手机设备在boxjs里填写cookie
-// boxjs订阅地址:https://gitee.com/passerby-b/javascript/raw/master/JD/passerby-b.boxjs.json
-//TG群:https://t.me/passerbyb2021
-
-//[task_local]
-//7 */1 * * * https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_getPoints.js
+/**
+ *京东到家鲜豆庄园收水滴脚本,支持qx,loon,shadowrocket,surge,nodejs
+ * cron "7 0-23/1 * * *" script-path=jddj_getPoints.js,tag=京东到家鲜豆庄园收水滴
+*/
 
 
-//[Script]
-//cron "7 */1 * * *" script-path=https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_getPoints.js,tag=京东到家鲜豆庄园收水滴
 
-
-const $ = new API("jddj_getPoints");
+const $ = new API("京东到家鲜豆庄园收水滴");
 let ckPath = './jdCookie.js';//ck路径,环境变量:JDDJ_CKPATH
 let cookies = [];
 let thiscookie = '', deviceid = '', nickname = '';
 let lat = '30.' + Math.round(Math.random() * (99999 - 10000) + 10000);
 let lng = '114.' + Math.round(Math.random() * (99999 - 10000) + 10000);
 let cityid = Math.round(Math.random() * (1500 - 1000) + 1000);
+
 !(async () => {
     if (cookies.length == 0) {
         if ($.env.isNode) {
@@ -51,10 +44,10 @@ let cityid = Math.round(Math.random() * (1500 - 1000) + 1000);
         thiscookie = await taskLoginUrl(thiscookie);
 
         await userinfo();
-        await $.wait(2000);
+        await $.wait(1000);
 
         await getPoints();
-        await $.wait(2000);
+        await $.wait(1000);
 
     }
 
@@ -103,7 +96,7 @@ async function watering() {
                     console.log('\n【浇水】:' + data.msg);
                     waterStatus = data.code;
                 })
-                await $.wait(2000);
+                await $.wait(1000);
             } while (waterStatus == 0);
             resolve();
 
@@ -206,13 +199,17 @@ async function taskLoginUrl(thiscookie) {
                 let ckstr = '';
                 await $.http.get(option).then(async response => {
                     //console.log(response);
-                    if (response.body.indexOf('请求成功') > -1) {
+                    let body = JSON.parse(response.body);
+                    if (body.code == 0) {
                         for (const key in response.headers) {
                             if (key.toLowerCase().indexOf('cookie') > -1) {
                                 ckstr = response.headers[key].toString();
                             }
                         }
                         ckstr += ';deviceid_pdj_jd=' + deviceid;
+                    }
+                    else {
+                        console.log(body.msg);
                     }
                 });
                 resolve(ckstr);
