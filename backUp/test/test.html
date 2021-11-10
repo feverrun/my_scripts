@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>axios</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<script>
+    getBean();
+
+    function getBean() {
+        return axios({
+            url: 'http://hz.feverrun.top:99/share/get/farm',
+            params: {},
+            data: {},
+            method: 'get',
+            timeout: 5000,
+            headers: {
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+            .then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log(err)
+            })
+    }
+
+</script>
+
+</body>
+</html>

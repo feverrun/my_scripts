@@ -57,17 +57,6 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                 let user = $.UserName;
                 await submitCode(code, user);
             }
-            if (i === 6) {
-                let code = $.temp[1];
-                let user = $.UserName;
-                await submitCode(code, user);
-            }
-            if (i == 12) {
-                let code = $.temp[2];
-                let user = $.UserName;
-                await submitCode(code, user);
-            }
-
             await $.wait(3000)
         }
     }
@@ -78,7 +67,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
 
             if ((cookiesArr && cookiesArr.length >= 1) && ($.temp && $.temp.length)) {
-                console.log(`\n先自己账号内部相互邀请助力`);
+                console.log(`\n先自己账号内部相互助力`);
                 for (let j = 0; j < $.temp.length && $.canHelp; j++) {
                     console.log(`\n${$.UserName} 去助力 ${$.temp[j]}`);
                     $.delcode = false;
@@ -91,7 +80,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                 }
             }
             if ($.canHelp && ($.newShareCodes && $.newShareCodes.length)) {
-                console.log(`\n\n如果有剩余助力机会，则给池子助力`)
+                console.log(`\n\n如果有剩余助力机会，给池子助力`)
                 for (let j = 0; j < $.newShareCodes.length && $.canHelp; j++) {
                     console.log(`\n${$.UserName} 去助力 ${$.newShareCodes[j]}`);
                     $.delcode = false;
