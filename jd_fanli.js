@@ -1,6 +1,6 @@
 /**
  *
- * cron "17 8,18 * * *"
+ * cron "17 8,18 * * *" jd_fanli.js
  */
 
 const $ = new Env('京东饭粒');
