@@ -1,13 +1,13 @@
 """
 const $ = new Env("京东饭粒");
 京东饭粒任务
-活动入口：https://u.jd.com/ywEoeYu
-每天60豆
+活动入口：https://u.jd.com/ytWx4w0
+每天60豆小毛，爱要不要
 
 cron:
-43 7,17 * * * jd_fanli.py
+46 9 * * * jd_fanli.py
 """
-
+import json
 import sys
 import os
 import time
@@ -75,27 +75,26 @@ def getTaskFinishCount(ck):
     return r.json()["content"]
 
 
-def saveTaskRecord(ck, taskId):
+def saveTaskRecord(ck, taskId, taskType):
     url = "https://ifanli.m.jd.com/rebateapi/task/saveTaskRecord"
     headers = getheader(ck)
-    data = '{"taskId":%s,"taskType":4}' % taskId
+    data = '{"taskId":%s,"taskType":%s}' % (taskId, taskType)
     r = requests.post(url, headers=headers, data=data, proxies=proxies)
     # printf(r.text)
     return r.json()["content"]["uid"], r.json()["content"]["tt"]
 
 
-def saveTaskRecord1(ck, taskId, uid, tt):
+def saveTaskRecord1(ck, taskId, uid, tt, taskType):
     # tt=int(time.time()*1000)
     url = "https://ifanli.m.jd.com/rebateapi/task/saveTaskRecord"
     headers = getheader(ck)
-    data = '{"taskId":%s,"taskType":4,"uid":"%s","tt":%s}' % (taskId, uid, tt)
+    data = '{"taskId":%s,"taskType":%s,"uid":"%s","tt":%s}' % (taskId, taskType, uid, tt)
     # printf(data)
     r = requests.post(url, headers=headers, data=data, proxies=proxies)
     printf(r.json()["content"]["msg"])
 
 
 if __name__ == '__main__':
-    printf("🔔京东饭粒, 开始!\n\n活动入口：https://u.jd.com/ywEoeYu\n\n")
     try:
         cks = os.environ["JD_COOKIE"].split("&")
     except:
@@ -111,9 +110,11 @@ if __name__ == '__main__':
                 for times in range(count["maxTaskCount"] - count["finishCount"]):
                     tasks = getTaskList(ck)
                     for i in tasks:
-                        if i["taskType"] == 4:
-                            uid, tt = saveTaskRecord(ck, i["taskId"])
+                        if i["statusName"] != "活动结束":
+                            printf("开始做任务：" + i["taskName"])
+                            uid, tt = saveTaskRecord(ck, i["taskId"], i["taskType"])
                             time.sleep(10)
-                            saveTaskRecord1(ck, i["taskId"], uid, tt)
+                            saveTaskRecord1(ck, i["taskId"], uid, tt, i["taskType"])
+                            break
         except:
             printf("发生异常错误")
