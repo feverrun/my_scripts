@@ -40,8 +40,8 @@ if($.isNode()){
             console.log(`[京东账号${$.index} ${$.UserName}]`)
             await bean();
             await totalBean();
-            message += `[京东账号${$.index}]\n`
-            console.log(`[京东账号${$.index}]`)
+            // message += `[京东账号${$.index}]\n`
+            // console.log(`[京东账号${$.index}]`)
             message += `账号名称：${$.jdName}\n`
             console.log(`账号名称：${$.jdName}`)
             message += `今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆\n`
@@ -62,12 +62,12 @@ if($.isNode()){
             $.JdMsScore !== 0 ? message += `京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元\n` : ''
             $.JdMsScore !== 0 ? console.log(`京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元`) : ''
             await redPacket();
-            if($.index % $.sendNum === 0 || (cookiesArr.length - ($.sentNum * $.sendNum)) < $.sendNum){
-                message += `[京东账号${$.index}]\n`
-            } else {
-                message += `[京东账号${$.index}]\n\n`
-            }
-            console.log(`[京东账号${$.index}]`)
+            // if($.index % $.sendNum === 0 || (cookiesArr.length - ($.sentNum * $.sendNum)) < $.sendNum){
+            //     message += `[京东账号${$.index}]\n`
+            // } else {
+            //     message += `[京东账号${$.index}]\n\n`
+            // }
+            // console.log(`[京东账号${$.index}]`)
             console.log(`[京东账号${$.index} ${$.UserName}] 结束\n`)
             if($.isNode()){
                 if($.index % $.sendNum === 0){
