@@ -90,12 +90,27 @@ async function jdPlantBean() {
             const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
             $.myPlantUuid = getParam(shareUrl, 'plantUuid')
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
-            const submitCodeRes = await submitCode();
-            if (submitCodeRes && submitCodeRes.code === 0) {
-                console.log(`🥑种豆得豆-互助码已提交！🥑`);
-            }else {
-                console.log(`🥑种豆得豆-互助码提交失败！🥑`);
+
+            try {
+                if ($.index === 1) {
+                    let submitRes = await submitCode0();
+                    if (submitRes && submitRes.code === 0) {
+                        console.log(`🥑种豆得豆-互助码已提交！🥑`);
+                    } else {
+                        console.log(`🥑种豆得豆-互助码提交失败！🥑`);
+                    }
+                } else {
+                    let submitCodeRes = await submitCode();
+                    if (submitCodeRes && submitCodeRes.code === 0) {
+                        console.log(`🥑种豆得豆-互助码已提交！🥑`);
+                    } else {
+                        console.log(`🥑种豆得豆-互助码提交失败！🥑`);
+                    }
+                }
+            } catch (e) {
+                console.log(e.message);
             }
+
             roundList = $.plantBeanIndexResult.data.roundList;
             currentRoundId = roundList[num].roundId;//本期的roundId
             lastRoundId = roundList[num - 1].roundId;//上期的roundId
@@ -562,7 +577,7 @@ function readShareCode() {
         resolve({"code":500})
     })
 }
-//提交互助码
+
 function submitCode() {
     return new Promise(async resolve => {
         $.get({url: `http://hz.feverrun.top:99/share/submit/bean?code=${$.myPlantUuid}&user=${$.UserName}`, timeout: 10000}, (err, resp, data) => {
@@ -585,7 +600,28 @@ function submitCode() {
         resolve({"code":500})
     })
 }
-//格式化助力码
+function submitCode0() {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/bean0?code=${$.myPlantUuid}&user=${$.UserName}`, timeout: 10000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        data = JSON.parse(data);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data || {"code":500});
+            }
+        })
+        await $.wait(10000);
+        resolve({"code":500})
+    })
+}
 function shareCodesFormat() {
     return new Promise(async resolve => {
         newShareCodes = [];
