@@ -25,7 +25,7 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|gua|jddj|getCookie|g
 ```
 城城分金        (优先内部) - 活动结束
 惊喜领取88      (优先内部)
-手机狂欢城活动   (优先内部)
+手机狂欢城活动   (优先内部) - 活动结束     
 锦鲤红包        (优先内部)
 ```
 
