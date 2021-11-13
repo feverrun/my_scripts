@@ -1,6 +1,6 @@
 /*
 https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=
-49 5,10,17 * * * jd_wxCollectionActivity
+49 5,10,17 * * * jd_wxCollectionActivity.js
 */
 const $ = new Env('加购物车抽奖');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
