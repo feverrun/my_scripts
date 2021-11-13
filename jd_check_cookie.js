@@ -40,7 +40,7 @@ if ($.isNode()) {
         $.nickName = '';
         message = '';
         await UserInfo();
-        await $.wait(200);
+        await $.wait(1000);
 
         console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
         if (!$.isLogin) {
@@ -70,7 +70,7 @@ if ($.isNode()) {
 
 
 function TotalBean() {
-    axios({
+    return axios({
         url: `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,  //这里写你要发请求的服务器url
         params: {},
         data: {},
@@ -104,7 +104,7 @@ function TotalBean() {
 }
 
 function UserInfo() {
-    axios({
+    return axios({
         url: `https://me-api.jd.com/user_new/info/GetJDUserInfoUnion`,  //这里写你要发请求的服务器url
         params: {},
         data: {},

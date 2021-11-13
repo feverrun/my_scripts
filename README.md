@@ -34,6 +34,8 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJD
 npm install -g png-js
 npm install -g date-fns
 npm install -g axios
+npm install -g dotenv
+npm install -g got
 npm install -g crypto-js
 npm install -g md5
 npm install -g ts-md5
@@ -46,6 +48,7 @@ npm install -g download
 npm install -g tunnel
 npm install -g ws
 npm install -g js-base64
+npm install -g qrcode-terminal
 ```
 ## 水群
 https://t.me/joinchat/s2VXArKMn5JlNjg1
