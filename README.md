@@ -2,7 +2,7 @@
 ### 只支持青龙拉取  (建议服务器通过docker安装青龙)
 #### 青龙环境搭建可以网上搜有很多教程
 ```
-ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|gua|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
+ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
 ## 只收稳定真实互助 账号个数不限

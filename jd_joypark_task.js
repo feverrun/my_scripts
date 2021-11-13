@@ -104,9 +104,9 @@ message = ""
                         }
                     }
                 } else if (task.taskType === 'SHARE_INVITE') {
+                    $.yq_taskid = task.id
                     for (let j = 0; j < 5; j++) {
-                        let resp = await apTaskDrawAward(261, 'SHARE_INVITE');
-
+                        let resp = await apTaskDrawAward($.yq_taskid, 'SHARE_INVITE');
                         if (!resp.success) {
                             break
                         }
