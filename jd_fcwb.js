@@ -17,6 +17,7 @@ let fcwbinviterArr = []
 let fcwbinviteCodes = ''
 let fcwbinviters = ''
 let breakFlag = 0;
+let linkId = `pTTvJeSTrpthgk9ASBVGsw`;
 
 if (process.env.fcwbinviteCode) {
     fcwbinviteCode = process.env.fcwbinviteCode;
@@ -150,7 +151,7 @@ if ($.isNode()) {
 
 //挖宝
 function wb(round, rowIdx, colIdx) {
-    let body = `{"round":${round},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"yCcpwTLIbY6pjaM42ACUVg"}`
+    let body = `{"round":${round},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"${linkId}"`
     return axios({
         url: JD_API_HOST,
         params: {
@@ -188,7 +189,7 @@ function wb(round, rowIdx, colIdx) {
 }
 
 function home() {
-    let body = {"linkId": "yCcpwTLIbY6pjaM42ACUVg"}
+    let body = `{"linkId": "${linkId}"}`
     return axios({
         url: JD_API_HOST,
         params: {
@@ -227,7 +228,7 @@ function home() {
 }
 
 function help() {
-    let body = `{"linkId":"yCcpwTLIbY6pjaM42ACUVg","inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}`
+    let body = `{"linkId":"${linkId}","inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}`
     return axios({
         url: JD_API_HOST,
         params: {
