@@ -65,7 +65,7 @@ if ($.isNode()) {
                 UAInfo[$.UserName] = UA
             }
         }
-    } while (count < 25)
+    } while (count < 3)
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done());
