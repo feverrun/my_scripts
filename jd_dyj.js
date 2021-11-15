@@ -53,6 +53,7 @@ if ($.isNode()) {
             await open()
             if ($.hotFlag) continue;
             await getid()
+            await $.wait(3000)
         } else {
             dyjStr = dyjCode.split("@")
             if (dyjStr[0]) {
@@ -70,14 +71,16 @@ if ($.isNode()) {
         }
     }
 
-    if (new Date().getHours() >= 10) {
+    console.log('\n');
+    if (new Date().getHours() >= 9) {
         await getAuthorShareCode()
         if ($.authorCode && $.authorCode.length) {
-            for (let i = 0; i < cookiesArr.length; i++) {
-                cookie = cookiesArr[i];
+            //只取前三个号
+            for (let i = 0; i < 3; i++) {
+                cookie = cookiesArr[i] ? cookiesArr[i] : cookiesArr[0];
                 $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
                 $.canRun = true
-                console.log(`\n${$.UserName} 有剩余机会帮助我\n`)
+                // console.log(`\n${$.UserName} 有剩余机会帮助我\n`)
                 for (let j = 0; j < $.authorCode.length; j++) {
                     let item = $.authorCode[j];
                     await help(item.redEnvelopeId, item.inviter, 1)
@@ -154,9 +157,11 @@ async function getid() {
                 console.log(`\n【您的redEnvelopeId】：${data.data.redEnvelopeId}`)
                 console.log(`\n【您的markPin】：${data.data.markedPin}`)
             } else {
-                console.log(data)
+                $.canHelp = false
+                // console.log(data)
             }
         } else {
+            $.canHelp = false
             console.log(`【京东账号${$.index}】为黑号，跳过`)
         }
     }catch (e) {
@@ -184,7 +189,7 @@ async function getinfo() {
             }
         } else {
             $.canDraw = false
-            console.log(data.data.state)
+            // console.log(data.data.state)
             console.log(`【京东账号${$.index} - ${$.UserName}】为黑号，跳过`)
         }
     }catch (e) {
@@ -217,7 +222,7 @@ async function help(rid, inviter, type) {
     try {
         let data = await get('openRedEnvelopeInteract', `{"linkId":"${LINKID}","redEnvelopeId":"${rid}","inviter":"${inviter}","helpType":"${type}"}`);
         if (data.data && data.data.helpResult) {
-            console.log(JSON.stringify(data.data.helpResult))
+            // console.log(JSON.stringify(data.data.helpResult))
             if (data.data.helpResult.code === 16005 || data.data.helpResult.code === 16007) {
                 $.needhelp = false
                 $.canDraw = true
@@ -225,7 +230,7 @@ async function help(rid, inviter, type) {
                 $.needhelp = false
             }
         } else {
-            console.log(JSON.stringify(data))
+            // console.log(JSON.stringify(data))
             console.log(`【京东账号${$.UserName}】为黑号，跳过助力`)
             $.canRun = false
         }

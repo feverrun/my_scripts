@@ -129,17 +129,22 @@ if ($.isNode()) {
     console.log('\n');
     await getAuthorShareCode();
     await $.wait(1000)
-    if ($.authorCode) {
-        let inviteCode = $.authorCode.inviteCode;
-        let inviter = $.authorCode.inviter;
-        for (let i = 0; i < cookiesArr.length; i++) {
-            fcwbinviteCode = inviteCode;
-            fcwbinviter = inviter;
-            $.index = i + 1;
-            await help()
-            await $.wait(2000)
+    try {
+        if ($.authorCode) {
+            let inviteCode = $.authorCode.inviteCode;
+            let inviter = $.authorCode.inviter;
+            for (let i = 0; i < 2; i++) {
+                cookie = cookiesArr[i] ? cookiesArr[i] : cookiesArr[0];
+                fcwbinviteCode = inviteCode;
+                fcwbinviter = inviter;
+                $.index = i + 1;
+                await help()
+                await $.wait(2000)
+            }
         }
+    } catch (e) {
     }
+
 
 })()
     .catch((e) => {
