@@ -5,14 +5,14 @@
 活动时间：2021-4-6至2021-5-30
 活动地址：https://prodev.m.jd.com/jdlite/active/31U4T6S4PbcK83HyLPioeCWrD63j/index.html
 活动入口：京东极速版-领红包
-cron "20 0,22 * * *" script-path=jd_speed_redpocke.js,tag=京东极速版红包
+cron "51 6,9,18 * * *" script-path=jd_speed_redpocke.js,tag=京东极速版红包
 */
 
 const $ = new Env('京东极速版红包');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const linkIdArr = ["9wdf1YTT2L59Vr-meKskLA", "7ya6o83WSbNhrbYJqsMfFA"];
+const linkIdArr = ["7ya6o83WSbNhrbYJqsMfFA"];
 const signLinkId = '9WA12jYGulArzWS7vcrwhw';
 let linkId;
 
@@ -69,7 +69,7 @@ async function jsRedPacket() {
     for (let i = 0; i < 3; ++i) {
       // 开红包
       await redPacket();
-      await $.wait(2500)
+      await $.wait(3000)
     }
     // 领红包提现
     await getPacketList();
@@ -139,7 +139,7 @@ async function sign() {
 function reward_query() {
   return new Promise(resolve => {
     $.get(taskGetUrl("spring_reward_query", {
-      "inviter": ["TcRo9GSFphN6X-DAuLLTzkXJgjiVoUJzlYLUvgszEh0"][Math.floor((Math.random() * 1))],
+      "inviter": ["fJzA5RAXoXQTaWV_OS6-qQ"][Math.floor((Math.random() * 1))],
       linkId
     }), async (err, resp, data) => {
       try {
@@ -166,7 +166,7 @@ function reward_query() {
 }
 async function redPacket() {
   return new Promise(resolve => {
-    $.get(taskGetUrl("spring_reward_receive",{"inviter":["TcRo9GSFphN6X-DAuLLTzkXJgjiVoUJzlYLUvgszEh0"][Math.floor((Math.random()*1))],linkId}),
+    $.get(taskGetUrl("spring_reward_receive",{"inviter":["fJzA5RAXoXQTaWV_OS6-qQ"][Math.floor((Math.random()*1))],linkId}),
         async (err, resp, data) => {
           try {
             if (err) {
