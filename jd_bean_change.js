@@ -19,65 +19,68 @@ $.jdName = ``
 $.sendNum = process.env.JD_BEAN_CHANGE_SENDNUM * 1 || 3
 $.sentNum = 0;
 if($.isNode()){
-    Object.keys(jdCookieNode).forEach((item) => {cookiesArr.push(jdCookieNode[item]);});
-    if(process.env.JD_DEBUG && process.env.JD_DEBUG === "false") console.log = () => {};
+    Object.keys(jdCookieNode).forEach((item) => {
+        cookiesArr.push(jdCookieNode[item]);
+    });
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false") console.log = () => {
+    };
 } else cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie),].filter((item) => !!item);
-!(async() => {
-    if(!cookiesArr[0]){
-        $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/", { "open-url": "https://bean.m.jd.com/" });
+
+!(async () => {
+    if (!cookiesArr[0]) {
+        $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/", {"open-url": "https://bean.m.jd.com/"});
         return;
     }
-    console.log('=====环境变量配置如下=====')
-    console.log(`sendNum: ${typeof $.sendNum}, ${$.sendNum}`)
-    console.log('=======================')
+    // console.log('=====环境变量配置如下=====')
+    // console.log(`sendNum: ${typeof $.sendNum}, ${$.sendNum}`)
+    // console.log('=======================')
     for(let i = 0; i < cookiesArr.length; i++){
-        if(cookiesArr[i]){
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
-            $.index = i + 1;
-            $.jdSpeedGoldBalance = 0;
-            $.jdzzNum = 0;
-            console.log(`[京东账号${$.index} ${$.UserName}]`)
-            await bean();
-            await totalBean();
-            // message += `[京东账号${$.index}]\n`
-            // console.log(`[京东账号${$.index}]`)
-            message += `账号名称：${$.jdName}\n`
-            console.log(`账号名称：${$.jdName}`)
-            message += `今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆\n`
-            console.log(`今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆`)
-            message += `昨日收支：${$.yestodayIncome}京豆 | ${$.yestodayExpenditure}京豆\n`
-            console.log(`昨日收支：${$.yestodayIncome}京豆 | ${$.yestodayExpenditure}京豆`)
-            message += `当前京豆：${$.beanCount}京豆\n`
-            console.log(`当前京豆：${$.beanCount}京豆`)
-            //speed jd
-            // await cash();
-            // typeof $.jdSpeedGoldBalance !== "undefined" ? message += `极速金币：${$.jdSpeedGoldBalance}金币 ≈ ${($.jdSpeedGoldBalance / 10000).toFixed(2)}元\n` : ''
-            // typeof $.jdSpeedGoldBalance !== "undefined" ? console.log(`极速金币：${$.jdSpeedGoldBalance}金币 ≈ ${($.jdSpeedGoldBalance / 10000).toFixed(2)}元`) : ''
-            await getJdzz();
-            typeof $.jdzzNum !== "undefined" ? message += `京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元\n` : ''
-            typeof $.jdzzNum !== "undefined" ? console.log(`京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元`) : ''
-            $.JdMsScore = 0;
-            await getMs();
-            $.JdMsScore !== 0 ? message += `京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元\n` : ''
-            $.JdMsScore !== 0 ? console.log(`京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元`) : ''
-            await redPacket();
-            // if($.index % $.sendNum === 0 || (cookiesArr.length - ($.sentNum * $.sendNum)) < $.sendNum){
-            //     message += `[京东账号${$.index}]\n`
-            // } else {
-            //     message += `[京东账号${$.index}]\n\n`
-            // }
-            // console.log(`[京东账号${$.index}]`)
-            console.log(`[京东账号${$.index} ${$.UserName}] 结束\n`)
-            if($.isNode()){
-                if($.index % $.sendNum === 0){
-                    $.sentNum++;
-                    console.log(`正在进行第 ${$.sentNum} 次发送通知，发送数量：${$.sendNum}`)
-                    await notify.sendNotify(`${$.name}`, `${message}`)
-                    message = "";
-                }
+        cookie = cookiesArr[i];
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+        $.index = i + 1;
+        $.jdSpeedGoldBalance = 0;
+        $.jdzzNum = 0;
+        console.log(`[京东账号${$.index} ${$.UserName}]`)
+        await bean();
+        await totalBean();
+        // message += `[京东账号${$.index}]\n`
+        // console.log(`[京东账号${$.index}]`)
+        message += `账号名称：${$.jdName}\n`
+        console.log(`账号名称：${$.jdName}`)
+        message += `今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆\n`
+        console.log(`今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆`)
+        message += `昨日收支：${$.yestodayIncome}京豆 | ${$.yestodayExpenditure}京豆\n`
+        console.log(`昨日收支：${$.yestodayIncome}京豆 | ${$.yestodayExpenditure}京豆`)
+        message += `当前京豆：${$.beanCount}京豆\n`
+        console.log(`当前京豆：${$.beanCount}京豆`)
+        //speed jd
+        // await cash();
+        // typeof $.jdSpeedGoldBalance !== "undefined" ? message += `极速金币：${$.jdSpeedGoldBalance}金币 ≈ ${($.jdSpeedGoldBalance / 10000).toFixed(2)}元\n` : ''
+        // typeof $.jdSpeedGoldBalance !== "undefined" ? console.log(`极速金币：${$.jdSpeedGoldBalance}金币 ≈ ${($.jdSpeedGoldBalance / 10000).toFixed(2)}元`) : ''
+        await getJdzz();
+        typeof $.jdzzNum !== "undefined" ? message += `京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元\n` : ''
+        typeof $.jdzzNum !== "undefined" ? console.log(`京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元`) : ''
+        $.JdMsScore = 0;
+        await getMs();
+        $.JdMsScore !== 0 ? message += `京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元\n` : ''
+        $.JdMsScore !== 0 ? console.log(`京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元`) : ''
+        await redPacket();
+        // if($.index % $.sendNum === 0 || (cookiesArr.length - ($.sentNum * $.sendNum)) < $.sendNum){
+        //     message += `[京东账号${$.index}]\n`
+        // } else {
+        //     message += `[京东账号${$.index}]\n\n`
+        // }
+        // console.log(`[京东账号${$.index}]`)
+        console.log(`[京东账号${$.index} ${$.UserName}] 结束\n`)
+        if ($.isNode()) {
+            if ($.index % $.sendNum === 0) {
+                $.sentNum++;
+                console.log(`正在进行第 ${$.sentNum} 次发送通知，发送数量：${$.sendNum}`)
+                await notify.sendNotify(`${$.name}`, `${message}`)
+                message = "";
             }
         }
+
     }
     //删除多余的通知
     if($.isNode()){
@@ -104,15 +107,13 @@ async function bean(){
     $.beanCount = 0;
     do {
         getJingBeanBalanceDetail($.beanPage);
-        await $.wait(500)
+        await $.wait(1000)
     } while($.beanFlag === true)
 }
 
 //获取京豆数据
 function getJingBeanBalanceDetail(page){
-    // 前一天的0:0:0时间戳
     const yesterdayTimeStamp = parseInt((Date.now() + 28800000) / 86400000) * 86400000 - 28800000 - (24 * 60 * 60 * 1000);
-    // 今天0:0:0时间戳
     const todayTimeStamp = parseInt((Date.now() + 28800000) / 86400000) * 86400000 - 28800000;
     return new Promise((resolve) => {
         const options = {
@@ -127,6 +128,7 @@ function getJingBeanBalanceDetail(page){
         $.post(options, (err, resp, data) => {
             try{
                 if(err){
+                    $.beanFlag = false;
                     if(JSON.stringify(err) !== `\"read ECONNRESET\"`){
                         console.log(JSON.stringify(err))
                         console.log(`${$.name} API请求失败，请检查网路重试`)
@@ -159,11 +161,13 @@ function getJingBeanBalanceDetail(page){
                             $.beanFlag = false;
                         }
                     } else {
+                        $.beanFlag = false;
                         console.log(`京东服务器返回空数据`)
                     }
                 }
             } catch(e){
                 $.logErr(e, resp)
+                $.beanFlag = false;
             } finally{
                 resolve(data);
             }
