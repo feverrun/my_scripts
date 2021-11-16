@@ -1,7 +1,7 @@
 /**
  京喜-首页-牛牛福利
  Date：2021-11-2
- cron 0 0,8,16,22 * * * jd_nnfls.js
+ cron 18 6,8,16,22 * * * jd_nnfl.js
  */
 
 const $ = new Env('牛牛福利');
