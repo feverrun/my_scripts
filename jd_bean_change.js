@@ -1,8 +1,8 @@
 /*
  * 简化版京东日资产变动通知
  * 支持环境变量控制每次发送的账号个数，默认为2
- * 环境变量为：JD_BEAN_CHANGE_SENDNUM
- * cron "16 12,20 * * *" jd_bean_change_xh.js
+ * 环境变量一次发送几个：JD_BEAN_CHANGE_SENDNUM
+ * cron "6 8,18 * * *" jd_bean_change.js
  * */
 const $ = new Env("京东日资产变动");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
@@ -31,9 +31,7 @@ if($.isNode()){
         $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/", {"open-url": "https://bean.m.jd.com/"});
         return;
     }
-    // console.log('=====环境变量配置如下=====')
-    // console.log(`sendNum: ${typeof $.sendNum}, ${$.sendNum}`)
-    // console.log('=======================')
+
     for(let i = 0; i < cookiesArr.length; i++){
         cookie = cookiesArr[i];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
@@ -43,10 +41,8 @@ if($.isNode()){
         console.log(`[京东账号${$.index} ${$.UserName}]`)
         await bean();
         await totalBean();
-        // message += `[京东账号${$.index}]\n`
-        // console.log(`[京东账号${$.index}]`)
-        message += `账号名称：${$.jdName}\n`
-        console.log(`账号名称：${$.jdName}`)
+        message += `${$.index}：${$.jdName}\n`
+        console.log(`${$.index}：${$.jdName}`)
         message += `今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆\n`
         console.log(`今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆`)
         message += `昨日收支：${$.yestodayIncome}京豆 | ${$.yestodayExpenditure}京豆\n`
@@ -54,9 +50,6 @@ if($.isNode()){
         message += `当前京豆：${$.beanCount}京豆\n`
         console.log(`当前京豆：${$.beanCount}京豆`)
         //speed jd
-        // await cash();
-        // typeof $.jdSpeedGoldBalance !== "undefined" ? message += `极速金币：${$.jdSpeedGoldBalance}金币 ≈ ${($.jdSpeedGoldBalance / 10000).toFixed(2)}元\n` : ''
-        // typeof $.jdSpeedGoldBalance !== "undefined" ? console.log(`极速金币：${$.jdSpeedGoldBalance}金币 ≈ ${($.jdSpeedGoldBalance / 10000).toFixed(2)}元`) : ''
         await getJdzz();
         typeof $.jdzzNum !== "undefined" ? message += `京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元\n` : ''
         typeof $.jdzzNum !== "undefined" ? console.log(`京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元`) : ''
@@ -65,12 +58,8 @@ if($.isNode()){
         $.JdMsScore !== 0 ? message += `京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元\n` : ''
         $.JdMsScore !== 0 ? console.log(`京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元`) : ''
         await redPacket();
-        // if($.index % $.sendNum === 0 || (cookiesArr.length - ($.sentNum * $.sendNum)) < $.sendNum){
-        //     message += `[京东账号${$.index}]\n`
-        // } else {
-        //     message += `[京东账号${$.index}]\n\n`
-        // }
-        // console.log(`[京东账号${$.index}]`)
+
+        message += `\n`
         console.log(`[京东账号${$.index} ${$.UserName}] 结束\n`)
         if ($.isNode()) {
             if ($.index % $.sendNum === 0) {

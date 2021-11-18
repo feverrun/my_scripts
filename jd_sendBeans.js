@@ -1,6 +1,6 @@
 /*
 * 来客有礼小程序
-* cron 3 6,9 * * *
+* cron "3 6,9 * * *" jd_sendBeans.js
 * */
 const $ = new Env('送豆得豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
