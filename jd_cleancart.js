@@ -1,5 +1,5 @@
 /*
-cron "10 6,22 * * *" jd_cleancart.js
+cron "1 5,17 * * *" jd_cleancart.js
 */
 const $ = new Env('清空购物车');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -52,7 +52,7 @@ $.keywordsNum = 0;
                 await getCart();
                 $.keywordsNum = 0
                 if($.beforeRemove !== "0"){
-                    await cartFilter_xh(venderCart);
+                    await cartFilter(venderCart);
                     if(parseInt($.beforeRemove) !== $.keywordsNum) await removeCart();
                     else {
                         console.log('由于购物车内的商品均包含关键字，本次执行将不删除购物车数据')
@@ -110,7 +110,7 @@ function getCart(){
         });
     })
 }
-function cartFilter_xh(cartData){
+function cartFilter(cartData){
     console.log("正在整理数据...")
     let pid;
     $.pushed = 0
