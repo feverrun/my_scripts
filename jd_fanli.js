@@ -2,14 +2,13 @@
 /*
 京东饭粒
 已支持IOS双京东账号,Node.js支持N个京东账号
-#京东饭粒
-cron "40 0,9,17 * * *" script-path=jd_fanli.js,tag=京东饭粒
-*/
+cron "20 0,9,17 * * *" script-path=jd_fanli.js,tag=京东饭粒
+ */
 
 const $ = new Env('京东饭粒');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-let cookiesArr = [], cookie = '', message = '',personMessage='';
+let cookiesArr = [], cookie = '', message = '', personMessage = '';
 
 let lz_cookie = {}
 
@@ -17,7 +16,8 @@ if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false')
+        console.log = () => {};
 } else {
     let cookiesData = $.getdata('CookiesJD') || "[]";
     cookiesData = JSON.parse(cookiesData);
@@ -27,14 +27,18 @@ if ($.isNode()) {
     cookiesArr.reverse();
     cookiesArr = cookiesArr.filter(item => !!item);
 }
-!(async () => {
+
+!(async() => {
     if (!cookiesArr[0]) {
-        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {
+            "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+        });
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
-            if ($.runOut) break;
+            if ($.runOut)
+                break;
             $.hasGet = 0
             cookie = cookiesArr[i]
             originCookie = cookiesArr[i]
@@ -46,7 +50,9 @@ if ($.isNode()) {
             await checkCookie();
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
+                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+                });
                 if ($.isNode()) {
                     await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
@@ -54,30 +60,32 @@ if ($.isNode()) {
             }
             await getTaskFinishCount(cookiesArr[i])
             await $.wait(2000)
-            if($.count.finishCount<$.count.maxTaskCount){
-                let range = $.count.maxTaskCount-$.count.finishCount
-                for(let i=0;i<range;i++){
-                    console.log(`开始第${$.count.finishCount+i+1}次`)
+            if ($.count.finishCount < $.count.maxTaskCount) {
+                let range = $.count.maxTaskCount - $.count.finishCount
+                for (let j = 0; j < range; j++) {
+                    console.log(`开始第${$.count.finishCount+j+1}次`)
+
                     await getTaskList(cookie)
                     await $.wait(2000)
-                    for (let i in $.taskList){
-                        // console.log($.taskList[i])
-                        if($.taskList[i].taskId!==null){
-                            await saveTaskRecord(cookie,$.taskList[i].taskId,$.taskList[i].businessId,$.taskList[i].taskType)
-                            if($.sendBody){
-                                await $.wait(Number($.taskList[i].watchTime)*1000 + Math.floor(Math.random()*1000))
-                                await saveTaskRecord1(cookie,$.taskList[i].taskId,$.taskList[i].businessId,$.taskList[i].taskType,$.sendBody.uid,$.sendBody.tt)
-                            }
-                            else{
+                    for (let k in $.taskList) {
+                        if ($.taskList[k].taskId !== null && $.taskList[k].status == 1) {
+                            console.log(`开始尝试活动:` + $.taskList[k].taskName);
+                            await saveTaskRecord(cookie, $.taskList[k].taskId, $.taskList[k].businessId, $.taskList[k].taskType)
+                            if ($.sendBody) {
+                                await $.wait(Number($.taskList[k].watchTime) * 1300)
+                                await saveTaskRecord1(cookie, $.taskList[k].taskId, $.taskList[k].businessId, $.taskList[k].taskType, $.sendBody.uid, $.sendBody.tt)
+                            } else {
                                 continue;
                             }
-                            break;
+                            if ($.count.finishCount = $.count.maxTaskCount) {
+                                console.log(`任务全部完成!`);
+                            }
                         }
+
                     }
                 }
 
-            }
-            else{
+            } else {
                 console.log("任务已做完")
             }
 
@@ -92,7 +100,7 @@ if ($.isNode()) {
         $.done();
     })
 
-function saveTaskRecord(ck,taskId,businessId,taskType) {
+function saveTaskRecord(ck, taskId, businessId, taskType) {
     let opt = {
         url: `https://ifanli.m.jd.com/rebateapi/task/saveTaskRecord`,
         headers: {
@@ -110,7 +118,11 @@ function saveTaskRecord(ck,taskId,businessId,taskType) {
             "Cookie": ck,
             "Content-Type": "application/json;charset=UTF-8"
         },
-        body : JSON.stringify({ taskId: taskId,businessId:businessId, taskType: taskType }),
+        body: JSON.stringify({
+            taskId: taskId,
+            businessId: businessId,
+            taskType: taskType
+        }),
 
     }
     return new Promise(resolve => {
@@ -123,13 +135,11 @@ function saveTaskRecord(ck,taskId,businessId,taskType) {
                     if (data) {
                         data = JSON.parse(data);
                         // console.log(data,"获取id")
-                        if(data.content){
+                        if (data.content) {
                             $.sendBody = data.content
-                        }
-                        else{
+                        } else {
                             console.log("未获取到活动内容，开始下一个")
                         }
-
 
                     } else {
                         $.log("京东返回了空数据")
@@ -138,14 +148,15 @@ function saveTaskRecord(ck,taskId,businessId,taskType) {
             } catch (error) {
                 $.log(error)
                 // console.log(error)
-            } finally {
+            }
+            finally {
                 resolve();
             }
         })
     })
 }
 
-function saveTaskRecord1(ck,taskId,businessId,taskType,uid,tt) {
+function saveTaskRecord1(ck, taskId, businessId, taskType, uid, tt) {
     let opt = {
         url: `https://ifanli.m.jd.com/rebateapi/task/saveTaskRecord`,
         headers: {
@@ -163,7 +174,13 @@ function saveTaskRecord1(ck,taskId,businessId,taskType,uid,tt) {
             "Cookie": ck,
             "Content-Type": "application/json;charset=UTF-8"
         },
-        body : JSON.stringify({ taskId: taskId, taskType: taskType,businessId:businessId,uid:uid,tt:tt }),
+        body: JSON.stringify({
+            taskId: taskId,
+            taskType: taskType,
+            businessId: businessId,
+            uid: uid,
+            tt: tt
+        }),
 
     }
     return new Promise(resolve => {
@@ -172,11 +189,14 @@ function saveTaskRecord1(ck,taskId,businessId,taskType,uid,tt) {
                 if (err) {
                     $.log(err)
                 } else {
-                    // console.log(data)
                     if (data) {
                         data = JSON.parse(data);
-                        // console.log("结果",data)
-                        console.log("浏览结果",data.content.msg)
+                        if (data.content) {
+                            if (data.content.status = 1)
+                                $.count.finishCount += 1;
+                            console.log("浏览结果", data.content.msg);
+                        } else
+                            console.log("结果", data);
                     } else {
                         $.log("京东返回了空数据")
                     }
@@ -184,7 +204,8 @@ function saveTaskRecord1(ck,taskId,businessId,taskType,uid,tt) {
             } catch (error) {
                 $.log(error)
                 // console.log(error)
-            } finally {
+            }
+            finally {
                 resolve();
             }
         })
@@ -194,7 +215,7 @@ function saveTaskRecord1(ck,taskId,businessId,taskType,uid,tt) {
 function getTaskFinishCount(ck) {
     return new Promise(resolve => {
         const options = {
-            url:'https://ifanli.m.jd.com/rebateapi/task/getTaskFinishCount',
+            url: 'https://ifanli.m.jd.com/rebateapi/task/getTaskFinishCount',
             headers: {
                 "Host": "ifanli.m.jd.com",
                 "Connection": "keep-alive",
@@ -211,21 +232,22 @@ function getTaskFinishCount(ck) {
                 "Content-Type": "application/json;charset=UTF-8"
             },
         };
-        $.get(options, async (err, resp, data) => {
+        $.get(options, async(err, resp, data) => {
             try {
                 if (err) {
                     $.log(err)
                 } else {
-                    if (data){
+                    if (data) {
                         data = JSON.parse(data)
                         // console.log(data)
-                        console.log("已完成次数："+data.content.finishCount+"  总任务次数："+data.content.maxTaskCount)
-                        $.count=data.content
+                        console.log("已完成次数：" + data.content.finishCount + "  总任务次数：" + data.content.maxTaskCount)
+                        $.count = data.content
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
-            } finally {
+            }
+            finally {
                 resolve(data);
             }
         })
@@ -235,7 +257,7 @@ function getTaskFinishCount(ck) {
 function getTaskList(ck) {
     return new Promise(resolve => {
         const options = {
-            url:'https://ifanli.m.jd.com/rebateapi/task/getTaskList',
+            url: 'https://ifanli.m.jd.com/rebateapi/task/getTaskList',
             headers: {
                 "Host": "ifanli.m.jd.com",
                 "Connection": "keep-alive",
@@ -252,18 +274,17 @@ function getTaskList(ck) {
                 "Content-Type": "application/json;charset=UTF-8"
             },
         };
-        $.get(options, async (err, resp, data) => {
+        $.get(options, async(err, resp, data) => {
             try {
                 if (err) {
                     $.log(err)
                 } else {
-                    if (data){
+                    if (data) {
                         data = JSON.parse(data)
                         // console.log(data,"活动列表")
-                        if(data.content){
-                            $.taskList=data.content
-                        }
-                        else{
+                        if (data.content) {
+                            $.taskList = data.content
+                        } else {
                             console.log("未获取到活动列表，请检查活动")
                         }
 
@@ -271,7 +292,8 @@ function getTaskList(ck) {
                 }
             } catch (e) {
                 $.logErr(e, resp)
-            } finally {
+            }
+            finally {
                 resolve(data);
             }
         })
@@ -312,7 +334,8 @@ function checkCookie() {
                 }
             } catch (e) {
                 $.logErr(e)
-            } finally {
+            }
+            finally {
                 resolve();
             }
         })
