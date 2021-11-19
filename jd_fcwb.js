@@ -1,13 +1,12 @@
 /***
  *活动入口: 京东极速版 - 发财挖宝
- * cron "31 6-22/3 * * *" script-path=jd_fcwb.js tag=发财挖宝助力
+ * cron "11 9,12,20 * * *" script-path=jd_fcwb.js tag=发财挖宝助力
  */
 const $ = new Env('发财挖宝助力');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const axios = $.isNode() ? require('axios') : '';
 const JD_API_HOST = 'https://api.m.jd.com';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let fcwbinviteCode = ''
 let fcwbinviter = ''
@@ -51,6 +50,8 @@ if ($.isNode()) {
         message = '';
         console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
 
+        console.log('\n请先去京东极速版app手动挖宝再运行脚本助力\n');
+
         if (process.env.fcwbinviteCode && process.env.fcwbinviteCode.indexOf('@') > -1) {
             fcwbinviteCodeArr = process.env.fcwbinviteCode.split('@');
         } else {
@@ -78,7 +79,6 @@ if ($.isNode()) {
         await home()
         await $.wait(2000)
 
-        console.log('\n去京东极速版app手动挖宝\n');
         // if (i === 0) {
         //     let flag = 0;
         //     switch (curRound) {
@@ -123,7 +123,7 @@ if ($.isNode()) {
             await $.wait(2000)
         }
     } else {
-        console.log(`\n请先设置需要助力账号的环境变量\n`);
+        console.log(`\n请先设置需要被助力账号环境变量\n`);
     }
 
     console.log('\n');
