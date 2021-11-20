@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Each</title>
+</head>
+<body>
+
+  <p id="content">
+
+  </p>
+
+  <script>
+    let arr = ["a", "b","c","d","e","f","g"]
+
+    // for (let i=0; i<arr.length; i++) {
+    //   document.write((arr[i]));
+    // }
+
+    // for (let v of arr) {
+    //   document.write(v + '\n')
+    // }
+
+    // for (let k in arr) {
+    //   document.write(k)
+    // }
+
+    let length = arr.length;
+    document.write(Math.ceil(3/5));
+
+    function getObject(data){
+        if (typeof data == 'object') {
+            return data
+        }
+        if (typeof data == 'string') {
+            return JSON.parse(data);
+        }
+    }
+
+  </script>
+
+</body>
+</html>
