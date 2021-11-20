@@ -22,7 +22,7 @@ if ($.isNode()) {
 const JD_API_HOST = 'https://api.m.jd.com/api';
 //邀请码一天一变化，已确定
 $.shareId = [];
-
+let codePools = [];
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -57,18 +57,16 @@ $.shareId = [];
         if ($.isNode()) await notify.sendNotify($.name, allMessage);
         $.msg($.name, '', allMessage, {"open-url": "https://blindbox5g.jd.com"})
     }
-    try {
-        await readShareCode();
-    } catch (e) {
-        console.log(e.message)
-    }
-    $.shareId = [...($.shareId || []), ...($.updatePkActivityIdRes || [])];
+
+    // $.shareId = [...($.shareId || []), ...($.updatePkActivityIdRes || [])];
+    try { codePools = await readShareCode();} catch (e) {console.log(e.message)}
+    await $.wait(500)
     for (let v = 0; v < cookiesArr.length; v++) {
         cookie = cookiesArr[v];
         $.index = v + 1;
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
         console.log(`\n\n互助开始`);
-        for (let item of $.shareId) {
+        for (let item of codePools) {
             console.log(`账号 ${$.index} ${$.UserName} 开始给 ${item}进行助力`)
             const res = await addShare(item);
             if (res && res['code'] === 2005) {
@@ -451,13 +449,14 @@ function readShareCode() {
                 } else {
                     if (data) {
                         data = JSON.parse(data);
-                        $.updatePkActivityIdRes = data.data;
+                        return data.data;
+                        // $.updatePkActivityIdRes = data.data;
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code": 500});
+                resolve(data.data || {"code": 500});
             }
         })
         await $.wait(10000);
