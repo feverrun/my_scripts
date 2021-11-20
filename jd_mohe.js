@@ -73,6 +73,7 @@ let codePools = [];
                 console.log(`次数已用完，跳出助力`)
                 break
             }
+            await $.wait(2000)
         }
     }
 })()
