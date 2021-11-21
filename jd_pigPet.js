@@ -60,7 +60,7 @@ let shareId = "LcNasllTozPQpd-Ui0Xlug";
   for (let j = 0; j < cookiesArr.length; j++) {
     cookie = cookiesArr[j];
     if ($.shareCodes && $.shareCodes.length) {
-      console.log(`\n优先内部助力\n`);
+      console.log(`\n互助开始\n`);
       for (let item of $.shareCodes) {
         await pigPetLotteryHelpFriend(item)
         await $.wait(1000)

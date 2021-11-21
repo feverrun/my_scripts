@@ -3,17 +3,20 @@
 更新时间：2021-4-23
 活动入口：京东APP我的-更多工具-摇钱树，[活动链接](https://uua.jr.jd.com/uc-fe-wxgrowing/moneytree/index/?channel=yxhd)
 京东摇钱树支持京东双账号
-[Script]
-cron "3 0-23/2 * * *" script-path=jd_moneyTree.js,tag=京东摇钱树
+cron "16 4-23/2 * * *" script-path=jd_moneyTree.js,tag=京东摇钱树
 */
 
 const $ = new Env('京东摇钱树');
 const notify = $.isNode() ? require('./sendNotify') : '';
-
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-
-
 let cookiesArr = [], cookie = '', allMsg = ``;
+let jdNotify = false; //是否开启静默运行，默认false开启
+let sellFruit = true; //是否卖出金果得到金币，默认'true'卖金果
+const JD_API_HOST = 'https://ms.jr.jd.com/gw/generic/uc/h5/m';
+let userInfo = null, taskInfo = [], message = '', subTitle = '', fruitTotal = 0;
+$.shareCodes = [];
+$.shareCodesArr = [];
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -23,10 +26,7 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-let jdNotify = false;//是否开启静默运行，默认false开启
-let sellFruit = true;//是否卖出金果得到金币，默认'true'卖金果
-const JD_API_HOST = 'https://ms.jr.jd.com/gw/generic/uc/h5/m';
-let userInfo = null, taskInfo = [], message = '', subTitle = '', fruitTotal = 0;
+
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -45,6 +45,25 @@ let userInfo = null, taskInfo = [], message = '', subTitle = '', fruitTotal = 0;
       await jd_moneyTree();
     }
   }
+
+  await $.wait(3000);
+  try {await shareCodesFormat();}catch (e) {console.log(e.message)}
+  try {
+    //内部互助开始
+    for (let k in cookiesArr) {
+      cookie = cookiesArr[k];
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+
+      for (let kk in $.newShareCodes) {
+        await help($.newShareCodes[kk])
+        await $.wait(1500)
+      }
+
+    }
+  } catch (e) {
+    console.log(e.message)
+  }
+
   if (allMsg) {
     jdNotify = $.isNode() ? (process.env.MONEYTREE_NOTIFY_CONTROL ? process.env.MONEYTREE_NOTIFY_CONTROL : jdNotify) : ($.getdata('jdMoneyTreeNotify') ? $.getdata('jdMoneyTreeNotify') : jdNotify);
     if (!jdNotify || jdNotify === 'false') {
@@ -106,14 +125,16 @@ function user_info() {
             const res = JSON.parse(data);
             if (res && res.resultCode === 0) {
               $.isLogin = true;
-              console.log('resultCode为0')
+              // console.log('resultCode为0')
               if (res.resultData.data) {
                 userInfo = res.resultData.data;
                 // userInfo.realName = null;
                 if (userInfo.realName) {
                   // console.log(`助力码sharePin为：：${userInfo.sharePin}`);
-                  $.treeMsgTime = userInfo.sharePin;
-                  subTitle = `【${userInfo.nick}】${userInfo.treeInfo.treeName}`;
+                  // $.treeMsgTime = userInfo.sharePin;
+                  console.log(`【京东账号${$.index}（${$.UserName}）的摇钱树好友互助码】${userInfo.sharePin}`);
+                  $.shareCodes.push(userInfo.sharePin);
+                  // subTitle = `【${userInfo.nick}】${userInfo.treeInfo.treeName}`;
                   // message += `【我的金果数量】${userInfo.treeInfo.fruit}\n`;
                   // message += `【我的金币数量】${userInfo.treeInfo.coin}\n`;
                   // message += `【距离${userInfo.treeInfo.level + 1}级摇钱树还差】${userInfo.treeInfo.progressLeft}\n`;
@@ -802,6 +823,55 @@ function taskurl(function_id, body) {
       'Accept-Language': `zh-cn`
     }
   }
+}
+
+function help(sharePin) {
+  const params = { "sharePin": sharePin, "shareType": 1, "channelLV": "", "source": 2, "riskDeviceParam": { "eid": "", "fp": "", "sdkToken": "", "token": "", "jstub": "", "appType": "2", } }
+  params.riskDeviceParam = JSON.stringify(params.riskDeviceParam);
+  return new Promise((resolve, reject) => {
+    $.post(taskurl('login', params), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log("\n摇钱树京东API请求失败 ‼️‼️")
+          console.log(JSON.stringify(err));
+        } else {
+          if (data) {
+            const res = JSON.parse(data);
+            if (res && res.resultCode === 0) {
+              $.isLogin = true;
+              if (res.resultData.data) {
+                userInfo = res.resultData.data;
+                console.log(res.resultData.msg);
+                if (userInfo.realName) {
+                } else {
+                  $.canRun = false;
+                  $.log(`京东账号${$.index}${$.UserName}运行失败\n此账号未实名认证或者未参与过此活动\n①如未参与活动,请先去京东app参加摇钱树活动\n入口：我的->游戏与互动->查看更多\n②如未实名认证,请进行实名认证`)
+                }
+              }
+            } else {
+              console.log(`其他情况::${JSON.stringify(res)}`);
+            }
+          } else {
+            console.log(`京东api返回数据为空，请检查自身原因`)
+          }
+        }
+      } catch (eor) {
+        $.logErr(eor, err)
+      } finally {
+        resolve(userInfo)
+      }
+    })
+  })
+}
+
+function shareCodesFormat() {
+  return new Promise(async resolve => {
+    console.log('内部互助开始')
+    $.newShareCodes = []
+    $.newShareCodes = [...new Set([...$.shareCodes, ...["LcNasllTozPQpd-Ui0Xlug"]])];
+    console.log(`\n您将要助力的好友${JSON.stringify($.newShareCodes)}\n`)
+    resolve();
+  })
 }
 
 function jsonParse(str) {
