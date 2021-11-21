@@ -5,8 +5,8 @@
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
-## 只收稳定真实互助 账号个数不限
-## 互助池提交仅限ip白名单内(可入群联系我加入白名单)
+## 只收稳定真实互助 账号个数越多越好
+## 入池联系我, 对于后续出现混跑多个库白嫖的，发现一次会永久封禁
 
 ### 长久活动(已接入助力池)
 ```
