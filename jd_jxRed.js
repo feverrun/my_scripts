@@ -1,18 +1,13 @@
 /*
-京享红包
-ck1助力 作者
-其余助力ck1
-跳转到app 可查看助力情况
 cron 0 0,8,12,20,22 * * * jd_jxRed.js
 */
-
-let rebateCodes = ''
 
 const $ = new Env('京享红包');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const Faker = $.isNode() ? require('./utils/sign_graphics_validate.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
+let rebateCodes = ''
 let cookiesArr = [], cookie = '';
 
 if ($.isNode()) {
@@ -20,8 +15,6 @@ if ($.isNode()) {
         cookiesArr.push(jdCookieNode[item])
     })
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-} else {
-    cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
 rebateCodes = $.isNode() ? (process.env.jd_rebateCode ? process.env.jd_rebateCode : `${rebateCodes}`) : ($.getdata('jd_rebateCode') ? $.getdata('jd_rebateCode') : `${rebateCodes}`);
@@ -30,7 +23,7 @@ rebateCode = ''
 message = ''
 newCookie = ''
 resMsg = ''
-const activeEndTime = '2021/11/30 00:00:00+08:00';//活动结束时间
+const activeEndTime = '2022/11/30 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 
 !(async () => {
@@ -43,7 +36,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     if (nowTime > new Date(activeEndTime).getTime()) {
         //活动结束后弹窗提醒
         $.msg($.name, '活动已结束', ``);
-        if ($.isNode()) await notify.sendNotify($.name + '活动已结束', ``);
+        // if ($.isNode()) await notify.sendNotify($.name + '活动已结束', ``);
         return
     }
     $.shareCode = 'OjSOv'
@@ -61,7 +54,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     if(message){
         $.msg($.name, ``, `${message}\nhttps://u.jd.com/ywYm7HY\n\n跳转到app 可查看助力情况`);
         if ($.isNode()){
-            await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/ywYm7HY\n跳转到app 可查看助力情况`);
+            // await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/ywYm7HY\n跳转到app 可查看助力情况`);
         }
     }
 })()
@@ -205,8 +198,8 @@ function shareUnionCoupon() {
                     if(typeof res == 'object'){
                         if(res.code == 0 && res.data && res.data.shareUrl){
                             $.shareCode = res.data.shareUrl.match(/\?s=([^&]+)/) && res.data.shareUrl.match(/\?s=([^&]+)/)[1] || ''
-                            console.log('分享码:'+$.shareCode)
-                            if($.shareCode) console.log(`以下账号会助力【京东账号${$.index}】${$.nickName || $.UserName}`)
+                            // console.log('分享码:'+$.shareCode)
+                            // if($.shareCode) console.log(`以下账号会助力【京东账号${$.index}】${$.nickName || $.UserName}`)
                         }
                     }else{
                         console.log(data)

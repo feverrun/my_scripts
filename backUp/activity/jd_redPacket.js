@@ -1,7 +1,6 @@
 /*
 京东全民开红包。
 活动入口：京东APP首页-领券-锦鲤红包。
-内部互助后若有剩余助力作者
 未实现功能：领3张券功能
 
 cron "1 0,3 * * *" script-path=jd_redPacket.js, tag=京东全民开红包
@@ -18,9 +17,6 @@ if ($.isNode()) {
     cookiesArr.push(jdCookieNode[item])
   })
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-  if (JSON.stringify(process.env).indexOf('GITHUB') > -1) process.exit(0);
-} else {
-  cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
 const JD_API_HOST = 'https://api.m.jd.com/api';
@@ -30,7 +26,6 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
     return;
   }
   // let res = await getAuthorShareCode()
-  // $.authorMyShareIds = [...(res || [])];
 
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
@@ -49,44 +44,28 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
   }
 
   // 执行任务
-  for (let i = 0; i < cookiesArr.length; i++) {
-    cookie = cookiesArr[i];
-    $.index = i + 1;
-    $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
-    $.canHelp = true;
-    $.redPacketId = [...new Set($.redPacketId)];
-    if (cookiesArr && cookiesArr.length >= 2) {
-      console.log(`\n\n自己账号内部互助`);
-      for (let j = 0; j < $.redPacketId.length && $.canHelp; j++) {
-        console.log(`账号 ${$.index} ${$.UserName} 开始给 ${$.redPacketId[j]} 进行助力`)
-        $.max = false;
-        await jinli_h5assist($.redPacketId[j]);
-        await $.wait(2000)
-        if ($.max) {
-          $.redPacketId.splice(j, 1)
-          j--
-          continue
-        }
-      }
-    }
-
-    // 有剩余机会助力作者
-    // if ($.canHelp && ($.authorMyShareIds && $.authorMyShareIds.length)) {
-    //   console.log(`\n\n有剩余助力机会则给作者进行助力`);
-    //   for (let j = 0; j < $.authorMyShareIds.length && $.canHelp; j++) {
-    //     console.log(`\n账号 ${$.index} ${$.UserName} 开始给作者 ${$.authorMyShareIds[j]} 进行助力`)
-    //     $.max = false;
-    //     await jinli_h5assist($.authorMyShareIds[j]);
-    //     await $.wait(2000)
-    //     if ($.max) {
-    //       $.authorMyShareIds.splice(j, 1)
-    //       j--
-    //       continue
-    //     }
-    //   }
-    // }
-
-  }
+  // for (let i = 0; i < cookiesArr.length; i++) {
+  //   cookie = cookiesArr[i];
+  //   $.index = i + 1;
+  //   $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+  //   $.canHelp = true;
+  //   $.redPacketId = [...new Set($.redPacketId)];
+  //   if (cookiesArr && cookiesArr.length >= 2) {
+  //     console.log(`\n\n自己账号内部互助`);
+  //     for (let j = 0; j < $.redPacketId.length && $.canHelp; j++) {
+  //       console.log(`账号 ${$.index} ${$.UserName} 开始给 ${$.redPacketId[j]} 进行助力`)
+  //       $.max = false;
+  //       await jinli_h5assist($.redPacketId[j]);
+  //       await $.wait(2000)
+  //       if ($.max) {
+  //         $.redPacketId.splice(j, 1)
+  //         j--
+  //         continue
+  //       }
+  //     }
+  //   }
+  //
+  // }
 })()
     .catch((e) => {
       $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -179,13 +158,13 @@ async function doTask() {
         if (item.innerStatus === 4) {
           console.log(`[${item.title}] 已经领取奖励`)
         } else if (item.innerStatus === 3) {
-          await receiveTaskRedpacket(item.taskType);
+          // await receiveTaskRedpacket(item.taskType);
         } else if (item.innerStatus === 2) {
           if (item.taskType !== 0 && item.taskType !== 1) {
             console.log(`开始做【${item.title}】任务`);
             await active(item.taskType);
             console.log(`开始领取【${item.title}】任务所得红包奖励`);
-            await receiveTaskRedpacket(item.taskType);
+            // await receiveTaskRedpacket(item.taskType);
           } else if (item.taskType === 1) {
             //浏览10秒任务
             console.log(`开始做【${item.title}】任务`);
@@ -201,7 +180,7 @@ async function doTask() {
             console.log(`开始做【${item.title}】任务`);
             await active(item.taskType);
             console.log(`开始领取【${item.title}】任务所得红包奖励`);
-            await receiveTaskRedpacket(item.taskType);
+            // await receiveTaskRedpacket(item.taskType);
           } else if (item.taskType === 1) {
             //浏览10秒任务
             console.log(`开始做【${item.title}】任务`);
@@ -311,7 +290,7 @@ async function active(taskType) {
     } else {
       console.log(`任务列表为空,手动进入app内检查 是否存在[从京豆首页进领券中心逛30秒]的任务,如存在,请手动完成再运行脚本`)
       $.msg(`${$.name}`, '', '手动进入app内检查\n是否存在[从京豆首页进领券中心逛30秒]的任务\n如存在,请手动完成再运行脚本');
-      if ($.isNode()) await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `执行脚本出现异常\n请手动进入app内检查\n是否存在[从京豆首页进领券中心逛30秒]的任务\n如存在,请手动完成再运行脚本`)
+      // if ($.isNode()) await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `执行脚本出现异常\n请手动进入app内检查\n是否存在[从京豆首页进领券中心逛30秒]的任务\n如存在,请手动完成再运行脚本`)
     }
   } else {
     console.log(`---具体任务详情---${JSON.stringify(getTaskDetailForColorRes)}`);
@@ -582,18 +561,6 @@ function getAuthorShareCode() {
                 "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
             }
         };
-        if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-            const tunnel = require("tunnel");
-            const agent = {
-                https: tunnel.httpsOverHttp({
-                    proxy: {
-                        host: process.env.TG_PROXY_HOST,
-                        port: process.env.TG_PROXY_PORT * 1
-                    }
-                })
-            }
-            Object.assign(options, { agent })
-        }
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {
