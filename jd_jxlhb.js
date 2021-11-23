@@ -100,8 +100,10 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     }
 
     //助力助力池
-    if ($.canHelp && (shareCodePool && shareCodePool.length)) {
+    $.canHelp = true;
+    if (shareCodePool && shareCodePool.length) {
       console.log(`\n【${$.UserName}】有剩余助力机会，开始助力助力池\n`)
+      // console.log(shareCodePool)
       for (let jj = 0; jj < shareCodePool.length && $.canHelp; jj++) {
         console.log(`【${$.UserName}】=> ${shareCodePool[jj]}`);
         $.max = false;

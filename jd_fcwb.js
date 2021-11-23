@@ -8,31 +8,24 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const axios = $.isNode() ? require('axios') : '';
 const JD_API_HOST = 'https://api.m.jd.com';
 let cookiesArr = [], cookie = '', message;
-let fcwbinviteCode = ''
-let fcwbinviter = ''
-let fcwbroud = ''
-let fcwbinviteCodeArr = []
-let fcwbinviterArr = []
-let fcwbinviteCodes = ''
-let fcwbinviters = ''
+let inviteCode = ''
+let inviter = ''
+let firstInviteCode = ''
+let firstInviter = ''
 let breakFlag = 0;
+let autoRun = false;
 let linkId = `pTTvJeSTrpthgk9ASBVGsw`;
 
-if (process.env.fcwbinviteCode) {
-    fcwbinviteCode = process.env.fcwbinviteCode;
+//默认只助力第一个号(基本环境变量一天一变，为了方便使用者默认只助力第一个号,第一个号助力作者)
+if (process.env.FCWB_AUTO_RUN) {
+    autoRun = process.env.FCWB_AUTO_RUN;
 }
-if (process.env.fcwbinviter) {
-    fcwbinviter = process.env.fcwbinviter;
-}
-if (process.env.fcwbroud) {
-    fcwbroud = process.env.fcwbroud;
-}
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-    };
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 }
 
 !(async () => {
@@ -41,6 +34,7 @@ if ($.isNode()) {
         return;
     }
 
+    console.log(`\n默认只助力第一个号\n`)
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -52,78 +46,56 @@ if ($.isNode()) {
 
         console.log('\n请先去京东极速版app手动挖宝再运行脚本助力\n');
 
-        if (process.env.fcwbinviteCode && process.env.fcwbinviteCode.indexOf('@') > -1) {
-            fcwbinviteCodeArr = process.env.fcwbinviteCode.split('@');
-        } else {
-            fcwbinviteCodes = [process.env.fcwbinviteCode]
-        }
-
-        if (process.env.fcwbinviter && process.env.fcwbinviter.indexOf('@') > -1) {
-            fcwbinviterArr = process.env.fcwbinviter.split('@');
-            console.log(`邀请码您选择的是用"@"隔开\n`)
-        } else {
-            fcwbinviters = [process.env.fcwbinviter]
-        }
-
-        Object.keys(fcwbinviteCodes).forEach((item) => {
-            if (fcwbinviteCodes[item]) {
-                fcwbinviteCodeArr.push(fcwbinviteCodes[item])
-            }
-        })
-        Object.keys(fcwbinviters).forEach((item) => {
-            if (fcwbinviters[item]) {
-                fcwbinviterArr.push(fcwbinviters[item])
-            }
-        })
-
         await home()
         await $.wait(2000)
 
-        // if (i === 0) {
-        //     let flag = 0;
-        //     switch (curRound) {
-        //         case 1:
-        //             flag = 4;
-        //             break;
-        //         case 2:
-        //             flag = 6;
-        //             break;
-        //         case 3:
-        //             flag = 7;
-        //             break;
-        //         default:
-        //             flag = 4;
-        //             break;
-        //     }
-        //     for (let i = 0; i < flag; i++) {
-        //         for (let j = 0; j < flag; j++) {
-        //             if (breakFlag === 1) {
-        //                 break;
-        //             } else {
-        //                 console.log('第' + curRound + '关')
-        //                 console.log(`挖宝位置坐标(${i},${j})`)
-        //                 await wb(curRound, i, j)
-        //                 await $.wait(5000)
-        //             }
-        //         }
-        //     }
-        // }
+        if (autoRun) {
+            if (i === 0) {
+                let flag = 0;
+                switch (curRound) {
+                    case 1:
+                        flag = 4;
+                        break;
+                    case 2:
+                        flag = 6;
+                        break;
+                    case 3:
+                        flag = 7;
+                        break;
+                    default:
+                        flag = 4;
+                        break;
+                }
+                for (let i = 0; i < flag; i++) {
+                    for (let j = 0; j < flag; j++) {
+                        if (breakFlag === 1) {
+                            break;
+                        } else {
+                            console.log('第' + curRound + '关')
+                            console.log(`挖宝位置坐标(${i},${j})`)
+                            await wb(curRound, i, j)
+                            await $.wait(5000)
+                        }
+                    }
+                }
+            }
+
+        }
+
     }
 
-    if (fcwbinviteCode) {
+    if (firstInviteCode) {
         console.log(`\n内部助力开始`);
         for (let k = 0; k < cookiesArr.length; k++) {
             cookie = cookiesArr[k];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            fcwbinviteCode = fcwbinviteCode;
-            fcwbinviter = fcwbinviter;
+            inviteCode = firstInviteCode;
+            inviter = firstInviter;
             $.index = k + 1;
-            console.log(`${$.UserName} => 帮助 ${fcwbinviter}`);
+            console.log(`${$.UserName} => 帮助 ${inviter}`);
             await help()
-            await $.wait(2000)
+            await $.wait(3000)
         }
-    } else {
-        console.log(`\n请先设置需要被助力账号环境变量\n`);
     }
 
     console.log('\n');
@@ -133,13 +105,13 @@ if ($.isNode()) {
         if ($.authorCode) {
             let inviteCode = $.authorCode.inviteCode;
             let inviter = $.authorCode.inviter;
-            for (let i = 0; i < 2; i++) {
+            for (let i = 0; i < 1; i++) {
                 cookie = cookiesArr[i] ? cookiesArr[i] : cookiesArr[0];
-                fcwbinviteCode = inviteCode;
-                fcwbinviter = inviter;
+                inviteCode = inviteCode;
+                inviter = inviter;
                 $.index = i + 1;
                 await help()
-                await $.wait(2000)
+                await $.wait(3000)
             }
         }
     } catch (e) {
@@ -221,8 +193,12 @@ function home() {
                 if (data.success == true) {
                     curRound = data.data.curRound
                     console.log('第' + curRound + '关')
-                    console.log(`export fcwbinviteCode='${data.data.inviteCode}'`)
-                    console.log(`export fcwbinviter='${data.data.markedPin}'`)
+                    console.log(`邀请码:'${data.data.inviteCode}'`)
+                    console.log(`邀请者:'${data.data.markedPin}'`)
+                    if ($.index === 1) {
+                        firstInviteCode = `${data.data.inviteCode}`
+                        firstInviter = `${data.data.markedPin}`
+                    }
                 } else {
                     console.log('黑号 快去买买买！')
                 }
@@ -233,7 +209,7 @@ function home() {
 }
 
 function help() {
-    let body = `{"linkId":"${linkId}","inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}`
+    let body = `{"linkId":"${linkId}","inviter":"${inviter}","inviteCode":"${inviteCode}"}`
     return axios({
         url: JD_API_HOST,
         params: {
