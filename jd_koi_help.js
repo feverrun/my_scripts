@@ -10,9 +10,28 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
 let cookiesArr = [], cookie = '';
 let shareCodes = [];
+let shareCodesLength = 0;
+let poolShareCode = [];
+let notify = $.isNode() ? require('./sendNotify') : '';
+
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+if ($.isNode()) {
+    Object.keys(jdCookieNode).forEach((item) => {
+        if (jdCookieNode[item]) {
+            cookiesArr.push(jdCookieNode[item])
+        }
+    })
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+}
+
+console.log(`共${cookiesArr.length}个京东账号\n`)
 
 !(async () => {
-    requireConfig()
+    if (!cookiesArr[0]) {
+        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+        return;
+    }
+
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i]
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -29,42 +48,72 @@ let shareCodes = [];
             console.log(`账号${$.index}`, '已达拆红包数量限制')
         }else if (data?.data?.code == 10002) {
             console.log(`账号${$.index}`, '火爆')
-        }else if (data?.data?.code == 20001) {//红包活动正在进行，可拆
+        }else if (data?.data?.code == 20001) {  //红包活动正在进行，可拆
             console.log(`互助码: ${data.data.result.redpacketInfo.id}`);
             shareCodes.push(data.data.result.redpacketInfo.id);
-            if (i === 0) {
-                let code = data.data.result.redpacketInfo.id;
-                let user = $.UserName;
-                await submitCode(code, user);
+
+            try {
+                if (i === 0) {
+                    let code = data.data.result.redpacketInfo.id;
+                    let user = $.UserName;
+                    await submitCode(code, user);
+                }
+            }catch (e) {
+                console.log(e.message)
             }
+
         }
         await $.wait(2000)
     }
-    await help();
+
+    //只助力靠前的
+    if (shareCodes.length >= 3) {
+        shareCodesLength = 3;
+    } else {
+        shareCodesLength = shareCodes.length;
+    }
+
+    try {
+        console.log(`\n内部互助\n`)
+        for (let k in cookiesArr) {
+            cookie = cookiesArr[k]
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.nickName = '';
+            for (let j = 0; j < shareCodesLength; j++){
+                let result = await requestApi('jinli_h5assist', {"redPacketId":shareCodes[j],"followShop":0,"random":random(000000, 999999),"log":"42588613~8,~0iuxyee","sceneid":"JLHBhPageh5"})
+                console.log(`账号【${$.UserName}】 助力: ${shareCodes[j]}\n${result.data.result.statusDesc}\n`);
+                await $.wait(3000);
+                if (result.data.result.status == 3) {break;}
+            }
+        }
+
+        await $.wait(2000)
+
+        console.log(`\n助力池互助\n`)
+        poolShareCode = await readShareCode();
+        // console.log(poolShareCode)
+        for (let key in cookiesArr) {
+            cookie = cookiesArr[key]
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.nickName = '';
+            for (let jj = 0; jj < poolShareCode.length; jj++){
+                let result = await requestApi('jinli_h5assist', {"redPacketId":poolShareCode[jj],"followShop":0,"random":random(000000, 999999),"log":"42588613~8,~0iuxyee","sceneid":"JLHBhPageh5"})
+                console.log(`账号【${$.UserName}】 助力: ${poolShareCode[jj]}\n${result.data.result.statusDesc}\n`);
+                await $.wait(3000);
+                if (result.data.result.status == 3) {break;}
+            }
+        }
+    }catch (e) {
+        console.log(e.message)
+    }
+
+
 })()  .catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 })
     .finally(() => {
         $.done();
     })
-
-async function help(){
-    let poolShareCode = await readShareCode();
-    shareCodes = [...shareCodes, ...(poolShareCode.data)];
-    console.log(`\n******互助开始: 先内部互助，再互助池******\n`);
-    for (let i = 0; i < cookiesArr.length; i++) {
-        cookie = cookiesArr[i]
-        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-        $.index = i + 1;
-        $.nickName = '';
-        for (let j = 0; j < shareCodes.length; j++){
-            let result = await requestApi('jinli_h5assist', {"redPacketId":shareCodes[j],"followShop":0,"random":random(000000, 999999),"log":"42588613~8,~0iuxyee","sceneid":"JLHBhPageh5"})
-            console.log(`账号【${$.index}】 助力: ${shareCodes[j]}\n${result.data.result.statusDesc}\n`);
-            if (result.data.result.status == 3) {break;}
-            await $.wait(3000);
-        }
-    }
-}
 
 function requestApi(functionId, body = {}) {
     return new Promise(resolve => {
@@ -88,25 +137,6 @@ function requestApi(functionId, body = {}) {
                 resolve(data)
             }
         })
-    })
-}
-
-function requireConfig() {
-    return new Promise(resolve => {
-        notify = $.isNode() ? require('./sendNotify') : '';
-        const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-        if ($.isNode()) {
-            Object.keys(jdCookieNode).forEach((item) => {
-                if (jdCookieNode[item]) {
-                    cookiesArr.push(jdCookieNode[item])
-                }
-            })
-            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-        } else {
-            cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
-        }
-        console.log(`共${cookiesArr.length}个京东账号\n`)
-        resolve()
     })
 }
 
@@ -154,7 +184,7 @@ function readShareCode() {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data);
+                resolve(data.data);
             }
         })
         await $.wait(10000);
