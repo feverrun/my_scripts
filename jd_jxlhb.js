@@ -12,6 +12,9 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 let cookiesArr = [], cookie = '';
 let UA, UAInfo = {}, codeInfo = {}, token = '';
 let shareCodePool = []
+let packetIdLength = 0;
+let ckLength = 0;
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -34,15 +37,7 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
       '助力逻辑：先自己京东账号相互助力，如有剩余助力机会，则助力助力池\n' +
       '温馨提示：如提示助力火爆，可尝试寻找京东客服')
   let res = []
-  // res = await getAuthorShareCode('')
-  // if (!res) {
-  //   $.http.get({url: ''}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
-  //   await $.wait(1000)
-  //   res = await getAuthorShareCode('')
-  // }
-  // res = JSON.parse('{"activeId":525597,"codes":["sxqJP9GEgnrAof9OUuoIbvXT7J1FH74YxSsxxTKKpKp1Ffe2U484vy5GrKcjlRVW"]}');
-  // if (res && res.activeId) $.activeId = res.activeId;
-  // $.authorMyShareIds = [...((res && res.codes) || [])];
+
   //开启红包,获取互助码
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
@@ -58,20 +53,31 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     // token = await getJxToken()
     await main();
 
-    //submit
-    if (i == 0) {
-      let submitRes = await submitCode($.packetIdArr[i].strUserPin, $.UserName)
-      if (submitRes && submitRes.code === 0) {
-        console.log(`互助码已提交！`);
-      } else {
-        console.log(`互助码提交失败！`);
+    try {
+      if (i == 0) {
+        let submitRes = await submitCode($.packetIdArr[i].strUserPin, $.UserName)
+        if (submitRes && submitRes.code === 0) {
+          console.log(`互助码已提交！`);
+        } else {
+          console.log(`互助码提交失败！`);
+        }
       }
+    }catch (e) {
+      console.log(e.message)
     }
+
   }
 
   //互助
-  // console.log(`\n\n自己京东账号助力码：\n${JSON.stringify($.packetIdArr)}\n\n`);
   console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，助力助力池\n`)
+  if ($.packetIdArr.length >= 5) {
+    packetIdLength = 5;
+  }else {
+    packetIdLength = $.packetIdArr.length ? $.packetIdArr.length : 0;
+  }
+
+  // console.log(JSON.stringify($.packetIdArr))
+
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.cookie = cookiesArr[i];
@@ -81,62 +87,37 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     UA = UAInfo[$.UserName]
     token = await getJxToken()
 
-    for (let j = 0; j < $.packetIdArr.length && $.canHelp; j++) {
-      //邀请码：${$.packetIdArr[j].strUserPin
+    for (let j = 0; j < packetIdLength && $.canHelp; j++) {
       console.log(`【${$.UserName}】去助力【${$.packetIdArr[j].userName}}`);
       if ($.UserName === $.packetIdArr[j].userName) {
         console.log(`助力失败：不能助力自己`)
         continue
       }
       $.max = false;
-
       await enrollFriend($.packetIdArr[j].strUserPin);
       await $.wait(5000);
-      if ($.max) {
-        $.packetIdArr.splice(j, 1)
-        j--
-        continue
-      }
 
     }
-
-    // 助力作者
-    // if ($.canHelp && ($.authorMyShareIds && $.authorMyShareIds.length)) {
-    //   console.log(`\n【${$.UserName}】有剩余助力机会，开始助力作者\n`)
-    //   for (let j = 0; j < $.authorMyShareIds.length && $.canHelp; j++) {
-    //     console.log(`【${$.UserName}】去助力作者的邀请码：${$.authorMyShareIds[j]}`);
-    //     $.max = false;
-    //     await enrollFriend($.authorMyShareIds[j]);
-    //     await $.wait(5000);
-    //     if ($.max) {
-    //       $.authorMyShareIds.splice(j, 1)
-    //       j--
-    //       continue
-    //     }
-    //   }
-    // }
 
     //助力助力池
     if ($.canHelp && (shareCodePool && shareCodePool.length)) {
       console.log(`\n【${$.UserName}】有剩余助力机会，开始助力助力池\n`)
-      for (let j = 0; j < shareCodePool.length && $.canHelp; j++) {
-        //去助力助力池的邀请码：${shareCodePool[j]}
-        console.log(`【${$.UserName}】`);
+      for (let jj = 0; jj < shareCodePool.length && $.canHelp; jj++) {
+        console.log(`【${$.UserName}】=> ${shareCodePool[jj]}`);
         $.max = false;
-        await enrollFriend(shareCodePool[j]);
+        await enrollFriend(shareCodePool[jj]);
         await $.wait(5000);
-        if ($.max) {
-          // $.authorMyShareIds.splice(j, 1)
-          shareCodePool.splice(j, 1)
-          j--
-          continue
-        }
       }
     }
-
   }
+
   //拆红包
-  for (let i = 0; i < cookiesArr.length; i++) {
+  if (cookiesArr.length >= 5) {
+    ckLength = 5;
+  }else {
+    ckLength = cookiesArr.length ? cookiesArr.length : 0;
+  }
+  for (let i = 0; i < ckLength; i++) {
     cookie = cookiesArr[i];
     $.cookie = cookiesArr[i];
 
@@ -170,6 +151,7 @@ async function main() {
   }catch (e) {
     console.log(e);
   }
+
   await joinActive();
   await $.wait(2000)
   await getUserInfo()
@@ -203,7 +185,6 @@ function joinActive() {
   })
 }
 
-//获取助力码
 function getUserInfo() {
   return new Promise(resolve => {
     const body = `joinDate=${$.time('yyyyMMdd')}`;
@@ -318,40 +299,6 @@ function openRedPack(strPin, grade) {
     })
   })
 }
-
-// function getAuthorShareCode(url) {
-//   return new Promise(resolve => {
-//     const options = {
-//       url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-//         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-//       }
-//     };
-//     if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-//       const tunnel = require("tunnel");
-//       const agent = {
-//         https: tunnel.httpsOverHttp({
-//           proxy: {
-//             host: process.env.TG_PROXY_HOST,
-//             port: process.env.TG_PROXY_PORT * 1
-//           }
-//         })
-//       }
-//       Object.assign(options, { agent })
-//     }
-//     $.get(options, async (err, resp, data) => {
-//       try {
-//         if (err) {
-//         } else {
-//           if (data) data = JSON.parse(data)
-//         }
-//       } catch (e) {
-//         // $.logErr(e, resp)
-//       } finally {
-//         resolve(data);
-//       }
-//     })
-//   })
-// }
 
 function taskurl(function_path, body = '', stk) {
   // let url = `${BASE_URL}/${function_path}?activeId=${$.activeId}&publishFlag=1&channel=7&${body}&sceneval=2&g_login_type=1&timestamp=${Date.now()}&_=${Date.now() + 2}&_ste=1`
