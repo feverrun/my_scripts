@@ -56,6 +56,7 @@ let llShowMonth = false;
 let Today = new Date();
 let strAllNotify="";
 let llPetError=false;
+let strGuoqi="";
 let RemainMessage = '\n';
 RemainMessage += "⭕提醒:⭕" + '\n';
 RemainMessage += '【极速金币】京东极速版->我的->金币(极速版使用)\n';
@@ -180,6 +181,7 @@ if ($.isNode()) {
       $.allexpenseBean = 0; //月支出
       $.joylevel = 0;
       TempBaipiao = "";
+      strGuoqi="";
       console.log(`******开始查询【京东账号${$.index}】${$.nickName || $.UserName}*********`);
 
       await TotalBean();
@@ -715,6 +717,11 @@ async function showMsg() {
       }
     }
   }
+  if(strGuoqi){
+    ReturnMessage += `💸💸💸临期京豆明细💸💸💸\n`;
+    ReturnMessage += `${strGuoqi}`;
+  }
+
   ReturnMessage += `🧧🧧🧧红包明细🧧🧧🧧\n`;
   ReturnMessage += `${$.message}`;
 
@@ -812,11 +819,8 @@ async function bean() {
   }
   $.todayOutcomeBean = -$.todayOutcomeBean;
   $.expenseBean = -$.expenseBean;
-  //await queryexpirejingdou();//过期京豆
-  //$.todayOutcomeBean=$.todayOutcomeBean+$.expirejingdou;
-  await redPacket(); //过期红包
-  // console.log(`昨日收入：${$.incomeBean}个京豆 🐶`);
-  // console.log(`昨日支出：${$.expenseBean}个京豆 🐶`)
+  await queryexpirejingdou();//过期京豆
+  await redPacket();
 }
 
 async function Monthbean() {
@@ -1182,6 +1186,9 @@ function queryexpirejingdou() {
             if (data.ret === 0) {
               data['expirejingdou'].map(item => {
                 //console.log(`${timeFormat(item['time'] * 1000)}日过期京豆：${item['expireamount']}\n`);
+                if(item['expireamount']!=0){
+                  strGuoqi+=`【${timeFormat(item['time'] * 1000)}】过期${item['expireamount']}豆\n`;
+                }
               })
               $.expirejingdou = data['expirejingdou'][0]['expireamount'];
               // if ($.expirejingdou > 0) {
