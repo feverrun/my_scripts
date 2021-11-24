@@ -12,18 +12,16 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '', allMessage = '', message;
 const JD_API_HOST = 'https://api.m.jd.com/api?appid=interCenter_shopSign';
 
-let activityId=''
-let vender=''
-let num=0
-let shopname=''
+let activityId = ''
+let vender = ''
+let num = 0
+let shopname = ''
 const token = [
   '3141B907298756D94916027C69595B90',
   '4ED3FE1C9D3A74E53C5DA81ED5BCBC5F',
-  'E9E46DB3172B14CBC9FC64C6566660C9',
   '2F6BDE0EAD60F8DEFBD89AFAD8A7FBA7',
   'ECDDB76AB1D9171BDA8523701417AA3E',
   '8F9497016D84EE98F56E0F830AC8921B',
-  'FEF758DCA9C06F2CEB236D1197C152B3',
   '35792A9E17C9FDB6CB8B631CE706BF4C',
   "8111EE06946DAB79472DFDF2A13C2DB9",//北大荒豆浆京东自营旗舰店
   "129E19555A06044320581461FE09C896",//大华京东自营官方旗舰店
@@ -50,7 +48,8 @@ if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
+  };
 } else {
   let cookiesData = $.getdata('CookiesJD') || "[]";
   cookiesData = jsonParse(cookiesData);
@@ -93,16 +92,20 @@ if ($.isNode()) {
     })
 
 //开始店铺签到
-async function dpqd(){
+async function dpqd() {
   for (var j = 0; j < token.length; j++) {
-    num=j+1
-    if (token[j]=='') {continue}
+    num = j + 1
+    if (token[j] == '') {
+      continue
+    }
     await getvenderId(token[j])
-    if (vender=='') {continue}
+    if (vender == '') {
+      continue
+    }
     await getvenderName(vender)
-    await getActivityInfo(token[j],vender)
-    await signCollectGift(token[j],vender,activityId)
-    await taskUrl(token[j],vender)
+    await getActivityInfo(token[j], vender)
+    await signCollectGift(token[j], vender, activityId)
+    await taskUrl(token[j], vender)
   }
 }
 
@@ -128,12 +131,12 @@ function getvenderId(token) {
         } else {
           //console.log(data)
           data = JSON.parse(/{(.*)}/g.exec(data)[0])
-          if (data.code==402) {
-            vender=''
-            console.log(`第`+num+`个店铺签到活动已失效`)
-            message +=`第`+num+`个店铺签到活动已失效\n`
-          }else{
-            vender=data.data.venderId
+          if (data.code == 402) {
+            vender = ''
+            console.log(`第` + num + `个店铺签到活动已失效`)
+            message += `第` + num + `个店铺签到活动已失效\n`
+          } else {
+            vender = data.data.venderId
           }
         }
       } catch (e) {
@@ -167,8 +170,8 @@ function getvenderName(venderId) {
           //console.log(data)
           data = JSON.parse(data)
           shopName = data.shopName
-          console.log(`【`+shopName+`】`)
-          message +=`【`+shopName+`】`
+          console.log(`【` + shopName + `】`)
+          message += `【` + shopName + `】`
         }
       } catch (e) {
         $.logErr(e, resp);
@@ -181,7 +184,7 @@ function getvenderName(venderId) {
 
 
 //获取店铺活动信息
-function getActivityInfo(token,venderId) {
+function getActivityInfo(token, venderId) {
   return new Promise(resolve => {
     const options = {
       url: `${JD_API_HOST}&t=${Date.now()}&loginType=2&functionId=interact_center_shopSign_getActivityInfo&body={%22token%22:%22${token}%22,%22venderId%22:${venderId}}&jsonp=jsonp1005`,
@@ -203,13 +206,13 @@ function getActivityInfo(token,venderId) {
         } else {
           //console.log(data)
           data = JSON.parse(/{(.*)}/g.exec(data)[0])
-          activityId=data.data.id
+          activityId = data.data.id
           //console.log(data)
-          let mes='';
+          let mes = '';
           for (let i = 0; i < data.data.continuePrizeRuleList.length; i++) {
-            const level=data.data.continuePrizeRuleList[i].level
-            const discount=data.data.continuePrizeRuleList[i].prizeList[0].discount
-            mes += "签到"+level+"天,获得"+discount+'豆'
+            const level = data.data.continuePrizeRuleList[i].level
+            const discount = data.data.continuePrizeRuleList[i].prizeList[0].discount
+            mes += "签到" + level + "天,获得" + discount + '豆'
           }
           // console.log(message+mes+'\n')
           // message += mes+'\n'
@@ -224,7 +227,7 @@ function getActivityInfo(token,venderId) {
 }
 
 //店铺签到
-function signCollectGift(token,venderId,activitytemp) {
+function signCollectGift(token, venderId, activitytemp) {
   return new Promise(resolve => {
     const options = {
       url: `${JD_API_HOST}&t=${Date.now()}&loginType=2&functionId=interact_center_shopSign_signCollectGift&body={%22token%22:%22${token}%22,%22venderId%22:688200,%22activityId%22:${activitytemp},%22type%22:56,%22actionType%22:7}&jsonp=jsonp1004`,
@@ -256,7 +259,7 @@ function signCollectGift(token,venderId,activitytemp) {
 }
 
 //店铺获取签到信息
-function taskUrl(token,venderId) {
+function taskUrl(token, venderId) {
   return new Promise(resolve => {
     const options = {
       url: `${JD_API_HOST}&t=${Date.now()}&loginType=2&functionId=interact_center_shopSign_getSignRecord&body={%22token%22:%22${token}%22,%22venderId%22:${venderId},%22activityId%22:${activityId},%22type%22:56}&jsonp=jsonp1006`,
@@ -277,8 +280,8 @@ function taskUrl(token,venderId) {
         } else {
           //console.log(data)
           data = JSON.parse(/{(.*)}/g.exec(data)[0])
-          console.log(`已签到：`+data.data.days+`天`)
-          message +=`已签到：`+data.data.days+`天\n`
+          console.log(`已签到：` + data.data.days + `天`)
+          message += `已签到：` + data.data.days + `天\n`
         }
       } catch (e) {
         $.logErr(e, resp);

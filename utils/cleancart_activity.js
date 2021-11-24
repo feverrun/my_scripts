@@ -1,11 +1,7 @@
 
 let jdSignUrl = 'https://jd.smiek.tk/jdcleancatr_21102717' // 算法url
 
-try{
-    const got = require('got');
-}catch(e){
-    console.log('请添加依赖模块"got"')
-}
+const got = $.isNode() ? require('got') : '';
 
 jdSignUrl = process.env.CLEANCART_SIGNURL ? process.env.CLEANCART_SIGNURL : `${jdSignUrl}`
 let cookie = ''
