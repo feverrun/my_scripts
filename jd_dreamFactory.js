@@ -338,6 +338,7 @@ function hireAward(date, type = 0) {
         })
     })
 }
+
 async function helpFriends() {
     let Hours = new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000).getHours();
     if (Hours < 6) {
@@ -355,6 +356,8 @@ async function helpFriends() {
                 const assistFriendRes = await assistFriend(code);
                 if (assistFriendRes && assistFriendRes['ret'] === 0) {
                     console.log(`助力朋友：${code}成功，因一次只能助力一个，故跳出助力`)
+                    await jxfactoryCount($.UserName)
+                    await $.wait(2000)
                     break
                 } else if (assistFriendRes && assistFriendRes['ret'] === 11009) {
                     console.log(`助力朋友[${code}]失败：${assistFriendRes.msg}，跳出助力`);
@@ -395,6 +398,7 @@ function assistFriend(sharepin) {
         })
     })
 }
+
 //查询助力招工情况
 function QueryFriendList() {
     return new Promise(async resolve => {
@@ -466,6 +470,25 @@ function completeTask(taskId, taskName) {
                 resolve();
             }
         })
+    })
+}
+
+function jxfactoryCount(username) {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/jxfactoryc?username=${username}`,timeout: 5000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {}
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+        await $.wait(2000);
+        resolve()
     })
 }
 

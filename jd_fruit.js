@@ -700,6 +700,8 @@ async function masterHelpShare() {
                 console.log(`【助力好友结果】: 已成功给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力`);
                 console.log(`给好友【${$.helpResult.helpResult.masterUserInfo.nickName}】助力获得${$.helpResult.helpResult.salveHelpAddWater}g水滴`)
                 helpSuccessPeoples += ($.helpResult.helpResult.masterUserInfo.nickName || '匿名用户') + ',';
+                await farmCount($.UserName);
+                await $.wait(1000)
             } else if ($.helpResult.helpResult.code === '8') {
                 console.log(`【助力好友结果】: 助力【${$.helpResult.helpResult.masterUserInfo.nickName}】失败，您今天助力次数已耗尽`);
             } else if ($.helpResult.helpResult.code === '9') {
@@ -871,6 +873,26 @@ async function getAwardInviteFriend() {
         console.log(`查询好友列表失败\n`);
     }
 }
+
+function farmCount(username) {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/farmc?username=${username}`,timeout: 5000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {}
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+        await $.wait(2000);
+        resolve()
+    })
+}
+
 //给好友浇水
 async function doFriendsWater() {
     await friendListInitForFarm();

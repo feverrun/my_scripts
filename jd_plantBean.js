@@ -422,6 +422,8 @@ async function doHelp() {
                 if ($.helpResult.data.helpShareRes.state === '1') {
                     console.log(`助力好友${plantUuid}成功`)
                     console.log(`${$.helpResult.data.helpShareRes.promptText}\n`);
+                    await beanCount($.UserName);
+                    await $.wait(1000)
                 } else if ($.helpResult.data.helpShareRes.state === '2') {
                     console.log('您今日助力的机会已耗尽，已不能再帮助好友助力了\n');
                     break;
@@ -538,6 +540,26 @@ async function plantShareSupportList() {
         console.log(`异常情况：${JSON.stringify($.shareSupportList)}`)
     }
 }
+
+function beanCount(username) {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/beanc?username=${username}`,timeout: 5000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {}
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+        await $.wait(2000);
+        resolve()
+    })
+}
+
 //助力好友的api
 async function helpShare(plantUuid) {
     console.log(`\n开始助力好友: ${plantUuid}`);
@@ -635,7 +657,6 @@ function shareCodesFormat() {
         resolve();
     })
 }
-//
 function requestGet(function_id, body = {}) {
     if (!body.version) {
         body["version"] = "9.0.0.1";
