@@ -420,10 +420,9 @@ async function doHelp() {
             // console.log(`助力好友结果: ${JSON.stringify($.helpResult.data.helpShareRes)}`);
             if ($.helpResult.data.helpShareRes) {
                 if ($.helpResult.data.helpShareRes.state === '1') {
+                    try {await beanCount($.UserName);}catch (e) {console.log(e.message)}
                     console.log(`助力好友${plantUuid}成功`)
                     console.log(`${$.helpResult.data.helpShareRes.promptText}\n`);
-                    await beanCount($.UserName);
-                    await $.wait(1000)
                 } else if ($.helpResult.data.helpShareRes.state === '2') {
                     console.log('您今日助力的机会已耗尽，已不能再帮助好友助力了\n');
                     break;
@@ -543,7 +542,7 @@ async function plantShareSupportList() {
 
 function beanCount(username) {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/submit/beanc?username=${username}`,timeout: 5000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/beanc?username=${username}`,timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -555,7 +554,6 @@ function beanCount(username) {
                 resolve();
             }
         })
-        await $.wait(2000);
         resolve()
     })
 }

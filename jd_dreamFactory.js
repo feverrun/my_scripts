@@ -355,9 +355,8 @@ async function helpFriends() {
                 }
                 const assistFriendRes = await assistFriend(code);
                 if (assistFriendRes && assistFriendRes['ret'] === 0) {
+                    try {await jxfactoryCount($.UserName)}catch (e) {console.log(e.message)}
                     console.log(`助力朋友：${code}成功，因一次只能助力一个，故跳出助力`)
-                    await jxfactoryCount($.UserName)
-                    await $.wait(2000)
                     break
                 } else if (assistFriendRes && assistFriendRes['ret'] === 11009) {
                     console.log(`助力朋友[${code}]失败：${assistFriendRes.msg}，跳出助力`);
@@ -475,7 +474,7 @@ function completeTask(taskId, taskName) {
 
 function jxfactoryCount(username) {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/submit/jxfactoryc?username=${username}`,timeout: 5000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/jxfactoryc?username=${username}`,timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -487,7 +486,6 @@ function jxfactoryCount(username) {
                 resolve();
             }
         })
-        await $.wait(2000);
         resolve()
     })
 }
