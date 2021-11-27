@@ -47,8 +47,8 @@ if ($.isNode()) {
       let str = await downloadUrl("https://gia.jd.com/m.html")
       await $.wait(1500)
 
-      $.jd_risk_token_id = str.split(';')[0].replace("var jd_risk_token_id = ","")
-      console.log($.jd_risk_token_id)
+      $.jd_risk_token_id = str.split(';')[0].replace("var jd_risk_token_id = ","").replace("'","").replace("'","")
+      // $.jd_jr_td_risk_pin = str.split(';')[1].replace("var jd_jr_td_risk_pin=","").replace("'","").replace("'","")
       await jdDailyEgg();
     }
   }
@@ -60,10 +60,15 @@ if ($.isNode()) {
       $.done();
     })
 async function jdDailyEgg() {
-  await toDailyHome()
-  if ($.stopNext) return
+  // 忽略
+  // await toDailyHome()
+  // if ($.stopNext) return
+
   await toWithdraw()
+  await $.wait(2000)
+
   await toGoldExchange();
+  await $.wait(2000)
 }
 
 function toGoldExchange() {
@@ -142,7 +147,7 @@ function toDailyHome() {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            // console.log(data)
+            console.log(data)
             data = JSON.parse(data);
             if (data.resultData.code !== "0000") {
               $.stopNext = true
@@ -171,7 +176,7 @@ function getBody(withSign = true) {
     channelLv: "yxjh",
     environment: "jrApp",
     riskDeviceInfo,
-    shareUuid: "uuid",
+    shareUuid: "6ad1e828afa4497a8a9933c0ef861b4e",
   }
   if (!withSign) {
     return {
@@ -261,6 +266,7 @@ function downloadUrl(url) {
     })
   })
 }
+
 function jsonParse(str) {
   if (typeof str == "string") {
     try {
