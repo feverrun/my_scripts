@@ -33,6 +33,7 @@ if ($.isNode()) {
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
+      $.cookie = cookie;
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
       $.isLogin = true;
@@ -43,7 +44,11 @@ if ($.isNode()) {
       const fakerBody = Faker.getBody(dailyEggUrl)
       $.fp = fakerBody.fp
       $.eid = await getClientData(fakerBody)
-      $.token = (await downloadUrl("https://gia.jd.com/m.html")).match(/var\s*?jd_risk_token_id\s*?=\s*["`'](\S*?)["`'];?/)?.[1] || ""
+      let str = await downloadUrl("https://gia.jd.com/m.html")
+      await $.wait(1500)
+
+      $.jd_risk_token_id = str.split(';')[0].replace("var jd_risk_token_id = ","")
+      console.log($.jd_risk_token_id)
       await jdDailyEgg();
     }
   }
@@ -160,7 +165,7 @@ function getBody(withSign = true) {
   const riskDeviceInfo = JSON.stringify({
     eid: $.eid,
     fp: $.fp,
-    token: $.token
+    token: $.jd_risk_token_id
   })
   const signData = {
     channelLv: "yxjh",
