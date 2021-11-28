@@ -916,27 +916,23 @@ async function showMsg() {
     })
 }
 function readShareCode() {
-    console.log(`开始`)
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/jxfactory`, 'timeout': 50000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/jxfactory`, 'timeout': 60000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
-                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500});
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
 
@@ -948,35 +944,30 @@ function submitCode() {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500});
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
-//格式化助力码
+
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        $.newShareCodes = [];
-        console.log(`互助开始\n`)
         let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
-            $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+            $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
         }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
         resolve();
     })
 }
 
-//提交互助码
 function submitCode0() {
     return new Promise(async resolve => {
         $.get({url: `http://hz.feverrun.top:99/share/submit/jxfactory0?code=${myInviteCode}&user=${$.UserName}`, timeout: 10000}, (err, resp, data) => {
@@ -985,18 +976,16 @@ function submitCode0() {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500});
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
 

@@ -14,7 +14,7 @@ const $ = new Env('京东种豆得豆');
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let jdNotify = true;//是否开启静默运行。默认true开启
-let cookiesArr = [], cookie = '', jdPlantBeanShareArr = [], isBox = false, notify, newShareCodes, option, message,subTitle;
+let cookiesArr = [], cookie = '', jdPlantBeanShareArr = [], isBox = false, notify, newShareCodes = [], option, message,subTitle;
 
 //助力好友分享码(最多3个,否则后面的助力失败)
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
@@ -554,7 +554,6 @@ function beanCount(username) {
                 resolve();
             }
         })
-        resolve()
     })
 }
 
@@ -576,25 +575,22 @@ async function plantBeanIndex() {
 
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/bean`, timeout: 50000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/bean`, timeout: 60000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
-                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500});
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
 
@@ -606,20 +602,31 @@ function submitCode() {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500});
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
+
+function safeGet(data) {
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
+    }
+}
+
 function submitCode0() {
     return new Promise(async resolve => {
         $.get({url: `http://hz.feverrun.top:99/share/submit/bean0?code=${$.myPlantUuid}&user=${$.UserName}`, timeout: 10000}, (err, resp, data) => {
@@ -628,28 +635,24 @@ function submitCode0() {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500});
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
+
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        newShareCodes = [];
-        console.log(`互助开始\n`)
-        //删除内部互助
         let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
-            newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
+            newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
         }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
         resolve();

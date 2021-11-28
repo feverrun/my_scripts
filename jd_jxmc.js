@@ -23,6 +23,7 @@ let cookiesArr = [];
 let UA, token, UAInfo = {}
 $.appId = 10028;
 $.helpCkList = [];
+$.newShareCodes = [];
 let cardinfo = {
     "16": "小黄鸡",
     "17": "辣子鸡",
@@ -162,22 +163,8 @@ async function pasture() {
             $.inviteCodeList.push($.homeInfo.sharekey);
             await $.wait(2000)
             if ($.index == 1) {
-                await submitCode($.homeInfo.sharekey, $.UserName)
+                try {await submitCode($.homeInfo.sharekey, $.UserName)}catch (e) {console.log(e.message)}
             }
-            // await takeGetRequest('GetUserTaskStatusList');
-            // for (let key of Object.keys($.taskList)) {
-            //     let vo = $.taskList[key]
-            //     if (vo.taskName === "邀请好友助力养鸡" || vo.taskType === 4) {
-            //         if (vo.completedTimes >= vo.configTargetTimes) {
-            //             console.log(`助力已满，不上传助力码`)
-            //         } else {
-            //             await submitCode($.homeInfo.sharekey, user)
-            //             $.inviteCodeList.push($.homeInfo.sharekey);
-            //             await $.wait(2000)
-            //         }
-            //     }
-            // }
-
 
             const petNum = ($.homeInfo?.petinfo || []).length
             await takeGetRequest('GetCardInfo');
@@ -983,7 +970,6 @@ function getUrlData(url, name) {
 //格式化助力码
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        $.newShareCodes = []
         const readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
             $.newShareCodes = [...new Set([...$.inviteCodeList, ...(readShareCodeRes.data || [])])];
@@ -997,14 +983,13 @@ function shareCodesFormat() {
 
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/jxmc`, timeout: 30 * 1000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/jxmc`, timeout: 60000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(JSON.stringify(err))
                     console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        console.log(`\n随机取10个码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = getObject(data)
                     }
                 }
@@ -1014,8 +999,6 @@ function readShareCode() {
                 resolve(data);
             }
         })
-        await $.wait(30 * 1000);
-        resolve()
     })
 }
 
@@ -1037,13 +1020,12 @@ function submitCode(code, user) {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500});
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
+
 function getObject(data){
     if (typeof data == 'object') {
         return data;

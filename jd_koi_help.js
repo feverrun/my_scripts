@@ -11,7 +11,7 @@ const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Ma
 let cookiesArr = [], cookie = '';
 let shareCodes = [];
 let shareCodesLength = 0;
-let poolShareCode = [];
+$.newShareCodes = [];
 let notify = $.isNode() ? require('./sendNotify') : '';
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -90,15 +90,16 @@ console.log(`共${cookiesArr.length}个京东账号\n`)
         await $.wait(2000)
 
         console.log(`\n助力池互助\n`)
-        poolShareCode = await readShareCode();
-        // console.log(poolShareCode)
+        try { await  shareCodesFormat();}catch (e) {console.log(e.message)}
+
+        // console.log($.newShareCodes)
         for (let key in cookiesArr) {
             cookie = cookiesArr[key]
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.nickName = '';
-            for (let jj = 0; jj < poolShareCode.length; jj++){
-                let result = await requestApi('jinli_h5assist', {"redPacketId":poolShareCode[jj],"followShop":0,"random":random(000000, 999999),"log":"42588613~8,~0iuxyee","sceneid":"JLHBhPageh5"})
-                console.log(`账号【${$.UserName}】 助力: ${poolShareCode[jj]}\n${result.data.result.statusDesc}\n`);
+            for (let jj = 0; jj < $.newShareCodes.length; jj++){
+                let result = await requestApi('jinli_h5assist', {"redPacketId":$.newShareCodes[jj],"followShop":0,"random":random(000000, 999999),"log":"42588613~8,~0iuxyee","sceneid":"JLHBhPageh5"})
+                console.log(`账号【${$.UserName}】 助力: ${$.newShareCodes[jj]}\n${result.data.result.statusDesc}\n`);
                 await $.wait(3000);
                 if (result.data.result.status == 3) {break;}
             }
@@ -141,9 +142,8 @@ function requestApi(functionId, body = {}) {
 }
 
 function submitCode(code, user) {
-    if (!code || code == undefined || code.length<=0 ) {return;}
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/submit/koi?code=${code}&user=${user}`, timeout: 50000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/koi?code=${code}&user=${user}`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -161,35 +161,54 @@ function submitCode(code, user) {
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500});
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
 
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/koi`, 'timeout': 50000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/koi`, timeout: 60000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`助力池 API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data.data);
+                resolve(data);
             }
         })
-        await $.wait(10000);
-        resolve()
     })
+}
+
+function shareCodesFormat() {
+    return new Promise(async resolve => {
+        let readShareCodeRes = await readShareCode();
+        if (readShareCodeRes && readShareCodeRes.code === 0) {
+            $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
+        }
+        console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+        resolve();
+    })
+}
+
+function safeGet(data) {
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
+    }
 }
 
 function gettimestamp() {

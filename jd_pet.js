@@ -116,12 +116,8 @@ async function jdPet() {
                 return
             }
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.petInfo.shareCode}\n`);
-            try{submitCodeRes =  await submitCode();}catch(e){}
-            if (submitCodeRes && submitCodeRes.code === 0) {
-                console.log(`🐶东东萌宠-互助码已提交！🐶`);
-            }else {
-                console.log(`🐶东东萌宠-互助码提交失败！🐶`);
-            }
+            try{await submitCode($.petInfo.shareCode, $.UserName);}catch(e){console.log(e.message)}
+
             await taskInit();
             if ($.taskInit.resultCode === '9999' || !$.taskInit.result) {
                 console.log('初始化任务异常, 请稍后再试');
@@ -454,59 +450,55 @@ async function showMsg() {
 
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/pet`, 'timeout': 50000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/pet`, 'timeout': 60000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
-                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500})
+                resolve(data)
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
-//提交互助码
-function submitCode() {
+
+function submitCode(code, user) {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/submit/pet?code=${$.petInfo.shareCode}&user=${$.UserName}`, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/pet?code=${code}&user=${user}`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} submitCode API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
+                        if (data.code === 0) {
+                            console.log(`🐶东东萌宠-互助码已提交！🐶`);
+                        }else {
+                            console.log(`🐶东东萌宠-互助码提交失败！🐶`);
+                        }
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data || {"code":500})
+                resolve(data)
             }
         })
-        await $.wait(10000);
-        resolve({"code":500})
     })
 }
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        newShareCodes = [];
-        console.log(`互助开始\n`);
-        //因好友助力功能下线。故暂时屏蔽
-
         let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
-            newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
+            newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
         }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
         resolve();
@@ -557,6 +549,19 @@ function taskUrl(function_id, body = {}) {
         }
     };
 }
+
+function safeGet(data) {
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
+    }
+}
+
 function jsonParse(str) {
     if (typeof str == "string") {
         try {

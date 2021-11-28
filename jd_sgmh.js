@@ -22,6 +22,7 @@ let myInviteCode;
 let cookiesArr = [], cookie = '';
 
 $.shareCodesArr = [];
+$.newShareCodes = [];
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -37,8 +38,6 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
         return;
     }
-
-    //
 
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
@@ -95,12 +94,8 @@ function interact_template_getHomeData(timeout = 0) {
                         if (data.data.result.taskVos[i].taskName === '邀请好友助力') {
                             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.result.taskVos[i].assistTaskDetailVo.taskToken}\n`);
                             myInviteCode = data.data.result.taskVos[i].assistTaskDetailVo.taskToken;
-                            const submitCodeRes = await submitCode();
-                            if (submitCodeRes && submitCodeRes.code === 0) {
-                                console.log(`📦闪购盲盒-互助码已提交！📦`);
-                            }else {
-                                console.log(`📦闪购盲盒-互助码提交失败！📦`);
-                            }
+                            try {await submitCode(myInviteCode, $.UserName);}catch (e) {console.log(e.message)}
+
                             for (let code of $.newShareCodes) {
                                 if (!code) continue
                                 await harmony_collectScore(code, data.data.result.taskVos[i].taskId);
@@ -247,15 +242,11 @@ function showMsg() {
     })
 }
 
-//格式化助力码
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        $.newShareCodes = [];
-
-        console.log(`互助开始\n`)
         let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
-            $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+            $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
         }
         console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
         resolve();
@@ -263,11 +254,10 @@ function shareCodesFormat() {
 }
 
 function readShareCode() {
-    console.log(`开始`)
     return new Promise(async resolve => {
         $.get({
             url: `http://hz.feverrun.top:99/share/get/sgmh`,
-            'timeout': 50000
+            timeout: 60000
         }, (err, resp, data) => {
             try {
                 if (err) {
@@ -275,7 +265,6 @@ function readShareCode() {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        console.log(`随机读取互助码放到您固定的互助码后面(不影响已有固定互助)`)
                         data = JSON.parse(data);
                     }
                 }
@@ -285,21 +274,24 @@ function readShareCode() {
                 resolve(data);
             }
         })
-        await $.wait(2000);
-        resolve()
     })
 }
-//提交互助码
-function submitCode() {
+
+function submitCode(code, user) {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/submit/sgmh?code=${myInviteCode}&user=${$.UserName}`, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/sgmh?code=${code}&user=${user}`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
+                    if (safeGet(data)) {
                         data = JSON.parse(data);
+                        if (data.code === 0) {
+                            console.log(`📦闪购盲盒-互助码已提交！📦`);
+                        }else {
+                            console.log(`📦闪购盲盒-互助码提交失败！📦`);
+                        }
                     }
                 }
             } catch (e) {
@@ -308,10 +300,21 @@ function submitCode() {
                 resolve(data);
             }
         })
-        await $.wait(15000);
-        resolve()
     })
 }
+
+function safeGet(data) {
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
+    }
+}
+
 
 function jsonParse(str) {
     if (typeof str == "string") {

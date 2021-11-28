@@ -14,6 +14,7 @@ let UA, UAInfo = {}, codeInfo = {}, token = '';
 let shareCodePool = []
 let packetIdLength = 0;
 let ckLength = 0;
+$.newShareCodes = [];
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -53,19 +54,9 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     // token = await getJxToken()
     await main();
 
-    try {
-      if (i == 0) {
-        let submitRes = await submitCode($.packetIdArr[i].strUserPin, $.UserName)
-        if (submitRes && submitRes.code === 0) {
-          console.log(`互助码已提交！`);
-        } else {
-          console.log(`互助码提交失败！`);
-        }
-      }
-    }catch (e) {
-      console.log(e.message)
+    if (i == 0) {
+      try {await submitCode($.packetIdArr[i].strUserPin, $.UserName)}catch (e) {console.log(e.message)}
     }
-
   }
 
   //互助
@@ -101,13 +92,13 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
 
     //助力助力池
     $.canHelp = true;
-    if (shareCodePool && shareCodePool.length) {
+    if ($.newShareCodes && $.newShareCodes.length) {
       console.log(`\n【${$.UserName}】有剩余助力机会，开始助力助力池\n`)
-      // console.log(shareCodePool)
-      for (let jj = 0; jj < shareCodePool.length && $.canHelp; jj++) {
-        console.log(`【${$.UserName}】=> ${shareCodePool[jj]}`);
+      // console.log($.newShareCodes)
+      for (let jj = 0; jj < $.newShareCodes.length && $.canHelp; jj++) {
+        console.log(`【${$.UserName}】=> ${$.newShareCodes[jj]}`);
         $.max = false;
-        await enrollFriend(shareCodePool[jj]);
+        await enrollFriend($.newShareCodes[jj]);
         await $.wait(5000);
       }
     }
@@ -145,19 +136,10 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     })
 
 async function main() {
-  try {
-    const readShareCodeRes = await readShareCode();
-    if (readShareCodeRes && readShareCodeRes.code === 0) {
-      shareCodePool = readShareCodeRes.data;
-    }
-  }catch (e) {
-    console.log(e);
-  }
-
+  await shareCodesFormat();
   await joinActive();
   await $.wait(2000)
   await getUserInfo()
-
 }
 //参与活动
 function joinActive() {
@@ -333,41 +315,52 @@ function taskurl(function_path, body = '', stk) {
 }
 
 //提交互助码
-function submitCode(code='', user='') {
+function submitCode(code, user) {
   return new Promise(async resolve => {
-    $.get({url: `http://hz.feverrun.top:99/share/submit/jxlhb?code=${code}&user=${user}`, timeout: 50000}, (err, resp, data) => {
+    $.get({url: `http://hz.feverrun.top:99/share/submit/jxlhb?code=${code}&user=${user}`, timeout: 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
-          if (data) {
-            //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+          if (safeGet(data)) {
             data = JSON.parse(data);
+            if (data.code === 0) {
+              console.log(`互助码已提交！`);
+            }else {
+              console.log(`互助码提交失败！`);
+            }
           }
         }
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve(data || {"code":500});
+        resolve(data);
       }
     })
-    await $.wait(10000);
-    resolve({"code":500})
   })
 }
 
-//读取互助码
-function readShareCode() {
-  console.log(`开始`)
+function shareCodesFormat() {
   return new Promise(async resolve => {
-    $.get({url: `http://hz.feverrun.top:99/share/get/jxlhb`, 'timeout': 50000}, (err, resp, data) => {
+    let readShareCodeRes = await readShareCode();
+    if (readShareCodeRes && readShareCodeRes.code === 0) {
+      $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
+    }
+    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+    resolve();
+  })
+}
+
+function readShareCode() {
+  return new Promise(async resolve => {
+    $.get({url: `http://hz.feverrun.top:99/share/get/jxlhb`, 'timeout': 60000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`助力池 API请求失败，请检查网路重试`)
         } else {
-          if (data) {
+          if (safeGet(data)) {
             data = JSON.parse(data);
           }
         }
@@ -377,11 +370,20 @@ function readShareCode() {
         resolve(data);
       }
     })
-    await $.wait(10000);
-    resolve()
   })
 }
 
+function safeGet(data) {
+  try {
+    if (typeof JSON.parse(data) == "object") {
+      return true;
+    }
+  } catch (e) {
+    console.log(e);
+    console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+    return false;
+  }
+}
 
 function randomString(e) {
   e = e || 32;

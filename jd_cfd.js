@@ -23,12 +23,14 @@ $.notifyTime = $.getdata("cfd_notifyTime");
 $.result = [];
 $.shareCodes = [];
 $.shareCodesArr = [];
-let codePool = [];
+$.newShareCodes = [];
+
 let cookiesArr = [], cookie = '', token = '';
 let UA, UAInfo = {};
 let nowTimes;
 const randomCount = $.isNode() ? 20 : 3;
 $.appId = 10032;
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -1522,10 +1524,9 @@ function showMsg() {
 //格式化助力码
 function shareCodesFormat() {
     return new Promise(async resolve => {
-        $.newShareCodes = []
-        await readShareCode()
-        if (codePool && codePool.code === 0) {
-            $.newShareCodes = [...new Set([...$.shareCodes,  ...(codePool.data || [])])];
+        let readShareCodeRes = await readShareCode();
+        if (readShareCodeRes && readShareCodeRes.code === 0) {
+            $.newShareCodes = [...new Set([...$.shareCodes,  ...(readShareCodeRes.data || [])])];
         } else {
             $.newShareCodes = [...new Set([...$.shareCodes])];
         }
@@ -1534,58 +1535,63 @@ function shareCodesFormat() {
     })
 }
 
-//提交互助码
-function submitCode(myInviteCode, user) {
-    return axios({
-        url: `http://hz.feverrun.top:99/share/submit/cfd`,
-        params: {
-            code: myInviteCode,
-            user: user,
-        },
-        data: {},
-        method: 'get',
-        timeout: 5000,
-        headers: {
-            'User-Agent': `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko, got) Chrome/92.0.4515.159 Safari/537.36`,
-        },
-    }).catch(err => {
-        console.log(err)
-    })
-        .then(res => {
-            if (res.status == 200 && res.data) {
-                let data = getObject(res.data)
-                if (data.code == 0) {
-                    console.log("🏝互助码已提交🏝");
+function submitCode(code, user) {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/cfd?code=${code}&user=${user}`, timeout: 10000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    console.log("🏝互助码提交失败🏝");
+                    if (safeGet(data)) {
+                        data = JSON.parse(data);
+                        if (data.code == 0) {
+                            console.log("🏝互助码已提交🏝");
+                        } else {
+                            console.log("🏝互助码提交失败🏝");
+                        }
+                    }
                 }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
             }
-        }).catch(err => {
-        console.log(err)
+        })
     })
 }
 
 function readShareCode() {
-    return axios({
-        url: `http://hz.feverrun.top:99/share/get/cfd`,
-        params: {},
-        data: {},
-        method: 'get',
-        timeout: 5000,
-        headers: {
-            'User-Agent': `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko, got) Chrome/92.0.4515.159 Safari/537.36`,
-        },
-    }).catch(err => {
-        console.log(err)
-    })
-        .then(res => {
-            if (res.status == 200 && res.data) {
-                let data = getObject(res.data)
-                codePool = data;
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/cfd`, timeout: 60000,}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        data = JSON.parse(data);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
             }
-        }).catch(err => {
-        console.log(err)
+        })
     })
+}
+
+function safeGet(data) {
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
+    }
 }
 
 function jsonParse(str) {
