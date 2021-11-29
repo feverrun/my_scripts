@@ -49,6 +49,7 @@ let codePools = [];
             await Promise.all([
                 task0()
             ])
+            $.taskList_limit = 0
             await taskList();
             await getAward();   //抽奖
         }
@@ -201,6 +202,7 @@ function getCoin() {
 
 async function taskList() {
     return new Promise(async (resolve) => {
+        $.taskList_limit++
         const body = {"apiMapping":"/active/taskList"}
         $.post(taskurl(body), async (err, resp, data) => {
             try {
@@ -237,8 +239,12 @@ async function taskList() {
                         console.log('\n\n----taskList的任务全部做完了---\n\n')
                         console.log(`分享好友助力 ${task5.finishNum}/${task5.totalNum}\n\n`)
                     } else {
-                        console.log(`请继续等待,正在做任务,不要退出哦`)
-                        await taskList();
+                        if ($.taskList_limit >= 15){
+                            console.log('触发死循环保护,结束')
+                        } else {
+                            console.log(`请继续等待,正在做任务,不要退出哦`)
+                            await taskList();
+                        }
                     }
                 }
             } catch (e) {

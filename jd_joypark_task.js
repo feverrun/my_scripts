@@ -32,131 +32,127 @@ message = ""
     }
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
-        if (cookie) {
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            $.openIndex = 0
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        $.index = i + 1;
+        $.isLogin = true;
+        $.nickName = '';
+        $.openIndex = 0
+        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
-            await getJoyBaseInfo()
-            if ($.joyBaseInfo && $.joyBaseInfo.invitePin) {
-                $.log(`${$.name} - ${$.UserName}  助力码: ${$.joyBaseInfo.invitePin}`);
-                $.invitePinTaskList.push($.joyBaseInfo.invitePin);
-            } else {
-                $.log(`${$.name} - ${$.UserName}  助力码: null`);
-                $.invitePinTaskList.push('');
-                $.isLogin = false
-                $.log("服务端异常，不知道为啥有时候这样，后面再观察一下，手动执行应该又没问题了")
-                continue
+        await getJoyBaseInfo()
+        if ($.joyBaseInfo && $.joyBaseInfo.invitePin) {
+            $.log(`${$.name} - ${$.UserName}  助力码: ${$.joyBaseInfo.invitePin}`);
+            $.invitePinTaskList.push($.joyBaseInfo.invitePin);
+        } else {
+            $.log(`${$.name} - ${$.UserName}  助力码: null`);
+            $.invitePinTaskList.push('');
+            $.isLogin = false
+            $.log("服务端异常，不知道为啥有时候这样，后面再观察一下，手动执行应该又没问题了")
+            continue
+        }
+        await getTaskList();
+
+        // 签到 / 逛会场 / 浏览商品
+        for (const task of $.taskList) {
+            if (task.taskType === 'SIGN') {
+                $.log(`${task.taskTitle}`)
+                await apDoTask(task.id, task.taskType, undefined);
+                $.log(`${task.taskTitle} 领取奖励`)
+                await apTaskDrawAward(task.id, task.taskType);
             }
-            await getTaskList();
+            if (task.taskType === 'BROWSE_PRODUCT' || task.taskType === 'BROWSE_CHANNEL' && task.taskLimitTimes !== 1) {
+                let productList = await apTaskDetail(task.id, task.taskType);
+                let productListNow = 0;
+                if (productList.length === 0) {
+                    let resp = await apTaskDrawAward(task.id, task.taskType);
 
-            // 签到 / 逛会场 / 浏览商品
-            for (const task of $.taskList) {
-                if (task.taskType === 'SIGN') {
-                    $.log(`${task.taskTitle}`)
-                    await apDoTask(task.id, task.taskType, undefined);
-                    $.log(`${task.taskTitle} 领取奖励`)
-                    await apTaskDrawAward(task.id, task.taskType);
+                    if (!resp.success) {
+                        $.log(`${task.taskTitle}|${task.taskShowTitle} 领取完成!`)
+                        productList = await apTaskDetail(task.id, task.taskType);
+
+                    }
                 }
-                if (task.taskType === 'BROWSE_PRODUCT' || task.taskType === 'BROWSE_CHANNEL' && task.taskLimitTimes !== 1) {
-                    let productList = await apTaskDetail(task.id, task.taskType);
-                    let productListNow = 0;
+                //做
+                while (task.taskLimitTimes - task.taskDoTimes >= 0) {
+
                     if (productList.length === 0) {
-                        let resp = await apTaskDrawAward(task.id, task.taskType);
-
-                        if (!resp.success) {
-                            $.log(`${task.taskTitle}|${task.taskShowTitle} 领取完成!`)
-                            productList = await apTaskDetail(task.id, task.taskType);
-
-                        }
+                        $.log(`${task.taskTitle} 活动火爆，素材库没有素材，我也不知道啥回事 = = `);
+                        break;
                     }
-                    //做
-                    while (task.taskLimitTimes - task.taskDoTimes >= 0) {
+                    $.log(`${task.taskTitle} ${task.taskDoTimes}/${task.taskLimitTimes}`);
+                    let resp = await apDoTask(task.id, task.taskType, productList[productListNow].itemId, productList[productListNow].appid);
 
-                        if (productList.length === 0) {
-                            $.log(`${task.taskTitle} 活动火爆，素材库没有素材，我也不知道啥回事 = = `);
-                            break;
-                        }
-                        $.log(`${task.taskTitle} ${task.taskDoTimes}/${task.taskLimitTimes}`);
-                        let resp = await apDoTask(task.id, task.taskType, productList[productListNow].itemId, productList[productListNow].appid);
-
-                        if (resp.code === 2005 || resp.code === 0) {
-                            $.log(`${task.taskTitle}|${task.taskShowTitle} 任务完成！`)
-                        } else {
-                            $.log(`${resp.echo} 任务失败！`)
-                        }
-                        productListNow++;
-                        task.taskDoTimes++;
-                        if (!productList[productListNow]) {
-                            break
-                        }
+                    if (resp.code === 2005 || resp.code === 0) {
+                        $.log(`${task.taskTitle}|${task.taskShowTitle} 任务完成！`)
+                    } else {
+                        $.log(`${resp.echo} 任务失败！`)
                     }
-                    //领
-                    for (let j = 0; j < task.taskLimitTimes; j++) {
-                        let resp = await apTaskDrawAward(task.id, task.taskType);
-
-                        if (!resp.success) {
-                            $.log(`${task.taskTitle}|${task.taskShowTitle} 领取完成!`)
-                            break
-                        }
-                    }
-                } else if (task.taskType === 'SHARE_INVITE') {
-                    $.yq_taskid = task.id
-                    for (let j = 0; j < 5; j++) {
-                        let resp = await apTaskDrawAward($.yq_taskid, 'SHARE_INVITE');
-                        if (!resp.success) {
-                            break
-                        }
-                        $.log("领取助力奖励成功！")
+                    productListNow++;
+                    task.taskDoTimes++;
+                    if (!productList[productListNow]) {
+                        break
                     }
                 }
-                if (task.taskType === 'BROWSE_CHANNEL' && task.taskLimitTimes === 1) {
-                    $.log(`${task.taskTitle}|${task.taskShowTitle}`)
-                    await apDoTask2(task.id, task.taskType, task.taskSourceUrl);
-                    $.log(`${task.taskTitle}|${task.taskShowTitle} 领取奖励`)
-                    await apTaskDrawAward(task.id, task.taskType);
+                //领
+                for (let j = 0; j < task.taskLimitTimes; j++) {
+                    let resp = await apTaskDrawAward(task.id, task.taskType);
+
+                    if (!resp.success) {
+                        $.log(`${task.taskTitle}|${task.taskShowTitle} 领取完成!`)
+                        break
+                    }
                 }
-                if (task.taskType === 'SHARE_INVITE') {
-                    $.yq_taskid = task.id
+            } else if (task.taskType === 'SHARE_INVITE') {
+                $.yq_taskid = task.id
+                for (let j = 0; j < 5; j++) {
+                    let resp = await apTaskDrawAward($.yq_taskid, 'SHARE_INVITE');
+                    if (!resp.success) {
+                        break
+                    }
+                    $.log("领取助力奖励成功！")
                 }
+            }
+            if (task.taskType === 'BROWSE_CHANNEL' && task.taskLimitTimes === 1) {
+                $.log(`${task.taskTitle}|${task.taskShowTitle}`)
+                await apDoTask2(task.id, task.taskType, task.taskSourceUrl);
+                $.log(`${task.taskTitle}|${task.taskShowTitle} 领取奖励`)
+                await apTaskDrawAward(task.id, task.taskType);
+            }
+            if (task.taskType === 'SHARE_INVITE') {
+                $.yq_taskid = task.id
             }
         }
     }
 
-    $.log("\n======汪汪乐园开始内部互助======\n======有剩余助力次数则帮zero205助力======\n")
+    $.log("\n======汪汪乐园开始内部互助======\n")
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
-        if (cookie) {
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        $.index = i + 1;
+        $.isLogin = true;
+        $.nickName = '';
+        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
-            $.newinvitePinTaskList = [...($.invitePinTaskList || []), ...($.invitePin || [])]
-            for (const invitePinTaskListKey of $.newinvitePinTaskList) {
-                $.log(`【京东账号${$.index}】${$.nickName || $.UserName} 助力 ${invitePinTaskListKey}`)
-                let resp = await getJoyBaseInfo($.yq_taskid, 1, invitePinTaskListKey);
-                if (resp.success) {
-                    if (resp.data.helpState === 1) {
-                        $.log("助力成功！");
-                    } else if (resp.data.helpState === 0) {
-                        $.log("自己不能助力自己！");
-                    } else if (resp.data.helpState === 2) {
-                        $.log("助力过了！");
-                    } else if (resp.data.helpState === 3) {
-                        $.log("没有助力次数了！");
-                        break
-                    } else if (resp.data.helpState === 4) {
-                        $.log("这个B助力满了！");
-                    }
-                } else {
-                    $.log("数据异常 助力失败！\n\n")
+        $.newinvitePinTaskList = [...($.invitePinTaskList || []), ...($.invitePin || [])]
+        for (const invitePinTaskListKey of $.newinvitePinTaskList) {
+            $.log(`【京东账号${$.index}】${$.nickName || $.UserName} 助力 ${invitePinTaskListKey}`)
+            let resp = await getJoyBaseInfo($.yq_taskid, 1, invitePinTaskListKey);
+            if (resp.success) {
+                if (resp.data.helpState === 1) {
+                    $.log("助力成功！");
+                } else if (resp.data.helpState === 0) {
+                    $.log("自己不能助力自己！");
+                } else if (resp.data.helpState === 2) {
+                    $.log("助力过了！");
+                } else if (resp.data.helpState === 3) {
+                    $.log("没有助力次数了！");
                     break
+                } else if (resp.data.helpState === 4) {
+                    $.log("助力满了！");
                 }
+            } else {
+                $.log("数据异常 助力失败！\n\n")
+                break
             }
         }
     }
