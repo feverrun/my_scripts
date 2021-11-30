@@ -5,7 +5,7 @@ new Env('京喜购物返红包助力');
 
 const $ = new Env('京喜购物返红包助力');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let cookiesArr = [], cookie = '';
+let cookiesArr = [], cookie = '', message = '';
 let orderList = [];
 let groupDetail = {};
 let groupArr = [];
@@ -15,8 +15,6 @@ if ($.isNode()) {
         cookiesArr.push(jdCookieNode[item])
     })
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
-} else {
-    cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
 !(async () => {
@@ -26,41 +24,32 @@ if ($.isNode()) {
         });
         return;
     }
-    console.log(`\n************************内部互助开始************************\n`)
-    message = ''
-    $.needhelp = true
-    $.canHelp = true;
 
-    for (let i = 0; i < cookiesArr.length && $.needhelp; i++) {
+    for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
-        $.hotFlag = false;
-        if (cookie) {
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.message = `【京东账号${$.index}】${$.UserName}\n`
-            console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        $.index = i + 1;
+        $.message = `【京东账号${$.index}】${$.UserName}\n`
+        console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
 
-            //助力只针对第一个账号 或者环境变量中的指定账号
-            if (i === 0) {
-                await getOrderList();
-                for (let k of orderList) {
-                    try {
-                        let orderid = k.parentId != '0' ? k.parentId : k.orderId
-                        await getGroupDetail(orderid, 1);
-                        await $.wait(500);
-                        // console.log(JSON.stringify(groupDetail));
-                    } catch (e) {}
-                }
-            }
+        await getOrderList();
+        for (let k of orderList) {
+            try {
+                let orderid = k.parentId != '0' ? k.parentId : k.orderId
+                await getGroupDetail(orderid, 1);
+                await $.wait(500);
+                // console.log(JSON.stringify(groupDetail));
+            } catch (e) {}
+        }
 
-            //help
-            if (groupArr && groupArr.length >0) {
-                for (j = 0; j< groupArr.length; j++) {
-                    await $.wait(2000);
-                    await help(groupArr[i]);
-                }
+        console.log(`\n************************内部互助开始************************\n`)
+        if (groupArr && groupArr.length >0) {
+            for (let j = 0; j< groupArr.length; j++) {
+                await $.wait(2000);
+                await help(groupArr[i]);
             }
+        }else {
+            console.log('没有可助力id')
         }
     }
 
@@ -107,7 +96,7 @@ function getGroupDetail(id){
                     data = JSON.parse(data);
                     if (data.data) {
                         if (data.data.groupinfo !=undefined) {
-                            groupDetail = data.data.groupinfo;
+                            let groupDetail = data.data.groupinfo;
                             let now = parseInt(new Date() / 1000)
                             let end = groupDetail.end_time
                             if (end > now && groupDetail.openhongbaosum != groupDetail.totalhongbaosum) {
@@ -163,13 +152,9 @@ function taskUrl(id, type) {
     return {
         url: url,
         headers: {
-            "Accept": "*/*",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-cn",
-            "Connection": "keep-alive",
+            'content-type': 'application/json',
             "Content-Type": "application/x-www-form-urlencoded",
-            "Host": "wq.jd.com",
-            "Referer": `https://happy.m.jd.com/babelDiy/Zeus/3ugedFa7yA6NhxLN5gw2L3PF9sQC/index.html?asid=287215626&un_area=12_904_905_57901&lng=121.477665&lat=31.239634`,
+            'referer': 'https://happy.m.jd.com/babelDiy/Zeus/3ugedFa7yA6NhxLN5gw2L3PF9sQC/index.html?asid=287215626&un_area=12_904_905_57901&lng=117.612969135975&lat=23.94014745198865',
             "Cookie": cookie,
             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdltapp;android;3.5.6;9;8363532363230343238303836333-43D2468336563316936636265356;network/wifi;model/MI 8;addressid/2688971613;aid/059b2009dc5afb88;oaid/665d225a3f96764;osVer/28;appBuild/1656;psn/gB6yf l3bIcXHm 4uTHuFZIigUClYKza5OsTPc6vgTc=|932;psq/11;adk/;ads/;pap/JA2020_3112531|3.5.6|ANDROID 9;osv/9;pv/712.12;jdv/0|direct|-|none|-|1613884468974|1613884552;ref/HomeFragment;partner/xiaomi;apprpd/Home_Main;eufv/1;Mozilla/5.0 (Linux; Android 9; MI 8 Build/PKQ1-wesley_iui-19.08.25; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045513 Mobile Safari/537.36"),
         }
