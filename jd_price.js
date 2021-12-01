@@ -1,7 +1,8 @@
 /*
 京东保价
 
-cron "21 0,12,23 * * *" script-path=jd_price.js,tag=京东保价
+已支持IOS双京东账号,Node.js支持N个京东账号
+cron "41 23 * * *" script-path=jd_price.js,tag=京东保价
  */
 const $ = new Env('京东保价');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -18,6 +19,7 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 const JD_API_HOST = 'https://api.m.jd.com/';
 !(async () => {
     if (!cookiesArr[0]) {
@@ -45,7 +47,9 @@ const JD_API_HOST = 'https://api.m.jd.com/';
                 continue
             }
             await price()
-            await $.wait(2000)
+            if (i != cookiesArr.length - 1) {
+                await $.wait(20000)
+            }
         }
     }
     if (allMessage) {
@@ -156,14 +160,16 @@ async function jstoken() {
         pretendToBeVisual: true,
         virtualConsole
     };
-    const { window } = new JSDOM(``, options);
-    const jdPriceJs = await downloadUrl("https://js-nocaptcha.jd.com/statics/js/main.min.js")
+    // const { window } = new JSDOM(``, options);
+    // const jdPriceJs = await downloadUrl("https://js-nocaptcha.jd.com/statics/js/main.min.js")
+    const dom = new JSDOM(`<body><script src="https://js-nocaptcha.jd.com/statics/js/main.min.js"></script></body>`, options);
+    await $.wait(1000)
     try {
-        window.eval(jdPriceJs)
-        window.HTMLCanvasElement.prototype.getContext = () => {
-            return {};
-        };
-        $.jab = new window.JAB({
+        // window.eval(jdPriceJs)
+        // window.HTMLCanvasElement.prototype.getContext = () => {
+        //   return {};
+        // };
+        $.jab = new dom.window.JAB({
             bizId: 'jdjiabao',
             initCaptcha: false
         })
