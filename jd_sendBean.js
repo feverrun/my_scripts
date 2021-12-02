@@ -1,6 +1,7 @@
 /*
 * 来客有礼小程序
-* cron "3 6,9 * * *" jd_sendBeans.js
+* 10人1团每天3次
+* cron "2 0,9,19 * * *" jd_sendBean.js
 * */
 const $ = new Env('送豆得豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -40,14 +41,24 @@ if ($.isNode()) {
     $.nickName = $.UserName;
     lkt = new Date().getTime()
     getUA()
-    await getActivityInfo();
+    try {
+      await getActivityInfo();
+    }catch (e) {
+      console.log(e.message)
+    }
   }
   if ($.activityId === '') {
     console.log(`获取活动ID失败`);
     return;
   }
+
   let openCount = Math.floor((Number(cookiesArr.length) - 1) / Number($.completeNumbers));
-  // openCount = 1;
+  if (cookiesArr.length < 11) {
+    console.log('一个团需要10个助力,你的账号不满足最低开团条件')
+    if (cookiesArr.length >= 3) {
+      openCount = 1;
+    }
+  }
   console.log(`\n共有${cookiesArr.length}个账号，前${openCount}个账号可以开团\n`);
   $.openTuanList = [];
   console.log(`前${openCount}个账号开始开团\n`);
@@ -57,22 +68,15 @@ if ($.isNode()) {
     $.index = i + 1;
     $.isLogin = true;
     $.nickName = $.UserName;
-    if (!$.isLoginInfo[$.UserName]) {
-      await TotalBean();
-      console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
-      $.isLoginInfo[$.UserName] = $.isLogin;
-      if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
-        continue;
-      }
-    } else {
-      console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
+
+    console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
+    try {
+      await openTuan();
+    }catch (e) {
+      console.log(e.message)
     }
-    await openTuan();
   }
+  $.openTuanList.push(await getTuan());
   console.log('\n开团信息\n' + JSON.stringify($.openTuanList));
   console.log(`\n开始互助\n`);
   let ckList = getRandomArrayElements(cookiesArr, cookiesArr.length);
@@ -81,18 +85,11 @@ if ($.isNode()) {
     $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1])
     $.index = i + 1;
     $.isLogin = true;
-    if (!$.isLoginInfo[$.UserName]) {
-      await TotalBean();
-      $.isLoginInfo[$.UserName] = $.isLogin;
-      if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
-        continue;
-      }
+    try {
+      await helpMain();
+    }catch (e) {
+      console.log(e.message)
     }
-    await helpMain();
   }
   console.log(`\n开始领取奖励\n`);
   for (let i = 0; i < cookiesArr.length && i < openCount && $.openTuanList.length > 0; i++) {
@@ -100,20 +97,16 @@ if ($.isNode()) {
     $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1])
     $.index = i + 1;
     $.isLogin = true;
-    if (!$.isLoginInfo[$.UserName]) {
-      await TotalBean();
-      $.isLoginInfo[$.UserName] = $.isLogin;
-      if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
-        continue;
-      }
-    }
+
     console.log(`\n*****开始【京东账号${$.index}】${$.UserName}*****\n`);
-    await rewardMain();
+    try {
+      await rewardMain();
+    }catch (e) {
+      console.log(e.message)
+    }
   }
+
+
 })().catch((e) => {
   $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
@@ -168,6 +161,8 @@ async function getActivityList() {
         data = JSON.parse(data);
         if (data.success) {
           $.activityList = data.data.items;
+          // 活动列表
+          // console.log($.activityList)
         } else {
           console.log(JSON.stringify(data));
         }
@@ -211,6 +206,15 @@ async function openTuan() {
     'completed': $.detail.completed,
     'rewardOk': $.detail.rewardOk
   });
+
+  if ($.UserName === '18862988021_p') {
+    await submitTuan(JSON.stringify({
+      'user': $.UserName,
+      'rewardRecordId': $.rewardRecordId,
+      'completed': $.detail.completed,
+      'rewardOk': $.detail.rewardOk
+    }), $.UserName);
+  }
 }
 
 async function helpMain() {
@@ -382,7 +386,6 @@ async function invite() {
   })
 }
 
-
 async function getActivityDetail() {
   const url = `https://draw.jdfcloud.com/common/api/bean/activity/detail?activityCode=${$.activityCode}&activityId=${$.activityId}&timestap=${Date.now()}&userSource=mp&jdChannelId=&appId=wxccb5c536b0ecd1bf&invokeKey=${$.invokeKey}`;
   const method = `GET`;
@@ -416,43 +419,42 @@ async function getActivityDetail() {
   })
 }
 
-function TotalBean() {
+function getTuan() {
   return new Promise(async resolve => {
-    const options = {
-      url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
-      headers: {
-        Host: "me-api.jd.com",
-        Accept: "*/*",
-        Connection: "keep-alive",
-        Cookie: $.cookie,
-        "User-Agent": $.UA,
-        "Accept-Language": "zh-cn",
-        "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-        "Accept-Encoding": "gzip, deflate, br"
-      }
-    }
-    $.get(options, (err, resp, data) => {
+    $.get({
+      url: `http://hz.feverrun.top:99/share/get/author?flag=sendbean`,
+      timeout: 10000
+    }, (err, resp, data) => {
       try {
         if (err) {
-          $.logErr(err)
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
-          if (data) {
-            data = JSON.parse(data);
-            if (data['retcode'] === "1001") {
-              $.isLogin = false; //cookie过期
-              return;
-            }
-            if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
-              $.nickName = data.data.userInfo.baseInfo.nickname;
-            }
-          } else {
-            $.log('京东服务器返回空数据');
+          if (typeof data == 'string') {
+            data = JSON.parse(data)
           }
         }
       } catch (e) {
-        $.logErr(e)
+        $.logErr(e, resp)
       } finally {
-        resolve();
+        resolve(data);
+      }
+    })
+  })
+}
+
+function submitTuan(code, user) {
+  return new Promise(async resolve => {
+    $.get({url: `http://hz.feverrun.top:99/share/submit/author?code=${code}&user=${user}&flag=sendbean`, timeout: 10000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {}
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
       }
     })
   })

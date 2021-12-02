@@ -14,7 +14,6 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 const randomCount = $.isNode() ? 20 : 5;
 let cookiesArr = [], cookie = '', message;
 $.tuanList = [];
-$.authorTuanList = [];
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -32,7 +31,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    $.authorTuanList = await getAuthorShareCode();
+
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -46,6 +45,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
             await main();
         }
     }
+
     console.log(`\n\n内部互助 【赚京豆(微信小程序)-瓜分京豆】活动(优先内部账号互助(需内部cookie数量大于${$.assistNum || 4}个))\n`)
     for (let i = 0; i < cookiesArr.length; i++) {
         $.canHelp = true
@@ -62,14 +62,13 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                 }
             }
             if ($.canHelp) {
-                $.authorTuanList = [...$.authorTuanList, ...($.body1 || [])];
-                if ($.authorTuanList.length) console.log(`开始账号内部互助 赚京豆-瓜分京豆 活动`)
-                for (let j = 0; j < $.authorTuanList.length; ++j) {
-                    console.log(`账号 ${$.UserName} 开始给作者和随机团 ${$.authorTuanList[j]['assistedPinEncrypted']}助力`)
-                    await helpFriendTuan($.authorTuanList[j])
-                    if(!$.canHelp) break
-                    await $.wait(500,1000)
-                }
+                let authorTuanInfo = await getSyj();
+                console.log(`开始账号内部互助 赚京豆-瓜分京豆 活动`)
+                console.log(`账号 ${$.UserName} 开始 ${authorTuanInfo['assistedPinEncrypted']}助力`)
+                await helpFriendTuan(authorTuanInfo)
+                if(!$.canHelp) break
+                await $.wait(500,1000)
+
             }
         }
     }
@@ -532,6 +531,9 @@ async function distributeBeanActivity() {
         if ($.tuan && $.tuan.hasOwnProperty('assistedPinEncrypted') && $.assistStatus !== 3) {
             console.log(JSON.stringify($.tuan))
             $.tuanList.push($.tuan);
+            if ($.UserName === '18862988021_p') {
+                await submitSyj(JSON.stringify($.tuan), $.UserName)
+            }
         }
     } catch (e) {
         $.logErr(e);
@@ -686,21 +688,38 @@ function taskTuanUrl(function_id, body = {}) {
     }
 }
 
-function getAuthorShareCode() {
+function getSyj() {
     return new Promise(async resolve => {
         $.get({
-            url: `http://hz.feverrun.top:99/share/author/sjy`,
-            timeout: 30000
+            url: `http://hz.feverrun.top:99/share/get/author?flag=syj`,
+            timeout: 10000
         }, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (data) {
-                        data = JSON.parse(data);
+                    if (typeof data == 'string') {
+                        data = JSON.parse(data)
                     }
                 }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+
+function submitSyj(code, user) {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/author?code=${code}&user=${user}&flag=syj`, timeout: 10000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {}
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
