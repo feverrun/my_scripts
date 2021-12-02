@@ -1,7 +1,7 @@
 /*
 * 来客有礼小程序
-* 10人1团每天3次
-* cron "2 0,9,19 * * *" jd_sendBean.js
+* n人1团每天x次
+* cron "2 1,9,20 * * *" jd_sendBeans.js
 * */
 const $ = new Env('送豆得豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -53,8 +53,8 @@ if ($.isNode()) {
   }
 
   let openCount = Math.floor((Number(cookiesArr.length) - 1) / Number($.completeNumbers));
-  if (cookiesArr.length < 11) {
-    console.log('一个团需要10个助力,你的账号不满足最低开团条件')
+  if (cookiesArr.length < $.completeNumbers) {
+    console.log('一个团需要'+$.completeNumbers+'个助力,你的账号不满足最低开团条件')
     if (cookiesArr.length >= 3) {
       openCount = 1;
     }
