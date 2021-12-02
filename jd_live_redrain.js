@@ -1,5 +1,5 @@
 /*
-"0 * * 11 *" jd_live_redrain.js
+"1 * * * *" jd_live_redrain.js
 */
 const $ = new Env('整点京豆雨');
 let allMessage = '';

@@ -1,6 +1,5 @@
 /*
-cron 5 2,3 * * * jd_syj.js
-cron "5 2,3 * * *" jd_syj.js
+cron "15 0,5 * * *" jd_zjd.js
 */
 
 const $ = new Env('赚京豆');

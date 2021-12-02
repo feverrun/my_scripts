@@ -48,7 +48,7 @@ const JD_API_HOST = 'https://api.m.jd.com/';
             }
             await price()
             if (i != cookiesArr.length - 1) {
-                await $.wait(20000)
+                await $.wait(3000)
             }
         }
     }
