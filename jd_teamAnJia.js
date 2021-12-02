@@ -2,15 +2,15 @@
 组队分豆-安佳 [jd_teamAnJia.js]
 
 ————————————————
-入口：[组队分豆-安佳 (https://lzkjdz-isv.isvjcloud.com/pool/captain/1313?activityId=e30b75bc00ce40b394da416c921fea66&shareUuid=decb7c8696cc403f9392fa9ecc2af02a)]
-cron "20 0,20 * * *" script-path=jd_teamAnJia.js,tag=组队分豆-安佳
+入口：[组队分豆-安佳 (https://lzkjdz-isv.isvjcloud.com/pool/captain/12318?activityId=e7c37c2548284d1eb7920079fbf6be68&shareUuid=30da66fa1e694fedb5f12035729c1c61)]
+IOS等用户直接用NobyDa的jd cookie
+cron "1 0,7,12,18,22 * * *" script-path=jd_teamAnJia.js,tag=组队分豆-安佳
 */
 const $ = new Env("组队分豆-安佳");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let ownCode = null;
-
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -25,13 +25,13 @@ if ($.isNode()) {
     cookiesArr.reverse();
     cookiesArr = cookiesArr.filter(item => !!item);
 }
-
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    console.log(`入口:\nhttps://lzkjdz-isv.isvjcloud.com/pool/captain/1313?activityId=e30b75bc00ce40b394da416c921fea66&shareUuid=decb7c8696cc403f9392fa9ecc2af02a`)
+    console.log(`若之前做过该活动，则无法重复入队。\n入口:\nhttps://lzkjdz-isv.isvjcloud.com/pool/captain/12318?activityId=e7c37c2548284d1eb7920079fbf6be68&shareUuid=30da66fa1e694fedb5f12035729c1c61`)
+
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
@@ -41,15 +41,23 @@ if ($.isNode()) {
             $.index = i + 1;
             $.isLogin = true;
             $.nickName = '';
-
+            await checkCookie();
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-
-            authorCodeList = ['']
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+                if ($.isNode()) {
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+                }
+                continue
+            }
+            authorCodeList = ['30da66fa1e694fedb5f12035729c1c61']
             $.bean = 0;
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            $.activityId = 'e30b75bc00ce40b394da416c921fea66'
+            $.activityId = 'e7c37c2548284d1eb7920079fbf6be68'
             $.activityShopId = '1000014486'
-            $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${random(1000000, 9999999)}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
+            $.randomNum = random(1000000, 9999999)
+            $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.randomNum}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
+            $.returnUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.randomNum}?activityId=${$.activityId}`;
             await anjia();
             await $.wait(3000)
             if ($.bean > 0) {
@@ -84,8 +92,8 @@ async function anjia() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            console.log('去助力 -> ' + $.authorCode);
-            await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
+            console.log('加入队伍 -> ' + $.authorCode);
+            await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=46&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await $.wait(2000)
             await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`)
             if ($.activityContent) {
@@ -97,8 +105,8 @@ async function anjia() {
                     if (!$.activityContent.openCard) {
                         $.log("加入会员")
                         await $.wait(2000)
-                        await getShopOpenCardInfo({ "venderId": "1000014486", "channel": 401 }, 1000014486)
-                        await bindWithVender({ "venderId": "1000014486", "shopId": "1000014486", "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "activityId": 3282318, "channel": 401 }, 100000000000085)
+                        await getShopOpenCardInfo({ "venderId": "1000014486", "channel": 7005 }, 1000014486)
+                        await bindWithVender({ "venderId": "1000014486", "shopId": "1000010410", "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "activityId": 2006823, "channel": 7005 }, $.activityShopId)
                     }
                     await $.wait(2000)
                     await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`, 0, 1)
@@ -212,7 +220,7 @@ function getShopOpenCardInfo(body, venderId) {
             Cookie: cookie,
             'User-Agent': `jdapp;iPhone;9.5.4;13.6;${getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')};network/wifi;ADID/${getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1)};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
             'Accept-Language': 'zh-cn',
-            Referer: `https://shopmember.m.jd.com/shopcard/?venderId=${venderId}}&channel=7014&returnUrl=${encodeURIComponent($.activityUrl)}`,
+            Referer: `https://shopmember.m.jd.com/shopcard/?venderId=${venderId}}&channel=7005&returnUrl=${encodeURIComponent($.returnUrl)}`,
             'Accept-Encoding': 'gzip, deflate, br'
         }
     }
@@ -248,7 +256,7 @@ function bindWithVender(body, venderId) {
             Cookie: cookie,
             'User-Agent': `jdapp;iPhone;9.5.4;13.6;${getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')};network/wifi;ADID/${getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1)};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
             'Accept-Language': 'zh-cn',
-            Referer: `https://shopmember.m.jd.com/shopcard/?venderId=${venderId}}&channel=7014&returnUrl=${encodeURIComponent($.activityUrl)}`,
+            Referer: `https://shopmember.m.jd.com/shopcard/?venderId=${venderId}}&channel=7005&returnUrl=${encodeURIComponent($.returnUrl)}`,
             'Accept-Encoding': 'gzip, deflate, br'
         }
     }
@@ -464,6 +472,47 @@ function getUUID(format = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', UpperCase 
         }
         return uuid;
     });
+}
+function checkCookie() {
+    const options = {
+        url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
+        headers: {
+            "Host": "me-api.jd.com",
+            "Accept": "*/*",
+            "Connection": "keep-alive",
+            "Cookie": cookie,
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1",
+            "Accept-Language": "zh-cn",
+            "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
+            "Accept-Encoding": "gzip, deflate, br",
+        }
+    };
+    return new Promise(resolve => {
+        $.get(options, (err, resp, data) => {
+            try {
+                if (err) {
+                    $.logErr(err)
+                } else {
+                    if (data) {
+                        data = JSON.parse(data);
+                        if (data.retcode === "1001") {
+                            $.isLogin = false; //cookie过期
+                            return;
+                        }
+                        if (data.retcode === "0" && data.data.hasOwnProperty("userInfo")) {
+                            $.nickName = data.data.userInfo.baseInfo.nickname;
+                        }
+                    } else {
+                        $.log('京东返回了空数据');
+                    }
+                }
+            } catch (e) {
+                $.logErr(e)
+            } finally {
+                resolve();
+            }
+        })
+    })
 }
 
 // prettier-ignore
