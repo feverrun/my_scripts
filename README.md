@@ -13,7 +13,7 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJD
 ```
 任务名:   my_scripts
 任务 :    ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
-定时 :    6 1-23/4 * * *	 
+定时 :    0 * * * *
 ```
 
 ### 长久活动(已接入助力池)

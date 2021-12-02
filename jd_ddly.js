@@ -1,23 +1,15 @@
 
 /*
-东东乐园@wenmoux
+东东乐园
 活动入口：东东农场->东东乐园(点大风车
 好像没啥用 就20💧
-更新地址：https://raw.githubusercontent.com/Wenmoux/scripts/wen/jd/jd_ddnc_farmpark.js
-[Script]
-cron "30 7 * * *" script-path=https://raw.githubusercontent.com/Wenmoux/scripts/wen/jd/jd_ddnc_farmpark.js tag=东东乐园
+cron "30 7 * * *" script-path=jd_ddly.js tag=东东乐园
  */
 const $ = new Env('东东乐园');
-
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-
-const randomCount = $.isNode() ? 20 : 5;
 const notify = $.isNode() ? require('./sendNotify') : '';
-let merge = {}
-let codeList = []
+let cookiesArr = [], cookie = '';
 
-let cookiesArr = [],
-    cookie = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -48,29 +40,25 @@ const JD_API_HOST = `https://api.m.jd.com/client.action`;
             $.taskList = []
             message = ''
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
-                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
-                });
 
-                if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                }
-                continue
-            }
             await parkInit()
-            for (task of $.taskList) {
-                if (task.topResource.task.status == 3) {
-                    console.log(`任务 ${task.topResource.title} 已完成`)
-                }  else {
-                    console.log("去浏览：" + task.topResource.title)
-                    let index = task.name.match(/\d+/)[0] - 1
-                    console.log(task.topResource.task.advertId, index, task.type)
-                    await browse(task.topResource.task.advertId)
-                    await $.wait(1000);
-                    await browseAward(task.topResource.task.advertId, index, task.type)
+            try {
+                for (let task of $.taskList) {
+                    if (task.topResource.task.status == 3) {
+                        console.log(`任务 ${task.topResource.title} 已完成`)
+                    }  else {
+                        console.log("去浏览：" + task.topResource.title)
+                        let index = task.name.match(/\d+/)[0] - 1
+                        console.log(task.topResource.task.advertId, index, task.type)
+                        await browse(task.topResource.task.advertId)
+                        await $.wait(3000);
+                        await browseAward(task.topResource.task.advertId, index, task.type)
+                    }
                 }
+            }catch (e) {
+                console.log(e.message)
             }
+
         }
     }
 
@@ -79,9 +67,6 @@ const JD_API_HOST = `https://api.m.jd.com/client.action`;
 .catch((e) => $.logErr(e))
     .finally(() => $.done())
 //获取活动信息
-
-
-
 
 function browseAward(id, index, type) {
     return new Promise(async (resolve) => {
@@ -100,7 +85,6 @@ function browseAward(id, index, type) {
                     } else {
                         console.log(JSON.stringify(data))
                     }
-
                 }
             } catch (e) {
                 $.logErr(e, resp);
@@ -132,7 +116,6 @@ function browse(id) {
     });
 }
 
-
 function parkInit() {
     return new Promise(async (resolve) => {
         const options = taskUrl("ddnc_farmpark_Init", `{"version":"1","channel":1}`)
@@ -159,7 +142,6 @@ function parkInit() {
     });
 }
 
-
 function taskUrl(functionId, body) {
     const time = Date.now();
     return {
@@ -174,7 +156,7 @@ function taskUrl(functionId, body) {
             Cookie: cookie,
             Host: "api.m.jd.com",
             Referer: "https://h5.m.jd.com/babelDiy/Zeus/J1C5d6E7VHb2vrb5sJijMPuj29K/index.html?babelChannel=ttt1&lng=107.147086&lat=33.255079&sid=cad74d1c843bd47422ae20cadf6fe5aw&un_area=8_573_6627_52446",
-            "User-Agent": "jdapp;android;9.4.4;10;3b78ecc3f490c7ba;network/UNKNOWN;model/M2006J10C;addressid/138543439;aid/3b78ecc3f490c7ba;oaid/7d5870c5a1696881;osVer/29;appBuild/85576;psn/3b78ecc3f490c7ba|541;psq/2;uid/3b78ecc3f490c7ba;adk/;ads/;pap/JA2015_311210|9.2.4|ANDROID 10;osv/10;pv/548.2;jdv/0|iosapp|t_335139774|appshare|CopyURL|1606277982178|1606277986;ref/com.jd.lib.personal.view.fragment.JDPersonalFragment;partner/xiaomi001;apprpd/MyJD_Main;Mozilla/5.0 (Linux; Android 10; M2006J10C Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045227 Mobile Safari/537.36",
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         }
     }
 }
