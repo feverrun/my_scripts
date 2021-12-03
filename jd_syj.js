@@ -2,8 +2,7 @@
 赚京豆脚本，一：做任务 天天领京豆(加速领京豆)
 Last Modified time: 2021-7-3 17:58:02
 活动入口：赚京豆(微信小程序)-赚京豆-签到领京豆
-已支持IOS双京东账号, Node.js支持N个京东账号
-cron "10 0,7,12,15,18,23 * * *" script-path=jd_syj.js, tag=赚京豆
+cron "37 6,11,16,19,23 * * *" script-path=jd_syj.js, tag=赚京豆
  */
 
 const $ = new Env('赚京豆');
@@ -58,7 +57,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                     console.log(`账号 ${$.UserName} 开始给 【${$.tuanList[j]['assistedPinEncrypted']}】助力`)
                     await helpFriendTuan($.tuanList[j])
                     if(!$.canHelp) break
-                    await $.wait(500,1000)
+                    await $.wait(2000)
                 }
             }
             if ($.canHelp) {
@@ -67,7 +66,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                 console.log(`账号 ${$.UserName} 开始 ${authorTuanInfo['assistedPinEncrypted']}助力`)
                 await helpFriendTuan(authorTuanInfo)
                 if(!$.canHelp) break
-                await $.wait(500,1000)
+                await $.wait(2000)
 
             }
         }
@@ -157,7 +156,7 @@ async function vvipTask() {
         await pg_channel_page_data();
         if (!$.vvipFlag) return
         await vviptask_receive_list();//做任务
-        await $.wait(1000)
+        await $.wait(2500)
         await pg_channel_page_data();
     } catch (e) {
         $.logErr(e)
@@ -294,7 +293,7 @@ function vviptask_receive_list() {
                             for (let item of $.taskData) {
                                 console.log(`\n领取 ${item['title']} 任务`)
                                 await vviptask_receive_getone(item['id']);
-                                await $.wait(1000);
+                                await $.wait(2500);
                                 console.log(`去完成 ${item['title']} 任务`)
                                 await vviptask_reach_task(item['id']);
                                 console.log(`领取 ${item['title']} 任务奖励\n`)
@@ -564,7 +563,7 @@ function helpFriendTuan(body) {
                             else if (data.resultCode === '2400205') console.log('助力结果：团已满\n')
                             else if (data.resultCode === '2400203') {console.log('助力结果：助力次数已耗尽\n');$.canHelp = false}
                             else if (data.resultCode === '9000000') {console.log('助力结果：活动火爆，跳出\n');$.canHelp = false}
-                            else console.log(`助力结果：未知错误\n${JSON.stringify(data)}\n\n`)
+                            else {console.log(`助力结果：未知错误\n${JSON.stringify(data)}\n\n`);$.canHelp = false}
                         }
                     }
                 }

@@ -71,7 +71,7 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
                     if (task.taskid == "interact") {
                         for (l = 0; l < 20 - task.curNum; l++) {
                             await dotask(task.taskid, task.params)
-                            await $.wait(3000,5000)
+                            await $.wait(10000)
                         }
                     } else if (task.taskid == "scansku") {
                         await getproduct()
@@ -79,16 +79,16 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
                         await dotask(task.taskid, $.pparam)
                     } else {
                         await dotask(task.taskid, task.params)
-                        await $.wait(3000,5000)
+                        await $.wait(10000)
                     }
                 }
                 await getinfo()
                 for (k = 0; k < $.drawchance; k++) {
                     await draw()
                 }
-                let exchanges =Math.floor($.foodNum/1000)
+                let exchanges = Math.floor($.foodNum / 1000)
                 console.log(`可兑换 ${exchanges} 次 20京🐶`)
-                for(q = 0;q<exchanges && Exchange;q++){
+                for (q = 0; q < exchanges && Exchange; q++) {
                     await exchange(13)
                 }
                 await getinfo()
