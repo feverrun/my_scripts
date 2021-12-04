@@ -61,14 +61,13 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
 
   //互助
   console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，助力助力池\n`)
-  if ($.packetIdArr.length >= 5) {
-    packetIdLength = 5;
+  if ($.packetIdArr.length >= 3) {
+    packetIdLength = 3;
   }else {
     packetIdLength = $.packetIdArr.length ? $.packetIdArr.length : 0;
   }
 
   // console.log(JSON.stringify($.packetIdArr))
-
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.cookie = cookiesArr[i];
