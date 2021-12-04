@@ -71,7 +71,7 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
                     if (task.taskid == "interact") {
                         for (l = 0; l < 20 - task.curNum; l++) {
                             await dotask(task.taskid, task.params)
-                            await $.wait(10000)
+                            await $.wait(18000)
                         }
                     } else if (task.taskid == "scansku") {
                         await getproduct()
@@ -79,21 +79,23 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
                         await dotask(task.taskid, $.pparam)
                     } else {
                         await dotask(task.taskid, task.params)
-                        await $.wait(10000)
+                        await $.wait(18000)
                     }
                 }
                 await getinfo()
                 for (k = 0; k < $.drawchance; k++) {
                     await draw()
                 }
-                let exchanges = Math.floor($.foodNum / 1000)
-                console.log(`可兑换 ${exchanges} 次 20京🐶`)
+                let exchanges = Math.floor($.foodNum/10000)
+                console.log(`可兑换 ${exchanges} 次 100京🐶`)
                 for (q = 0; q < exchanges && Exchange; q++) {
-                    await exchange(13)
+                    await exchange(16)   //16是100豆，14是50豆，13是20豆
                 }
                 await getinfo()
                 if(!Exchange){console.log("你 默认 不兑换东西,请自行进去活动兑换")}
                 message += `【京东账号${$.index}】${$.nickName || $.UserName}\n${$.cow} 兑换京🐶 ${$.exchange}  ${$.drawresult}\n`
+                console.log("休息休息~")
+                await $.wait(80*1000)
 
             } else {
                 $.msg($.name, "", "跑不起来了~请自己进去一次牧场")
