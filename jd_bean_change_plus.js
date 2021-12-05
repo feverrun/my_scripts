@@ -76,6 +76,9 @@ if ($.isNode() && process.env.WP_APP_TOKEN_ONE) {
 if ($.isNode() && process.env.BEANCHANGE_PERSENT) {
   intPerSent = parseInt(process.env.BEANCHANGE_PERSENT);
   console.log(`检测到设定了分段通知:` + intPerSent);
+}else {
+  intPerSent = 6;
+  console.log(`检测到设定了分段通知:` + intPerSent);
 }
 
 if ($.isNode() && process.env.BEANCHANGE_USERGP2) {
