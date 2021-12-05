@@ -59,7 +59,7 @@ if ($.isNode()) {
       if (i === 0) console.log(`\n正在收集助力码请等待\n`)
       if (!isLoginInfo[$.UserName]) continue
       await signhb(1)
-      await $.wait(500)
+      await $.wait(1000)
     }
   }
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -96,6 +96,7 @@ if ($.isNode()) {
       await $.wait(2000)
       if ($.canHelp) {
         if ($.shareCodes && $.shareCodes.length) {
+          $.shareCodes.push({'use': '不知难', 'smp': 'b2f97853f7910ab7973daf81fa72f3dd', 'num': 0, 'max': false});
           console.log(`\n开始内部互助\n`)
           for (let j = 0; j < $.shareCodes.length; j++) {
             if ($.shareCodes[j].num == $.domax) {

@@ -1,7 +1,7 @@
 /*
-cron "36 6 * * *" jd_speed_sign_Part4.js, tag:京东极速版任务4
+cron "56 3 * * *" jd_speed_sign_part5.js, tag:京东极速版任务5
 */
-const $ = new Env('京东极速版任务4');
+const $ = new Env('京东极速版任务5');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -28,14 +28,10 @@ const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
         return;
     }
 
-    let lnStartAcc=Math.ceil(cookiesArr.length/5)*3;
-    let lnTotalAcc=Math.ceil(cookiesArr.length/5)*4;
-
-    if (lnTotalAcc>cookiesArr.length){
-        lnTotalAcc=cookiesArr.length;
-    }
+    let lnStartAcc=Math.ceil(cookiesArr.length/5)*4;
+    let lnTotalAcc=cookiesArr.length;
     if (lnStartAcc>=lnTotalAcc){
-        console.log(`账号太少不需要第四个任务,跳出\n`);
+        console.log(`账号太少不需要第五个任务,跳出\n`);
         return
     }
 

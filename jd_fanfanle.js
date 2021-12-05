@@ -2,7 +2,7 @@
 省钱大赢家之翻翻乐
 一天可翻多次，但有上限
 运气好每次可得0.3元以上的微信现金(需京东账号绑定到微信)
-cron "20 * * * *" script-path=jd_big_winner.js,tag=省钱大赢家之翻翻乐
+cron "17 5-16/1 * * *" script-path=jd_fanfanle.js,tag=省钱大赢家之翻翻乐
  */
 const $ = new Env('省钱大赢家之翻翻乐');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -67,12 +67,13 @@ async function main() {
         let num = 0;
         do {
           await openRedReward();
-          await $.wait(500);
+          await $.wait(1000);
           num++
         } while (!$.canApCashWithDraw && $.changeReward && num < 20)
         if ($.canApCashWithDraw) {
           //提现
           await openRedReward('gambleObtainReward', $.rewardData.rewardType);
+          await $.wait(1500);
           await apCashWithDraw($.rewardData.id, $.rewardData.poolBaseId, $.rewardData.prizeGroupId, $.rewardData.prizeBaseId, $.rewardData.prizeType);
         }
       }
