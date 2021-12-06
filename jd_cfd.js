@@ -66,10 +66,14 @@ if ($.isNode()) {
             await cfd();
             await $.wait(2000);
 
-            if (i === 0) {
-                let user = $.UserName;
-                let code = $.shareCodes[0];
-                await submitCode(code, user);
+            try {
+                if (i === 0) {
+                    let user = $.UserName;
+                    let code = $.shareCodes[0];
+                    await submitCode(code, user);
+                }
+            } catch (e) {
+                console.log(e.message)
             }
         }
     }
@@ -1525,10 +1529,16 @@ function showMsg() {
 function shareCodesFormat() {
     return new Promise(async resolve => {
         let readShareCodeRes = await readShareCode();
+        let shareCodes = [];
+        if ($.shareCodes) {
+            shareCodes = $.shareCodes.slice(0, 5);
+        }else {
+            shareCodes = [];
+        }
         if (readShareCodeRes && readShareCodeRes.code === 0) {
-            $.newShareCodes = [...new Set([...$.shareCodes,  ...(readShareCodeRes.data || [])])];
+            $.newShareCodes = [...new Set([...shareCodes,  ...(readShareCodeRes.data || [])])];
         } else {
-            $.newShareCodes = [...new Set([...$.shareCodes])];
+            $.newShareCodes = [...new Set([...shareCodes])];
         }
         console.log(`您将要助力的好友${JSON.stringify($.newShareCodes)}`)
         resolve();

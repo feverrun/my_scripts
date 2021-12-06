@@ -2,19 +2,21 @@
 锦鲤红包互助
 入口：[京东App领券频道]
 先内部互助，再互助池
+JD_KOI_OPENRED 默认自动开红包如果想手动开红包环境变量设置为false
 cron "1 0,8,12,20 * * *" script-path=jd_koi_help.js, tag=锦鲤红包互助
 */
-
 const $ = new Env("锦鲤红包互助")
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
+let notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+
+let openRed = process.env.JD_KOI_OPENRED ? true : false;
 let cookiesArr = [], cookie = '';
 let shareCodes = [];
 let shareCodesLength = 0;
 $.newShareCodes = [];
-let notify = $.isNode() ? require('./sendNotify') : '';
 
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         if (jdCookieNode[item]) {
@@ -22,10 +24,14 @@ if ($.isNode()) {
         }
     })
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+    if (process.env.JD_KOI_OPENRED === false) {
+        openRed = false;
+    }else {
+        openRed = true;
+    }
 }
 
 console.log(`共${cookiesArr.length}个京东账号\n`)
-
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -37,13 +43,13 @@ console.log(`共${cookiesArr.length}个京东账号\n`)
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
         $.index = i + 1;
         $.nickName = '';
-        let data = await requestApi('h5launch', {"followShop":1,"random":random(000000, 999999),"log":"4817e3a2~8,~1wsv3ig","sceneid":"JLHBhPageh5"});
+        let data = await requestApi('h5launch', cookie,{"followShop":1,"random":random(000000, 999999),"log":"4817e3a2~8,~1wsv3ig","sceneid":"JLHBhPageh5"});
         if (data?.data?.result?.status == 1) {
             console.log(`账号${$.index}`, '火爆')
             continue;
         }
         console.log(`\n账号【${$.index}】${$.UserName}`);
-        data = await requestApi('h5activityIndex', {"isjdapp":1});
+        data = await requestApi('h5activityIndex',cookie, {"isjdapp":1});
         if (data?.data?.code == 20002) {
             console.log(`账号${$.index}`, '已达拆红包数量限制')
         }else if (data?.data?.code == 10002) {
@@ -79,35 +85,70 @@ console.log(`共${cookiesArr.length}个京东账号\n`)
             cookie = cookiesArr[k]
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.nickName = '';
-            for (let j = 0; j < shareCodesLength; j++){
-                let result = await requestApi('jinli_h5assist', {"redPacketId":shareCodes[j],"followShop":0,"random":random(000000, 999999),"log":"42588613~8,~0iuxyee","sceneid":"JLHBhPageh5"})
+            for (let j = 0; j < shareCodesLength; j++) {
+                let result = await requestApi('jinli_h5assist',cookie, {
+                    "redPacketId": shareCodes[j],
+                    "followShop": 0,
+                    "random": random(000000, 999999),
+                    "log": "42588613~8,~0iuxyee",
+                    "sceneid": "JLHBhPageh5"
+                })
                 console.log(`账号【${$.UserName}】 助力: ${shareCodes[j]}\n${result.data.result.statusDesc}\n`);
                 await $.wait(3000);
-                if (result.data.result.status == 3) {break;}
+                if (result.data.result.status == 3) {
+                    break;
+                }
             }
         }
 
         await $.wait(2000)
 
         console.log(`\n助力池互助\n`)
-        try { await  shareCodesFormat();}catch (e) {console.log(e.message)}
+        try {
+            await shareCodesFormat();
+        } catch (e) {
+            console.log(e.message)
+        }
 
         // console.log($.newShareCodes)
         for (let key in cookiesArr) {
             cookie = cookiesArr[key]
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.nickName = '';
-            for (let jj = 0; jj < $.newShareCodes.length; jj++){
-                let result = await requestApi('jinli_h5assist', {"redPacketId":$.newShareCodes[jj],"followShop":0,"random":random(000000, 999999),"log":"42588613~8,~0iuxyee","sceneid":"JLHBhPageh5"})
+            for (let jj = 0; jj < $.newShareCodes.length; jj++) {
+                let result = await requestApi('jinli_h5assist', cookie, {
+                    "redPacketId": $.newShareCodes[jj],
+                    "followShop": 0,
+                    "random": random(000000, 999999),
+                    "log": "42588613~8,~0iuxyee",
+                    "sceneid": "JLHBhPageh5"
+                })
                 console.log(`账号【${$.UserName}】 助力: ${$.newShareCodes[jj]}\n${result.data.result.statusDesc}\n`);
                 await $.wait(3000);
-                if (result.data.result.status == 3) {break;}
+                if (result.data.result.status == 3) {
+                    break;
+                }
             }
+        }
+    } catch (e) {
+        console.log(e.message)
+    }
+
+    try {
+        if(openRed) {
+            //统一开红包
+            console.log('拆红包\n')
+            for (let ii = 0; ii < shareCodesLength; ii++) {
+                cookie = cookiesArr[ii]
+                await openRedPacket(cookie);
+                await $.wait(1200)
+            }
+        }else {
+            console.log('去京东商城->我的->更多游戏->锦鲤红包手动开红包')
         }
     }catch (e) {
         console.log(e.message)
     }
-
 
 })()  .catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -116,24 +157,42 @@ console.log(`共${cookiesArr.length}个京东账号\n`)
         $.done();
     })
 
-function requestApi(functionId, body = {}) {
+async function openRedPacket(cookie) {
+    var num = "";
+    for (var g = 0; g < 6; g++) {
+        num += Math.floor(Math.random() * 10);
+    }
+    let resp = await requestApi('h5receiveRedpacketAll', cookie, {
+        "random": num,
+        "log": "42588613~8,~0iuxyee",
+        "sceneid": "JLHBhPageh5"
+    });
+    if (resp?.data?.biz_code == 0) {
+        console.info(`领取到 ${resp.data.result?.discount} 元红包`)
+    } else {
+        console.error(`领取红包失败，结果为 ${JSON.stringify(resp)}`)
+    }
+}
+
+async function requestApi(functionId, cookie, body = {}) {
     return new Promise(resolve => {
         $.post({
-            url: `https://api.m.jd.com/api?appid=jinlihongbao&functionId=${functionId}&loginType=2&client=jinlihongbao&t=${gettimestamp()}&clientVersion=10.1.4&osVersion=-1`,
+            url: `${JD_API_HOST}/api?appid=jinlihongbao&functionId=${functionId}&loginType=2&client=jinlihongbao&clientVersion=10.2.4&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi`,
             headers: {
                 "Cookie": cookie,
                 "origin": "https://h5.m.jd.com",
-                "referer": "https://h5.m.jd.com/babelDiy/Zeus/index.html",
+                "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
                 'Content-Type': 'application/x-www-form-urlencoded',
                 "X-Requested-With": "com.jingdong.app.mall",
                 "User-Agent": ua,
             },
-            body: `body=${escape(JSON.stringify(body))}`,
+            body: `body=${encodeURIComponent(JSON.stringify(body))}`,
         }, (_, resp, data) => {
             try {
                 data = JSON.parse(data)
             } catch (e) {
                 $.logErr('Error: ', e, resp)
+                console.warn(`请求${functionId}失败，resp=${JSON.stringify(resp)}，data=${JSON.stringify(data)}, e=${JSON.stringify(e)}`)
             } finally {
                 resolve(data)
             }
@@ -169,7 +228,7 @@ function submitCode(code, user) {
 
 function readShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/get/koi`, timeout: 60000}, (err, resp, data) => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/koi`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
