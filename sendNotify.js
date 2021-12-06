@@ -705,6 +705,175 @@ function iGotNotify(text, desp, params = {}) {
     })
 }
 
+async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n') {
+    try {
+        var Uid = "";
+        var UserRemark = [];
+        var llShowRemark = "false";
+        strAuthor = "";
+        if (process.env.NOTIFY_AUTHOR) {
+            strAuthor = process.env.NOTIFY_AUTHOR;
+        }
+        WP_APP_TOKEN_ONE = "";
+        if (process.env.WP_APP_TOKEN_ONE) {
+            WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
+        }
+        if (process.env.WP_APP_ONE_TEXTSHOWREMARK) {
+            llShowRemark = process.env.WP_APP_ONE_TEXTSHOWREMARK;
+        }
+        if (WP_APP_TOKEN_ONE) {
+            if (TempCKUid) {
+                for (let j = 0; j < TempCKUid.length; j++) {
+                    if (PtPin == decodeURIComponent(TempCKUid[j].pt_pin)) {
+                        Uid = TempCKUid[j].Uid;
+                    }
+                }
+            }
+            if (Uid) {
+                console.log("查询到Uid ：" + Uid);
+                WP_UIDS_ONE = Uid;
+                console.log("正在发送一对一通知,请稍后...");
+                if (strAuthor)
+                    desp += '\n\n本通知 By ' + strAuthor;
+                else
+                    desp += author;
+
+                if (llShowRemark == "true") {
+                    //开始读取青龙变量列表
+                    const envs = await getEnvs();
+                    if (envs[0]) {
+                        for (let i = 0; i < envs.length; i++) {
+                            cookie = envs[i].value;
+                            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+                            if (PtPin != $.UserName)
+                                continue;
+                            $.nickName = "";
+                            $.Remark = envs[i].remarks || '';
+                            $.FoundnickName = "";
+                            $.FoundPin = "";
+                            //判断有没有Remark，没有搞个屁，有的继续
+                            if ($.Remark) {
+                                console.log("正在处理账号Remark.....");
+                                //先查找缓存文件中有没有这个账号，有的话直接读取别名
+                                if (envs[i].status == 0) {
+                                    if (TempCK) {
+                                        for (let j = 0; j < TempCK.length; j++) {
+                                            if (TempCK[j].pt_pin == $.UserName) {
+                                                $.FoundPin = TempCK[j].pt_pin;
+                                                $.nickName = TempCK[j].nickName;
+                                            }
+                                        }
+                                    }
+                                    if (!$.FoundPin) {
+                                        //缓存文件中有没有这个账号，调用京东接口获取别名,并更新缓存文件
+                                        console.log($.UserName + "好像是新账号，尝试获取别名.....");
+                                        await GetnickName();
+                                        if (!$.nickName) {
+                                            console.log("别名获取失败，尝试调用另一个接口获取别名.....");
+                                            await GetnickName2();
+                                        }
+                                        if ($.nickName) {
+                                            console.log("好像是新账号，从接口获取别名" + $.nickName);
+                                        } else {
+                                            console.log($.UserName + "该账号没有别名.....");
+                                        }
+                                        tempAddCK = {
+                                            "pt_pin": $.UserName,
+                                            "nickName": $.nickName
+                                        };
+                                        TempCK.push(tempAddCK);
+                                        //标识，需要更新缓存文件
+                                        boolneedUpdate = true;
+                                    }
+                                }
+
+                                $.nickName = $.nickName || $.UserName;
+                                //这是为了处理ninjia的remark格式
+                                $.Remark = $.Remark.replace("remark=", "");
+                                $.Remark = $.Remark.replace(";", "");
+                                //开始替换内容中的名字
+                                if (ShowRemarkType == "2") {
+                                    $.Remark = $.nickName + "(" + $.Remark + ")";
+                                }
+                                if (ShowRemarkType == "3") {
+                                    $.Remark = $.UserName + "(" + $.Remark + ")";
+                                }
+                                text = text + " (" + $.Remark + ")";
+                                //console.log($.nickName+$.Remark);
+                                console.log("处理完成，开始发送通知...");
+                            }
+
+                        }
+
+                    }
+
+                }
+                await wxpusherNotifyByOne(text, desp);
+            } else {
+                console.log("未查询到用户的Uid,取消一对一通知发送...");
+            }
+        } else {
+            console.log("变量WP_APP_TOKEN_ONE未配置WxPusher的appToken, 取消发送...");
+
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
+function wxpusherNotifyByOne(text, desp) {
+    return new Promise((resolve) => {
+        if (WP_APP_TOKEN_ONE) {
+            var WPURL = "";
+            let uids = [];
+            for (let i of WP_UIDS_ONE.split(";")) {
+                if (i.length != 0)
+                    uids.push(i);
+            };
+            let topicIds = [];
+            const body = {
+                appToken: `${WP_APP_TOKEN_ONE}`,
+                content: `${text}\n\n${desp}`,
+                summary: `${text}`,
+                contentType: 1,
+                topicIds: topicIds,
+                uids: uids,
+                url: `${WPURL}`,
+            };
+            const options = {
+                url: `http://wxpusher.zjiecode.com/api/send/message`,
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                timeout,
+            };
+            $.post(options, (err, resp, data) => {
+                try {
+                    if (err) {
+                        console.log("WxPusher 发送通知调用 API 失败！！\n");
+                        console.log(err);
+                    } else {
+                        data = JSON.parse(data);
+                        if (data.code === 1000) {
+                            console.log("WxPusher 发送通知消息成功!\n");
+                        }
+                    }
+                } catch (e) {
+                    $.logErr(e, resp);
+                }
+                finally {
+                    resolve(data);
+                }
+            });
+        } else {
+            resolve();
+        }
+    });
+}
+
+
 function pushPlusNotify(text, desp) {
     return new Promise(resolve => {
         if (PUSH_PLUS_TOKEN) {
@@ -751,6 +920,7 @@ function pushPlusNotify(text, desp) {
 
 module.exports = {
     sendNotify,
+    sendNotifybyWxPucher,
     BARK_PUSH
 }
 

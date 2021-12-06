@@ -48,7 +48,7 @@ const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
                 continue
             }
             await jdGlobal()
-            await $.wait(10*1000)
+            await $.wait(5000)
         }
     }
 })()
