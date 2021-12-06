@@ -1,19 +1,18 @@
 /*
 众筹许愿池
 活动入口：京东-京东众筹-众筹许愿池
-cron "40 0,2 * * *" script-path=jd_wish.js,tag=众筹许愿池
+cron "12 0,8 * * *" script-path=jd_wish.js,tag=众筹许愿池
  */
 
 const $ = new Env('众筹许愿池');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let message = '', allMessage = '';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1E1NXxq0', '1FFVQyqw'];
-let appNameArr = ['众筹许愿池', '1111点心动'];
+let appIdArr = ['1E1NXxq0', '1FFVQyqw','1EFVXxg'];
+let appNameArr = ['众筹许愿池', '1111点心动','金榜年终奖'];
+
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {

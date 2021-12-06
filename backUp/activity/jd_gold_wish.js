@@ -8,8 +8,8 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let message = '', allMessage = '';
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1EFVXxg'];
-let appNameArr = ['金榜年终奖'];
+let appIdArr = ['1E1NXxq0', '1FFVQyqw','1EFVXxg'];
+let appNameArr = ['众筹许愿池', '1111点心动','金榜年终奖'];
 let appId, appName;
 $.shareCode = [];
 
@@ -126,7 +126,7 @@ async function healthyDay_getHomeData(type = healthyDay_getHomeData) {
                                                 await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
                                             }
                                         }
-                                    } else if (vo.taskType === 14) {
+                                    } else if (vo.taskType === 14 || vo.taskType === 6) {
                                         console.log(`【京东账号${$.index}（${$.UserName}）的${appName}好友互助码】${vo.assistTaskDetailVo.taskToken}\n`)
                                         if (vo.times !== vo.maxTimes) {
                                             $.shareCode.push({
@@ -194,7 +194,7 @@ function harmony_collectScore(body = {}, taskType = '') {
 
 function interact_template_getLotteryResult(taskid) {
     return new Promise(resolve => {
-        $.post(taskUrl('splitHongbao_getLotteryResult', { "appId": appId, "taskId": taskid }), (err, resp, data) => {
+        $.post(taskUrl(appId == '1EFVXxg' ? 'splitHongbao_getLotteryResult' : 'interact_template_getLotteryResult', {"appId":appId}), (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
