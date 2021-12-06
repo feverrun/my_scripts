@@ -159,7 +159,7 @@ async function healthyDay_getHomeData(type = true) {
                         await harmony_collectScore({"appId":appId,"taskToken":shoppingActivityVos.taskToken,"taskId":vo.taskId,"actionType":"0"})
                       }
                     }
-                  } else if (vo.taskType === 14) {
+                  } else if (vo.taskType === 14 || vo.taskType === 6) {
                     console.log(`【京东账号${$.index}（${$.UserName}）的${appName}好友互助码】${vo.assistTaskDetailVo.taskToken}\n`)
                     if (vo.times !== vo.maxTimes) {
                       $.shareCode.push({
@@ -225,7 +225,7 @@ function harmony_collectScore(body = {}, taskType = '') {
 }
 function interact_template_getLotteryResult() {
   return new Promise(resolve => {
-    $.post(taskUrl('interact_template_getLotteryResult', {"appId":appId}), (err, resp, data) => {
+    $.post(taskUrl(appId == '1EFVXxg' ? 'splitHongbao_getLotteryResult' : 'interact_template_getLotteryResult', {"appId":appId}), (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
