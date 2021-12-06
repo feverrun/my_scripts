@@ -1,7 +1,7 @@
 /*
 品质女装 年终狂欢
 https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dzsdfkl20211204A&shareUuid=34e4aeec6ab1458dacb4e92c375a31a2
-7 0,9 1-12 12 * jd_opencard_women.js, tag=12.1~12.12 大牌联合 赢大额京豆, enabled=true
+31 0,8 1-12 12 * jd_opencard_women.js, tag=12.1~12.12 大牌联合 赢大额京豆, enabled=true
 */
 const $ = new Env("品质女装 年终狂欢");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
