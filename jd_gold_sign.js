@@ -2,8 +2,6 @@
 京东金榜
 活动入口：https://h5.m.jd.com/babelDiy/Zeus/2H5Ng86mUJLXToEo57qWkJkjFPxw/index.html
 脚本更新时间：2021-11-18 14:20
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-新手写脚本，难免有bug，能用且用。
 #京东金榜
 6 6 * * * jd_gold_sign.js, tag=京东金榜, img-url=jd.png, enabled=true
  */
