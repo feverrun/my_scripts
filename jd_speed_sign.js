@@ -2,7 +2,7 @@
 京东极速版签到+赚现金任务
 每日9毛左右，满3，10，50可兑换无门槛红包
 ⚠️⚠️⚠️一个号需要运行40分钟左右
-
+普通版和并发版启用一种即可
 活动时间：长期
 活动入口：京东极速版app-现金签到
 cron "21 7 * * *" script-path=jd_speed_sign.js,tag=京东极速版
@@ -14,6 +14,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
 
 let cookiesArr = [], cookie = '', message;
+let llAPIError = false;
 $.score = 0
 $.total = 0
 
@@ -168,7 +169,7 @@ async function taskList() {
                   if (task.taskInfo.status === 0) {
                     if (task.taskType >= 1000) {
                       await doTask(task.taskType)
-                      await $.wait(1000)
+                      await $.wait(1500)
                     } else {
                       $.canStartNewItem = true
                       while ($.canStartNewItem) {
@@ -182,6 +183,9 @@ async function taskList() {
                   } else {
                     console.log(`${task.taskInfo.mainTitle}已完成`)
                   }
+
+                  if (llAPIError) break;
+
                 }
               }
             }
@@ -204,6 +208,7 @@ async function doTask(taskId) {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
+          llAPIError=true;
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
@@ -291,6 +296,7 @@ async function queryItem(activeType = 1) {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
+          llAPIError=true;
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
@@ -327,6 +333,7 @@ async function startItem(activeId, activeType) {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
+          llAPIError=true;
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
@@ -336,7 +343,9 @@ async function startItem(activeId, activeType) {
                 if (activeType !== 3)
                   videoBrowsing = activeType === 1 ? 5 : 10
                 console.log(`【${taskCompletionProgress + 1}/${taskCompletionLimit}】浏览商品任务记录成功，等待${videoBrowsing}秒`)
+                await $.wait(1000);
                 await $.wait(videoBrowsing * 1000)
+                await $.wait(1500);
                 await endItem(data.data.uuid, activeType, activeId, activeType === 3 ? videoBrowsing : "")
               } else {
                 console.log(`${$.taskName}任务已达上限`)
