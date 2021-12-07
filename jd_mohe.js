@@ -459,18 +459,15 @@ function readShareCode() {
                 } else {
                     if (data) {
                         data = JSON.parse(data);
-                        return data.data;
                         // $.updatePkActivityIdRes = data.data;
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
-                resolve(data.data || {"code": 500});
+                resolve(data.data);
             }
         })
-        await $.wait(10000);
-        resolve({"code": 500})
     })
 }
 
