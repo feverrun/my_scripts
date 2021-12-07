@@ -8,7 +8,7 @@
 const $ = new Env('京东生鲜每日抽奖');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let configCode = "8041d3890db747c89ebf9442c78ec165";
+let configCode = "f0a3329c402641b78a1f9e77d4eb30c7";
 let cookiesArr = [], cookie = '', message;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -88,7 +88,6 @@ async function run() {
                 console.log(`任务${vo.taskName}，已完成`);
                 continue;
             }
-            console.log(vo)
             console.log(`开始做${vo.taskName}:${vo.taskItem.itemName}`);
             await doTask(vo.taskType, vo.taskItem.itemId);
             await $.wait(1000 * vo.viewTime)
@@ -125,7 +124,6 @@ function getinfo() {
                     data = JSON.parse(data);
                     $.chanceLeft = data.data.chanceLeft;
                     if (data.success == true) {
-                        console.log(data)
                         $.taskinfo = data.data.taskConfig
                     } else {
                         console.log(data.errorMessage);

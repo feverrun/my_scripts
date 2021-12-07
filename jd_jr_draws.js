@@ -3,7 +3,7 @@
 活动入口：京东金融APP首页-会员中心-生活特权
 目前已知领取一次 ，其他的未知。
 脚本更新时间：2021-12-6 14:20
-cron "32 7,18 7 * *" script-path=jd_jr_draw.js,tag=每周领取权益活动
+cron "22 5,18 * * 1,3" script-path=jd_jr_draws.js,tag=每周领取权益活动
 */
 
 const $ = new Env('京东金融每周领取权益活动');
