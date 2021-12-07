@@ -77,7 +77,7 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
                         await getproduct()
                         await writePersonInfo($.vid)
                         await dotask(task.taskid, $.pparam)
-                    } else {
+                    } else if (task.taskid !== "add2cart") {
                         await dotask(task.taskid, task.params)
                         await $.wait(18000)
                     }
