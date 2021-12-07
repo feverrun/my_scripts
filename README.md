@@ -10,10 +10,11 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJD
 ## 入池联系我,加入白名单。 对于白名单内出现混跑多个集成库造成白嫖的，发现一次会永久封禁
 
 ## 定时更新库
-```
 任务名:   my_scripts
-任务 :    ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
+
 定时 :    0 * * * *
+```
+ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
 ### 长久活动(已接入助力池)
@@ -39,6 +40,7 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJD
 ```
 
 ## nodejs模块安装
+### 方法一: 进入青龙容器安装依赖
 ```
 npm install -g png-js
 npm install -g date-fns
@@ -59,6 +61,29 @@ npm install -g ws
 npm install -g js-base64
 npm install -g qrcode-terminal
 ```
+### 方法二：进入青龙后台安装依赖
+依赖管理》NodeJs》添加依赖》选择自动拆分，把以下内容全部复制到名称里，之后点击确定
+```
+png-js
+date-fns
+axios
+dotenv
+got
+crypto-js
+md5
+ts-md5
+tslib
+@types/node
+requests
+tough-cookie
+jsdom
+download
+tunnel
+ws
+js-base64
+qrcode-terminal
+```
+
 ## 水群
 https://t.me/joinchat/s2VXArKMn5JlNjg1
 
