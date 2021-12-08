@@ -52,8 +52,8 @@ let cleanCart = ''
 if($.isNode()){
     try{
         const fs = require('fs');
-        if (fs.existsSync('./cleancart_activity.js')) {
-            cleanCart = require('./cleancart_activity');
+        if (fs.existsSync('./utils/cleancart_activity.js')) {
+            cleanCart = require('./utils/cleancart_activity');
         }
     }catch(e){
     }

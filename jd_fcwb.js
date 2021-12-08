@@ -14,7 +14,8 @@ let firstInviteCode = ''
 let firstInviter = ''
 let breakFlag = 0;
 let autoRun = false;
-let linkId = `pTTvJeSTrpthgk9ASBVGsw`;
+let linkId = "pTTvJeSTrpthgk9ASBVGsw";
+let levelArr = [4, 4, 5];
 
 //默认只助力第一个号(基本环境变量一天一变，为了方便使用者默认只助力第一个号,第一个号助力作者)
 if (process.env.FCWB_AUTO_RUN) {
@@ -54,16 +55,16 @@ if ($.isNode()) {
                 let flag = 0;
                 switch (curRound) {
                     case 1:
-                        flag = 4;
+                        flag = levelArr[0];
                         break;
                     case 2:
-                        flag = 6;
+                        flag = levelArr[1];
                         break;
                     case 3:
-                        flag = 7;
+                        flag = levelArr[2];
                         break;
                     default:
-                        flag = 4;
+                        flag = levelArr[0];
                         break;
                 }
                 for (let i = 0; i < flag; i++) {
@@ -74,12 +75,13 @@ if ($.isNode()) {
                             console.log('第' + curRound + '关')
                             console.log(`挖宝位置坐标(${i},${j})`)
                             await wb(curRound, i, j)
-                            await $.wait(5000)
+                            await $.wait(3500)
                         }
                     }
                 }
             }
-
+        } else {
+            console.log(`如需自动挖宝设置环境变量FCWB_AUTO_RUN为true`)
         }
 
     }
@@ -94,7 +96,7 @@ if ($.isNode()) {
             $.index = k + 1;
             console.log(`${$.UserName} => 帮助 ${inviter}`);
             await help()
-            await $.wait(3000)
+            await $.wait(3500)
         }
     }
 
@@ -111,11 +113,10 @@ if ($.isNode()) {
                 inviter = inviter;
                 $.index = i + 1;
                 await help()
-                await $.wait(3000)
+                await $.wait(10000)
             }
         }
-    } catch (e) {
-    }
+    } catch (e) {}
 
 
 })()
@@ -128,7 +129,7 @@ if ($.isNode()) {
 
 //挖宝
 function wb(round, rowIdx, colIdx) {
-    let body = `{"round":${round},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"${linkId}"`
+    let body = {"round":round,"rowIdx":rowIdx,"colIdx":colIdx,"linkId":linkId}
     return axios({
         url: JD_API_HOST,
         params: {
@@ -146,7 +147,7 @@ function wb(round, rowIdx, colIdx) {
             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         },
         method: 'get',
-        timeout: 5000,
+        timeout: 10000,
     }).catch(err => {
         console.log(err)
     })
@@ -166,7 +167,7 @@ function wb(round, rowIdx, colIdx) {
 }
 
 function home() {
-    let body = `{"linkId": "${linkId}"}`
+    let body = {"linkId": linkId}
     return axios({
         url: JD_API_HOST,
         params: {
@@ -183,7 +184,7 @@ function home() {
             Origin: "https://api.m.jd.com",
             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         },
-        timeout: 5000,
+        timeout: 10000,
     }).catch(err => {
         console.log(err)
     })
@@ -209,7 +210,7 @@ function home() {
 }
 
 function help() {
-    let body = `{"linkId":"${linkId}","inviter":"${inviter}","inviteCode":"${inviteCode}"}`
+    let body = {"linkId":linkId,"inviter":inviter,"inviteCode":inviteCode}
     return axios({
         url: JD_API_HOST,
         params: {
@@ -227,7 +228,7 @@ function help() {
             'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         },
         method: 'get',
-        timeout: 5000,
+        timeout: 10000,
     }).catch(err => {
         console.log(err)
     })
@@ -259,7 +260,7 @@ function getAuthorShareCode() {
             "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
         },
         method: 'get',
-        timeout: 5000,
+        timeout: 10000,
     }).catch(function (err) {
         console.log(err)
     })
