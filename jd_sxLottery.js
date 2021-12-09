@@ -8,14 +8,14 @@
 const $ = new Env('京东生鲜每日抽奖');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 let configCode = "f0a3329c402641b78a1f9e77d4eb30c7";
 let cookiesArr = [], cookie = '', message;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-    };
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
@@ -26,26 +26,26 @@ if ($.isNode()) {
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
-        cookie = cookiesArr[i];
-        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-        $.index = i + 1;
-        $.isLogin = true;
-        $.nickName = '';
-        message = '';
-        await TotalBean();
-        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-        if (!$.isLogin) {
-            $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+        if (cookiesArr[i]) {
+            cookie = cookiesArr[i];
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.index = i + 1;
+            $.isLogin = true;
+            $.nickName = '';
+            message = '';
+            await TotalBean();
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
 
-            if ($.isNode()) {
-                await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+                if ($.isNode()) {
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+                }
+                continue
             }
-            continue
+            await jdmodule();
+            await showMsg();
         }
-
-        await jdmodule();
-        await showMsg();
-
     }
 })()
     .catch((e) => {
@@ -62,8 +62,8 @@ function showMsg() {
     })
 }
 
-
 async function jdmodule() {
+    await getCode(); //获取任务
     let runTime = 0;
     do {
         await getinfo(); //获取任务
@@ -99,6 +99,39 @@ async function run() {
     }
 }
 
+
+// 获取任务
+function getCode() {
+    return new Promise(resolve => {
+        $.get({
+            url: `https://prodev.m.jd.com/mall/active/2Rkjx8aT5eKaQnUzn8dwcR6jNanj/index.html`,
+            headers:{
+                "Connection": "keep-alive",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                'User-Agent': 'JD4iPhone/167874 (iPhone; iOS 14.2; Scale/3.00)',
+                'Cookie': $.cookie,
+                "Host": "prodev.m.jd.com",
+                "Referer": "",
+                "Accept-Language": "zh-Hans-CN;q=1, en-CN;q=0.9",
+                "Accept": "*/*"
+            },
+        }, async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} getinfo请求失败，请检查网路重试`)
+                } else {
+                    configCode = resp.body.match(/"activityCode":"(.*?)"/)[1]
+                }
+            } catch (e) {
+                $.logErr(e, resp);
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
 // 获取任务
 function getinfo() {
     return new Promise(resolve => {
@@ -162,7 +195,6 @@ function join() {
                 } else {
                     data = JSON.parse(data);
                     if (data.success == true) {
-                        // console.log(data);
                         console.log(`抽奖结果:${data.data.rewardName}`);
                     }
                     else {
