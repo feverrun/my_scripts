@@ -7,7 +7,7 @@
 每个京东账号每天只能帮助3个人。多出的助力码将会助力失败。
 
 [Script]
-cron "1 7-21/1 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
+cron "1 5,7-21 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
 */
 
 const $ = new Env('京东种豆得豆');
