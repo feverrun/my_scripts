@@ -1,10 +1,7 @@
 /*
 京选大牌 超会宠你
-
 https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=5870cf9ea76046b4bfc5493f82784eef&shareUuid=cec7c3fd134e435a8fc9fa07650a7755
-
-默认执行脚本。如果需要不执行
-7 0,10 4-17 12 * jd_opencard_chcn.js, tag=12.1~12.12 京选大牌 超会宠你, enabled=true
+33 0,12 4-17 12 * jd_opencard_chcn.js, tag=12.1~12.12 京选大牌 超会宠你, enabled=true
 */
 const $ = new Env("京选大牌 超会宠你");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
