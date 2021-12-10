@@ -1,6 +1,6 @@
 /*
 暖暖红包
-cron:0 0,12,18 * * * gua_redEnvelope.js
+cron:0 0,12,18 * * * jd_redEnvelope.js
 返利变量：jd_redEnvelope_rebateCodes，默认给脚本作者返利，若需要返利给自己，请自己修改返利变量jd_redEnvelope_rebateCodes
 例：
 export jd_redEnvelope_rebateCodes="你的返利code"
