@@ -1,5 +1,5 @@
 /*
-12.10~12.25 狂欢日联合盛典 [gua_opencard81.js]
+12.10~12.25 狂欢日联合盛典 [jd_opencard81.js]
 新增开卡脚本
 一次性脚本
 
@@ -29,7 +29,7 @@ All变量适用
 ============Quantumultx===============
 [task_local]
 #12.10~12.25 狂欢日联合盛典
-13 0,12 11-25 12 * jd_opencard81.js, tag=12.10~12.25 狂欢日联合盛典, enabled=true
+13 0,12 10-25 12 * jd_opencard81.js, tag=12.10~12.25 狂欢日联合盛典, enabled=true
 
 */
 let opencard_addSku = "true"
