@@ -1,6 +1,6 @@
 /*
 城城领现金
-cron "0 0-23/5,22 * 10 *" jd_city.js, tag=城城领现金, img-url=jd_city.png, enabled=true
+cron "3 0-23/5,22 * 10 *" jd_city.js, tag=城城领现金, img-url=jd_city.png, enabled=true
  */
 
 const $ = new Env('城城领现金');
