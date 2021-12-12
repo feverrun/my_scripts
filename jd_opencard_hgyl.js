@@ -1,6 +1,6 @@
 /**
 
- cron "3 0,16 4-25 12 *" jd_opencard_chcn.js, tag=12.1~12.12 嗨购有礼 狂欢再续, enabled=true
+ cron "31 18 4-25 12 *" jd_opencard_hgyl.js, tag=12.1~12.12 嗨购有礼 狂欢再续, enabled=true
  **/
 
 const $ = new Env("嗨购有礼 狂欢再续");
