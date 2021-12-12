@@ -24,7 +24,6 @@
 [task_local]
 #12.12~12.20 狂欢购
 17 1,9 12-20 12 * jd_opencardLH29.js, tag=12.12~12.20 狂欢购, enabled=true
-
 */
 
 
