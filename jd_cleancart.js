@@ -1,5 +1,5 @@
 /*
-cron "1 5,17 * * *" jd_cleancart.js
+cron "1 5-22 * * *" jd_cleancart.js
 */
 const $ = new Env('清空购物车');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
