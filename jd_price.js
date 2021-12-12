@@ -47,9 +47,7 @@ const JD_API_HOST = 'https://api.m.jd.com/';
                 continue
             }
             await price()
-            if (i != cookiesArr.length - 1) {
-                await $.wait(3000)
-            }
+            await $.wait(3000)
         }
     }
     if (allMessage) {
@@ -69,6 +67,7 @@ async function price() {
         $.token = $.jab.getToken() || ''
         if ($.token) {
             await siteppM_skuOnceApply();
+            await $.wait(3000)
         }
         num++
     } while (num < 3 && !$.token)
