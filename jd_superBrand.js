@@ -1,7 +1,7 @@
 /**
  特务
  脚本没有自动开卡，会尝试领取开卡奖励
- cron 33 7,8,16 * * * jd_superBrand.js
+ cron 21 7,8,16 * * * jd_superBrand.js
  */
 const $ = new Env('特务Z');
 const notify = $.isNode() ? require('./sendNotify') : '';
