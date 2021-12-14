@@ -43,7 +43,6 @@ if ($.isNode()) {
     }
     $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
     await requestAlgo();
-    await $.wait(1000)
     console.log(`\n\n\n变量JD_CFD_FRESH_DDW_VIRHB  可选值  5 10 20 30 50 100 (默认100)\n`)
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -310,7 +309,7 @@ async function requestAlgo() {
             "expandParams": ""
         })
     }
-    new Promise(async resolve => {
+    return new Promise(async resolve => {
         $.post(options, (err, resp, data) => {
             try {
                 if (err) {

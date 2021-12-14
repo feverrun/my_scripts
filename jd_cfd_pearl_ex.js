@@ -29,7 +29,6 @@ $.appId = 10032;
     }
     $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
     await requestAlgo();
-    await $.wait(1000)
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -263,7 +262,7 @@ async function requestAlgo() {
             "expandParams": ""
         })
     }
-    new Promise(async resolve => {
+    return new Promise(async resolve => {
         $.post(options, (err, resp, data) => {
             try {
                 if (err) {

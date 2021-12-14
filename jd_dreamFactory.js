@@ -46,8 +46,6 @@ if ($.isNode()) {
     }
     await requestAlgo();
 
-    //
-
     //cookies
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -1099,7 +1097,7 @@ async function requestAlgo() {
             "expandParams": ""
         })
     }
-    new Promise(async resolve => {
+    return new Promise(async resolve => {
         $.post(options, (err, resp, data) => {
             try {
                 if (err) {

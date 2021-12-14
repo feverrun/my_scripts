@@ -36,7 +36,6 @@ if ($.isNode()) {
 !(async () => {
   $.CryptoJS = $.isNode() ? require("crypto-js") : CryptoJS;
   await requestAlgo();
-  await $.wait(1000);
   if (!cookiesArr[0]) {
     $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/bean/signIndex.action", { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
@@ -59,7 +58,7 @@ if ($.isNode()) {
       if (i === 0) console.log(`\n正在收集助力码请等待\n`)
       if (!isLoginInfo[$.UserName]) continue
       await signhb(1)
-      await $.wait(1000)
+      await $.wait(1500)
     }
   }
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -482,7 +481,7 @@ async function requestAlgo() {
       "expandParams": ""
     })
   }
-  new Promise(async resolve => {
+  return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {

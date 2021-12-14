@@ -39,7 +39,6 @@ if ($.isNode()) {
     let count = 0
     $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
     await requestAlgo();
-    await $.wait(1000)
     console.log('\n')
     do {
         count++
@@ -320,7 +319,7 @@ async function requestAlgo() {
             "expandParams": ""
         })
     }
-    new Promise(async resolve => {
+    return new Promise(async resolve => {
         $.post(options, (err, resp, data) => {
             try {
                 if (err) {

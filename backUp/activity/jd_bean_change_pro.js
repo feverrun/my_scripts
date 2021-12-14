@@ -26,6 +26,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
+    await requestAlgo();
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -67,7 +68,6 @@ if ($.isNode()) {
             await getMs();
             await jdfruitRequest('taskInitForFarm', {"version":14,"channel":1,"babelChannel":"120"});
             await getjdfruit();
-            await requestAlgo();
             await JxmcGetRequest();
             await bean();
             await getJxFactory();   //惊喜工厂
@@ -952,7 +952,7 @@ async function requestAlgo() {
             "expandParams": ""
         })
     }
-    new Promise(async resolve => {
+    return new Promise(async resolve => {
         $.post(options, (err, resp, data) => {
             try {
                 if (err) {

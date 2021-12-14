@@ -142,6 +142,7 @@ if ($.isNode()) {
     });
     return;
   }
+  await requestAlgo();
   for (i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -213,7 +214,6 @@ if ($.isNode()) {
       });
       await getjdfruit();
       await cash();
-      await requestAlgo();
       await JxmcGetRequest();
       await bean();
 
@@ -1987,7 +1987,7 @@ async function requestAlgo() {
       "expandParams": ""
     })
   }
-  new Promise(async resolve => {
+  return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
