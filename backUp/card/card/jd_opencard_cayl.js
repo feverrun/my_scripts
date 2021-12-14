@@ -1,7 +1,7 @@
 /*
 大牌联合 宠爱有礼
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/5063373?activityId=dzlhkkffoo1208&shareUuid=6f8c66c5850f428a96b1b0261f131cab
-17 0,12 4-17 12 * jd_opencard_cayl.js, tag=12.1~12.12 大牌联合 赢大额京豆, enabled=true
+17 0,14 8-15 12 * jd_opencard_cayl.js, tag=12.1~12.12 大牌联合 赢大额京豆, enabled=true
 */
 const $ = new Env("大牌联合 宠爱有礼");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
