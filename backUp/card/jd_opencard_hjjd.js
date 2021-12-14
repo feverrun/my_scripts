@@ -1,7 +1,7 @@
 /*
 惠聚京东 好物连连
-
-https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/5063373?activityId=llk20211020&shareUuid=91245cc15b1847b1961c10c5412f2420
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/5063373?activityId=llk20211020&shareUuid=0aa5b782ae5c4d36ae09767e95256a80
+cron "33 1 * * *" jd_opencard_hjjd.js
 */
 const $ = new Env("惠聚京东 好物连连");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -28,12 +28,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    // authorCodeList = await getAuthorCodeList('')
-    // if(authorCodeList === '404: Not Found'){
-    //     authorCodeList = [
-    //     ]
-    // }
-    // console.log(authorCodeList)
+    
     let authorCode = '0aa5b782ae5c4d36ae09767e95256a80';
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {

@@ -82,11 +82,12 @@ async function main() {
         $.actId = ($.url2.match(/mall\/active\/([^/]+)\/index\.html/) && $.url2.match(/mall\/active\/([^/]+)\/index\.html/)[1]) || "3nJaTysLg4QmXejNy3R8uWwNR1x8";
         let arr = getBody($.UA, $.url2);
         await getEid(arr);
-        await getcouponUrl()
-        if(!$.eid){
-            $.eid = -1
-        }
-        await getCoupons("");
+        console.log($.actId);
+        // await getcouponUrl()
+        // if(!$.eid){
+        //     $.eid = -1
+        // }
+        // await getCoupons("");
         await $.wait(2000);
     }
 }
