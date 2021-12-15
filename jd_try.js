@@ -11,6 +11,7 @@ let trialActivityIdList = []
 let trialActivityTitleList = []
 let notifyMsg = ''
 let size = 1;
+let ckLength = 0;
 $.isPush = true;
 $.isLimit = false;
 $.isForbidden = false;
@@ -121,70 +122,73 @@ let args = {
         })
         return
     }
-    for (let i = 0; i < $.cookiesArr.length; i++) {
-        if ($.cookiesArr[i]) {
-            $.cookie = $.cookiesArr[i];
-            $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            await totalBean();
-            console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
-                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
-                });
-                await $.notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                continue
+    if ($.cookiesArr.length >=5){
+        ckLength = 5;
+    } else {
+        ckLength = $.cookiesArr.length ? $.cookiesArr.length : 0;
+    }
+    for (let i = 0; i < ckLength; i++) {
+        $.cookie = $.cookiesArr[i];
+        $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1])
+        $.index = i + 1;
+        $.isLogin = true;
+        $.nickName = '';
+        await totalBean();
+        console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
+        if (!$.isLogin) {
+            $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
+                "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+            });
+            await $.notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+            continue
+        }
+        $.totalTry = 0
+        $.totalSuccess = 0
+        $.nowTabIdIndex = 0;
+        $.nowPage = 1;
+        $.nowItem = 1;
+        trialActivityIdList = []
+        trialActivityTitleList = []
+        $.isLimit = false;
+        // 获取tabList的，不知道有哪些的把这里的注释解开跑一遍就行了
+        // await try_tabList();
+        // return;
+        $.isForbidden = false
+        $.wrong = false
+        size = 1
+        while (trialActivityIdList.length < args.maxLength && $.isForbidden === false && $.wrong === false) {
+            if ($.nowTabIdIndex === args.tabId.length) {
+                console.log(`tabId组已遍历完毕，不在获取商品\n`);
+                break;
+            } else {
+                await try_feedsList(args.tabId[$.nowTabIdIndex], $.nowPage++)  //获取对应tabId的试用页面
             }
-            $.totalTry = 0
-            $.totalSuccess = 0
-            $.nowTabIdIndex = 0;
-            $.nowPage = 1;
-            $.nowItem = 1;
-            trialActivityIdList = []
-            trialActivityTitleList = []
-            $.isLimit = false;
-            // 获取tabList的，不知道有哪些的把这里的注释解开跑一遍就行了
-            // await try_tabList();
-            // return;
-            $.isForbidden = false
-            $.wrong = false
-            size = 1
-            while (trialActivityIdList.length < args.maxLength && $.isForbidden === false && $.wrong === false) {
-                if ($.nowTabIdIndex === args.tabId.length) {
-                    console.log(`tabId组已遍历完毕，不在获取商品\n`);
-                    break;
-                } else {
-                    await try_feedsList(args.tabId[$.nowTabIdIndex], $.nowPage++)  //获取对应tabId的试用页面
-                }
-                if (trialActivityIdList.length < args.maxLength) {
-                    console.log(`间隔等待中，请等待 2 秒\n`)
-                    await $.wait(2000);
-                }
-            }
-            if ($.isForbidden === false && $.isLimit === false) {
-                console.log(`稍后将执行试用申请，请等待 2 秒\n`)
+            if (trialActivityIdList.length < args.maxLength) {
+                console.log(`间隔等待中，请等待 2 秒\n`)
                 await $.wait(2000);
-                for (let i = 0; i < trialActivityIdList.length && $.isLimit === false; i++) {
-                    if ($.isLimit) {
-                        console.log("试用上限")
-                        break
-                    }
-                    await try_apply(trialActivityTitleList[i], trialActivityIdList[i])
-                    console.log(`间隔等待中，请等待 ${args.applyInterval} ms\n`)
-                    await $.wait(args.applyInterval);
-                }
-                console.log("试用申请执行完毕...")
-                // await try_MyTrials(1, 1)    //申请中的商品
-                $.giveupNum = 0;
-                $.successNum = 0;
-                $.getNum = 0;
-                $.completeNum = 0;
-                await try_MyTrials(1, 2)    //申请成功的商品
-                // await try_MyTrials(1, 3)    //申请失败的商品
-                await showMsg()
             }
+        }
+        if ($.isForbidden === false && $.isLimit === false) {
+            console.log(`稍后将执行试用申请，请等待 2 秒\n`)
+            await $.wait(2000);
+            for (let i = 0; i < trialActivityIdList.length && $.isLimit === false; i++) {
+                if ($.isLimit) {
+                    console.log("试用上限")
+                    break
+                }
+                await try_apply(trialActivityTitleList[i], trialActivityIdList[i])
+                console.log(`间隔等待中，请等待 ${args.applyInterval} ms\n`)
+                await $.wait(args.applyInterval);
+            }
+            console.log("试用申请执行完毕...")
+            // await try_MyTrials(1, 1)    //申请中的商品
+            $.giveupNum = 0;
+            $.successNum = 0;
+            $.getNum = 0;
+            $.completeNum = 0;
+            await try_MyTrials(1, 2)    //申请成功的商品
+            // await try_MyTrials(1, 3)    //申请失败的商品
+            await showMsg()
         }
     }
     if ($.isForbidden === false && $.isLimit === false) {
