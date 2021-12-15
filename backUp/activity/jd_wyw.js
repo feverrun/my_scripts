@@ -1,226 +1,74 @@
 /*
-汪汪乐园提现
-活动地址: 京东极速版-汪汪乐园
-活动时间：
-更新时间：2021-11-30
-[task_local]
-#汪汪乐园提现
-cron "35 9 * * *" script-path=jd_joy_withdraw.js,tag=汪汪乐园提现
- */
-const $ = new Env('汪汪乐园提现');
-const notify = $.isNode() ? require('./sendNotify') : '';
+玩一玩成就，没啥作用
+[Script]
+cron "0 8 * * *" script-path=jd_wyw.js,tag=玩一玩成就
+*/
+const $ = new Env('玩一玩成就');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let cookiesArr = [];
-let linkId = 'LsQNxL7iWDlXUs6cFl-AAg';
-let taskStatus = true;
-let allMessage = '';
-$.cookie = '';
+const notify = $.isNode() ? require('./sendNotify') : '';
+let cookiesArr = [],
+    cookie = '';
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
-    cookiesArr = [
-        $.getdata("CookieJD"),
-        $.getdata("CookieJD2"),
-        ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
+    cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
+$.invitePinTaskList = []
+
+message = ""
 !(async () => {
+    $.user_agent = require('./USER_AGENTS').USER_AGENT
     if (!cookiesArr[0]) {
-        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+        $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
+            "open-url": "https://bean.m.jd.com/"
+        });
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
-        taskStatus = true;
-        $.cookie = cookiesArr[i];
-        $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+        cookie = cookiesArr[i];
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
         $.index = i + 1;
         $.isLogin = true;
-        $.nickName = $.UserName;
-        $.hotFlag = false; //是否火爆
-        await TotalBean();
-        console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
+        $.nickName = '';
+        console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+
         if (!$.isLogin) {
-            $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+            $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
+                "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+            });
             if ($.isNode()) {
                 await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
             }
             continue
         }
-
-        //获取列表提现
-        await signPrizeDetailList();
-        await $.wait(1500)
-    }
-
-    if ($.isNode() && allMessage) {
-        await notify.sendNotify(`${$.name}`, `${allMessage}`,{ url: 'https://t.me/joinchat/DrHGFt-CvcE2ZmU1' })
+        await getPlayTaskCenter()
+        for (const playTaskCenterListElement of $.playTaskCenterList) {
+            $.log(`play ${playTaskCenterListElement.name}  获得成就值: ${playTaskCenterListElement.achieve}`)
+            await doPlayAction(playTaskCenterListElement.playId)
+        }
+        await $.wait(2000)
     }
 })()
-    .catch((e) => {
-        $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-    })
-    .finally(() => {
-        $.done();
-    })
+    .catch((e) => $.logErr(e))
+    .finally(() => $.done())
+//获取活动信息
 
-function TotalBean() {
-    return new Promise(async resolve => {
-        const options = {
-            url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
-            headers: {
-                Host: "me-api.jd.com",
-                Accept: "*/*",
-                Connection: "keep-alive",
-                Cookie: $.cookie,
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-                "Accept-Language": "zh-cn",
-                "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-                "Accept-Encoding": "gzip, deflate, br"
-            }
-        }
-        $.get(options, (err, resp, data) => {
-            try {
-                if (err) {
-                    $.logErr(err)
-                } else {
-                    if (data) {
-                        data = JSON.parse(data);
-                        if (data['retcode'] === "1001") {
-                            $.isLogin = false; //cookie过期
-                            return;
-                        }
-                        if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
-                            $.nickName = data.data.userInfo.baseInfo.nickname;
-                        }
-                    } else {
-                        $.log('京东服务器返回空数据');
-                    }
-                }
-            } catch (e) {
-                $.logErr(e)
-            } finally {
-                resolve();
-            }
-        })
-    })
-}
-
-
-/**
- * 获取奖励列表
- * @returns {Promise<unknown>}
- */
-function signPrizeDetailList() {
-    return new Promise(async resolve => {
-        let body = {"linkId":linkId};
-
-        const options = {
-            url: `https://api.m.jd.com/?functionId=gameMyPrize&body=${escape(JSON.stringify(body))}&_t=${+new Date()}&appid=activities_platform&clientVersion=3.5.0`,
-            headers: {
-                'Origin': 'https://joypark.jd.com',
-                'Cookie': $.cookie,
-                'Connection': `keep-alive`,
-                'Accept': `application/json, text/plain, */*`,
-                'Host': `api.m.jd.com`,
-                'X-Requested-With': `com.jingdong.app.mall`,
-                'User-Agent':  $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-                'Accept-Encoding': `gzip, deflate, br`,
-                'Accept-Language': `zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7,zh-TW;q=0.6,en-US;q=0.5`,
-                'Referer': `https://joypark.jd.com/?activityId=${linkId}&channel=wlfc&sid=a05ade6f8abfce24dbbc74fw&un_area=2`,
-                'Sec-Fetch-Site': `same-site`,
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (safeGet(data)) {
-                        data = $.toObj(data);
-                        if (data.code === 0) {
-                            console.log(`获取奖励列表成功\n`);
-                            for(let item of data.data.gamePrizeItemVos.filter(vo => vo.prizeType===4 && vo.status===1)){
-                                if(item.prizeTypeVO.prizeUsed===0){
-                                    console.log(`提现${item.prizeTypeVO.prizeValue}微信现金`)
-                                    await apCashWithDraw(item.prizeTypeVO.id,item.prizeTypeVO.poolBaseId,item.prizeTypeVO.prizeGroupId,item.prizeTypeVO.prizeBaseId)
-                                }
-                            }
-                        } else {
-                            console.log(`获取奖励列表异常:${JSON.stringify(data)}\n`);
-                        }
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
-
-/**
- * 提现
- * @param id
- * @param poolBaseId
- * @param prizeGroupId
- * @param prizeBaseId
- * @returns {Promise<unknown>}
- */
-function apCashWithDraw(id, poolBaseId, prizeGroupId, prizeBaseId) {
+function getPlayTaskCenter() {
+    //await $.wait(20)
     return new Promise(resolve => {
-        const body = {
-            "linkId": linkId,
-            "businessSource": "JOY_PARK",
-            "base": {
-                "prizeType": 4,
-                "business": "joyPark",
-                "id": id,
-                "poolBaseId": poolBaseId,
-                "prizeGroupId": prizeGroupId,
-                "prizeBaseId": prizeBaseId
-            }
-        }
-        const options = {
-            url: `https://api.m.jd.com/`,
-            body: `functionId=apCashWithDraw&body=${JSON.stringify(body)}&_t=${+new Date()}&appid=activities_platform`,
-            headers: {
-                'Cookie': $.cookie,
-                "Host": "api.m.jd.com",
-                'Origin': 'https://joypark.jd.com',
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Accept": "*/*",
-                "Connection": "keep-alive",
-                'User-Agent':  $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-                "Accept-Language": "zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8",
-                'Referer': `https://joypark.jd.com/?activityId=${linkId}&channel=wlfc5`,
-                "Accept-Encoding": "gzip, deflate, br"
-            }
-        }
-        $.post(options, async (err, resp, data) => {
+        $.post(taskPostClientActionUrl(`body={"client":"app"}&client=wh5&clientVersion=1.0.0`,`playTaskCenter`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (safeGet(data)) {
-                        data = $.toObj(data);
-                        if (data.code === 0) {
-                            if (data.data.status === "310") {
-                                console.log(`提现成功！`)
-                                allMessage += `京东账号${$.index} ${$.UserName}汪汪乐园提现成功！\n`;
-                            } else {
-                                console.log(`提现：失败:${JSON.stringify(data)}\n`);
-                            }
-                        } else {
-                            console.log(`提现：异常:${JSON.stringify(data)}\n`);
-                        }
-                    }
+                    data = JSON.parse(data);
+                    $.playTaskCenterList = data.data
                 }
             } catch (e) {
                 $.logErr(e, resp)
@@ -231,15 +79,52 @@ function apCashWithDraw(id, poolBaseId, prizeGroupId, prizeBaseId) {
     })
 }
 
-function safeGet(data) {
-    try {
-        if (typeof JSON.parse(data) == "object") {
-            return true;
+function doPlayAction(playId) {
+    //await $.wait(20)
+    return new Promise(resolve => {
+        $.post(taskPostClientActionUrl(`body={"client":"app","playId":"${playId}","type":"1"}&client=wh5&clientVersion=1.0.0`,`playAction`), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    data = JSON.parse(data);
+                    debugger
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+
+
+
+function taskPostClientActionUrl(body,functionId) {
+    return {
+        url: `https://api.m.jd.com/client.action?${functionId?`functionId=${functionId}`:``}`,
+        body: body,
+        headers: {
+            'User-Agent':$.user_agent,
+            'Content-Type':'application/x-www-form-urlencoded',
+            'Host':'api.m.jd.com',
+            'Origin':'https://api.m.jd.com',
+            'Referer':'https://funearth.m.jd.com/babelDiy/Zeus/3BB1rymVZUo4XmicATEUSDUgHZND/index.html?source=6&lng=113.388032&lat=22.510956&sid=f9dd95649c5d4f0c0d31876c606b6cew&un_area=19_1657_52093_0',
+            'Cookie': cookie,
         }
-    } catch (e) {
-        console.log(e);
-        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
-        return false;
+    }
+}
+function jsonParse(str) {
+    if (typeof str == "string") {
+        try {
+            return JSON.parse(str);
+        } catch (e) {
+            console.log(e);
+            $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
+            return [];
+        }
     }
 }
 
