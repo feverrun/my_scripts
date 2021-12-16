@@ -108,7 +108,7 @@ async function signRun() {
     }else{
       errorNum++;
     }
-    let time = Math.random() * 5000 + 10000
+    let time = Math.random() * 5000 + 16000
     console.log(`等待${(time/1000).toFixed(3)}秒`)
     await $.wait(parseInt(time, 10))
   }
