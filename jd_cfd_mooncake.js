@@ -1,7 +1,7 @@
 /*
 京喜财富岛合成珍珠
 活动入口：京喜APP-我的-京喜财富岛
-cron "5 0,5-23 * * *" jd_cfd_mooncake.js
+cron "5 0,5-23/3 * * *" jd_cfd_mooncake.js
  */
 
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
@@ -182,7 +182,7 @@ async function composePearlState(type) {
                                         let beaconType = beacon.type
                                         if (v % div === 0){
                                             await realTmReport(data.strMyShareId)
-                                            await $.wait(5000)
+                                            await $.wait(6000)
                                         }
                                         if (beacon.rbf) {
                                             let size = 1

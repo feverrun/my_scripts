@@ -20,6 +20,7 @@ let jdNotify = false;//是否开启静默运行，默认false关闭(即:奖品�
 let invokeKey = 'q8DNJdpcfRQ69gIx';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
+let outFlag = false;
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -116,9 +117,11 @@ async function joyReward() {
       }
     }
     console.log(`\ndebug场次:${giftSaleInfos}\n`)
-    for (let j = 0; j < 20; j++) {
+    for (let j = 0; j < 5; j++) {
       // await getExchangeRewards();
+      if (outFlag) break;
       if ($.getExchangeRewardsRes && $.getExchangeRewardsRes.success) {
+        outFlag = false;
         const data = $.getExchangeRewardsRes.data;
         let saleInfoId = '', giftValue = '', extInfo = '', leftStock = 0, salePrice = 0;
         let rewardNum = 0;
@@ -202,6 +205,7 @@ async function joyReward() {
           console.log(`\n您设置了不兑换京豆,如需兑换京豆，请去BoxJs处设置或修改joyRewardName代码或设置环境变量 JD_JOY_REWARD_NAME`)
         }
       } else {
+        outFlag = true;
         console.log(`${$.name}getExchangeRewards异常,${JSON.stringify($.getExchangeRewardsRes)}`)
       }
     }
