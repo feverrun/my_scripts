@@ -1,7 +1,7 @@
 /*
 京东小魔方
 [Script]
-cron "22 1,7 * * *" script-path=jd_mofang.js,tag=京东小魔方
+cron "31 2,8 * * *" script-path=jd_mofang.js,tag=京东小魔方
  */
 const $ = new Env('京东小魔方');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -11,6 +11,8 @@ let cookiesArr = [], cookie = '', message;
 let uuid
 $.shareCodes = []
 let hotInfo = {}
+const JD_API_HOST = 'https://api.m.jd.com/client.action';
+let allMessage = '';
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -20,8 +22,6 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let allMessage = '';
 
 !(async () => {
     if (!cookiesArr[0]) {
@@ -242,7 +242,7 @@ function doInteractiveAssignment(extraType, encryptProjectId, sourceCode, encryp
                         } else if (extraType === "sign1") {
                             console.log(`签到成功：获得${data.rewardsInfo.successRewards[$.type][0] ? `${data.rewardsInfo.successRewards[$.type][0].quantity}${data.rewardsInfo.successRewards[$.type][0].rewardName}` : `${data.rewardsInfo.successRewards[$.type].quantityDetails[0].quantity}${data.rewardsInfo.successRewards[$.type].quantityDetails[0].rewardName}`}`)
                         } else if (actionType === "0") {
-                            if (data.assignmentInfo.completionCnt === data.assignmentInfo.maxTimes) {
+                            if (data.code === 0) {
                                 $.complete = true
                                 console.log(`完成成功：获得${data.rewardsInfo.successRewards[$.type][0] ? `${data.rewardsInfo.successRewards[$.type][0].quantity}${data.rewardsInfo.successRewards[$.type][0].rewardName}` : `${data.rewardsInfo.successRewards[$.type].quantityDetails[0].quantity}${data.rewardsInfo.successRewards[$.type].quantityDetails[0].rewardName}`}`)
                             }
