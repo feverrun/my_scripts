@@ -119,7 +119,6 @@ async function joyReward() {
     console.log(`\ndebug场次:${giftSaleInfos}\n`)
     for (let j = 0; j < 5; j++) {
       // await getExchangeRewards();
-      if (outFlag) break;
       if ($.getExchangeRewardsRes && $.getExchangeRewardsRes.success) {
         outFlag = false;
         const data = $.getExchangeRewardsRes.data;
@@ -208,6 +207,7 @@ async function joyReward() {
         outFlag = true;
         console.log(`${$.name}getExchangeRewards异常,${JSON.stringify($.getExchangeRewardsRes)}`)
       }
+      if (outFlag) break;
     }
   } catch (e) {
     $.logErr(e)

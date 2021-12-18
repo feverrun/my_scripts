@@ -1,7 +1,7 @@
 /*
 京东小魔方
 [Script]
-cron "31 2,8 * * *" script-path=jd_mofang.js,tag=京东小魔方
+cron "21 1,7 * * *" script-path=jd_mofang.js,tag=京东小魔方
  */
 const $ = new Env('京东小魔方');
 const notify = $.isNode() ? require('./sendNotify') : '';
