@@ -4,7 +4,7 @@
 活动入口：京东金融养猪猪，
 加了个邀新助力，不过应该没啥用。邀请码变量：PIGPETSHARECODES，变量仅支持单账号邀请码
 京东金融养猪猪
-cron "12 0-23/6 * * *" script-path=jd_pigPet.js,tag=京东金融养猪猪
+cron "39 0-23/5 * * *" script-path=jd_pigPet.js,tag=京东金融养猪猪
 *
 */
 const $ = new Env('金融养猪');
@@ -68,7 +68,7 @@ let shareId = "LcNasllTozPQpd-Ui0Xlug";
       }
     }
   }
-  if (process.env.PIGNF != 'false' && allMessage && new Date().getHours() % 6 === 0) {
+  if (process.env.PIGNF != 'false' && allMessage) {
     if ($.isNode()) await notify.sendNotify($.name, allMessage);
     $.msg($.name, '', allMessage);
   }
