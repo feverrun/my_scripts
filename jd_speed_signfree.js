@@ -3,148 +3,221 @@
   京东极速版,先下单,第二天开始签到
   9 8,12,20 * * * jd_speed_signfree.js 签到免单
 */
-const $ = new Env('京东极速版签到免单')
+// 自行确认是否有效
+
+const $ = new Env('极速免费签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
+//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let cookiesArr = [], cookie = '';
+const UA = $.isNode() ? (process.env.JS_USER_AGENT ? process.env.JS_USER_AGENT : (require('./JS_USER_AGENTS').USER_AGENT)) : ($.getdata('JSUA') ? $.getdata('JSUA') : "'jdltapp;iPad;3.1.0;14.4;network/wifi;Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
+//IOS等用户直接用NobyDa的jd cookie
+let cookiesArr = [],
+    cookie,
+    msg = []
+
+const activityId = 'PiuLvM8vamONsWzC0wqBGQ'
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-
-$.message = "\n";
+const JD_API_HOST = 'https://api.m.jd.com/';
 !(async () => {
-    if (!cookiesArr[0]) {
-        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-        return;
-    }
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.index = i + 1;
-            $.isLogin = true;
             $.nickName = '';
-            $.mian_dan_list = []
-            console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
-
-            $.message += `【京东账号】${$.UserName || $.UserName}\n`
-            await get_order_ids(cookie)
-            if ($.mian_dan_list.length > 0) {
-                for (let i = 0; i < $.mian_dan_list.length; i++) {
-                    let orderId = $.mian_dan_list[i];
-                    await sign(cookie, orderId);
-                    await $.wait(2000)
-                }
-            }
+            message = '';
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            msg.push(($.nickName || $.UserName) + ':')
+            await sign_all()
         }
     }
-    // notify.sendNotify(`${$.name}`, $.message);
+    if (msg.length) {
+        console.log('有消息,推送消息')
+        await notify.sendNotify($.name, msg.join('\n'))
+    } else {
+        console.error('无消息,推送错误')
+        await notify.sendNotify($.name + '错误!!', "无消息可推送!!")
+    }
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+        notify.sendNotify($.name + '异常!!', msg.join('\n') + '\n' + e)
     })
     .finally(() => {
+        $.msg($.name, '', `结束`);
         $.done();
     })
-
-function get_order_ids(cookie) {
-    return new Promise(resolve => {
-        try {
-            $.get({
-                url: `https://api.m.jd.com/?functionId=signFreeHome&body=%7B%22linkId%22%3A%22PiuLvM8vamONsWzC0wqBGQ%22%7D&_t=${Date.now()}&appid=activities_platform`,
-                headers: {
-                    'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-                    'Host': 'api.m.jd.com',
-                    'accept': 'application/json, text/plain, */*',
-                    'origin': 'https://signfree.jd.com',
-                    'sec-fetch-dest': 'empty',
-                    'x-requested-with': 'com.jd.jdlite',
-                    'sec-fetch-site': 'same-site',
-                    'sec-fetch-mode': 'cors',
-                    'referer': 'https://signfree.jd.com/?activityId=PiuLvM8vamONsWzC0wqBGQ&lng=107.647085&lat=30.280608&sid=2c81fdcf0d34f67bacc5df5b2a4add6w&un_area=4_134_19915_0',
-                    'accept-encoding': 'gzip, deflate',
-                    'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-                    'cookie': cookie
-                }
-            }, (err, resp, data) => {
-                data = JSON.parse(data)
-                if (data.success == true) {
-                    if (data.data.risk == true) {
-                        console.log("风控用户,继续操作");
-                        $.message += "风控用户,继续操作\n"
-                        // console.log("风控用户,跳过");
-                        // $.message += "风控用户,跳过\n"
-                        // resolve()
-                        // return
-                    }
-                    if (!data.data.signFreeOrderInfoList) {
-                        console.log("没有需要签到的商品,请到京东极速版[签到免单]购买商品");
-                        $.message += "没有需要签到的商品,请到京东极速版[签到免单]购买商品\n"
-                        resolve()
-                    } else {
-                        for (let i = 0; i < data.data.signFreeOrderInfoList.length; i++) {
-                            var respdemo = { "success": true, "code": 0, "errMsg": "success", "data": { "newUser": false, "backRecord": false, "risk": false, "surplusCount": 2, "sumTotalFreeAmount": "0.00", "signFreeOrderInfoList": [{ "id": 472, "productName": "百事可乐 300ml*6瓶", "productImg": "jfs/t1/177052/32/20077/117620/611e1a4cE0065cc54/b19fb6ed2ff59493.jpg", "needSignDays": 20, "hasSignDays": 0, "freeAmount": "6.54", "moneyReceiveMode": "3", "orderId": 225947891472, "surplusTime": 0, "combination": 1 }], "interruptInfoList": null } }
-                            const order = data.data.signFreeOrderInfoList[i];
-                            $.mian_dan_list.push(order.orderId)
-                            console.log(`商品名称:${order.productName},商品id:${order.orderId}`);
-                            $.message += `商品名称:${order.productName}\n`
-                        }
-                    }
-                }
-                resolve()
-            })
-        } catch (error) {
-            $.logErr(e, resp)
-            resolve()
+async function sign_all() {
+    await query()
+    if (!$.signFreeOrderInfoList){
+        console.log('啥也没买,结束')
+        return
+    }
+    await $.wait(3000)
+    for (const order of $.signFreeOrderInfoList) {
+        // console.debug('now:', order)
+        $.productName = order.productName
+        await sign(order.orderId)
+        await $.wait(3000)
+    }
+    await $.wait(3000)
+    await query()
+    await $.wait(3000)
+    for (const order of $.signFreeOrderInfoList) {
+        // console.debug('2nd now:', order)
+        if (order.needSignDays == order.hasSignDays) {
+            console.log(order.productName, '可提现,执行提现')
+            $.productName = order.productName
+            await cash(order.orderId)
+            await $.wait(3000)
         }
-
-
-    })
+    }
 }
 
-function sign(cookie, orderId) {
+function query() {
     return new Promise(resolve => {
-        const options = {
-            url: `https://api.m.jd.com?functionId=signFreeSignIn&body=%7B%22linkId%22%3A%22PiuLvM8vamONsWzC0wqBGQ%22%2C%22orderId%22%3A${orderId}%7D&_t=${Date.now()}&appid=activities_platform`,
-            headers: {
-                'Host': 'api.m.jd.com',
-                'accept': 'application/json, text/plain, */*',
-                'origin': 'https://signfree.jd.com',
-                'sec-fetch-dest': 'empty',
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-                'content-type': 'application/x-www-form-urlencoded',
-                'x-requested-with': 'com.jd.jdlite',
-                'sec-fetch-site': 'same-site',
-                'sec-fetch-mode': 'cors',
-                'referer': 'https://signfree.jd.com/?activityId=PiuLvM8vamONsWzC0wqBGQ&lng=107.647085&lat=30.280608&sid=2c81fdcf0d34f67bacc5df5b2a4add6w&un_area=4_134_19915_0',
-                'accept-encoding': 'gzip, deflate',
-                'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-                'cookie': cookie
-            },
-        }
-        $.post(options, async (err, resp, data) => {
+        $.get(taskGetUrl("signFreeHome", { "linkId": activityId }), async (err, resp, data) => {
             try {
-                console.log(data);
-                data = JSON.parse(data)
-                var dataDemo = { "success": false, "code": 400015, "errMsg": "明日签到", "data": null }
-                if (data.success == false) {
-                    console.log(data.errMsg);
+                if (err) {
+                    console.error(`${JSON.stringify(err)}`)
                 } else {
-                    console.log("签到成功");
+                    // console.debug('query:', data)
+                    data = JSON.parse(data)
+                    $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
+                    if (data.success == true) {
+                        if (!data.data.signFreeOrderInfoList) {
+                            console.log("没有需要签到的商品,请到京东极速版[签到免单]购买商品");
+                            msg.push("没有需要签到的商品,请到京东极速版[签到免单]购买商品")
+                        } else {
+                            $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
+                            console.log("脚本也许随时失效,请注意");
+                            msg.push("脚本也许随时失效,请注意")
+                            if (data.data.risk == true) {
+                                console.log("风控用户,可能有异常");
+                                msg.push("风控用户,可能有异常")
+                            }
+                        }
+                    }else{
+                        console.error("失败");
+                    }
                 }
             } catch (e) {
-                $.logErr(e, resp);
+                $.logErr(e, resp)
             } finally {
-                resolve(data || "");
+                resolve(data);
             }
         })
     })
+}
+
+function sign(orderId) {
+    return new Promise(resolve => {
+        // console.debug('sign orderId:', orderId)
+        $.post(taskPostUrl("signFreeSignIn", { "linkId": activityId, "orderId": orderId }), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.error(`${JSON.stringify(err)}`)
+                } else {
+                    // console.debug('sign:', data)
+                    data = JSON.parse(data)
+                    let msg_temp
+                    if (data.success) {
+                        msg_temp = $.productName + ' 签到成功'
+                    } else {
+                        msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                    }
+                    console.log(msg_temp)
+                    msg.push(msg_temp)
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+
+function cash(orderId) {
+    return new Promise(resolve => {
+        // console.debug('cash orderId:', orderId)
+        $.post(taskPostUrl("signFreePrize", { "linkId": activityId, "orderId": orderId, "prizeType": 2 }), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.error(`${JSON.stringify(err)}`)
+                } else {
+                    // console.debug('cash:', data)
+                    data = JSON.parse(data)
+                    let msg_temp
+                    if (data.success) {
+                        msg_temp = $.productName + ' 提现成功'
+                    } else {
+                        msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                    }
+                    console.log(msg_temp)
+                    msg.push(msg_temp)
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+
+function taskPostUrl(function_id, body) {
+    return {
+        url: `${JD_API_HOST}`,
+        body: `functionId=${function_id}&body=${escape(JSON.stringify(body))}&_t=${new Date()}&appid=activities_platform`,
+        headers: {
+            'Cookie': cookie,
+            'Host': 'api.m.jd.com',
+            // 'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            "User-Agent": UA,
+            'accept-language': 'en-US,zh-CN;q=0.9',
+            'accept-encoding': 'gzip, deflate, br',
+            "referer": "https://signfree.jd.com/?activityId=" + activityId
+        }
+    }
+}
+
+function taskGetUrl(function_id, body) {
+    return {
+        url: `${JD_API_HOST}?functionId=${function_id}&body=${escape(JSON.stringify(body))}&_t=${new Date()}&appid=activities_platform`,
+        headers: {
+            'Cookie': cookie,
+            'Host': 'api.m.jd.com',
+            'Accept': 'application/json, text/plain, */*',
+            'origin': 'https://signfree.jd.com',
+            // 'Connection': 'keep-alive',
+            'user-agent': UA,
+            'accept-language': 'en-US,zh-CN;q=0.9',
+            'accept-encoding': 'gzip, deflate, br',
+            "referer": "https://signfree.jd.com/?activityId=" + activityId
+        }
+    }
+}
+
+function safeGet(data) {
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
+    }
 }
 
 function jsonParse(str) {
