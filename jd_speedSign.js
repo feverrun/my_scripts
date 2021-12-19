@@ -5,7 +5,7 @@
 普通版和并发版启用一种即可
 活动时间：长期
 活动入口：京东极速版app-现金签到
-cron "36 4 * * *" script-path=jd_speed_sign.js,tag=京东极速版
+cron "36 4 * * *" script-path=jd_speedSign.js,tag=京东极速版
 */
 
 const $ = new Env('京东极速版');

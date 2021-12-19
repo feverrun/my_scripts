@@ -33,28 +33,28 @@ if ($.isNode()) {
     //做任务
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
-        if (cookie) {
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            $.letterList = [];
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-                continue
-            }
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            console.log(`\n入口：京东APP主页 ==> 京豆美妆 ==> 右边悬浮 => 写情书抽京豆\n`);
-            $.canDo = true
-            $.user_id = ""
-            $.letterList.length = 0 ;
-            receiveBean = 0;
-            await getMyToken(`user/token`,`&client=m&url=pengyougou.m.jd.com`);
-            $.token = $.tokenList.data
-            console.log(`Token:${$.token}\n`)
-            //做任务
-            await main()
+
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        $.index = i + 1;
+        $.isLogin = true;
+        $.nickName = '';
+        $.letterList = [];
+        if (!$.isLogin) {
+            $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+            continue
         }
+        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+        console.log(`\n入口：京东APP主页 ==> 京豆美妆 ==> 右边悬浮 => 写情书抽京豆\n`);
+        $.canDo = true
+        $.user_id = ""
+        $.letterList.length = 0 ;
+        receiveBean = 0;
+        await getMyToken(`user/token`,`&client=m&url=pengyougou.m.jd.com`);
+        $.token = $.tokenList.data
+        console.log(`Token:${$.token}\n`)
+        //做任务
+        await main()
+        await $.wait(3000)
     };
     //助力
     if (cookiesArr.length > 1 && $.shareCoseList.length > 0){
@@ -84,7 +84,7 @@ if ($.isNode()) {
                 await getMyToken(`user/token`,`&client=m&url=pengyougou.m.jd.com`);
                 $.token = $.tokenList.data
                 await logIn(`{"token": "${$.token}","source": "01"}`)
-                await $.wait(800)
+                await $.wait(1500)
                 //console.log(`Token:${$.token}\n`)
                 //助力
                 for (let y = 0; y < $.shareCoseList.length; y++){
@@ -115,20 +115,20 @@ if ($.isNode()) {
 async function main() {
     try{
         await logIn(`{"token": "${$.token}","source": "01"}`)
-        await $.wait(800)
+        await $.wait(1500)
         await getHomePage()
         await getUserInfo()
-        await $.wait(800)
+        await $.wait(1500)
         await getTaskList(`task_state`)
-        await $.wait(800)
+        await $.wait(1500)
         await getTaskList(`task_info`)
-        await $.wait(800)
+        await $.wait(1500)
         if ($.friendNum < 5){
             let r = $.friendNum;
             await getOldshareCose('send_letter_record?page=1&page_num=10')
             for (let q = 1; q * 10 < $.letterNum; q++){
                 await getOldshareCose(`send_letter_record?page=${q+1}&page_num=10`)
-                await $.wait(300)
+                await $.wait(1000)
             };
             for (let w = 0; w < $.letterList.length; w++){
                 for (let e = 0; e < $.letterList[w].length; e++){
@@ -160,12 +160,12 @@ async function main() {
             }
             //console.log(JSON.stringify($.shareCoseList))
         }
-        await $.wait(800)
+        await $.wait(1500)
         for (let doit of $.channel){
             if ($.channelNum < $.channel.length && $.canDo === true){
                 console.log(`去关注${doit.name}`)
                 await getRewardList(`fertilizer_chanel_view?channel_id=${doit.id}`)
-                await $.wait(800)
+                await $.wait(1500)
             }
         };
         $.canDo = true
@@ -173,7 +173,7 @@ async function main() {
             if ($.shopsNum < $.shops.length && $.canDo === true){
                 console.log(`去关注${doit.name}`)
                 await getRewardList(`shop_view?shop_id=${doit.id}`)
-                await $.wait(800)
+                await $.wait(1500)
             }
         };
         $.canDo = true
@@ -181,7 +181,7 @@ async function main() {
             if ($.meetingplacesNum < $.meetingplaces.length && $.canDo === true){
                 console.log(`去逛逛${doit.name}`)
                 await getRewardList(`meetingplace_view?meetingplace_id=${doit.id}`)
-                await $.wait(800)
+                await $.wait(1500)
             }
         };
         $.canDo = true
@@ -189,11 +189,11 @@ async function main() {
             if ($.prodcutsNum < $.prodcuts.length && $.canDo === true){
                 console.log(`去加购${doit.name}`)
                 await getRewardList(`product_view?product_id=${doit.id}`)
-                await $.wait(800)
+                await $.wait(1500)
             }
         };
         await getUserInfo()
-        await $.wait(800)
+        await $.wait(1500)
         console.log(`可抽奖${$.lottery_number}次`)
         for (let i = 0; i < $.lottery_number; i++){
             console.log(`第${i+1}次抽奖`)
