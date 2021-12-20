@@ -1,5 +1,5 @@
 /*
-12.20~1.5 双旦寻宝 玩转大富翁 [gua_opencard85.js]
+12.20~1.5 双旦寻宝 玩转大富翁 [jd_opencard85.js]
 新增开卡脚本
 一次性脚本
 
@@ -27,11 +27,9 @@ All变量适用
 请求太频繁会被黑ip
 过10分钟再执行
 
-cron:30 1 21-31/2,2-5/2 12,1 *
-============Quantumultx===============
 [task_local]
 #12.20~1.5 双旦寻宝 玩转大富翁
-18 1,9 21-31,2-5 12,1 * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard85.js, tag=12.20~1.5 双旦寻宝 玩转大富翁, enabled=true
+18 1,9 21-31,2-5 12,1 * jd_opencard85.js, tag=12.20~1.5 双旦寻宝 玩转大富翁, enabled=true
 
 */
 let opencard_addSku = "true"
