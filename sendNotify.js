@@ -1088,7 +1088,7 @@ async function sendNotify(text, desp, params = {}, author = '\n') {
                 }
 
                 if (allCode) {
-                    desp += '\n' + '\n' + "ccwav格式化后的互助码:" + '\n' + allCode;
+                    desp += '\n' + '\n' + "格式化后的互助码:" + '\n' + allCode;
                 }
             }
         }
@@ -1255,7 +1255,7 @@ async function sendNotify(text, desp, params = {}, author = '\n') {
     ]);
 }
 
-async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n本通知 By ccwav Mod') {
+async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n') {
 
     try {
         var Uid = "";
@@ -1735,6 +1735,7 @@ function buildLastDesp(desp, author = '') {
         if (!author.match(/本通知 By/)) {
             author = `\n\n本通知 By ${author}`
         }
+        if (!author) author = ''
         return desp.trim() + author + "\n通知时间: " + GetDateTime(new Date());
     }
 }
