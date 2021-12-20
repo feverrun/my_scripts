@@ -1732,10 +1732,9 @@ function buildLastDesp(desp, author = '') {
     if (process.env.NOTIFY_AUTHOR_BLANK || !author) {
         return desp.trim();
     } else {
-        if (!author.match(/本通知 By/)) {
-            author = `\n\n本通知 By ${author}`
-        }
-        if (!author) author = ''
+        // if (!author.match(/本通知 By/)) {
+        //     author = `\n\n本通知 By ${author}`
+        // }
         return desp.trim() + author + "\n通知时间: " + GetDateTime(new Date());
     }
 }
