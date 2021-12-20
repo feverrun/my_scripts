@@ -45,7 +45,6 @@ const JD_API_HOST = 'https://wq.jd.com/fav';
     $.msg('【京东账号一】取关京东店铺商品失败', '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
   }
   for (let i = 0; i < cookiesArr.length; i++) {
-    if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
@@ -56,7 +55,7 @@ const JD_API_HOST = 'https://wq.jd.com/fav';
       await requireConfig();
       await jdUnsubscribe();
       await showMsg();
-    }
+      await $.wait(3000)
   }
 })()
     .catch((e) => {

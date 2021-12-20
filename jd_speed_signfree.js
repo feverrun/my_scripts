@@ -11,9 +11,8 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const UA = $.isNode() ? (process.env.JS_USER_AGENT ? process.env.JS_USER_AGENT : (require('./JS_USER_AGENTS').USER_AGENT)) : ($.getdata('JSUA') ? $.getdata('JSUA') : "'jdltapp;iPad;3.1.0;14.4;network/wifi;Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [],
-    cookie,
-    msg = []
+let cookiesArr = [], cookie, msg = []
+let first_flag = true
 
 const activityId = 'PiuLvM8vamONsWzC0wqBGQ'
 
@@ -36,6 +35,7 @@ const JD_API_HOST = 'https://api.m.jd.com/';
             message = '';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             msg.push(($.nickName || $.UserName) + ':')
+            first_flag = true
             await sign_all()
         }
     }
@@ -98,11 +98,14 @@ function query() {
                             msg.push("没有需要签到的商品,请到京东极速版[签到免单]购买商品")
                         } else {
                             $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
-                            console.log("脚本也许随时失效,请注意");
-                            msg.push("脚本也许随时失效,请注意")
-                            if (data.data.risk == true) {
-                                console.log("风控用户,可能有异常");
-                                msg.push("风控用户,可能有异常")
+                            if (first_flag) {
+                                first_flag = false
+                                console.log("脚本也许随时失效,请注意");
+                                msg.push("脚本也许随时失效,请注意")
+                                if (data.data.risk == true) {
+                                    console.log("风控用户,可能有异常");
+                                    msg.push("风控用户,可能有异常")
+                                }
                             }
                         }
                     }else{

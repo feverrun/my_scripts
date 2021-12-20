@@ -1,10 +1,8 @@
-/**
+/*
  * sendNotify 推送通知功能
  * @param text 通知头
  * @param desp 通知体
  * @param params 某些推送通知方式点击弹窗可跳转, 例：{ url: 'https://abc.com' }
- * @param author 作者仓库等信息  例：`本脚本免费使用 By：xxx`
- * @returns {Promise<unknown>}
  */
 const querystring = require('querystring');
 const exec = require('child_process').exec;
@@ -95,6 +93,9 @@ let WP_UIDS = "";
 let WP_URL = "";
 
 let WP_APP_TOKEN_ONE = "";
+if (process.env.WP_APP_TOKEN_ONE) {
+    WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
+}
 let WP_UIDS_ONE = "";
 
 // =======================================gotify通知设置区域==============================================
@@ -119,9 +120,10 @@ let ShowRemarkType = "1";
 let Notify_NoCKFalse = "false";
 let Notify_NoLoginSuccess = "false";
 let UseGroupNotify = 1;
-let strAuthor = "";
 const {
-    getEnvs
+    getEnvs,
+    DisableCk,
+    getEnvByPtPin
 } = require('./utils/ql');
 const fs = require('fs');
 let strCKFile = '/ql/scripts/CKName_cache.json';
@@ -154,7 +156,7 @@ let strCustomArr = [];
 let strCustomTempArr = [];
 let Notify_CKTask = "";
 let Notify_SkipText = [];
-async function sendNotify(text, desp, params = {}, author = '\n\n') {
+async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By ccwav Mod') {
     console.log(`开始发送通知...`);
     try {
         //Reset 变量
@@ -201,10 +203,6 @@ async function sendNotify(text, desp, params = {}, author = '\n\n') {
 
         if (process.env.NOTIFY_NOCKFALSE) {
             Notify_NoCKFalse = process.env.NOTIFY_NOCKFALSE;
-        }
-        strAuthor = "";
-        if (process.env.NOTIFY_AUTHOR) {
-            strAuthor = process.env.NOTIFY_AUTHOR;
         }
         if (process.env.NOTIFY_SHOWNAMETYPE) {
             ShowRemarkType = process.env.NOTIFY_SHOWNAMETYPE;
@@ -291,6 +289,13 @@ async function sendNotify(text, desp, params = {}, author = '\n\n') {
             }
         }
 
+        if (strTitle == "汪汪乐园养joy领取" && WP_APP_TOKEN_ONE) {
+            console.log(`捕获汪汪乐园养joy领取通知，开始尝试一对一推送...`);
+            var strPtPin = await GetPtPin(text);
+            if (strPtPin) {
+                await sendNotifybyWxPucher("汪汪乐园领取通知", `【京东账号】${strPtPin}\n当前等级: 30\n已自动领取最高等级奖励\n请前往京东极速版APP查看使用优惠券\n活动入口：京东极速版APP->我的->优惠券->京券`, strPtPin);
+            }
+        }
         //检查脚本名称是否需要通知到Group2,Group2读取原环境配置的变量名后加2的值.例如: QYWX_AM2
         const notifyGroup2List = process.env.NOTIFY_GROUP2_LIST ? process.env.NOTIFY_GROUP2_LIST.split('&') : [];
         const titleIndex2 = notifyGroup2List.findIndex((item) => item === strTitle);
@@ -1083,7 +1088,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n') {
                 }
 
                 if (allCode) {
-                    desp += '\n' + '\n' + "格式化后的互助码:" + '\n' + allCode;
+                    desp += '\n' + '\n' + "ccwav格式化后的互助码:" + '\n' + allCode;
                 }
             }
         }
@@ -1150,15 +1155,15 @@ async function sendNotify(text, desp, params = {}, author = '\n\n') {
 
                         try {
                             //额外处理1，nickName包含星号
-                            $.nickName=$.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
+                            $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
 
                             text = text.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
                             desp = desp.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
 
                             //额外处理2，nickName不包含星号，但是确实是手机号
-                            var tempname=$.UserName;
-                            if(tempname.length==13 && tempname.substring(8)){
-                                tempname=tempname.substring(0,3)+"[*][*][*][*][*]"+  tempname.substring(8);
+                            var tempname = $.UserName;
+                            if (tempname.length == 13 && tempname.substring(8)) {
+                                tempname = tempname.substring(0, 3) + "[*][*][*][*][*]" + tempname.substring(8);
                                 //console.log("额外处理2:"+tempname);
                                 text = text.replace(new RegExp(tempname, 'gm'), $.Remark);
                                 desp = desp.replace(new RegExp(tempname, 'gm'), $.Remark);
@@ -1170,8 +1175,6 @@ async function sendNotify(text, desp, params = {}, author = '\n\n') {
                             console.log("Debug Name2 :" + $.nickName);
                             console.log("Debug Remark :" + $.Remark);
                         }
-
-
 
                         //console.log($.nickName+$.Remark);
 
@@ -1199,10 +1202,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n') {
     }
 
     //提供6种通知
-    if (strAuthor)
-        desp += '\n\n本通知 By ' + strAuthor + "\n通知时间: " + GetDateTime(new Date());
-    else
-        desp += author + "\n通知时间: " + GetDateTime(new Date());
+    desp = buildLastDesp(desp, author)
 
     await serverNotify(text, desp); //微信server酱
 
@@ -1250,25 +1250,18 @@ async function sendNotify(text, desp, params = {}, author = '\n\n') {
         qywxamNotify(text, desp), //企业微信应用消息推送
         iGotNotify(text, desp, params), //iGot
         gobotNotify(text, desp), //go-cqhttp
-        gotifyNotify(text, desp),//gotify
+        gotifyNotify(text, desp), //gotify
         wxpusherNotify(text, desp) // wxpusher
     ]);
 }
 
-async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n') {
+async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n本通知 By ccwav Mod') {
 
     try {
         var Uid = "";
         var UserRemark = [];
         var llShowRemark = "false";
-        strAuthor = "";
-        if (process.env.NOTIFY_AUTHOR) {
-            strAuthor = process.env.NOTIFY_AUTHOR;
-        }
-        WP_APP_TOKEN_ONE = "";
-        if (process.env.WP_APP_TOKEN_ONE) {
-            WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
-        }
+
         if (process.env.WP_APP_ONE_TEXTSHOWREMARK) {
             llShowRemark = process.env.WP_APP_ONE_TEXTSHOWREMARK;
         }
@@ -1284,10 +1277,7 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n') {
                 console.log("查询到Uid ：" + Uid);
                 WP_UIDS_ONE = Uid;
                 console.log("正在发送一对一通知,请稍后...");
-                if (strAuthor)
-                    desp += '\n\n本通知 By ' + strAuthor;
-                else
-                    desp += author;
+                desp = buildLastDesp(desp, author)
 
                 if (llShowRemark == "true") {
                     //开始读取青龙变量列表
@@ -1359,6 +1349,7 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n') {
                     }
 
                 }
+                desp = desp.replace(/[\n\r]/g, '<br>'); // 默认为html, 不支持plaintext
                 await wxpusherNotifyByOne(text, desp);
             } else {
                 console.log("未查询到用户的Uid,取消一对一通知发送...");
@@ -1369,6 +1360,42 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n') {
         }
     } catch (error) {
         console.error(error);
+    }
+
+}
+
+async function GetPtPin(text) {
+    try {
+        const TempList = text.split('- ');
+        if (TempList.length == 3) {
+            var strNickName = TempList[TempList.length - 1];
+            var strPtPin = "";
+            console.log(`捕获别名:` + strNickName);
+            if (TempCK) {
+                for (let j = 0; j < TempCK.length; j++) {
+                    if (TempCK[j].nickName == strNickName) {
+                        strPtPin = TempCK[j].pt_pin;
+                        break;
+                    }
+                    if (TempCK[j].pt_pin == strNickName) {
+                        strPtPin = TempCK[j].pt_pin;
+                        break;
+                    }
+                }
+                if (strPtPin) {
+                    return strPtPin;
+                } else {
+                    console.log(`别名反查PtPin失败: 1.用户更改了别名 2.可能是新用户，别名缓存还没有。`);
+                    return "";
+                }
+            }
+        } else {
+            console.log(`标题格式无法捕获别名...`);
+            return "";
+        }
+    } catch (error) {
+        console.error(error);
+        return "";
     }
 
 }
@@ -1398,7 +1425,8 @@ function gotifyNotify(text, desp) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                } finally {
+                }
+                finally {
                     resolve();
                 }
             });
@@ -1407,7 +1435,6 @@ function gotifyNotify(text, desp) {
         }
     });
 }
-
 
 function gobotNotify(text, desp, time = 2100) {
     return new Promise((resolve) => {
@@ -1700,6 +1727,18 @@ function qywxBotNotify(text, desp) {
     });
 }
 
+function buildLastDesp(desp, author = '') {
+    author = process.env.NOTIFY_AUTHOR || author;
+    if (process.env.NOTIFY_AUTHOR_BLANK || !author) {
+        return desp.trim();
+    } else {
+        if (!author.match(/本通知 By/)) {
+            author = `\n\n本通知 By ${author}`
+        }
+        return desp.trim() + author + "\n通知时间: " + GetDateTime(new Date());
+    }
+}
+
 function ChangeUserId(desp) {
     const QYWX_AM_AY = QYWX_AM.split(',');
     if (QYWX_AM_AY[2]) {
@@ -1973,11 +2012,13 @@ function wxpusherNotifyByOne(text, desp) {
                     uids.push(i);
             };
             let topicIds = [];
+            desp=`${text}\n\n${desp}`;
+            desp = desp.replace(/[\n\r]/g, '<br>'); // 默认为html, 不支持plaintext
             const body = {
                 appToken: `${WP_APP_TOKEN_ONE}`,
-                content: `${text}\n\n${desp}`,
+                content: `${desp}`,
                 summary: `${text}`,
-                contentType: 1,
+                contentType: 2,
                 topicIds: topicIds,
                 uids: uids,
                 url: `${WPURL}`,
@@ -2031,7 +2072,7 @@ function wxpusherNotify(text, desp) {
                 appToken: `${WP_APP_TOKEN}`,
                 content: `${text}\n\n${desp}`,
                 summary: `${text}`,
-                contentType: 1,
+                contentType: 2,
                 topicIds: topicIds,
                 uids: uids,
                 url: `${WP_URL}`,
