@@ -29,7 +29,7 @@ All变量适用
 
 [task_local]
 #12.20~1.5 双旦寻宝 玩转大富翁
-18 1,9 21-31,2-5 12,1 * jd_opencard85.js, tag=12.20~1.5 双旦寻宝 玩转大富翁, enabled=true
+8 0,9 20-31,2-5 12,1 * jd_opencard5.js, tag=12.20~1.5 双旦寻宝 玩转大富翁, enabled=true
 
 */
 let opencard_addSku = "true"
