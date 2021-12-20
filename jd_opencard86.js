@@ -1,5 +1,5 @@
 /*
-12.20~1.5 双旦寻宝 玩转大富翁 [jd_opencard85.js]
+12.20~1.5 双旦寻宝 玩转大富翁 [jd_opencard86.js]
 新增开卡脚本
 一次性脚本
 
@@ -7,29 +7,29 @@
 2.开9张卡 成功开1张 获得10豆
   开通所有可抽奖1次 可能获得5/10/888京豆
 3.关注5豆
-4.抽奖 (默认不抽奖 如需抽奖请设置环境变量[opencard_draw85]为"3"
+4.抽奖 (默认不抽奖 如需抽奖请设置环境变量[opencard_draw86]为"3"
 
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 
 默认脚本不执行
 如需执行脚本请设置环境变量
-opencard85="true"
+opencard86="true"
 每个账号之间延迟 100=延迟100秒 0=延迟0秒会使用每3个账号延迟60秒
 openwait_All 所有
-openwait85="0"
+openwait86="0"
 
 
 All变量适用
 ————————————————
-入口：[ 12.20~1.5 双旦寻宝 玩转大富翁 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dfw2021121702rics9xrkw5mpka&shareUuid=17d4ebef1a1844349ef942a447afe80d)]
+入口：[ 12.20~1.5 双旦寻宝 玩转大富翁 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dfw2021121701vrb6n1c0ilo0uw&shareUuid=800524ae19924082a3ce4e0019cc27e1)]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
 [task_local]
 #12.20~1.5 双旦寻宝 玩转大富翁
-8 0,9 20-31,2-5 12,1 * jd_opencard5.js, tag=12.20~1.5 双旦寻宝 玩转大富翁, enabled=true
+18 1,10 20-31,2-5 12,1 * jd_opencard86.js, tag=12.20~1.5 双旦寻宝 玩转大富翁, enabled=true
 
 */
 let opencard_addSku = "true"
@@ -37,7 +37,7 @@ let opencard = "true"
 let openwait = "0"
 let opencard_draw = "20"
 
-const $ = new Env('12.20~1.5 双旦寻宝 玩转大富翁-1');
+const $ = new Env('12.20~1.5 双旦寻宝 玩转大富翁-2');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cleanCart = ''
@@ -63,14 +63,14 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-opencard_addSku = $.isNode() ? (process.env.opencard_addSku85 ? process.env.opencard_addSku85 : `${opencard_addSku}`) : ($.getdata('opencard_addSku85') ? $.getdata('opencard_addSku85') : `${opencard_addSku}`);
+opencard_addSku = $.isNode() ? (process.env.opencard_addSku86 ? process.env.opencard_addSku86 : `${opencard_addSku}`) : ($.getdata('opencard_addSku86') ? $.getdata('opencard_addSku86') : `${opencard_addSku}`);
 opencard_addSku = $.isNode() ? (process.env.opencard_addSku_All ? process.env.opencard_addSku_All : `${opencard_addSku}`) : ($.getdata('opencard_addSku_All') ? $.getdata('opencard_addSku_All') : `${opencard_addSku}`);
-opencard = $.isNode() ? (process.env.opencard85 ? process.env.opencard85 : `${opencard}`) : ($.getdata('opencard85') ? $.getdata('opencard85') : `${opencard}`);
+opencard = $.isNode() ? (process.env.opencard86 ? process.env.opencard86 : `${opencard}`) : ($.getdata('opencard86') ? $.getdata('opencard86') : `${opencard}`);
 opencard = $.isNode() ? (process.env.opencard_All ? process.env.opencard_All : `${opencard}`) : ($.getdata('opencard_All') ? $.getdata('opencard_All') : `${opencard}`);
-openwait = $.isNode() ? (process.env.openwait85 ? process.env.openwait85 : `${openwait}`) : ($.getdata('openwait85') ? $.getdata('openwait85') : `${openwait}`);
+openwait = $.isNode() ? (process.env.openwait86 ? process.env.openwait86 : `${openwait}`) : ($.getdata('openwait86') ? $.getdata('openwait86') : `${openwait}`);
 openwait = $.isNode() ? (process.env.openwait_All ? process.env.openwait_All : `${openwait}`) : ($.getdata('openwait_All') ? $.getdata('openwait_All') : `${openwait}`);
 openwait = parseInt(openwait, 10) || 0
-opencard_draw = $.isNode() ? (process.env.opencard_draw85 ? process.env.opencard_draw85 : opencard_draw) : ($.getdata('opencard_draw85') ? $.getdata('opencard_draw85') : opencard_draw);
+opencard_draw = $.isNode() ? (process.env.opencard_draw86 ? process.env.opencard_draw86 : opencard_draw) : ($.getdata('opencard_draw86') ? $.getdata('opencard_draw86') : opencard_draw);
 opencard_draw = $.isNode() ? (process.env.opencard_draw ? process.env.opencard_draw : opencard_draw) : ($.getdata('opencard_draw') ? $.getdata('opencard_draw') : opencard_draw);
 allMessage = ""
 message = ""
@@ -82,7 +82,7 @@ let activityCookie =''
 !(async () => {
     if ($.isNode()) {
         if(opencard+"" != "true"){
-            console.log('如需执行脚本请设置环境变量[opencard85]为"true"')
+            console.log('如需执行脚本请设置环境变量[opencard86]为"true"')
         }
         if(opencard+"" != "true"){
             return
@@ -94,8 +94,8 @@ let activityCookie =''
         });
         return;
     }
-    $.activityId = "dfw2021121702rics9xrkw5mpka"
-    $.shareUuid = "17d4ebef1a1844349ef942a447afe80d"
+    $.activityId = "dfw2021121701vrb6n1c0ilo0uw"
+    $.shareUuid = "800524ae19924082a3ce4e0019cc27e1"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -229,7 +229,7 @@ async function run() {
                 }
                 await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
             }
-        }else console.log('如需抽奖请设置环境变量[opencard_draw85]为"3" 3为次数');
+        }else console.log('如需抽奖请设置环境变量[opencard_draw86]为"3" 3为次数');
 
         await $.wait(parseInt(Math.random() * 1000 + 2000, 10))
         await takePostRequest('getDrawRecordHasCoupon');
