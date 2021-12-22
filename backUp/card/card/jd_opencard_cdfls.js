@@ -1,5 +1,5 @@
 /*
- 11.11 超店会员福利社 [jd_opencardLH10.js]
+ 11.11 超店会员福利社 [jd_opencard_cdfls.js]
 开卡一次性脚本
 
 1.邀请一人可能30豆
@@ -15,7 +15,7 @@
 ============Quantumultx===============
 [task_local]
 #11.11超店会员福利社
-26 1,10 1-11 11 * jd_card_cdfls.js, tag=11.11 超店会员福利社, enabled=true
+26 1,10 1-11 11 * jd_opencard_cdfls.js, tag=11.11 超店会员福利社, enabled=true
 */
 
 const $ = new Env("11.11 超店会员福利社");
