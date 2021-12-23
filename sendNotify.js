@@ -244,6 +244,7 @@ async function sendNotify(text, desp, params = {}, author = '\n') {
             var strPtPin = await GetPtPin(text);
             var strdecPtPin = decodeURIComponent(strPtPin);
             var llHaderror = false;
+            var strtext=text;
 
             if (strPtPin) {
                 var temptest = await getEnvByPtPin(strdecPtPin);
@@ -253,6 +254,9 @@ async function sendNotify(text, desp, params = {}, author = '\n') {
                         await checkCookie(temptest.value);
                         if (!isLogin) {
                             const DisableCkBody = await DisableCk(temptest._id);
+                            strPtPin=temptest.value;
+                            strPtPin=(strPtPin.match(/pt_pin=([^; ]+)(?=;?)/) && strPtPin.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+
                             var strAllNotify = "";
                             var MessageUserGp2 = "";
                             var MessageUserGp3 = "";
@@ -276,14 +280,14 @@ async function sendNotify(text, desp, params = {}, author = '\n') {
                             }
 
                             if (MessageUserGp4) {
-                                userIndex4 = MessageUserGp4.findIndex((item) => item === $.UserName);
+                                userIndex4 = MessageUserGp4.findIndex((item) => item === strPtPin);
 
                             }
                             if (MessageUserGp2) {
-                                userIndex2 = MessageUserGp2.findIndex((item) => item === $.UserName);
+                                userIndex2 = MessageUserGp2.findIndex((item) => item === strPtPin);
                             }
                             if (MessageUserGp3) {
-                                userIndex3 = MessageUserGp3.findIndex((item) => item === $.UserName);
+                                userIndex3 = MessageUserGp3.findIndex((item) => item === strPtPin);
                             }
 
                             if (userIndex2 != -1) {
@@ -317,6 +321,7 @@ async function sendNotify(text, desp, params = {}, author = '\n') {
                                 console.log(`京东账号` + strdecPtPin + `已失效,自动禁用成功!\n`);
 
                                 strNotifyOneTemp = `京东账号: ` + strdecPtPin + ` 已失效,自动禁用成功!\n如果要继续挂机，请联系管理员重新登录账号，账号有效期为30天.`;
+                                strNotifyOneTemp+="\n任务标题："+strtext;
                                 if (strAllNotify)
                                     strNotifyOneTemp += `\n` + strAllNotify;
                                 desp = strNotifyOneTemp;
@@ -327,6 +332,7 @@ async function sendNotify(text, desp, params = {}, author = '\n') {
                             } else {
                                 console.log(`京东账号` + strPtPin + `已失效,自动禁用失败!\n`);
                                 strNotifyOneTemp = `京东账号: ` + strdecPtPin + ` 已失效!\n如果要继续挂机，请联系管理员重新登录账号，账号有效期为30天.`;
+                                strNotifyOneTemp+="\n任务标题："+strtext;
                                 if (strAllNotify)
                                     strNotifyOneTemp += `\n` + strAllNotify;
                                 desp = strNotifyOneTemp;
@@ -1273,7 +1279,7 @@ async function sendNotify(text, desp, params = {}, author = '\n') {
                             text = text.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
 
                             if (text == "京东资产变动" || text == "京东资产变动#2" || text == "京东资产变动#3" || text == "京东资产变动#4") {
-                                var Tempinfo = getQLinfo(cookie, envs[i].created, envs[i].timestamp);
+                                var Tempinfo = getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
                                 if (Tempinfo) {
                                     $.Remark += Tempinfo;
                                 }
@@ -1382,10 +1388,23 @@ function getuuid(strRemark, PtPin) {
         if (Tempindex != -1) {
             console.log("检测到NVJDC的一对一格式,瑞思拜~!");
             var TempRemarkList = strRemark.split("@@");
-            strTempuuid = TempRemarkList[1];
+            for (let j = 1; j < TempRemarkList.length; j++) {
+                if (TempRemarkList[j]) {
+                    if (TempRemarkList[j].length > 4) {
+                        if (TempRemarkList[j].substring(0, 4) == "UID_") {
+                            strTempuuid = TempRemarkList[j];
+                            break;
+                        }
+                    }
+                }
+            }
+            if(!strTempuuid){
+                console.log("检索资料失败...");
+            }
         }
     }
     if (!strTempuuid && TempCKUid) {
+        console.log("正在从CK_WxPusherUid文件中检索资料...");
         for (let j = 0; j < TempCKUid.length; j++) {
             if (PtPin == TempCKUid[j].pt_pin) {
                 strTempuuid = TempCKUid[j].Uid;
@@ -1396,7 +1415,7 @@ function getuuid(strRemark, PtPin) {
     return strTempuuid;
 }
 
-function getQLinfo(strCK, intcreated, strTimestamp) {
+function getQLinfo(strCK, intcreated, strTimestamp, strRemark) {
     var strCheckCK = strCK.match(/pt_key=([^; ]+)(?=;?)/) && strCK.match(/pt_key=([^; ]+)(?=;?)/)[1];
     var strReturn = "";
     if (strCheckCK.substring(0, 4) == "AAJh") {
@@ -1404,10 +1423,27 @@ function getQLinfo(strCK, intcreated, strTimestamp) {
         var DateTimestamp = new Date(strTimestamp);
         var DateToday = new Date();
 
+        if (strRemark) {
+            var Tempindex = strRemark.indexOf("@@");
+            if (Tempindex != -1) {
+                console.log("检测到NVJDC的备注格式,尝试获取登录时间,瑞思拜~!");
+                var TempRemarkList = strRemark.split("@@");
+                for (let j = 1; j < TempRemarkList.length; j++) {
+                    if (TempRemarkList[j]) {
+                        if (TempRemarkList[j].length == 13) {
+                            DateTimestamp = new Date(parseInt(TempRemarkList[j]));
+                            console.log("获取登录时间成功:"+GetDateTime(DateTimestamp));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         //过期时间
         var UseDay = Math.ceil((DateToday.getTime() - DateCreated.getTime()) / 86400000);
         var LogoutDay = 30 - Math.ceil((DateToday.getTime() - DateTimestamp.getTime()) / 86400000);
-        if (LogoutDay < 1 ) {
+        if (LogoutDay < 1) {
             strReturn = "\n【登录信息】已服务" + UseDay + "天(登录状态即将到期，请重新登录)"
         } else {
             strReturn = "\n【登录信息】已服务" + UseDay + "天(有效期约剩" + LogoutDay + "天)"
@@ -1482,7 +1518,7 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n', strsummary
                             //额外处理1，nickName包含星号
                             $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
 
-                            var Tempinfo = getQLinfo(cookie, tempEnv.created, tempEnv.timestamp);
+                            var Tempinfo = getQLinfo(cookie, tempEnv.created, tempEnv.timestamp, tempEnv.remarks);
                             if (Tempinfo) {
                                 Tempinfo = $.nickName + Tempinfo;
                                 desp = desp.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), Tempinfo);
