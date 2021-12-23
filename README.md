@@ -10,9 +10,11 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJD
 ## 入池联系我,加入白名单。 对于白名单内出现混跑多个集成库造成白嫖的，发现一次会永久封禁
 
 ## 定时更新库
-任务名:   my_scripts
+任务名:   myScripts
 
-定时 :    0 * * * *
+定时 :    1 * * * *
+
+任务 :
 ```
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
@@ -32,7 +34,7 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJD
 
 ### 临时活动(已接入助力池)
 ```
-惊喜领取88      (优先内部)
+惊喜领取88      (优先内部) - 活动结束
 锦鲤红包        (优先内部)
 5G超级盲盒      
 城城分金        (优先内部) - 活动结束
@@ -85,7 +87,7 @@ qrcode-terminal
 ```
 
 ## 水群
-https://t.me/joinchat/s2VXArKMn5JlNjg1
+https://t.me/proenv
 
 
 
