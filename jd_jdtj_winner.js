@@ -1,16 +1,15 @@
 /*
-京东特价--翻翻乐
+京东特价翻翻乐
 一天可翻多次，但有上限
 运气好每次可得0.3元以上的微信现金(需京东账号绑定到微信)
-37 5-13 * * * jd_jdtj_winner.js
-*/
-const $ = new Env('京东特价--翻翻乐');
+cron "37 5-10 * * *" script-path=jd_jdtj_winner.js,tag=京东特价翻翻乐
+ */
+const $ = new Env('京东特价翻翻乐');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = '', linkId = 'ouLEuSSoBzj9b9YYYIsiDA', fflLinkId = 'ouLEuSSoBzj9b9YYYIsiDA';
 const money = process.env.BIGWINNER_MONEY || 0.3
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -31,15 +30,14 @@ const len = cookiesArr.length;
         return;
     }
     for (let i = 0; i < len; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            await main()
-        }
+        cookie = cookiesArr[i];
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+        $.index = i + 1;
+        $.isLogin = true;
+        $.nickName = '';
+        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+        await main()
+        await $.wait(3000);
     }
     if (message) {
         $.msg($.name, '', message);
@@ -62,6 +60,7 @@ async function main() {
         if (!$.time) {
             console.log(`开始进行翻翻乐拿红包\n`)
             await gambleOpenReward();//打开红包
+            await $.wait(3000);
             if ($.canOpenRed) {
                 while (!$.canApCashWithDraw && $.changeReward) {
                     await openRedReward();
@@ -79,14 +78,14 @@ async function main() {
     }
 }
 
-
 //查询剩余多长时间可进行翻翻乐
 function gambleHomePage() {
     const headers = {
         'Host': 'api.m.jd.com',
         'Origin': 'https://doublejoy.jd.com',
         'Accept': 'application/json, text/plain, */*',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Note9 Build/PKQ1.181203.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.99 XWEB/3149 MMWEBSDK/20211001 Mobile Safari/537.36 MMWEBID/8813 MicroMessenger/8.0.16.2040(0x28001055) Process/appbrand0 WeChat/arm64 Weixin NetType/4G Language/zh_CN ABI/arm64 miniProgram/wxc3c2227edeffca75',
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'Accept-Encoding': `gzip, deflate, br`,
         'Referer': `https://doublejoy.jd.com/?activityId${linkId}`,
         'Accept-Language': 'zh-cn',
         'Cookie': cookie
@@ -131,8 +130,8 @@ function gambleOpenReward() {
         'Host': 'api.m.jd.com',
         'Origin': 'https://doublejoy.jd.com',
         'Accept': 'application/json, text/plain, */*',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Note9 Build/PKQ1.181203.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.99 XWEB/3149 MMWEBSDK/20211001 Mobile Safari/537.36 MMWEBID/8813 MicroMessenger/8.0.16.2040(0x28001055) Process/appbrand0 WeChat/arm64 Weixin NetType/4G Language/zh_CN ABI/arm64 miniProgram/wxc3c2227edeffca75',
-        'Referer': `https://doublejoy.jd.com/?activityId${linkId}`,
+        'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'Referer': `https://doublejoy.jd.com`,
         'Accept-Language': 'zh-cn',
         "Content-Type": "application/x-www-form-urlencoded",
         'Cookie': cookie
@@ -141,7 +140,7 @@ function gambleOpenReward() {
     const options = {
         url: `https://api.m.jd.com/`,
         headers,
-        body: `functionId=gambleOpenReward&body=${encodeURIComponent(JSON.stringify(body))}&t=${+new Date()}&appid=activities_platform&clientVersion=null`
+        body: `functionId=gambleOpenReward&body=${JSON.stringify(body)}&t=${Date.now()}&appid=activities_platform&clientVersion=null`
     }
     return new Promise(resolve => {
         $.post(options, (err, resp, data) => {
@@ -177,8 +176,8 @@ function openRedReward(functionId = 'gambleChangeReward', type) {
         'Host': 'api.m.jd.com',
         'Origin': 'https://doublejoy.jd.com',
         'Accept': 'application/json, text/plain, */*',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Note9 Build/PKQ1.181203.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.99 XWEB/3149 MMWEBSDK/20211001 Mobile Safari/537.36 MMWEBID/8813 MicroMessenger/8.0.16.2040(0x28001055) Process/appbrand0 WeChat/arm64 Weixin NetType/4G Language/zh_CN ABI/arm64 miniProgram/wxc3c2227edeffca75',
-        'Referer': `https://doublejoy.jd.com?activityId=${linkId}`,
+        'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'Referer': `https://doublejoy.jd.com`,
         'Accept-Language': 'zh-cn',
         "Content-Type": "application/x-www-form-urlencoded",
         'Cookie': cookie
@@ -188,12 +187,13 @@ function openRedReward(functionId = 'gambleChangeReward', type) {
     const options = {
         url: `https://api.m.jd.com/`,
         headers,
-        body: `functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}&t=${+new Date()}&appid=activities_platform&clientVersion=null`
+        body: `functionId=${functionId}&body=${JSON.stringify(body)}&t=${Date.now()}&appid=activities_platform&clientVersion=null`
     }
     return new Promise(resolve => {
         $.post(options, (err, resp, data) => {
             try {
                 if (err) {
+                    $.changeReward = false;
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
@@ -249,7 +249,7 @@ function apCashWithDraw(id, poolBaseId, prizeGroupId, prizeBaseId, prizeType) {
         'Host': 'api.m.jd.com',
         'Origin': 'https://doublejoy.jd.com',
         'Accept': 'application/json, text/plain, */*',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Note9 Build/PKQ1.181203.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.99 XWEB/3149 MMWEBSDK/20211001 Mobile Safari/537.36 MMWEBID/8813 MicroMessenger/8.0.16.2040(0x28001055) Process/appbrand0 WeChat/arm64 Weixin NetType/4G Language/zh_CN ABI/arm64 miniProgram/wxc3c2227edeffca75',
+        'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         'Referer': `https://doublejoy.jd.com?activityId=${linkId}`,
         'Accept-Language': 'zh-cn',
         "Content-Type": "application/x-www-form-urlencoded",
@@ -270,7 +270,7 @@ function apCashWithDraw(id, poolBaseId, prizeGroupId, prizeBaseId, prizeType) {
     const options = {
         url: `https://api.m.jd.com/`,
         headers,
-        body: `functionId=apCashWithDraw&body=${encodeURIComponent(JSON.stringify(body))}&t=${+new Date()}&appid=activities_platform&clientVersion=null`
+        body: `functionId=apCashWithDraw&body=${encodeURIComponent(JSON.stringify(body))}&t=${Date.now()}&appid=activities_platform&clientVersion=null`
     }
     return new Promise(resolve => {
         $.post(options, (err, resp, data) => {
@@ -283,14 +283,14 @@ function apCashWithDraw(id, poolBaseId, prizeGroupId, prizeBaseId, prizeType) {
                         data = JSON.parse(data);
                         if (data['code'] === 0) {
                             if (data['data']['status'] === '310') {
-                                console.log(`翻翻乐提现 成功🎉，详情：${JSON.stringify(data)}\n`);
+                                console.log(`京东特价--翻翻乐 成功🎉，详情：${JSON.stringify(data)}\n`);
                                 message += `提现至微信钱包成功🎉\n\n`;
                             } else if (data['data']['status'] === '50053') {
-                                console.log(`翻翻乐提现 失败，详情：${JSON.stringify(data)}\n`);
+                                console.log(`京东特价--翻翻乐 失败，详情：${JSON.stringify(data)}\n`);
                                 message += `提现至微信钱包失败\n详情：${JSON.stringify(data)}\n\n`;
                             }
                         } else {
-                            console.log(`翻翻乐提现 失败：${JSON.stringify(data)}\n`);
+                            console.log(`京东特价--翻翻乐 失败：${JSON.stringify(data)}\n`);
                         }
                     }
                 }

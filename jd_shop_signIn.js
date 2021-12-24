@@ -1,21 +1,17 @@
 /*
 店铺签到，各类店铺签到，有新的店铺直接添加token即可
-[task_local]
-#店铺签到
-cron "0 0,7 * * *" script-path=dpqd.js,tag=店铺签到
+cron "45 0,7 * * *" script-path=jd_shop_signIn.js,tag=店铺签到
 */
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', allMessage = '', message;
 const JD_API_HOST = 'https://api.m.jd.com/api?appid=interCenter_shopSign';
 
 let activityId = ''
 let vender = ''
 let num = 0
-let shopname = ''
+
 const token = [
   "01B3D5EAB2AB6FCCA4A8B699D560A458",
   "09B63A54599F85A17BACA9C81F50B1B8",
@@ -28,6 +24,7 @@ const token = [
   "9EA0257D7BA5312ED76E537813DA28A1",
   "501105E4C2FAB2A9FF760A554063E769",
   "D0DB6641A279674F401E52B867E595BC",
+  "9E610DED3B2F61B9A745375A2BD0D094",
 ]
 
 if ($.isNode()) {
@@ -64,6 +61,7 @@ if ($.isNode()) {
 
       await dpqd()
       await showMsg()
+      await $.wait(1500)
     }
   }
   if ($.isNode() && allMessage) {
@@ -89,13 +87,9 @@ async function dpqd() {
       continue
     }
     await getvenderName(vender)
-    await $.wait(500)
     await getActivityInfo(token[j], vender)
-    await $.wait(500)
     await signCollectGift(token[j], vender, activityId)
-    await $.wait(500)
     await taskUrl(token[j], vender)
-    await $.wait(500)
   }
 }
 
