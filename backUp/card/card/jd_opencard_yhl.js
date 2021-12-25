@@ -1,7 +1,7 @@
 /*
 默认执行脚本。如果需要不执行
 环境变量 NO_RUSH=false
-cron "11 0 * * *" jd_opencard_yhl.js
+cron "11 0 1-25 12 *" jd_opencard_yhl.js
 */
 const $ = new Env("瓜分千万京豆 赢好礼");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
