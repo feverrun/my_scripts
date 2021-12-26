@@ -13,6 +13,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 let openRed = process.env.JD_KOI_OPENRED ? true : false;
 let cookiesArr = [], cookie = '';
+let authorCode = ''
 let shareCodes = [];
 let shareCodesLength = 0;
 $.newShareCodes = [];
@@ -73,11 +74,8 @@ console.log(`共${cookiesArr.length}个京东账号\n`)
     }
 
     //只助力靠前的
-    if (shareCodes.length >= 3) {
-        shareCodesLength = 3;
-    } else {
-        shareCodesLength = shareCodes.length;
-    }
+    if (shareCodes.length >= 3) {shareCodesLength = 3;} else {shareCodesLength = shareCodes.length;}
+    try {await shareCodesFormat();} catch (e) {console.log(e.message)}
 
     try {
         console.log(`\n内部互助\n`)
@@ -85,6 +83,21 @@ console.log(`共${cookiesArr.length}个京东账号\n`)
             cookie = cookiesArr[k]
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.nickName = '';
+            if (k == 0) {
+                let result = await requestApi('jinli_h5assist',cookie, {
+                    "redPacketId": authorCode,
+                    "followShop": 0,
+                    "random": random(000000, 999999),
+                    "log": "42588613~8,~0iuxyee",
+                    "sceneid": "JLHBhPageh5"
+                })
+                console.log(`账号【${$.UserName}】 助力: ${authorCode}\n${result.data.result.statusDesc}\n`);
+                await $.wait(3000);
+                if (result.data.result.status == 3) {
+                    break;
+                }
+            }
+
             for (let j = 0; j < shareCodesLength; j++) {
                 let result = await requestApi('jinli_h5assist',cookie, {
                     "redPacketId": shareCodes[j],
@@ -104,11 +117,6 @@ console.log(`共${cookiesArr.length}个京东账号\n`)
         await $.wait(2000)
 
         console.log(`\n助力池互助\n`)
-        try {
-            await shareCodesFormat();
-        } catch (e) {
-            console.log(e.message)
-        }
 
         // console.log($.newShareCodes)
         for (let key in cookiesArr) {
@@ -251,9 +259,10 @@ function shareCodesFormat() {
     return new Promise(async resolve => {
         let readShareCodeRes = await readShareCode();
         if (readShareCodeRes && readShareCodeRes.code === 0) {
+            authorCode = readShareCodeRes.data[0] ? readShareCodeRes.data[0] : '';
             $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
         }
-        console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+        // console.log(`将要助力的好友${JSON.stringify($.newShareCodes)}`)
         resolve();
     })
 }

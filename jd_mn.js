@@ -57,7 +57,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             // $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            console.log($.authorCode)
+            // console.log($.authorCode)
             $.authorNum = `${random(1000000, 9999999)}`
             $.activityId = '4e3b9b6233104c199c0c44ff6edbc85d'
             $.activityShopId = '1000014803'
