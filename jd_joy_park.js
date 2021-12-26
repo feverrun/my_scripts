@@ -327,6 +327,7 @@ function doJoyMerge(joyId1, joyId2) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
           data = {}
+          hotFlag = true;
         } else {
           data = JSON.parse(data);
           $.log(`合成 ${joyId1} <=> ${joyId2} ${data.success ? `成功！` : `失败！【${data.errMsg}】 code=${data.code}`}`)
@@ -336,6 +337,7 @@ function doJoyMerge(joyId1, joyId2) {
         }
       } catch (e) {
         $.logErr(e, resp)
+        hotFlag = true;
       } finally {
         resolve(data.data);
       }
