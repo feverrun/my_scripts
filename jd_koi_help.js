@@ -91,7 +91,7 @@ console.log(`共${cookiesArr.length}个京东账号\n`)
                     "log": "42588613~8,~0iuxyee",
                     "sceneid": "JLHBhPageh5"
                 })
-                console.log(`账号【${$.UserName}】 助力: ${authorCode}\n${result.data.result.statusDesc}\n`);
+                // console.log(`账号【${$.UserName}】 助力: ${authorCode}\n${result.data.result.statusDesc}\n`);
                 await $.wait(3000);
                 if (result.data.result.status == 3) {
                     break;
