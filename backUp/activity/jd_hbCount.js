@@ -1,6 +1,7 @@
 /***
- *活动入口: 红包使用情况统计
- * cron "15 5 1-31/7 * *" script-path=jd_hbCount.js tag=历史红包统计
+ * 活动入口: 红包使用情况统计
+ * 想知道红包情况的 最好手动运行
+ * cron "35 5 4 * *" script-path=jd_hbCount.js tag=历史红包统计
  */
 const $ = new Env('历史红包统计');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -21,7 +22,8 @@ if ($.isNode()) {
         return;
     }
 
-    for (let i = 0; i < cookiesArr.length; i++) {
+    let ckArr = cookiesArr.slice(0, 3); //默认只看前3个号的最近6个月红包使用记录(因为耗时较长)
+    for (let i = 0; i < ckArr.length; i++) {
         cookie = cookiesArr[i];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
         $.index = i + 1;
