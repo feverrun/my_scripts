@@ -48,7 +48,7 @@ if ($.isNode()) {
             continue
         }
         await main();
-        await $.wait(1000)
+        await $.wait(2000)
     }
 })()
     .catch((e) => {
@@ -61,14 +61,14 @@ if ($.isNode()) {
 async function main() {
     try {
         await getNewMissions();//领取任务
-        await $.wait(500)
+        await $.wait(1500)
         if (!$.canRun) return
         await getNewMissions();//重新查询任务
-        await $.wait(500)
+        await $.wait(1500)
         await missions();
-        await $.wait(500)
+        await $.wait(1500)
         await grantAward();
-        await $.wait(500)
+        await $.wait(1500)
     } catch (e) {
         $.logErr(e)
     }
