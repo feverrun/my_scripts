@@ -2,24 +2,10 @@
 东东超市
 Last Modified time: 2021-3-4 21:22:37
 活动入口：京东APP首页-京东超市-底部东东超市
-Some Functions Modified From https://github.com/Zero-S1/JD_tools/blob/master/JD_superMarket.py
-东东超市兑换奖品请使用此脚本 jd_blueCoin.js
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-=================QuantumultX==============
-[task_local]
-#东东超市
-11 * * * * jd_superMarket.js, tag=东东超市, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxc.png, enabled=true
-===========Loon===============
 [Script]
-cron "11 * * * *" script-path=jd_superMarket.js,tag=东东超市
-=======Surge===========
-东东超市 = type=cron,cronexp="11 * * * *",wake-system=1,timeout=3600,script-path=jd_superMarket.js
-==============小火箭=============
-东东超市 = type=cron,script-path=jd_superMarket.js, cronexpr="11 * * * *", timeout=3600, enable=true
+cron "33 6-22/2 * * *" script-path=jd_superMarket.js,tag=东东超市
  */
 const $ = new Env('东东超市');
-//Node.js用户请在jdCookie.js处填写京东ck;
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', jdSuperMarketShareArr = [], notify, newShareCodes;
 helpAu = $.isNode() ? (process.env.HELP_AUTHOR ? process.env.HELP_AUTHOR === 'true' : false) : false;
 let jdNotify = true;//用来是否关闭弹窗通知，true表示关闭，false表示开启。

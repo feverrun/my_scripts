@@ -2,17 +2,14 @@
 东东超市兑换奖品 脚本地址：jd_blueCoin.js
 更新时间：2021-6-7
 活动入口：京东APP我的-更多工具-东东超市
-支持京东多个账号
-[Script]
 cron "59 23 * * *" script-path=jd_blueCoin.js,tag=东东超市兑换奖品
  */
 
 const $ = new Env('东东超市兑换奖品');
 const notify = $.isNode() ? require('./sendNotify') : '';
-let allMessage = '';
-
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let coinToBeans = $.getdata('coinToBeans') || 1000; //兑换多少数量的京豆（20或者1000），0表示不兑换，默认不兑换京豆，如需兑换把0改成20或者1000，或者'商品名称'(商品名称放到单引号内)即可
+let allMessage = '';
+let coinToBeans = $.getdata('coinToBeans') || 20; //兑换多少数量的京豆（20或者1000），0表示不兑换，默认不兑换京豆，如需兑换把0改成20或者1000，或者'商品名称'(商品名称放到单引号内)即可
 let jdNotify = false;//是否开启静默运行，默认false关闭(即:奖品兑换成功后会发出通知提示)
 
 let cookiesArr = [], cookie = '';
