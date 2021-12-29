@@ -1,13 +1,18 @@
 # 学习使用
+### 全网最稳定助力池
 ### 只支持青龙拉取  (建议服务器通过docker安装青龙)
-#### 青龙环境搭建可以网上搜有很多教程
+#### 青龙环境搭建教程
+https://github.com/feverrun/my_scripts/wiki/%E9%9D%92%E9%BE%99%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B
 ```
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
-## 只收稳定真实互助 账号个数越多越好
-### 拉库后安装好依赖无需做额外助力相关配置
+## 只收不混跑多个集成库的，号越多越好
+**你们青龙所在车头优先，非车头随机**
 
-## 入池联系我,加入白名单。 对于白名单内出现混跑多个集成库造成白嫖的，发现一次会永久封禁
+**拉库后安装好依赖无需做额外配置**
+
+## 加入助力池
+[点此入群](https://t.me/proenv) 联系我加入白名单 
 
 ## 定时更新库
 任务名:   myScripts
@@ -86,8 +91,8 @@ js-base64
 qrcode-terminal
 ```
 
-## 水群
-https://t.me/proenv
+## [点此入群](https://t.me/proenv)
+
 
 
 
