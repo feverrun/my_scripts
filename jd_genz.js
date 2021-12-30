@@ -48,7 +48,7 @@ async function main() {
     $.reg = false;
     $.tasklist = [];
     await task('apTaskList', { "linkId": appid, "uniqueId": "" })
-    await $.wait(500);
+    await $.wait(3000)
     await task('findPostTagList', { "typeId": typeid })
     if (!$.reg && $.tasklist) {
         await task('genzTaskCenter')
@@ -58,6 +58,7 @@ async function main() {
                 if (!vo.completionStatus) {
                     $.log(`去完成：${vo.taskName}新手任务！`)
                     await task('genzDoNoviceTasks', { "taskId": vo.taskId, "completionStatus": 1 })
+                    await $.wait(6000)
                 }
             }
         }
@@ -66,8 +67,8 @@ async function main() {
                 $.log(`去完成：${vo.taskShowTitle}`)
                 for (let x = 0; x < vo.taskLimitTimes; x++) {
                     if (vo.taskDoTimes != vo.taskLimitTimes) {
-                        await $.wait(500);
                         await task('apDoTask', { "linkId": appid, "taskType": vo.taskType, "taskId": vo.id, "channel": "2", "itemId": vo.taskSourceUrl })
+                        await $.wait(6000)
                     }
                 }
             }
@@ -85,8 +86,8 @@ async function main() {
                                     PostId.push(likePostId.postId)
                                     PostIdx = PostId[random(0, PostId.length)]
                                     await task('likePosts', { "likePostId": PostIdx })
-                                    await $.wait(500);
                                     await task('cancelLikePosts', { "likePostId": PostIdx })
+                                    await $.wait(6000)
                                 }
                             }
                         }
@@ -99,8 +100,8 @@ async function main() {
                                     userId.push(likeuserId.userId)
                                     userIdx = userId[random(0, userId.length)]
                                     await task('followHim', { "forwardUserId": userIdx })
-                                    await $.wait(500);
                                     await task('cancelFollowHim', { "forwardUserId": userIdx })
+                                    await $.wait(6000)
                                 }
                             }
                         }

@@ -55,19 +55,20 @@ if ($.isNode()) {
                         $.fails = 0;
                     } else {
                         $.fails += 1;
-                        if ($.fails > 4) { break }
+                        if ($.fails = 1) { break }
                     }
-                    await sleep(randomNum(800, 2200))
+                    await $.wait(3000)
                 }
                 console.log('取关一轮完成，等待3-6秒')
-                await sleep(randomNum(3000, 6000))
+                await $.wait(6000)
             }
             allMessage += `成功取关主播数：${$.succs}\n`;
-            if ($.fails > 4) {
-                allMessage += `❗️❗️取关主播连续五次失败❗️❗️\n`;
+            if ($.fails = 1) {
+                allMessage += `❗️❗️取关主播连续一次失败❗️❗️\n`;
             }
             allMessage += '\n'
         }
+        await $.wait(5000)
     }
     if (allMessage) {
         allMessage = allMessage.substring(0, allMessage.length - 1)
