@@ -2,7 +2,6 @@
 大牌联合 年货盛宴
 2021年12月31日 - 2022年1月9日
 
-
 1.邀请一人20豆(有可能没有豆
 2.开10张 成功开1张 可能获得5京豆
   全部开完获得1次抽奖
@@ -13,17 +12,13 @@
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 
-————————————————
 入口：https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/1872126?activityId=dzlhkklblzms20211227&shareUuid=a69151555c3f4f40b6eaeb6906e63d43
 
 请求太频繁会被黑ip
 过10分钟再执行
 
-
-[task_local]
 #12.23~1.2 联合开卡
-4 1,14 31,1-9 12,1 * jd_opencardL36.js, tag=2021.12.31-1.9大牌联合 年货盛宴, enabled=true
-
+2 0,9 31,1-9 12,1 * jd_opencard_nhsy.js, tag=2021.12.31-1.9大牌联合 年货盛宴, enabled=true
 */
 const $ = new Env("2021.12.31-1.9大牌联合 年货盛宴");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
