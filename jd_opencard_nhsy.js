@@ -1,5 +1,5 @@
 /*
-12.31~1.9 大牌联合 年货盛宴 [jd_opencard92.js]
+12.31~1.9 大牌联合 年货盛宴 [jd_opencard_nhsy.js]
 新增开卡脚本
 一次性脚本
 
@@ -34,12 +34,12 @@ All变量适用
 ============Quantumultx===============
 [task_local]
 #12.31~1.9 大牌联合 年货盛宴
-2 0,9 31,1-9 12,1 * jd_opencard92.js, tag=12.31~1.9 大牌联合 年货盛宴, enabled=true
+22 0,8 31,1-9 12,1 * jd_opencard_nhsy.js, tag=12.31~1.9 大牌联合 年货盛宴, enabled=true
 
 */
 let opencard_addSku = "true"
 let opencard = "true"
-let openwait = "10"
+let openwait = "15"
 let opencard_draw = "20"
 
 const $ = new Env('12.31~1.9 大牌联合 年货盛宴');
