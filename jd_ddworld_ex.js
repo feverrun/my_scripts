@@ -1,7 +1,6 @@
-
 /**
  东东世界兑换
- cron "0 0,6 * * *" jd_ddworld_exchange.js
+ cron "6 0,18 * * *" jd_ddworld_ex.js
  */
 const $ = new Env("东东世界兑换");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
