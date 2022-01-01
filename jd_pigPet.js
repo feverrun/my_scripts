@@ -53,6 +53,7 @@ let shareId = "LcNasllTozPQpd-Ui0Xlug";
       }
       await jdPigPet();
     }
+    await $.wait(3000)
   }
 
   console.log(`\n======开始大转盘助力======\n`);
@@ -60,10 +61,9 @@ let shareId = "LcNasllTozPQpd-Ui0Xlug";
   for (let j = 0; j < cookiesArr.length; j++) {
     cookie = cookiesArr[j];
     if ($.shareCodes && $.shareCodes.length) {
-      console.log(`\n互助开始\n`);
       for (let item of $.shareCodes) {
         await pigPetLotteryHelpFriend(item)
-        await $.wait(1800)
+        await $.wait(2000)
         // if (!$.canRun) break
       }
     }
@@ -82,19 +82,28 @@ let shareId = "LcNasllTozPQpd-Ui0Xlug";
 async function jdPigPet() {
   try {
     await pigPetLogin();
+    await $.wait(500)
     if (!$.hasPig) return
     await pigPetSignIndex();
+    await $.wait(500)
     await pigPetSign();
+    await $.wait(500)
     await pigPetOpenBox();
+    await $.wait(500)
     await pigPetLotteryIndex();
+    await $.wait(500)
     await pigPetLottery();
+    await $.wait(500)
     if (process.env.JD_PIGPET_PK && process.env.JD_PIGPET_PK === 'true') {
       await pigPetRank();
     }
     await pigPetMissionList();
+    await $.wait(500)
     await missions();
+    await $.wait(500)
     if ($.finish) return
     await pigPetUserBag();
+    await $.wait(500)
   } catch (e) {
     $.logErr(e)
   }
@@ -179,7 +188,7 @@ function pigPetUserBag() {
                       console.log(`\n每次运行最多喂食50次`)
                       do {
                         console.log(`\n10秒后开始喂食${item.goodsName}，当前数量为${item.count}g`)
-                        await $.wait(11000);
+                        await $.wait(12000);
                         await pigPetAddFood(item.sku);
                         if ($.finish) break
                         item.count = item.count - 20

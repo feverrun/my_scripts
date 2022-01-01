@@ -1,7 +1,7 @@
 /*
 #盲盒任务抽京豆，自行加入以下环境变量，多个活动用@连接
 export jd_mhurlList=""
-cron "48 16 * * *" jd_mhtask.js
+cron "28 7,12 * * *" jd_mhtask.js
  */
 
 const $ = new Env('盲盒任务抽京豆');
@@ -15,11 +15,12 @@ if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.jd_mhurlList) jd_mhurlList = process.env.jd_mhurlList
+    jd_mhurlList = process.env.jd_mhurlList ? process.env.jd_mhurlList : "https://anmp.jd.com/babelDiy/Zeus/nANthByMLeuV5LU146QSJTt8dRh/index.html";
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
@@ -30,7 +31,6 @@ if ($.isNode()) {
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
-        i
         cookie = cookiesArr[i];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
         $.index = i + 1;
@@ -57,6 +57,7 @@ if ($.isNode()) {
                 $.logErr(e)
             }
         }
+        await $.wait(2000)
     }
 })()
     .catch((e) => {
@@ -74,7 +75,7 @@ async function jdMh(url) {
         while ($.userInfo.bless >= $.userInfo.cost_bless_one_time) {
             await draw()
             await getUserInfo()
-            await $.wait(500)
+            await $.wait(1500)
         }
         await showMsg();
     } catch (e) {
@@ -127,7 +128,7 @@ function getUserInfo() {
                         if (!$.userInfo.complete_task_list.includes(task['_id'])) {
                             console.log(`去做任务${task['_id']}`)
                             await doTask(task['_id'])
-                            await $.wait(500)
+                            await $.wait(1500)
                         }
                     }
                 }
