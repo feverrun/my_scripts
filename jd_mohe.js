@@ -2,7 +2,7 @@
 5G超级盲盒，可抽奖获得京豆，建议在凌晨0点时运行脚本，白天抽奖基本没有京豆，3小时运行一次收集热力值
 活动地址: https://blindbox5g.jd.com
 活动时间：2021年11月1日00:00:00-2022年1月28日23:59:59
-cron "2 0,1-23/3 * * *" script-path=jd_mohe.js,tag=5G超级盲盒
+cron "33 0,1-23/3 * * *" script-path=jd_mohe.js,tag=5G超级盲盒
  */
 const $ = new Env('5G超级盲盒');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -239,7 +239,7 @@ async function taskList() {
                         console.log('\n\n----taskList的任务全部做完了---\n\n')
                         console.log(`分享好友助力 ${task5.finishNum}/${task5.totalNum}\n\n`)
                     } else {
-                        if ($.taskList_limit >= 15){
+                        if ($.taskList_limit >= 10){
                             console.log('触发死循环保护,结束')
                         } else {
                             console.log(`请继续等待,正在做任务,不要退出哦`)
