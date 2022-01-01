@@ -1,5 +1,5 @@
 /*
-12.31~1.9 大牌联合 年货盛宴 [jd_opencard_nhsy2.js]
+1.1~1.3大牌联合 年货盛宴 [jd_opencard93.js]
 新增开卡脚本
 一次性脚本
 
@@ -7,10 +7,10 @@
 2.开10张卡 成功开1张 有机会获得10豆
 3.关注5京豆
 4.加购5京豆
-  (默认不加购 如需加购请设置环境变量[opencard_addSku92]为"true"
-5.抽奖 (默认不抽奖 如需抽奖请设置环境变量[opencard_draw92]为"3"
+  (默认不加购 如需加购请设置环境变量[opencard_addSku93]为"true"
+5.抽奖 (默认不抽奖 如需抽奖请设置环境变量[opencard_draw93]为"3"
 填写要抽奖的次数 不足已自身次数为准
-opencard_draw92="3"
+opencard_draw93="3"
 填非数字会全都抽奖
 
 第一个账号助力作者 其他依次助力CK1
@@ -21,20 +21,19 @@ opencard_draw92="3"
 opencard93="true"
 每个账号之间延迟 100=延迟100秒 0=延迟0秒会使用每3个账号延迟60秒
 openwait_All 所有
-openwait92="0"
+openwait93="0"
 
 
 All变量适用
 ————————————————
-入口：[ 12.31~1.9 大牌联合 年货盛宴 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkklblzms20211228&shareUuid=848a24b6d93d4790a1ad99423c732a28)]
+入口：[ 1.1~1.3大牌联合 年货盛宴 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkklblzms20211228&shareUuid=848a24b6d93d4790a1ad99423c732a28)]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
-============Quantumultx===============
 [task_local]
-#12.31~1.9 大牌联合 年货盛宴
-2 1,8 1-3 1 * jd_opencard_nhsy2.js, tag=12.31~1.9 大牌联合 年货盛宴, enabled=true
+#1.1~1.3大牌联合 年货盛宴
+32 0,11 1-3 1 * jd_opencard93.js, tag=1.1~1.3大牌联合 年货盛宴, enabled=true
 
 */
 let opencard_addSku = "true"
@@ -49,8 +48,8 @@ let cleanCart = ''
 if($.isNode()){
     try{
         const fs = require('fs');
-        if (fs.existsSync('./cleancart_activity.js')) {
-            cleanCart = require('./cleancart_activity');
+        if (fs.existsSync('./utils/cleancart_activity.js')) {
+            cleanCart = require('./utils/cleancart_activity');
         }
     }catch(e){
     }
@@ -68,14 +67,14 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-opencard_addSku = $.isNode() ? (process.env.opencard_addSku92 ? process.env.opencard_addSku92 : `${opencard_addSku}`) : ($.getdata('opencard_addSku92') ? $.getdata('opencard_addSku92') : `${opencard_addSku}`);
+opencard_addSku = $.isNode() ? (process.env.opencard_addSku93 ? process.env.opencard_addSku93 : `${opencard_addSku}`) : ($.getdata('opencard_addSku93') ? $.getdata('opencard_addSku93') : `${opencard_addSku}`);
 opencard_addSku = $.isNode() ? (process.env.opencard_addSku_All ? process.env.opencard_addSku_All : `${opencard_addSku}`) : ($.getdata('opencard_addSku_All') ? $.getdata('opencard_addSku_All') : `${opencard_addSku}`);
 opencard = $.isNode() ? (process.env.opencard93 ? process.env.opencard93 : `${opencard}`) : ($.getdata('opencard93') ? $.getdata('opencard93') : `${opencard}`);
 opencard = $.isNode() ? (process.env.opencard_All ? process.env.opencard_All : `${opencard}`) : ($.getdata('opencard_All') ? $.getdata('opencard_All') : `${opencard}`);
-openwait = $.isNode() ? (process.env.openwait92 ? process.env.openwait92 : `${openwait}`) : ($.getdata('openwait92') ? $.getdata('openwait92') : `${openwait}`);
+openwait = $.isNode() ? (process.env.openwait93 ? process.env.openwait93 : `${openwait}`) : ($.getdata('openwait93') ? $.getdata('openwait93') : `${openwait}`);
 openwait = $.isNode() ? (process.env.openwait_All ? process.env.openwait_All : `${openwait}`) : ($.getdata('openwait_All') ? $.getdata('openwait_All') : `${openwait}`);
 openwait = parseInt(openwait, 10) || 0
-opencard_draw = $.isNode() ? (process.env.opencard_draw92 ? process.env.opencard_draw92 : opencard_draw) : ($.getdata('opencard_draw92') ? $.getdata('opencard_draw92') : opencard_draw);
+opencard_draw = $.isNode() ? (process.env.opencard_draw93 ? process.env.opencard_draw93 : opencard_draw) : ($.getdata('opencard_draw93') ? $.getdata('opencard_draw93') : opencard_draw);
 opencard_draw = $.isNode() ? (process.env.opencard_draw ? process.env.opencard_draw : opencard_draw) : ($.getdata('opencard_draw') ? $.getdata('opencard_draw') : opencard_draw);
 allMessage = ""
 message = ""
@@ -230,7 +229,7 @@ async function run() {
                     await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717',goodsArr || [ ])
                 }
             }else{
-                console.log('如需加购请设置环境变量[opencard_addSku92]为"true"');
+                console.log('如需加购请设置环境变量[opencard_addSku93]为"true"');
             }
         }
         if(flag){
@@ -254,7 +253,7 @@ async function run() {
                 }
                 await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
             }
-        }else console.log('如需抽奖请设置环境变量[opencard_draw92]为"3" 3为次数');
+        }else console.log('如需抽奖请设置环境变量[opencard_draw93]为"3" 3为次数');
 
         await $.wait(parseInt(Math.random() * 1000 + 2000, 10))
         await takePostRequest('getDrawRecordHasCoupon');

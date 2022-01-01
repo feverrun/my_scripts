@@ -63,13 +63,13 @@ async function jsRedPacket() {
   try {
     await invite2();
     // 极速版签到提现
-    await sign();
+    // await sign();
     await reward_query();
     for (let i = 0; i < 3; ++i) {
-      // 开红包
       await redPacket();
       await $.wait(3000)
     }
+
     // 领红包提现
     await getPacketList();
     await signPrizeDetailList();

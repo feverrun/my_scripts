@@ -1,5 +1,5 @@
 /*
-12.31~1.9 大牌联合 年货盛宴 [jd_opencard_nhsy.js]
+12.31~1.9 大牌联合 年货盛宴 [jd_opencard92.js]
 新增开卡脚本
 一次性脚本
 
@@ -31,12 +31,11 @@ All变量适用
 请求太频繁会被黑ip
 过10分钟再执行
 
-============Quantumultx===============
 [task_local]
 #12.31~1.9 大牌联合 年货盛宴
-22 0,8 31,1-9 12,1 * jd_opencard_nhsy.js, tag=12.31~1.9 大牌联合 年货盛宴, enabled=true
-
+12 0,10 31,1-9 12,1 * jd_opencard92.js, tag=12.31~1.9 大牌联合 年货盛宴, enabled=true
 */
+
 let opencard_addSku = "true"
 let opencard = "true"
 let openwait = "15"
@@ -49,8 +48,8 @@ let cleanCart = ''
 if($.isNode()){
     try{
         const fs = require('fs');
-        if (fs.existsSync('./cleancart_activity.js')) {
-            cleanCart = require('./cleancart_activity');
+        if (fs.existsSync('./utils/cleancart_activity.js')) {
+            cleanCart = require('./utils/cleancart_activity');
         }
     }catch(e){
     }
