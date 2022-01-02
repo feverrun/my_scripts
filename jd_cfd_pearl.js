@@ -1,7 +1,7 @@
 /*
 京喜财富岛合成珍珠
 活动入口：京喜APP-我的-京喜财富岛
-cron "5 0,5-23/3 * * *" jd_cfd_mooncake.js
+cron "3 0,2,4,5 * * *" jd_cfd_pearl.js
  */
 
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
@@ -61,30 +61,6 @@ if ($.isNode()) {
         }
     }
 
-    // $.strMyShareIds = [...(res && res.shareId || [])]
-    await shareCodesFormat()
-    for (let i = 0; i < cookiesArr.length; i++) {
-        cookie = cookiesArr[i];
-        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-        $.canHelp = true
-        UA = UAInfo[$.UserName]
-        if ($.newShareCodes && $.newShareCodes.length) {
-            console.log(`\n开始互助\n`);
-            for (let j = 0; j < $.newShareCodes.length && $.canHelp; j++) {
-                console.log(`账号${$.UserName} 去助力 ${$.newShareCodes[j]}`)
-                $.delcode = false
-                await helpByStage($.newShareCodes[j])
-                await $.wait(2000)
-                if ($.delcode) {
-                    $.newShareCodes.splice(j, 1)
-                    j--
-                    continue
-                }
-            }
-        } else {
-            break
-        }
-    }
     await showMsg();
 })()
     .catch((e) => $.logErr(e))
@@ -121,7 +97,7 @@ async function cfd() {
         console.log(`合成珍珠运行次数为：${count}\n`)
         let num = 0
         do {
-            await $.wait(2000)
+            await $.wait(5000)
             await composePearlState(3)
             num++
         } while (!$.stop && num < count)
@@ -181,8 +157,8 @@ async function composePearlState(type) {
                                         data.PearlList.shift()
                                         let beaconType = beacon.type
                                         if (v % div === 0){
-                                            await realTmReport(data.strMyShareId)
                                             await $.wait(6000)
+                                            await realTmReport(data.strMyShareId)
                                         }
                                         if (beacon.rbf) {
                                             let size = 1
@@ -363,45 +339,6 @@ function pearlHelpDraw(ddwSeasonStartTm, dwUserId) {
     })
 }
 
-// 助力
-function helpByStage(shareCodes) {
-    return new Promise((resolve) => {
-        $.get(taskUrl(`user/PearlHelpByStage`, `__t=${Date.now()}&strShareId=${shareCodes}`), (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} helpbystage API请求失败，请检查网路重试`)
-                } else {
-                    data = JSON.parse(data.replace(/\n/g, "").match(new RegExp(/jsonpCBK.?\((.*);*\)/))[1]);
-                    if (data.iRet === 0 || data.sErrMsg === 'success') {
-                        console.log(`助力成功：获得${data.GuestPrizeInfo.strPrizeName}`)
-                    } else if (data.iRet === 2235 || data.sErrMsg === '今日助力次数达到上限，明天再来帮忙吧~') {
-                        console.log(`助力失败：${data.sErrMsg}`)
-                        $.canHelp = false
-                    } else if (data.iRet === 2232 || data.sErrMsg === '分享链接已过期') {
-                        console.log(`助力失败：${data.sErrMsg}`)
-                        $.delcode = true
-                    } else if (data.iRet === 9999 || data.sErrMsg === '您还没有登录，请先登录哦~') {
-                        console.log(`助力失败：${data.sErrMsg}`)
-                        $.canHelp = false
-                    } else if (data.iRet === 2229 || data.sErrMsg === '助力失败啦~') {
-                        console.log(`助力失败：您的账号已黑`)
-                        $.canHelp = false
-                    } else if (data.iRet === 2190 || data.sErrMsg === '达到助力上限') {
-                        console.log(`助力失败：${data.sErrMsg}`)
-                        $.delcode = true
-                    } else {
-                        console.log(`助力失败：${data.sErrMsg}`)
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
 
 // 获取用户信息
 function getUserInfo(showInvite = true) {
