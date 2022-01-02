@@ -1,10 +1,10 @@
 /*
 女装盲盒
-活动时间：2021-10-31至2021-11-30
-活动地址：https://anmp.jd.com/babelDiy/Zeus/2x36jyruNVDWxUiAiGAgHRrkqVX2/index.html
+活动时间：2022-1-1至2022-1-31
+活动地址：https://anmp.jd.com/babelDiy/Zeus/293owQqRtKfS8cuUhk4YzGFYGw2W/index.html
 活动入口：京东app-女装馆-赢京豆
 已支持IOS双京东账号,Node.js支持N个京东账号
-cron "35 1,23 * * *" script-path=jd_nzmh.js,tag=女装盲盒
+cron "36 0,12 * * *" script-path=jd_nzmh.js,tag=女装盲盒
  */
 
 const $ = new Env('女装盲盒抽京豆');
@@ -25,8 +25,8 @@ if ($.isNode()) {
     return;
   }
   console.log('女装盲盒\n' +
-      '活动时间：2021-12-1至2021-12-31\n' +
-      '活动地址：https://anmp.jd.com/babelDiy/Zeus/2x36jyruNVDWxUiAiGAgHRrkqVX2/index.html');
+      '活动时间：2022-1-1至2022-1-31\n' +
+      '活动地址：https://anmp.jd.com/babelDiy/Zeus/293owQqRtKfS8cuUhk4YzGFYGw2W/index.html');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -40,10 +40,11 @@ if ($.isNode()) {
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
       try {
-        await jdMh('https://anmp.jd.com/babelDiy/Zeus/2x36jyruNVDWxUiAiGAgHRrkqVX2/index.html')
+        await jdMh('https://anmp.jd.com/babelDiy/Zeus/293owQqRtKfS8cuUhk4YzGFYGw2W/index.html')
       } catch (e) {
         $.logErr(e)
       }
+      await $.wait(3000)
     }
   }
 })()
@@ -62,7 +63,7 @@ async function jdMh(url) {
     while ($.userInfo.bless >= $.userInfo.cost_bless_one_time) {
       await draw()
       await getUserInfo()
-      await $.wait(500)
+      await $.wait(1500)
     }
     await showMsg();
   } catch (e) {
