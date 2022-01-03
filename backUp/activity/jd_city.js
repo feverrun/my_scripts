@@ -1,8 +1,7 @@
 /*
 城城领现金
-cron "3 0-23/5,22 * 10 *" jd_city.js, tag=城城领现金, img-url=jd_city.png, enabled=true
+cron "0 0,1,8,12,18,20,22 * 1 *" jd_city.js, tag=城城领现金, img-url=jd_city.png, enabled=true
  */
-
 const $ = new Env('城城领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -11,25 +10,20 @@ let exchangeFlag = $.getdata('JD_CITY_EXCHANGE ') || "false";//是否开启自�
 exchangeFlag = $.isNode() ? (process.env.JD_CITY_EXCHANGE ? process.env.JD_CITY_EXCHANGE : `${exchangeFlag}`) : ($.getdata('JD_CITY_EXCHANGE ') ? $.getdata('JD_CITY_EXCHANGE ') : `${exchangeFlag}`);
 
 // 优先助力[助力池]
-let helpShareFlag = "true";//是否优先助力[助力池]，默认是
+let helpShareFlag = "false";//是否优先助力[助力池]，默认是
 helpShareFlag = $.isNode() ? (process.env.JD_CITY_HELPSHARE ? process.env.JD_CITY_HELPSHARE : `${helpShareFlag}`) : ($.getdata('JD_CITY_HELPSHARE') ? $.getdata('JD_CITY_HELPSHARE') : `${helpShareFlag}`);
-
-
-//IOS等用户直接用NobyDa的jd cookie
+$.inviteIdCodesArr = []
 let cookiesArr = [], cookie = '', message;
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-  };
+  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = [
-]
 let firstCode = "";
 let authorCode = "";
 $.shareCodesArr = [];
@@ -39,18 +33,11 @@ $.shareCodesArr = [];
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  // await requireConfig();
-  // if(helpShareFlag+"" == "true"){
-  //   console.log('脚本优先助力[助力池] 如需开启优先助力[内部账号]，请设置环境变量  JD_CITY_HELPSHARE 为false\n')
-  // }else{
-  //   console.log('脚本优先助力[内部账号] 如需开启优先助力[助力池]，请设置环境变量  JD_CITY_HELPSHARE 为true\n')
-  // }
   if (exchangeFlag + "" == "true") {
     console.log(`脚本自动抽奖`)
   } else {
     console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭(在10.29日自动开启抽奖),如需自动抽奖请设置环境变量  JD_CITY_EXCHANGE 为true`);
   }
-  $.inviteIdCodesArr = {}
   for (let i = 0; i < cookiesArr.length && true; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -60,25 +47,7 @@ $.shareCodesArr = [];
       await getInviteId();
     }
   }
-  if (Object.getOwnPropertyNames($.inviteIdCodesArr).length > 0) {
-    for (let i = 0; i < cookiesArr.length && true; i++) {
-      if (cookiesArr[i]) {
-        cookie = cookiesArr[i];
-        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-        $.index = i + 1;
-        let code = []
-        if (i == 0) {
-          firstCode = $.inviteIdCodesArr[0];
-        }
-        // for (let s = 0; s < cookiesArr.length && true; s++) {
-        //   if(s != $.index - 1 && $.inviteIdCodesArr[s]) code.push($.inviteIdCodesArr[s])
-        // }
 
-        // if(code.length > 0) $.shareCodesArr.push(code.join('@'))
-      }
-    }
-
-  }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -185,7 +154,7 @@ function getInviteId() {
               if (data.data && data['data']['bizCode'] === 0) {
                 if (data.data && data.data.result.userActBaseInfo.inviteId) {
                   console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
-                  $.inviteIdCodesArr[$.index - 1] = data.data.result.userActBaseInfo.inviteId
+                  $.inviteIdCodesArr.push = data.data.result.userActBaseInfo.inviteId
                 }
               } else {
                 console.log(`\n\n获取邀请码失败:${data.data.bizMsg}`)
@@ -413,57 +382,17 @@ function readShareCode() {
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
-    // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     $.newShareCodes = [];
-    // if (helpShareFlag + "" != "true") {
-    //   if ($.shareCodesArr[$.index - 1]) {
-    //     $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-    //   }
-    // }
-    // if($.index == 1) $.newShareCodes = [...inviteCodes,...$.newShareCodes]
     try {
       const readShareCodeRes = await readShareCode();
       if (readShareCodeRes && readShareCodeRes.code === 0) {
-        // 只助力作者和自己第一个账号
-        $.newShareCodes = []; //[firstCode, authorCode];
-        $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+        $.ownCodes = []; //[firstCode, authorCode];
+        $.newShareCodes = [...new Set([...$.inviteIdCodesArr, ...(readShareCodeRes.data || [])])];
       }
     } catch (e) {
       console.log(e);
     }
-    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
-  })
-}
-
-function requireConfig() {
-  return new Promise(resolve => {
-    console.log(`开始获取${$.name}配置文件\n`);
-    //Node.js用户请在jdCookie.js处填写京东ck;
-    let shareCodes = [];
-    if ($.isNode()) {
-      if (process.env.JD_CITY_EXCHANGE) {
-        exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
-      }
-      if (process.env.CITY_SHARECODES) {
-        if (process.env.CITY_SHARECODES.indexOf('\n') > -1) {
-          shareCodes = process.env.CITY_SHARECODES.split('\n');
-        } else {
-          shareCodes = process.env.CITY_SHARECODES.split('&');
-        }
-      }
-    }
-    console.log(`共${cookiesArr.length}个京东账号\n`);
-    $.shareCodesArr = [];
-    if ($.isNode()) {
-      Object.keys(shareCodes).forEach((item) => {
-        if (shareCodes[item]) {
-          $.shareCodesArr.push(shareCodes[item])
-        }
-      })
-    }
-    console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
-    resolve()
   })
 }
 

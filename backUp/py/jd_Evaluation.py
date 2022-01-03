@@ -397,12 +397,7 @@ def start():
                     'orderId': da['oid'],
                     'content': context,
                     'userclient': 29,
-                    'imageJson': random.sample(
-                        ['//img10.360buyimg.com/shaidan/s645x515_jfs/t…5601/29741/619f3006Ed48af8cd/e78dc083a1293bdd.jpg', '//img13.360buyimg.com/shaidan/s645x515_jfs/t…5695/69929/619f3007E7a54e586/00a465072aed1485.jpg',
-                        '//img30.360buyimg.com/shaidan/s645x515_jfs/t…1610/83098/619f3007Ee47b830d/978776a0b978eaa9.jpg',
-                        '//img10.360buyimg.com/shaidan/s645x515_jfs/t…7037/54889/619f3007Eefa89588/c2393bbbda622cc5.jpg',
-                        '//img13.360buyimg.com/shaidan/s645x515_jfs/t…1163/40064/619f3007Ea141143d/73250aa354de7786.jpg',
-                        '//img10.360buyimg.com/shaidan/s645x515_jfs/t…1400/65152/619f3008E7f518459/2390d27ee9a3fb61.jpg'], 1)
+                    'imageJson': random.sample([''], 1)
                 }
                 req = requests.post(url, headers=headers, data=data)
                 if req.json()['data']['result'] != {}:
@@ -418,24 +413,27 @@ def start():
     global cookiesList, userNameList, pinNameList, ckNum, beanCount, userCount
     cookiesList, userNameList, pinNameList = getCk.iscookie()
 
-    for i,ck,user,pin in zip(range(1,len(cookiesList)+1),cookiesList,userNameList,pinNameList):
-        if pin in NeedEvaluation or len(NeedEvaluation) == 0:
-            printf(f"** 开始[账号{i}]-{user} **")
-            headers = {
-                'cookie': ck,
-                'user-agent': 'jdltapp;android;1.0.0;9;860105045422157-bce2658d9db5;network/wifi;model/JKM-AL00a;addressid/0;aid/5d84f5872ec4e5c8;oaid/51fe75e7-7e5d-aefc-fbed-ffffdf7f6bd2;osVer/28;appBuild/694;psn/860105045422157-bce2658d9db5|3;psq/26;uid/860105045422157-bce2658d9db5;adk/;ads/;pap/JA2020_3112531|1.0.0|ANDROID',
-            }
-            Cent[f'账号{i}[{user}]'] = {'评价':0 , '晒单':0, '服务评价':0}
-            printf('开始评价与服务评价！')
-            ordinary(headers, f'账号{i}[{user}]')
-            printf('开始晒单！')
-            sunbw(headers, f'账号{i}[{user}]')
-            printf('完成！！。等待10秒')
-            time.sleep(10)
-    msg = ''
-    for i in Cent:
-        msg += f'{i}\n{Cent[i]}\n\n'
-    send('京东全自动评价',msg)
+    try:
+        for i,ck,user,pin in zip(range(1,len(cookiesList)+1),cookiesList,userNameList,pinNameList):
+            if pin in NeedEvaluation or len(NeedEvaluation) == 0:
+                printf(f"** 开始[账号{i}]-{user} **")
+                headers = {
+                    'cookie': ck,
+                    'user-agent': 'jdltapp;android;1.0.0;9;860105045422157-bce2658d9db5;network/wifi;model/JKM-AL00a;addressid/0;aid/5d84f5872ec4e5c8;oaid/51fe75e7-7e5d-aefc-fbed-ffffdf7f6bd2;osVer/28;appBuild/694;psn/860105045422157-bce2658d9db5|3;psq/26;uid/860105045422157-bce2658d9db5;adk/;ads/;pap/JA2020_3112531|1.0.0|ANDROID',
+                }
+                Cent[f'账号{i}[{user}]'] = {'评价':0 , '晒单':0, '服务评价':0}
+                printf('开始评价与服务评价！')
+                ordinary(headers, f'账号{i}[{user}]')
+                printf('开始晒单！')
+                sunbw(headers, f'账号{i}[{user}]')
+                printf('完成！！。等待10秒')
+                time.sleep(10)
+        msg = ''
+        for i in Cent:
+            msg += f'{i}\n{Cent[i]}\n\n'
+        send('京东全自动评价',msg)
+    except Exception as e:
+        pass
 
 
 
