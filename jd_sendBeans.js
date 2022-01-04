@@ -53,7 +53,7 @@ if ($.isNode()) {
   }
 
   let openCount = Math.floor((Number(cookiesArr.length) - 1) / Number($.completeNumbers));
-  if (cookiesArr.length < $.completeNumbers) {
+  if (cookiesArr.length <= $.completeNumbers) {
     console.log('一个团需要'+$.completeNumbers+'个助力,你的账号不满足最低开团条件')
     if (cookiesArr.length >= 3) {
       openCount = 1;

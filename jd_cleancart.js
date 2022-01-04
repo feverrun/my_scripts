@@ -20,7 +20,7 @@ if ($.isNode()) {
     cookiesArr.reverse();
     cookiesArr = cookiesArr.filter(item => !!item);
 }
-let removeSize = process.env.JD_CART_REMOVESIZE || 20;      // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
+//let removeSize = process.env.JD_CART_REMOVESIZE || 20;      // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
 let isRemoveAll = process.env.JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
 $.keywords = process.env.JD_CART_KEYWORDS || []
 $.keywordsNum = 0;
@@ -50,11 +50,15 @@ $.keywordsNum = 0;
             await requireConfig();
             do {
                 await getCart();
+                await $.wait(500);
                 $.keywordsNum = 0
                 if($.beforeRemove !== "0"){
                     await cartFilter(venderCart);
-                    if(parseInt($.beforeRemove) !== $.keywordsNum) await removeCart();
-                    else {
+                    await $.wait(500)
+                    if(parseInt($.beforeRemove) !== $.keywordsNum) {
+                        await removeCart();
+                        await $.wait(1500)
+                    } else {
                         console.log('由于购物车内的商品均包含关键字，本次执行将不删除购物车数据')
                         break;
                     }
@@ -114,41 +118,45 @@ function getCart(){
 
 function cartFilter(cartData){
     console.log("正在整理数据...")
-    let pid;
-    $.pushed = 0
-    for(let cartJson of cartData){
-        if($.pushed === removeSize) break;
-        for(let sortedItem of cartJson.sortedItems){
-            if($.pushed === removeSize) break;
-            pid = typeof (sortedItem.polyItem.promotion) !== "undefined" ? sortedItem.polyItem.promotion.pid : ""
-            for(let product of sortedItem.polyItem.products){
-                if($.pushed === removeSize) break;
-                let mainSkuName = product.mainSku.name
-                $.isKeyword = false
-                $.isPush = true
-                for(let keyword of $.keywords){
-                    if(mainSkuName.indexOf(keyword) !== -1){
-                        $.keywordsNum += 1
-                        $.isPush = false
-                        $.keyword = keyword;
-                        break;
-                    } else $.isPush = true
-                }
-                if($.isPush){
-                    let skuUuid = product.skuUuid;
-                    let mainSkuId = product.mainSku.id
-                    if(pid === "") postBody += `${mainSkuId},,1,${mainSkuId},1,,0,skuUuid:${skuUuid}@@useUuid:0$`
-                    else postBody += `${mainSkuId},,1,${mainSkuId},11,${pid},0,skuUuid:${skuUuid}@@useUuid:0$`
-                    $.pushed += 1;
-                } else {
-                    console.log(`\n${mainSkuName}`)
-                    console.log(`商品已被过滤，原因：包含关键字 ${$.keyword}`)
-                    $.isKeyword = true
+    return new Promise((resolve) => {
+        let pid;
+        // $.pushed = 0
+        for(let cartJson of cartData){
+            // if($.pushed === removeSize) break;
+            for(let sortedItem of cartJson.sortedItems){
+                // if($.pushed === removeSize) break;
+                pid = typeof (sortedItem.polyItem.promotion) !== "undefined" ? sortedItem.polyItem.promotion.pid : ""
+                for(let product of sortedItem.polyItem.products){
+                    // if($.pushed === removeSize) break;
+                    let mainSkuName = product.mainSku.name
+                    $.isKeyword = false
+                    $.isPush = true
+                    for(let keyword of $.keywords){
+                        if(mainSkuName.indexOf(keyword) !== -1){
+                            $.keywordsNum += 1
+                            $.isPush = false
+                            $.keyword = keyword;
+                            break;
+                        } else $.isPush = true
+                    }
+                    if($.isPush){
+                        let skuUuid = product.skuUuid;
+                        let mainSkuId = product.mainSku.id
+                        if(pid === "") postBody += `${mainSkuId},,1,${mainSkuId},1,,0,skuUuid:${skuUuid}@@useUuid:0$`
+                        else postBody += `${mainSkuId},,1,${mainSkuId},11,${pid},0,skuUuid:${skuUuid}@@useUuid:0$`
+                        // $.pushed += 1;
+                    } else {
+                        console.log(`\n${mainSkuName}`)
+                        console.log(`商品已被过滤，原因：包含关键字 ${$.keyword}`)
+                        $.isKeyword = true
+                    }
                 }
             }
         }
-    }
-    postBody += `&type=0&checked=0&locationid=${$.areaId}&templete=1&reg=1&scene=0&version=20190418&traceid=${$.traceId}&tabMenuType=1&sceneval=2`
+        postBody += `&type=0&checked=0&locationid=${$.areaId}&templete=1&reg=1&scene=0&version=20190418&traceid=${$.traceId}&tabMenuType=1&sceneval=2`
+        resolve(postBody);
+    });
+
 }
 function removeCart(){
     console.log('正在删除购物车数据...')
