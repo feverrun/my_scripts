@@ -60,9 +60,8 @@ $.keywordsNum = 0;
                     }
                 } else break;
             } while(isRemoveAll && $.keywordsNum !== $.beforeRemove)
-            if ($.bean > 0) {
-                message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
-            }
+
+           await $.wait(3000)
         }
     }
 })()
@@ -95,7 +94,9 @@ function getCart(){
         }
         $.get(option, async(err, resp, data) => {
             try{
-                data = JSON.parse(getSubstr(data, "window.cartData = ", "window._PFM_TIMING"));
+                data = getSubstr(data, "window.cartData = ", "window._PFM_TIMING");
+                data = data.replace(/\s+/g,'');
+                data = JSON.parse(data);
                 $.areaId = data.areaId;   // locationId的传值
                 $.traceId = data.traceId; // traceid的传值
                 venderCart = data.cart.venderCart;
@@ -110,6 +111,7 @@ function getCart(){
         });
     })
 }
+
 function cartFilter(cartData){
     console.log("正在整理数据...")
     let pid;
