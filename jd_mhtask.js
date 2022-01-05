@@ -7,7 +7,7 @@ cron "28 7,12 * * *" jd_mhtask.js
 const $ = new Env('盲盒任务抽京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let cookiesArr = [], cookie = '', message;
+let cookiesArr = [], cookie = '', message, allMessage;
 let jd_mhurlList = '';
 let jd_mhurlArr = [];
 let jd_mhurl = '';
@@ -59,6 +59,10 @@ if ($.isNode()) {
         }
         await $.wait(2000)
     }
+    if (allMessage) {
+        if ($.isNode()) await notify.sendNotify(`${$.name}`, `${allMessage}`);
+        $.msg($.name, '', allMessage);
+    }
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -87,6 +91,7 @@ function showMsg() {
     return new Promise(resolve => {
         if ($.beans) {
             message += `本次运行获得${$.beans}京豆`
+            allMessage += `京东账号${$.index}-${$.nickName}：   获得【${$.beans}】京豆\n`
             $.msg($.name, '', `京东账号${$.index}${$.nickName}\n${message}`);
         }
         resolve()
