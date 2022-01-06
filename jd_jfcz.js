@@ -55,7 +55,7 @@ if ($.isNode()) {
             await getNeedleLevelInfo();
 
             console.log('当前关卡: ',needleLevel+"/"+totalLevel)
-            await $.wait(500);
+            await $.wait(1500);
             for (let i = needleLevel; i <= totalLevel; i++) {
                 if (stop){
                     console.log('关卡异常下个')
@@ -63,6 +63,7 @@ if ($.isNode()) {
                 }
                 await getNeedleLevelInfo(needleLevel);
                 console.log('当前关卡: ',needleLevel+"/"+totalLevel)
+                await $.wait(1500);
                 if (stop){
                     console.log('关卡异常下个')
                     break
