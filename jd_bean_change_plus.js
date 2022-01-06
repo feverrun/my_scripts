@@ -169,10 +169,6 @@ if ($.isNode()) {
     return;
   }
 
-  await requestAlgo();
-  if (DisableCash == "false") {
-    await jdCash();
-  }
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
   for (i = 0; i < cookiesArr.length; i++) {
       cookie = cookiesArr[i];
@@ -238,6 +234,10 @@ if ($.isNode()) {
         continue
       }
 
+      await requestAlgo();
+      if (DisableCash == "false") {
+        await jdCash();
+      }
       await getJoyBaseInfo();
       await getJdZZ();
       await getMs();
@@ -286,6 +286,8 @@ if ($.isNode()) {
           allMessageMonth = "";
         }
       }
+
+      await $.wait(5000)
   }
 
   //组1通知
@@ -2223,7 +2225,7 @@ async function requestAlgo() {
       "expandParams": ""
     })
   }
-  new Promise(async resolve => {
+  return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
