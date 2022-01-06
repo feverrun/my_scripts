@@ -32,6 +32,8 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
+
+    cookiesArr = cookiesArr.slice(0, 5)
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             totalLevel = 400
@@ -69,10 +71,10 @@ if ($.isNode()) {
                     break
                 }
                 await saveNeedleLevelInfo(needleLevel);
-                await $.wait(3000);
+                await $.wait(15000);
             }
             await needleMyPrize()
-            await $.wait(3500)
+            await $.wait(5000)
         }
     }
     if ($.isNode() && allMessage) {

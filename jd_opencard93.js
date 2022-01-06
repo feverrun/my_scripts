@@ -32,7 +32,7 @@ All变量适用
 
 [task_local]
 #1.6～1.31 会员狂欢日
-23 0,15 6-31 1 * jd_opencard93.js, tag=1.6～1.31 会员狂欢日, enabled=true
+23 0,11 6-31 1 * jd_opencard93.js, tag=1.6～1.31 会员狂欢日, enabled=true
 
 */
 let opencard_addSku = "true"
