@@ -42,7 +42,7 @@ if($.isNode()){
         await bean();
         await totalBean();
         message += `${$.index}：${$.jdName}\n`
-        console.log(`${$.index}：${$.jdName}`)
+        console.log(`账号${$.index}🆔：${$.jdName}`)
         message += `今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆\n`
         console.log(`今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆`)
         message += `昨日收支：${$.yestodayIncome}京豆 | ${$.yestodayExpenditure}京豆\n`
