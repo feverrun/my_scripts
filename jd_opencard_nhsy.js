@@ -1,7 +1,7 @@
 /*
 集“年味卡”，享年货盛宴
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=cd2022n4ci22tlj1s2w3245u1mk&shareUuid=1a8d1fd0b1894819b99cffa1620064ab
-cron "11 1,15 5-16 1 *" jd_opencard_nhsy
+cron "11 0,15 5-16 1 *" jd_opencard_nhsy
 */
 const $ = new Env("集“年味卡”，享年货盛宴");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
