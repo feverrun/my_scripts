@@ -1,21 +1,57 @@
 /*
-https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=
-
-不能并发
-
-JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
-JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
-cron "5 7,17 * * *" jd_wxCollectionActivity.js
+说明: 超级无线店铺签到
+不能并发,超级无线黑号不能跑,建议别跑太多号
+环境变量:
+SEVENDAY_LIST,SEVENDAY_LIST2,SEVENDAY_LIST3
+6 0,17 * * * jd_sevenDay.js
 */
-const $ = new Env('加购物车抽奖');
+const $ = new Env('超级无线店铺签到');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-let cookiesArr = [], cookie = '', message = '' ,isPush = false;
-let activityIdList = ['11b4d4d13fa24062bb0cb45c0abd3301', 'f0ffa62f09f6447b8fcfddaeafd15810', '421c0b9e90f2423d8ef980c2508bc7b2', 'c475a9c7b08545b9b359d1a97f14ec8c', '47d527740de74ed88f65e946b4d0500a', '4363aec53aac44309e8afa5cf58ce950']
+let cookiesArr = [], cookie = '', message = '';
+// https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=
+let activityIdList = [
+    'eaf0e5313fa1484db90c3fc467af33e5',
+    'f3207d49ac8e4fcfbd542befc1338916',
+    'ba2d672b1fc44814aef1c3ee4c3ac5fa',
+    'f46601936b40496b97a85de2b5ab97eb',
+    '13126645fcb2477fa1090a94cb7f3ca2',
+    '202f8daefb63452ebcdd68ef2d3db135',
+    '3a9885564c6a4633b55b6bfcd083d3a4',
+    'e181d252d0354331ad6226c407745ad6',
+    '52a339445cba489f8df00cf18666d2be',
+    'eaf0e5313fa1484db90c3fc467af33e5',
+]
+// https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=
+let activityIdList2 = [
+    'af38e0ae3c534e5882a2c29cbd08a355',
+    '478c9f15a4fc43f691db0451d956cfef',
+    'b688a802471443d092343821a8403531',
+    'ab51ff694beb41948a554aade50d5608',
+    '462aae0d426443cd962257afce4b760f',
+    'c3fde07f69bb43e79f12686013b45f8b',
+    'd7d28539c7e54d0896cec5089f1b82f2',
+    'e170e27eb0374b01bfed88138a82f968',
+    'bea32e6d4a6749ec98a990dbf276278f',
+    '7fb38e10addf49b487c84f579971cbd4',
+    '393ddb3a8ce04f19aed59fb458e2425f',
+    'cbf22d6dfbde42ac98fb3f693530132e',
+    '2a20095bf87e408bb70fdf537ea3f57f',
+]
+let activityIdList3 = [
+    '456de0f620024cbda71e9a9cbaaf95e1',
+    '0dee39bb7c9b48828d8cdc08af4875e7',
+]
 let lz_cookie = {}
 
-if (process.env.ACTIVITY_ID && process.env.ACTIVITY_ID != "") {
-    activityId = process.env.ACTIVITY_ID;
+if (process.env.SEVENDAY_LIST && process.env.SEVENDAY_LIST != "") {
+    activityIdList = process.env.SEVENDAY_LIST.split(',');
+}
+if (process.env.SEVENDAY_LIST2 && process.env.SEVENDAY_LIST2 != "") {
+    activityIdList2 = process.env.SEVENDAY_LIST.split(',');
+}
+if (process.env.SEVENDAY_LIST3 && process.env.SEVENDAY_LIST3 != "") {
+    activityIdList3 = process.env.SEVENDAY_LIST.split(',');
 }
 
 if ($.isNode()) {
@@ -32,61 +68,57 @@ if ($.isNode()) {
     cookiesArr.reverse();
     cookiesArr = cookiesArr.filter(item => !!item);
 }
-let doPush = process.env.DoPush || true; // 设置为 false 每次推送, true 跑完了推送
-let removeSize = process.env.JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
-let isRemoveAll = process.env.JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
-$.keywords = process.env.JD_CART_KEYWORDS || []
-$.keywordsNum = 0;
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    // activityIdList = await getActivityIdList('https://raw.githubusercontent.com/FKPYW/dongge/master/code/wxCollectionActivity.json')
-    for(let a in activityIdList){
-        activityId = activityIdList[a];
-        console.log("开起第 "+ a +" 个活动，活动id："+activityId)
-        for (let i = 0; i < cookiesArr.length; i++) {
-            if (cookiesArr[i]) {
-                cookie = cookiesArr[i]
-                originCookie = cookiesArr[i]
-                newCookie = ''
-                $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
-                $.index = i + 1;
-                $.isLogin = true;
-                $.nickName = '';
-                await checkCookie();
-                console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-                if (!$.isLogin) {
-                    $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-                    if ($.isNode()) {
-                        await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                    }
-                    continue
+    for (let i = 0; i < cookiesArr.length; i++) {
+        if (cookiesArr[i]) {
+            cookie = cookiesArr[i]
+            originCookie = cookiesArr[i]
+            newCookie = ''
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+            $.index = i + 1;
+            $.isLogin = true;
+            $.nickName = '';
+            await checkCookie();
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+                if ($.isNode()) {
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
-                authorCodeList = ['',]
-                $.bean = 0;
-                $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
-                $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                $.authorCode = authorCodeList[random(0, authorCodeList.length)]
-                $.authorNum = `${random(1000000, 9999999)}`
-                $.activityId = activityId
-                $.activityUrl = `https://lzkj-isv.isvjcloud.com/wxCollectionActivity/activity2/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&sid=&un_area=`
-                $.drawInfoName = false
-                $.getPrize = null;
-                await addCart();
-                if($.drawInfoName === false || $.getPrize === null){
-                    break
-                } else if($.getPrize != null && !$.getPrize.includes("京豆")){
-                    break
-                }
+                continue
+            }
+            $.bean = 0;
+            $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
+            $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+            console.log("签到类型1")
+            for(let a in activityIdList){
+                $.activityUrl = `https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
+                $.activityId = activityIdList[a];
+                await signActivity();
                 await $.wait(3000)
-                if ($.bean > 0) {
-                    message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
-                }
+            }
+            console.log("签到类型2")
+            for(let a in activityIdList2){
+                $.activityUrl = `https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
+                $.activityId = activityIdList2[a];
+                await signActivity2();
+                await $.wait(3000)
+            }
+            console.log("签到类型3")
+            for(let a in activityIdList3){
+                $.activityUrl = `https://cjhy-isv.isvjcloud.com/sign/signActivity?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
+                $.activityId = activityIdList3[a];
+                await signActivity3();
+                await $.wait(3000)
+            }
+            if ($.bean > 0) {
+                message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
             }
         }
-        await $.wait(3000)
     }
     if (message !== '') {
         if ($.isNode()) {
@@ -104,7 +136,7 @@ $.keywordsNum = 0;
     })
 
 
-async function addCart() {
+async function signActivity() {
     $.token = null;
     $.secretPin = null;
     $.venderId = null;
@@ -114,21 +146,51 @@ async function addCart() {
     if ($.token) {
         await getMyPing();
         if ($.secretPin) {
-            await task('common/accessLogWithAD', `venderId=${$.venderId}&code=6&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
-            // await task('wxActionCommon/getUserInfo', `pin=${encodeURIComponent($.secretPin)}`, 1)
-            await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
-            if ($.activityContent.drawInfo.name.includes("京豆")) {
-                $.log("-> 加入购物车")
-                for(let i in $.activityContent.cpvos){
-                    await $.wait(1000)
-                    await task('addCart', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&productId=${$.activityContent.cpvos[i].skuId}`)
-                }
-                $.log("-> 抽奖")
-                await $.wait(1000)
-                await task('getPrize', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`)
-            } else {
-                $.log("未能成功获取到活动信息")
-            }
+            await task('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
+            console.log(`签到 -> ${$.activityId}`)
+            await task('sign/sevenDay/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
+        } else {
+            $.log("没有成功获取到用户信息")
+        }
+    } else {
+        $.log("没有成功获取到用户鉴权信息")
+    }
+}
+
+async function signActivity2() {
+    $.token = null;
+    $.secretPin = null;
+    $.venderId = null;
+    await getFirstLZCK()
+    await getToken();
+    await task('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
+    if ($.token) {
+        await getMyPing();
+        if ($.secretPin) {
+            await task('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
+            console.log(`签到 -> ${$.activityId}`)
+            await task('sign/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
+        } else {
+            $.log("没有成功获取到用户信息")
+        }
+    } else {
+        $.log("没有成功获取到用户鉴权信息")
+    }
+}
+
+async function signActivity3() {
+    $.token = null;
+    $.secretPin = null;
+    $.venderId = null;
+    await getFirstLZCK()
+    await getToken();
+    await task2('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
+    if ($.token) {
+        await getMyPing2();
+        if ($.secretPin) {
+            await task2('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
+            console.log(`签到 -> ${$.activityId}`)
+            await task2('sign/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
         } else {
             $.log("没有成功获取到用户信息")
         }
@@ -156,29 +218,37 @@ function task(function_id, body, isCommon = 0) {
                                 cookie += vo + '=' + lz_cookie[vo] + ';'
                             }
                         }
-                        if (data.result) {
+                        if (data) {
                             switch (function_id) {
                                 case 'customer/getSimpleActInfoVo':
+                                    $.activityId = data.data.activityId;
                                     $.jdActivityId = data.data.jdActivityId;
                                     $.venderId = data.data.venderId;
-                                    $.activityShopId = data.data.venderId;
+                                    $.shopId = data.data.shopId;
+                                    $.activityType = data.data.activityType;
                                     break;
-                                case 'activityContent':
-                                    $.activityContent = data.data;
-                                    $.drawInfoName = $.activityContent.drawInfo.name.includes("京豆")
-                                    break;
-                                case 'addCart':
-                                    console.log(data.data)
-                                    break
-                                case 'getPrize':
-                                    console.log(data.data.name)
-                                    $.getPrize = data.data.name;
-                                    if (doPush === true) {
-                                        if (data.data.name) {
-                                            message += data.data.name + " "
+                                case 'sign/sevenDay/wx/signUp':
+                                    if(data){
+                                        if (data.isOk) {
+                                            console.log("签到成功");
+                                            if (data.signResult.giftName) {
+                                                console.log(data.signResult.giftName);
+                                            }
+                                        } else {
+                                            console.log(data.msg);
                                         }
-                                    } else {
-                                        // await notify.sendNotify($.name, data.data.name, '', `\n`);
+                                    }
+                                    break
+                                case 'sign/wx/signUp':
+                                    if(data){
+                                        if (data.isOk) {
+                                            console.log("签到成功");
+                                            if (data.gift.giftName) {
+                                                console.log(data.gift.giftName);
+                                            }
+                                        } else {
+                                            console.log(data.msg);
+                                        }
                                     }
                                     break
                                 default:
@@ -186,8 +256,73 @@ function task(function_id, body, isCommon = 0) {
                                     break;
                             }
                         }
-                    } else {
-                        // $.log("京东没有返回数据")
+                    }
+                }
+            } catch (error) {
+                $.log(error)
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
+function task2(function_id, body, isCommon = 0) {
+    return new Promise(resolve => {
+        $.post(taskUrl2(function_id, body, isCommon), async (err, resp, data) => {
+            try {
+                if (err) {
+                    $.log(err)
+                } else {
+
+                    if (data) {
+                        data = JSON.parse(data);
+                        if (resp['headers']['set-cookie']) {
+                            cookie = `${originCookie};`
+                            for (let sk of resp['headers']['set-cookie']) {
+                                lz_cookie[sk.split(";")[0].substr(0, sk.split(";")[0].indexOf("="))] = sk.split(";")[0].substr(sk.split(";")[0].indexOf("=") + 1)
+                            }
+                            for (const vo of Object.keys(lz_cookie)) {
+                                cookie += vo + '=' + lz_cookie[vo] + ';'
+                            }
+                        }
+                        if (data) {
+                            switch (function_id) {
+                                case 'customer/getSimpleActInfoVo':
+                                    $.activityId = data.data.activityId;
+                                    $.jdActivityId = data.data.jdActivityId;
+                                    $.venderId = data.data.venderId;
+                                    $.shopId = data.data.shopId;
+                                    $.activityType = data.data.activityType;
+                                    break;
+                                case 'sign/sevenDay/wx/signUp':
+                                    if(data){
+                                        if (data.isOk) {
+                                            console.log("签到成功");
+                                            if (data.signResult.giftName) {
+                                                console.log(data.signResult.giftName);
+                                            }
+                                        } else {
+                                            console.log(data.msg);
+                                        }
+                                    }
+                                    break
+                                case 'sign/wx/signUp':
+                                    if(data){
+                                        if (data.isOk) {
+                                            console.log("签到成功");
+                                            if (data.gift.giftName) {
+                                                console.log(data.gift.giftName);
+                                            }
+                                        } else {
+                                            console.log(data.msg);
+                                        }
+                                    }
+                                    break
+                                default:
+                                    $.log(JSON.stringify(data))
+                                    break;
+                            }
+                        }
                     }
                 }
             } catch (error) {
@@ -200,7 +335,7 @@ function task(function_id, body, isCommon = 0) {
 }
 function taskUrl(function_id, body, isCommon) {
     return {
-        url: isCommon ? `https://lzkj-isv.isvjcloud.com/${function_id}` : `https://lzkj-isv.isvjcloud.com/wxCollectionActivity/${function_id}`,
+        url: isCommon ? `https://lzkj-isv.isvjcloud.com/${function_id}` : `https://lzkj-isv.isvjcloud.com/sign/wx/${function_id}`,
         headers: {
             Host: 'lzkj-isv.isvjcloud.com',
             Accept: 'application/json',
@@ -209,6 +344,26 @@ function taskUrl(function_id, body, isCommon) {
             'Accept-Encoding': 'gzip, deflate, br',
             'Content-Type': 'application/x-www-form-urlencoded',
             Origin: 'https://lzkj-isv.isvjcloud.comm',
+            'User-Agent': `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
+            Connection: 'keep-alive',
+            Referer: $.activityUrl,
+            Cookie: cookie
+        },
+        body: body
+
+    }
+}
+function taskUrl2(function_id, body, isCommon) {
+    return {
+        url: isCommon ? `https://cjhy-isv.isvjcloud.com/${function_id}` : `https://cjhy-isv.isvjcloud.com/sign/wx/${function_id}`,
+        headers: {
+            Host: 'cjhy-isv.isvjcloud.com',
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept-Language': 'zh-cn',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Origin: 'https://cjhy-isv.isvjcloud.comm',
             'User-Agent': `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
             Connection: 'keep-alive',
             Referer: $.activityUrl,
@@ -235,7 +390,62 @@ function getMyPing() {
             Referer: $.activityUrl,
             Cookie: cookie,
         },
-        body: `userId=${$.activityShopId}&token=${$.token}&fromType=APP&riskType=1`
+        body: `userId=${$.venderId}&token=${$.token}&fromType=APP`
+    }
+    return new Promise(resolve => {
+        $.post(opt, (err, resp, data) => {
+            try {
+                if (err) {
+                    $.log(err)
+                } else {
+                    if (resp['headers']['set-cookie']) {
+                        cookie = `${originCookie};`
+                        for (let sk of resp['headers']['set-cookie']) {
+                            lz_cookie[sk.split(";")[0].substr(0, sk.split(";")[0].indexOf("="))] = sk.split(";")[0].substr(sk.split(";")[0].indexOf("=") + 1)
+                        }
+                        for (const vo of Object.keys(lz_cookie)) {
+                            cookie += vo + '=' + lz_cookie[vo] + ';'
+                        }
+                    }
+                    if (data) {
+                        data = JSON.parse(data)
+                        if (data.result) {
+                            $.log(`你好：${data.data.nickname}`)
+                            $.pin = data.data.nickname;
+                            $.secretPin = data.data.secretPin;
+                        } else {
+                            $.log(data.errorMessage)
+                        }
+                    } else {
+                        $.log("京东返回了空数据")
+                    }
+                }
+            } catch (error) {
+                $.log(error)
+            } finally {
+                resolve();
+            }
+
+        })
+    })
+}
+function getMyPing2() {
+    let opt = {
+        url: `https://cjhy-isv.isvjcloud.com/customer/getMyPing`,
+        headers: {
+            Host: 'cjhy-isv.isvjcloud.com',
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept-Language': 'zh-cn',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Origin: 'https://cjhy-isv.isvjcloud.com',
+            'User-Agent': `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
+            Connection: 'keep-alive',
+            Referer: $.activityUrl,
+            Cookie: cookie,
+        },
+        body: `userId=${$.venderId}&token=${$.token}&fromType=APP&riskType=1`
     }
     return new Promise(resolve => {
         $.post(opt, (err, resp, data) => {
@@ -341,142 +551,6 @@ function random(min, max) {
 
     return Math.floor(Math.random() * (max - min)) + min;
 
-}
-function requireConfig(){
-    return new Promise(resolve => {
-        if($.isNode() && process.env.JD_CART){
-            if(process.env.JD_CART_KEYWORDS){
-                $.keywords = process.env.JD_CART_KEYWORDS.split('@')
-            }
-        }
-        resolve()
-    })
-}
-function getCart(){
-    console.log('正在获取购物车数据...')
-    return new Promise((resolve) => {
-        const option = {
-            url: 'https://p.m.jd.com/cart/cart.action?fromnav=1&sceneval=2',
-            headers: {
-                "Cookie": cookie,
-                "User-Agent": "jdapp;JD4iPhone/167724 (iPhone; iOS 15.0; Scale/3.00)",
-            },
-        }
-        $.get(option, async(err, resp, data) => {
-            try{
-                data = JSON.parse(getSubstr(data, "window.cartData = ", "window._PFM_TIMING"));
-                $.areaId = data.areaId;   // locationId的传值
-                $.traceId = data.traceId; // traceid的传值
-                venderCart = data.cart.venderCart;
-                postBody = 'pingouchannel=0&commlist=';
-                $.beforeRemove = data.cartJson.num
-                console.log(`获取到购物车数据 ${$.beforeRemove} 条`)
-            } catch(e){
-                $.logErr(e, resp);
-            } finally{
-                resolve(data);
-            }
-        });
-    })
-}
-function cartFilter(cartData){
-    console.log("正在整理数据...")
-    let pid;
-    $.pushed = 0
-    for(let cartJson of cartData){
-        if($.pushed === removeSize) break;
-        for(let sortedItem of cartJson.sortedItems){
-            if($.pushed === removeSize) break;
-            pid = typeof (sortedItem.polyItem.promotion) !== "undefined" ? sortedItem.polyItem.promotion.pid : ""
-            for(let product of sortedItem.polyItem.products){
-                if($.pushed === removeSize) break;
-                let mainSkuName = product.mainSku.name
-                $.isKeyword = false
-                $.isPush = true
-                for(let keyword of $.keywords){
-                    if(mainSkuName.indexOf(keyword) !== -1){
-                        $.keywordsNum += 1
-                        $.isPush = false
-                        $.keyword = keyword;
-                        break;
-                    } else $.isPush = true
-                }
-                if($.isPush){
-                    let skuUuid = product.skuUuid;
-                    let mainSkuId = product.mainSku.id
-                    if(pid === "") postBody += `${mainSkuId},,1,${mainSkuId},1,,0,skuUuid:${skuUuid}@@useUuid:0$`
-                    else postBody += `${mainSkuId},,1,${mainSkuId},11,${pid},0,skuUuid:${skuUuid}@@useUuid:0$`
-                    $.pushed += 1;
-                } else {
-                    console.log(`\n${mainSkuName}`)
-                    console.log(`商品已被过滤，原因：包含关键字 ${$.keyword}`)
-                    $.isKeyword = true
-                }
-            }
-        }
-    }
-    postBody += `&type=0&checked=0&locationid=${$.areaId}&templete=1&reg=1&scene=0&version=20190418&traceid=${$.traceId}&tabMenuType=1&sceneval=2`
-}
-function removeCart(){
-    console.log('正在删除购物车数据...')
-    return new Promise((resolve) => {
-        const option = {
-            url: 'https://wq.jd.com/deal/mshopcart/rmvCmdy?sceneval=2&g_login_type=1&g_ty=ajax',
-            body: postBody,
-            headers: {
-                "Cookie": cookie,
-                "User-Agent": "jdapp;JD4iPhone/167724 (iPhone; iOS 15.0; Scale/3.00)",
-                "referer": "https://p.m.jd.com/",
-                "origin": "https://p.m.jd.com/"
-            },
-        }
-        $.post(option, async(err, resp, data) => {
-            try{
-                data = JSON.parse(data);
-                $.afterRemove = data.cartJson.num
-                if($.afterRemove < $.beforeRemove){
-                    console.log(`删除成功，当前购物车剩余数据 ${$.afterRemove} 条\n`)
-                    $.beforeRemove = $.afterRemove
-                } else {
-                    console.log('删除失败')
-                    console.log(data.errMsg)
-                    isRemoveAll = false;
-                }
-            } catch(e){
-                $.logErr(e, resp);
-            } finally{
-                resolve(data);
-            }
-        });
-    })
-}
-function getSubstr(str, leftStr, rightStr){
-    let left = str.indexOf(leftStr);
-    let right = str.indexOf(rightStr, left);
-    if(left < 0 || right < left) return '';
-    return str.substring(left + leftStr.length, right);
-}
-function getActivityIdList(url) {
-    return new Promise(resolve => {
-        const options = {
-            url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-            }
-        };
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    $.log(err)
-                } else {
-                    if (data) data = JSON.parse(data)
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
 }
 function getUUID(format = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', UpperCase = 0) {
     return format.replace(/[xy]/g, function (c) {
