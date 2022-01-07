@@ -15,7 +15,7 @@
 
 [task_local]
 1.5~1.31 年货盛宴，春节集福攻略
-5 0,6 5-31 1 *  jd_opencardL39.js, tag=1.5~1.31 年货盛宴，春节集福攻略, enabled=true
+5 0,11 5-31 1 *  jd_opencardL39.js, tag=1.5~1.31 年货盛宴，春节集福攻略, enabled=true
 
 */
 
@@ -51,7 +51,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
         return;
     }
     $.activityId = "cd20220105fff606x19uj4vijetkg"
-    $.shareUuid = "08596cff838040668ba20851491f925a"
+    $.shareUuid = "048a08faf63143a88aca285ec3a9e31a"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -155,6 +155,7 @@ async function run() {
             console.log('已全部开卡')
         }
 
+        await takePostRequest('addSku');
         $.log("关注: " + $.followShop)
         if(!$.followShop && !$.outFlag){
             flag = true
@@ -329,7 +330,7 @@ async function takePostRequest(type) {
         case 'visitSku':
         case 'toShop':
         case 'addSku':
-            url = `${domain}/dingzhi/dz/openCard/saveTask`;
+            url = `${domain}/play/monopoly/doTasks`;
             let taskType = ''
             let taskValue = ''
             if(type == 'viewVideo'){
@@ -342,8 +343,8 @@ async function takePostRequest(type) {
                 taskType = 14
                 taskValue = $.toShopValue || 14
             }else if(type == 'addSku'){
-                taskType = 2
-                taskValue = $.addSkuValue || 2
+                taskType = 21
+                taskValue = $.addSkuValue || 21
             }
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&taskType=${taskType}&taskValue=${taskValue}`
             break;
