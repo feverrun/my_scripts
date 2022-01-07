@@ -43,6 +43,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
       await jdMs()
+      await $.wait(5000)
     }
   }
 })()
@@ -56,12 +57,16 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 async function jdMs() {
   $.score = 0
   await getActInfo()
+  await $.wait(2000)
   await getUserInfo()
+  await $.wait(1000)
   $.cur = $.score
   if ($.encryptProjectId) {
     await getTaskList()
+    await $.wait(2000)
   }
   await getUserInfo(false)
+  await $.wait(2000)
   await showMsg()
 }
 
