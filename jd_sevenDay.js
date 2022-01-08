@@ -11,15 +11,15 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 // https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=
 let activityIdList = [
-    'f3207d49ac8e4fcfbd542befc1338916',
+    'eaf0e5313fa1484db90c3fc467af33e5',
     'ba2d672b1fc44814aef1c3ee4c3ac5fa',
-    'f46601936b40496b97a85de2b5ab97eb',
-    '13126645fcb2477fa1090a94cb7f3ca2',
     '202f8daefb63452ebcdd68ef2d3db135',
     '3a9885564c6a4633b55b6bfcd083d3a4',
     'e181d252d0354331ad6226c407745ad6',
     '52a339445cba489f8df00cf18666d2be',
     'eaf0e5313fa1484db90c3fc467af33e5',
+    '1b2a84030440442f977978f535331cf5',
+    '5df741d7b82740309217a40247b67674',
 ]
 // https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=
 let activityIdList2 = [
@@ -35,7 +35,17 @@ let activityIdList2 = [
     '7fb38e10addf49b487c84f579971cbd4',
     '393ddb3a8ce04f19aed59fb458e2425f',
     'cbf22d6dfbde42ac98fb3f693530132e',
-    '2a20095bf87e408bb70fdf537ea3f57f',
+    'c2560ac2bcc94894ae41bb66e5921640',
+    '4b6dca90e4874cf3980dee3b80c41fc4',
+    'b0b0f2816de14971ae1118a5e39fcedc',
+    'c23c2c321e6e4f81bc1a524315d082f5',
+    '66144d35dbf64a90adf695abc46caaa2',
+    '7d2b4b54987f435794075b613e03abf4',
+    '5ff6afb5b5a84312bbb27709ebc22e16',
+    'cdb2ec07dca24451891a6a025d0718b9',
+    '5c4a8fc391b6416c97687b3aa6803d43',
+    'caaeb263f50a49808b940427888c732f',
+    'fd13800334a1421299183698c255db30'
 ]
 let activityIdList3 = [
     '456de0f620024cbda71e9a9cbaaf95e1',
