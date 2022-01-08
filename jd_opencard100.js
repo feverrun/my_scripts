@@ -33,7 +33,7 @@ All变量适用
 
 [task_local]
 #1.8~1.15 大牌联合 宠爱有礼
-cron "15 0,13 7-61 1 *" jd_opencard100.js, tag=1.8~1.15 大牌联合 宠爱有礼, enabled=true
+cron "15 0,13 7-16 1 *" jd_opencard100.js, tag=1.8~1.15 大牌联合 宠爱有礼, enabled=true
 
 */
 let opencard_addSku = "true"
