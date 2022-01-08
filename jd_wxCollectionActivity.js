@@ -2,7 +2,6 @@
 https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=
 
 不能并发
-
 JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
 JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
 cron "5 7,17 * * *" jd_wxCollectionActivity.js
@@ -33,7 +32,7 @@ if ($.isNode()) {
     cookiesArr = cookiesArr.filter(item => !!item);
 }
 let doPush = process.env.DoPush || true; // 设置为 false 每次推送, true 跑完了推送
-let removeSize = process.env.JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
+let removeSize = process.env.JD_CART_REMOVESIZE || 200; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
 let isRemoveAll = process.env.JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
 $.keywords = process.env.JD_CART_KEYWORDS || []
 $.keywordsNum = 0;
@@ -64,7 +63,9 @@ $.keywordsNum = 0;
                     }
                     continue
                 }
-                authorCodeList = ['',]
+                authorCodeList = [
+                    '',
+                ]
                 $.bean = 0;
                 $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
                 $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
@@ -81,6 +82,19 @@ $.keywordsNum = 0;
                     break
                 }
                 await $.wait(3000)
+                await requireConfig();
+                do {
+                    await getCart();
+                    $.keywordsNum = 0
+                    if($.beforeRemove !== "0"){
+                        await cartFilter(venderCart);
+                        if(parseInt($.beforeRemove) !== $.keywordsNum) await removeCart();
+                        else {
+                            console.log('由于购物车内的商品均包含关键字，本次执行将不删除购物车数据')
+                            break;
+                        }
+                    } else break;
+                } while(isRemoveAll && $.keywordsNum !== $.beforeRemove)
                 if ($.bean > 0) {
                     message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
                 }
@@ -342,6 +356,10 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 
 }
+function strToJson(str){
+    var json = eval('(' + str + ')');
+    return json;
+}
 function requireConfig(){
     return new Promise(resolve => {
         if($.isNode() && process.env.JD_CART){
@@ -364,7 +382,7 @@ function getCart(){
         }
         $.get(option, async(err, resp, data) => {
             try{
-                data = JSON.parse(getSubstr(data, "window.cartData = ", "window._PFM_TIMING"));
+                data = strToJson(getSubstr(data, "window.cartData = ", "window._PFM_TIMING"));
                 $.areaId = data.areaId;   // locationId的传值
                 $.traceId = data.traceId; // traceid的传值
                 venderCart = data.cart.venderCart;
