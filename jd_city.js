@@ -3,7 +3,6 @@
 [task_local]
 #城城领现金
 cron "0 0,4,10,12,16,20 9-21 1 *" jd_city.js, tag=城城领现金, img-url=jd.png, enabled=true
-
  */
 const $ = new Env('城城领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -85,6 +84,7 @@ $.shareCodesArr = [];
                         break
                     }
                     if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0]) {
+                        try {await cityCount($.UserName);}catch (e) {}
                         console.log(`助力 【${$.newShareCodes[i]}】:${res.data.result.toasts[0].msg}`)
                     }
                 }
@@ -179,6 +179,24 @@ function getInviteId() {
         })
     })
 }
+
+function cityCount(username) {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/cityc?username=${username}`,timeout: 10000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {}
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
+
 function getInfo(inviteId, flag = false) {
     let body = {"lbsCity":"16","realLbsCity":"1315","inviteId":inviteId,"headImg":"","userName":"","taskChannel":"1"}
     return new Promise((resolve) => {

@@ -1,6 +1,6 @@
 /*
 年货签到
-0 1,12,14,18 * * jd_nhSign.js, tag=年货签到, img-url=jd.png, enabled=true
+cron "0 1,12,18 * * *" jd_nh_sign.js, tag=年货签到, img-url=jd.png, enabled=true
  */
 const $ = new Env('年货签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
