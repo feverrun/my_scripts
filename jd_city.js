@@ -22,7 +22,7 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = ['oeDzX64FbmxDYROrCpeJ99JYfH1h',]
+let inviteCodes = []
 $.shareCodesArr = [];
 
 !(async () => {
@@ -30,7 +30,7 @@ $.shareCodesArr = [];
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    console.log('脚本优先助力[内部账号] 后助力池\n')
+    console.log('2022年1月9日优先内部助力, 1月9日后优先助力池 \n')
     if (exchangeFlag+"" == "true") {
         console.log(`脚本自动抽奖`)
     } else {
@@ -395,9 +395,9 @@ function shareCodesFormat() {
         try{
             let readShareCodeRes = await readShareCode();
             if (readShareCodeRes && readShareCodeRes.code === 0) {
-                $.newShareCodes = [...new Set([...$.inviteIdCodesArr, ...inviteCodes,  ...(readShareCodeRes.data || [])])];
+                $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
             }else {
-                $.newShareCodes = [...new Set([...$.inviteIdCodesArr, ...inviteCodes])];
+                $.newShareCodes = [...new Set([])];
             }
         } catch (e) {
             console.log(e);
