@@ -7,13 +7,6 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let activityIdList = [
-    'd46ed50f87314fc6abf14c92b7cd0e9f',
-    'b043e87bf02443fb8c03bee18fe813a1',
-    'f65cec3bc63843a29a2a854ea4151ccc',
-    '369d17a4b1af468483f67bced345912e',
-    '434e78bdb78f43418233a6dfb677ef59',
-    'eeff2e447ff44b899f6c1f5f2aa216a2',
-    '60bc422d686b4d96942b0f63f38e1533',
 ]
 let lz_cookie = {}
 
