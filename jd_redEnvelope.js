@@ -4,7 +4,7 @@ cron:0 0,12,18 * * * jd_redEnvelope.js
 返利变量：jd_redEnvelope_rebateCodes，默认给脚本作者返利，若需要返利给自己，请自己修改返利变量jd_redEnvelope_rebateCodes
 例：
 export jd_redEnvelope_rebateCodes="你的返利code"
-https://u.jd.com/nChMXRK
+https://u.jd.com/YtIAtMR
 */
 let rebateCodes = '' // 返利code
 
@@ -21,7 +21,7 @@ if ($.isNode()) {
     cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 rebateCodes = $.isNode() ? (process.env.jd_redEnvelope_rebateCodes ? process.env.jd_redEnvelope_rebateCodes : `${rebateCodes}`) : ($.getdata('jd_redEnvelope_rebateCodes') ? $.getdata('jd_redEnvelope_rebateCodes') : `${rebateCodes}`);
-let codeLsit = ['nChMXRK']
+let codeLsit = ['YtIAtMR']
 if(rebateCodes){
     codeLsit = [`${rebateCodes}`]
 }
@@ -83,11 +83,11 @@ async function main() {
         let arr = getBody($.UA, $.url2);
         await getEid(arr);
         console.log($.actId);
-        // await getcouponUrl()
-        // if(!$.eid){
-        //     $.eid = -1
-        // }
-        // await getCoupons("");
+        await getcouponUrl()
+        if(!$.eid){
+            $.eid = -1
+        }
+        await getCoupons("");
         await $.wait(2000);
     }
 }

@@ -4,19 +4,18 @@
 活动时间：
 更新时间：2021-11-30
 [Script]
-cron "45 9 * * *" script-path=d_jfcz.js,tag=见缝插针
+cron "25 8 * * *" script-path=jd_jfcz.js,tag=见缝插针
  */
 const $ = new Env('见缝插针');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [];
 let linkId = 'DYWV0DabsUxdj2FEBIkurg';
+let stop = false;
 let needleLevel = 1;
 let totalLevel = 400;
 let allMessage = '';
 $.cookie = '';
-let hot_flag = false
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -33,6 +32,8 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
+
+    cookiesArr = cookiesArr.slice(0, 5)
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             totalLevel = 400
@@ -51,21 +52,29 @@ if ($.isNode()) {
                 }
                 continue
             }
+            stop = false
             //获取下关等级
             await getNeedleLevelInfo();
+
             console.log('当前关卡: ',needleLevel+"/"+totalLevel)
             await $.wait(1500);
-            for (let i = needleLevel; i <= totalLevel && !hot_flag; i++) {
-                await getNeedleLevelInfo();
+            for (let i = needleLevel; i <= totalLevel; i++) {
+                if (stop){
+                    console.log('关卡异常下个')
+                    break
+                }
+                await getNeedleLevelInfo(needleLevel);
                 console.log('当前关卡: ',needleLevel+"/"+totalLevel)
-                if (needleLevel ==undefined){
+                await $.wait(1500);
+                if (stop){
                     console.log('关卡异常下个')
                     break
                 }
                 await saveNeedleLevelInfo(needleLevel);
-                await $.wait(3000);
+                await $.wait(15000);
             }
             await needleMyPrize()
+            await $.wait(5000)
         }
     }
     if ($.isNode() && allMessage) {
@@ -130,7 +139,7 @@ function needleMyPrize() {
         let body = {"linkId":linkId,"pageNum":1,"pageSize":30};
 
         const options = {
-            url: `https://api.m.jd.com/?functionId=needleMyPrize&body=${encodeURIComponent(JSON.stringify(body))}&_t=${+new Date()}&appid=activities_platform&clientVersion=3.5.0`,
+            url: `https://api.m.jd.com/?functionId=needleMyPrize&body=${escape(JSON.stringify(body))}&_t=${+new Date()}&appid=activities_platform&clientVersion=3.5.0`,
             headers: {
                 'Origin': 'https://joypark.jd.com',
                 'Cookie': $.cookie,
@@ -168,6 +177,7 @@ function needleMyPrize() {
                     }
                 }
             } catch (e) {
+                console.log(`logErr`,JSON.stringify(data))
                 $.logErr(e, resp)
             } finally {
                 resolve(data);
@@ -180,12 +190,14 @@ function needleMyPrize() {
  * 获取下关等级
  * @returns {Promise<unknown>}
  */
-function getNeedleLevelInfo() {
+function getNeedleLevelInfo(currentLevel) {
     return new Promise(async resolve => {
         let body = {"linkId":linkId};
-
+        if (currentLevel !== undefined){
+            body = {"linkId":linkId,"currentLevel":currentLevel};
+        }
         const options = {
-            url: `https://api.m.jd.com/?functionId=getNeedleLevelInfo&body=${encodeURIComponent(JSON.stringify(body))}&_t=${+new Date()}&appid=activities_platform&clientVersion=3.5.0`,
+            url: `https://api.m.jd.com/?functionId=getNeedleLevelInfo&body=${escape(JSON.stringify(body))}&_t=${+new Date()}&appid=activities_platform&clientVersion=3.5.0`,
             headers: {
                 'Origin': 'https://h5platform.jd.com',
                 'Cookie': $.cookie,
@@ -204,6 +216,7 @@ function getNeedleLevelInfo() {
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {
+                    stop = true
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
@@ -214,16 +227,17 @@ function getNeedleLevelInfo() {
                                 needleLevel =  data.data.needleConfig.level
                                 totalLevel =  data.data.totalLevel
                             }else {
-                                needleLevel = undefined
+                                stop = true
                                 console.log(`关卡已全部通过`)
                             }
                         } else {
-                            needleLevel = undefined
+                            stop = true
                             console.log(`获取下关等级异常:${JSON.stringify(data)}\n`);
                         }
                     }
                 }
             } catch (e) {
+                stop = true
                 $.logErr(e, resp)
             } finally {
                 resolve(data);
@@ -241,7 +255,7 @@ function saveNeedleLevelInfo(currentLevel) {
         let body = {"currentLevel":currentLevel,"linkId":linkId};
 
         const options = {
-            url: `https://api.m.jd.com/?functionId=saveNeedleLevelInfo&body=${JSON.stringify(body)}&_t=${+new Date()}&appid=activities_platform&clientVersion=3.5.0`,
+            url: `https://api.m.jd.com/?functionId=saveNeedleLevelInfo&body=${JSON.stringify(body)}&_t=${+new Date()}&appid=activities_platform&client=H5&clientVersion=1.0.0&h5st=20220106101759841%3B4377072519655308%3Bf1658%3Btk02waf0d1c2318njnCBM9qYgO8%2F%2Ftqq%2Fe1asBWVmidYfLpZ3kFd0rLsZOspq2aBxoz%2FBvATLVmEkPLX5U%2BFgNVmOc8E%3B22da3eb0d3c191a89ff16b5f051efdba2d0f013437857d994912faf498906d70%3B3.0%3B1641435479841`,
             headers: {
                 'Origin': 'https://h5platform.jd.com',
                 'Cookie': $.cookie,
@@ -260,6 +274,7 @@ function saveNeedleLevelInfo(currentLevel) {
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {
+                    stop = true
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
@@ -267,16 +282,14 @@ function saveNeedleLevelInfo(currentLevel) {
                         data = $.toObj(data);
                         if (data.code === 0) {
                             console.log(`关卡[${currentLevel}]通关成功\n`);
-                        } else if (data.code === 1020) {
-                            console.warn('火爆,结束')
-                            hot_flag = true
-                        }else {
-                            needleLevel = undefined
+                        } else {
+                            stop = true
                             console.log(`通关异常:${JSON.stringify(data)}\n`);
                         }
                     }
                 }
             } catch (e) {
+                stop = true
                 $.logErr(e, resp)
             } finally {
                 resolve(data);
