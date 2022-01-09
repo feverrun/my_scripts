@@ -2,12 +2,12 @@
 年货节红包
 cron 0 0,8,20,22 * * *  jd_nhRed.js
 整点跑 红包几率大点
-https://u.jd.com/SKi3W2o
+https://u.jd.com/SLsNuA5
 跳转到app 可查看助力情况
 
 返利变量：jd_nhjRed_rebateCode，若需要返利给自己，请自己修改环境变量[jd_nhjRed_rebateCode]
-SKi3W2o换成自己的返利
-export jd_nhjRed_rebateCode="SKi3W2o"
+SLsNuA5换成自己的返利
+export jd_nhjRed_rebateCode="SLsNuA5"
 */
 
 const $ = new Env('年货节红包');
@@ -23,7 +23,7 @@ if ($.isNode()) {
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let rebateCodes = 'SKi3W2o'
+let rebateCodes = 'SLsNuA5'
 rebateCodes = $.isNode() ? (process.env.jd_nhjRed_rebateCode ? process.env.jd_nhjRed_rebateCode : `${rebateCodes}`) : ($.getdata('jd_nhjRed_rebateCode') ? $.getdata('jd_nhjRed_rebateCode') : `${rebateCodes}`);
 
 rebateCode = rebateCodes
@@ -97,9 +97,9 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     }
     if(Object.getOwnPropertyNames($.shareCodeArr).length > 0 && $.shareCodeArr["updateTime"] != pinUpdateTime) $.setdata($.shareCodeArr,'jd_nhjRed')
     if(message){
-        $.msg($.name, ``, `${message}\nhttps://u.jd.com/SKi3W2o\n\n跳转到app 可查看助力情况`);
+        $.msg($.name, ``, `${message}\nhttps://u.jd.com/SLsNuA5\n\n跳转到app 可查看助力情况`);
         if ($.isNode()){
-            // await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/SKi3W2o\n跳转到app 可查看助力情况`);
+            // await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/SLsNuA5\n跳转到app 可查看助力情况`);
         }
     }
 })()

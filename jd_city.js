@@ -22,7 +22,6 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = []
 $.shareCodesArr = [];
 
 !(async () => {
@@ -395,9 +394,9 @@ function shareCodesFormat() {
         try{
             let readShareCodeRes = await readShareCode();
             if (readShareCodeRes && readShareCodeRes.code === 0) {
-                $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
-            }else {
-                $.newShareCodes = [...new Set([])];
+                $.newShareCodes = [...new Set([...['oeDzX64FbmxDYROrCpeJ99JYfH1h'], ...(readShareCodeRes.data || [])])];
+            } else {
+                $.newShareCodes = [...new Set(['oeDzX64FbmxDYROrCpeJ99JYfH1h'], ...$.inviteIdCodesArr)];
             }
         } catch (e) {
             console.log(e);
