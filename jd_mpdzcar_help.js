@@ -89,10 +89,11 @@ async function mpdzCar() {
         })
         // console.log($.buyerNick)
         if ($.buyerNick) {
-
+            await $.wait(3000)
             await task('/ql/front/loadUnitedCardActivityInfo', {
                 buyerNick: $.buyerNick
             })
+            await $.wait(3000)
             console.log('去助力 '+$.authorCode);
             await task('/ql/front/participantBehavior', {
                 buyerNick: $.buyerNick,
