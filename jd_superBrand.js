@@ -68,7 +68,7 @@ if ($.isNode()) {
         for (let j = 0; j < $.allInvite.length && $.canHelp; j++) {
             $.codeInfo = $.allInvite[j];
             $.code = $.codeInfo.code;
-            if($.UserName ===  $.codeInfo.userName || $.codeInfo.time === 3){
+            if($.UserName ===  $.codeInfo.userName || $.codeInfo.time === 999){
                 continue;
             }
             $.encryptAssignmentId = $.codeInfo.encryptAssignmentId;
@@ -100,6 +100,15 @@ async function main() {
         await takeRequest('superBrandPkJoinTeam',{"source":"pk","activityId":$.activityId,"pre":"pre","teamName":$.teamName.toString()});
     }else{
         console.log(`已加入战队`);
+    }
+    if($.activityInfo.activityPkInfo.userTeamName === $.activityInfo.activityPkInfo.winTeamName && $.activityInfo.activityPkInfo.divideStatus === 0){
+        console.log(`去瓜分`);
+        await takeRequest('superBrandTaskLottery',{"source":"pk","activityId":$.activityId,"encryptProjectId":$.encryptProjectId,"encryptAssignmentId":"2v8f6JzBBTjrvzwZbYztuV9MVWv7","tag":"divide"});
+        return ;
+    }
+    if($.activityInfo.activityPkInfo.divideStatus === 1){
+        console.log(`已瓜分`);
+        return ;
     }
     if($.activityInfo.activityPkInfo.userTeamStatus !== 0 && $.activityInfo.activityPkInfo.userTeamStatus !== 1){
         return ;
@@ -274,7 +283,7 @@ function dealReturn(type, data) {
                 console.log(`助力次数已用完`);
             }else if (data.code === '0' && data.data.bizCode === '103'){
                 console.log(`助力已满`);
-                $.codeInfo.time = 3;
+                $.codeInfo.time = 999;
             }else if (data.code === '0' && data.data.bizCode === '2001'){
                 $.canHelp = false;
                 console.log(`黑号`);
