@@ -242,7 +242,7 @@ if ($.isNode()) {
       }
       await getJoyBaseInfo();
       await getJdZZ();
-      await getMs();
+      // await getMs();
       await jdfruitRequest('taskInitForFarm', {
         "version": 14,
         "channel": 1,

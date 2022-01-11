@@ -1,5 +1,5 @@
 /**
- cron "5 0,19 * * *" jd_opencard_vipp.js
+ cron "5,45 0,10 * * *" jd_opencard_vip.js
  https://lzdz1-isv.isvjcloud.com/dingzhi/majorsuit/memberday/activity/888?activityId=dz2112100001448501&shareUuid=04279d65b30b49f3b6b8797f834d5861&adsource=null&shareuserid4minipg=null&shopid=1000014485&lng=00.000000&lat=00.000000&sid=&un_area=
  */
 const $ = new Env("会员狂欢日");
