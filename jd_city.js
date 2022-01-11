@@ -2,7 +2,7 @@
 城城领现金
 [task_local]
 #城城领现金
-cron "0 0,4,10,12,16,20 9-21 1 *" jd_city.js, tag=城城领现金, img-url=jd.png, enabled=true
+cron "0 0,7,12,16,20 9-21 1 *" jd_city.js, tag=城城领现金, img-url=jd.png, enabled=true
  */
 const $ = new Env('城城领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -12,7 +12,6 @@ exchangeFlag = $.isNode() ? (process.env.JD_CITY_EXCHANGE ? process.env.JD_CITY_
 
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
-
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -24,6 +23,7 @@ if ($.isNode()) {
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 $.shareCodesArr = [];
 
+let authorCode = 'oeDzX64FbmxDYROrCpeJ99JYfH1h';
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -70,13 +70,29 @@ $.shareCodesArr = [];
                         console.log(`互助码提交失败！`);
                     }
                 }
-            }catch (e) {
+            }catch (e) {}
 
-            }
-
-            for (let i = 0; i < $.newShareCodes.length && true; ++i) {
-                console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
-                let res = await getInfo($.newShareCodes[i])
+            if (i >= 1) {
+                for (let i = 0; i < $.newShareCodes.length && true; ++i) {
+                    console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
+                    let res = await getInfo($.newShareCodes[i])
+                    if (res && res['data'] && res['data']['bizCode'] === 0) {
+                        if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
+                            console.log(`助力次数已耗尽，跳出`)
+                            break
+                        }
+                        if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0]) {
+                            try {await cityCount($.UserName);}catch (e) {}
+                            console.log(`助力 【${$.newShareCodes[i]}】:${res.data.result.toasts[0].msg}`)
+                        }
+                    }
+                    if ((res && res['status'] && res['status'] === '3') || (res && res.data && res.data.bizCode === -11)) {
+                        // 助力次数耗尽 || 黑号
+                        break
+                    }
+                }
+            }else {
+                let res = await getInfo(authorCode);
                 if (res && res['data'] && res['data']['bizCode'] === 0) {
                     if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
                         console.log(`助力次数已耗尽，跳出`)
@@ -91,7 +107,9 @@ $.shareCodesArr = [];
                     // 助力次数耗尽 || 黑号
                     break
                 }
+
             }
+
             // await getInfo($.newShareCodes[i], true)
             await getInviteInfo();//雇佣
             if (exchangeFlag+"" == "true") {
@@ -394,9 +412,9 @@ function shareCodesFormat() {
         try{
             let readShareCodeRes = await readShareCode();
             if (readShareCodeRes && readShareCodeRes.code === 0) {
-                $.newShareCodes = [...new Set([...['oeDzX64FbmxDYROrCpeJ99JYfH1h'], ...(readShareCodeRes.data || [])])];
+                $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
             } else {
-                $.newShareCodes = [...new Set(['oeDzX64FbmxDYROrCpeJ99JYfH1h'], ...$.inviteIdCodesArr)];
+                $.newShareCodes = [...new Set(...$.inviteIdCodesArr)];
             }
         } catch (e) {
             console.log(e);
