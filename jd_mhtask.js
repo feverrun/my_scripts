@@ -1,7 +1,7 @@
 /*
 #盲盒任务抽京豆，自行加入以下环境变量，多个活动用@连接
 export jd_mhurlList=""
-cron "28 7,12 * * *" jd_mhtask.js
+cron "28 7,22 * * *" jd_mhtask.js
  */
 
 const $ = new Env('盲盒任务抽京豆');
@@ -15,7 +15,7 @@ if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    jd_mhurlList = process.env.jd_mhurlList ? process.env.jd_mhurlList : "https://anmp.jd.com/babelDiy/Zeus/nANthByMLeuV5LU146QSJTt8dRh/index.html";
+    jd_mhurlList = process.env.jd_mhurlList ? process.env.jd_mhurlList : "https://anmp.jd.com/babelDiy/Zeus/4ZRoEPUncW1xHAUuz2CC7QhqYFSk/index.html";
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
