@@ -1,8 +1,7 @@
 /*
 城城领现金
-[task_local]
 #城城领现金
-cron "0 0,7,12,16,20 9-21 1 *" jd_city.js, tag=城城领现金, img-url=jd.png, enabled=true
+cron "0 0,3,14 9-21 1 *" jd_town.js, tag=城城领现金, img-url=jd.png, enabled=true
  */
 const $ = new Env('城城领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -23,7 +22,6 @@ if ($.isNode()) {
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 $.shareCodesArr = [];
 
-let authorCode = 'oeDzX64FbmxDYROrCpeJ99JYfH1h';
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -60,21 +58,20 @@ let authorCode = 'oeDzX64FbmxDYROrCpeJ99JYfH1h';
             await shareCodesFormat()
 
             try {
-                if (i === 0) {
-                    let inviteId = $.inviteIdCodesArr[i];
-                    let user = $.UserName;
-                    let submitRes = await submitCode(inviteId, user)
-                    if (submitRes && submitRes.code === 0) {
-                        console.log(`互助码已提交！`);
-                    } else {
-                        console.log(`互助码提交失败！`);
-                    }
+                let inviteId = $.inviteIdCodesArr[i];
+                let user = $.UserName;
+                let submitRes = await submitCode(inviteId, user)
+                if (submitRes && submitRes.code === 0) {
+                    console.log(`互助码已提交！`);
+                } else {
+                    console.log(`互助码提交失败！`);
                 }
             }catch (e) {}
 
             for (let i = 0; i < $.newShareCodes.length && true; ++i) {
                 console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
                 let res = await getInfo($.newShareCodes[i])
+                // console.log(res)
                 if (res && res['data'] && res['data']['bizCode'] === 0) {
                     if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
                         console.log(`助力次数已耗尽，跳出`)
@@ -390,12 +387,13 @@ function readShareCode() {
 function shareCodesFormat() {
     return new Promise(async resolve => {
         $.newShareCodes = [];
-        try{
+        let authorCode = '-ryUMOpeDDs_ImG6IqCEu1v_ZeWz_9c';
+        try {
             let readShareCodeRes = await readShareCode();
             if (readShareCodeRes && readShareCodeRes.code === 0) {
-                $.newShareCodes = [...new Set([...(readShareCodeRes.data || [])])];
+                $.newShareCodes = [...new Set([...[authorCode], ...(readShareCodeRes.data || [])])];
             } else {
-                $.newShareCodes = [...new Set(...$.inviteIdCodesArr)];
+                $.newShareCodes = [...new Set(...[authorCode], ...$.inviteIdCodesArr)];
             }
         } catch (e) {
             console.log(e);
