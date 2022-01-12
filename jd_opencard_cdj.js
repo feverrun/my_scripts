@@ -23,6 +23,7 @@ if ($.isNode()) {
     cookiesArr.reverse();
     cookiesArr = cookiesArr.filter(item => !!item);
 }
+
 !(async () => {
     $.getAuthorCodeListerr = false
     if (!cookiesArr[0]) {
