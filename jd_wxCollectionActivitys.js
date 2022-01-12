@@ -4,13 +4,13 @@ https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=
 不能并发
 JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
 JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
-cron "5 7,17 * * *" jd_wxCollectionActivity.js
+cron "5 7,2 * * *" jd_wxCollectionActivitys.js
 */
 const $ = new Env('加购物车抽奖');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '' ,isPush = false;
-let activityIdList = ['bdacfcba95964d04b3e1cf0cb0e186dd', '6cb3e11671af40f9a8ab461d68995583', '892cb7fbfb844d0098e7f11d69bad6bd', 'cb052bef22334cd29089a39a52dfa1ed', '51de2cce01754429a6a0bc10c369ad8a', 'a1e3fb99b82345738aee4cc907224232', '6818e794a8d143328a819e0a22aced29']
+let activityIdList = ['9064d289203f4faaa8fe89efa2d23f08', '43452257d2144b969a2d5e48104ed24f', '1489ba67a43d40f1b464dbdf4fdf371c', 'a5b8977bfd2145a39542231fe74c0ea1', 'f5e54db90df248be8c9ff360e906b030', '4e249815d2c34b77a919af2f0e2775ab', 'b17070f4ffeb487b8340f16b1bff347f', '755b82ade6a44447beb3fcc4a268d613', 'eb209962302442dfa31d2932eab0d014', '39c4ed8ddf5942a099dce628a26c026b', '61f615e382f64a17803691fec1b7857b']
 let lz_cookie = {}
 
 if (process.env.ACTIVITY_ID && process.env.ACTIVITY_ID != "") {
