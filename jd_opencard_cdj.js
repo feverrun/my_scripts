@@ -4,7 +4,6 @@
  cron "2 0,17 * * *" jd_opencard_cdj.js
  **/
 
-
 const $ = new Env("瓜分千万京豆 免费抽大奖");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
