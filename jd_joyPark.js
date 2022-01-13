@@ -5,7 +5,7 @@ JOY_COIN_MAXIMIZE =      最大化硬币收益，如果合成后全部挖土后�
 请确保新用户助力过开工位，否则开启游戏了就不算新用户，后面就不能助力开工位了！！！！！！！！！！
 如需关闭请添加变量，变量名：HELP_JOYPARK，变量值：false
 #汪汪乐园养joy
-cron "13 0-23/3 * * *" script-path=jd_joy_park.js,tag=汪汪乐园养joy
+cron "49 0-23/6 * * *" script-path=jd_joyPark.js,tag=汪汪乐园养joy
 */
 const $ = new Env('汪汪乐园养joy');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

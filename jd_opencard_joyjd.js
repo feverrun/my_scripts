@@ -1,7 +1,7 @@
 /*
 JoyJd任务脚本
 [Script]
-cron "35 0,11 * * *" script-path=jd_joyjd_open.js,tag=JoyJd任务脚本
+cron "35 0,11 * * *" script-path=jd_opencard_joyjd.js,tag=JoyJd任务脚本
 */
 const $ = new Env('会员开卡赢京豆');
 const Faker=require('./utils/sign_graphics_validate.js')

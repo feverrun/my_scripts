@@ -1,10 +1,8 @@
 /*
 脚本默认会帮我助力开工位，介意请添加变量HELP_JOYPARK，false为不助力
 export HELP_JOYPARK=""
-
-cron "17 0,7,9,17,20 * * *" script-path=jd_joypark_task.js,tag=汪汪乐园每日任务
+cron "16 6,22 * * *" script-path=jd_joyparkTask.js,tag=汪汪乐园每日任务
 */
-
 const $ = new Env('汪汪乐园每日任务');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
