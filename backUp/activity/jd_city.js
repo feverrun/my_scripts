@@ -1,435 +1,438 @@
 /*
 城城领现金
-cron "0 0,1,8,12,18,20,22 * 1 *" jd_city.js, tag=城城领现金, img-url=jd_city.png, enabled=true
+#城城领现金
+cron "0 0,3,14 9-21 1 *" jd_city.js, tag=城城领现金, img-url=jd.png, enabled=true
  */
 const $ = new Env('城城领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-//自动抽奖 ，环境变量  JD_CITY_EXCHANGE
-let exchangeFlag = $.getdata('JD_CITY_EXCHANGE ') || "false";//是否开启自动抽奖，建议活动快结束开启，默认关闭
-exchangeFlag = $.isNode() ? (process.env.JD_CITY_EXCHANGE ? process.env.JD_CITY_EXCHANGE : `${exchangeFlag}`) : ($.getdata('JD_CITY_EXCHANGE ') ? $.getdata('JD_CITY_EXCHANGE ') : `${exchangeFlag}`);
+let exchangeFlag = $.getdata('JD_CITY_EXCHANGE') || "false";//是否开启自动抽奖，建议活动快结束开启，默认关闭
+exchangeFlag = $.isNode() ? (process.env.JD_CITY_EXCHANGE ? process.env.JD_CITY_EXCHANGE : `${exchangeFlag}`) : ($.getdata('JD_CITY_EXCHANGE') ? $.getdata('JD_CITY_EXCHANGE') : `${exchangeFlag}`);
 
-// 优先助力[助力池]
-let helpShareFlag = "false";//是否优先助力[助力池]，默认是
-helpShareFlag = $.isNode() ? (process.env.JD_CITY_HELPSHARE ? process.env.JD_CITY_HELPSHARE : `${helpShareFlag}`) : ($.getdata('JD_CITY_HELPSHARE') ? $.getdata('JD_CITY_HELPSHARE') : `${helpShareFlag}`);
-$.inviteIdCodesArr = []
+//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
-
 if ($.isNode()) {
-  Object.keys(jdCookieNode).forEach((item) => {
-    cookiesArr.push(jdCookieNode[item])
-  })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+    Object.keys(jdCookieNode).forEach((item) => {
+        cookiesArr.push(jdCookieNode[item])
+    })
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
-  cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
+    cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let firstCode = "";
-let authorCode = "";
 $.shareCodesArr = [];
 
 !(async () => {
-  if (!cookiesArr[0]) {
-    $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-    return;
-  }
-  if (exchangeFlag + "" == "true") {
-    console.log(`脚本自动抽奖`)
-  } else {
-    console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭(在10.29日自动开启抽奖),如需自动抽奖请设置环境变量  JD_CITY_EXCHANGE 为true`);
-  }
-  for (let i = 0; i < cookiesArr.length && true; i++) {
-    if (cookiesArr[i]) {
-      cookie = cookiesArr[i];
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-      $.index = i + 1;
-      await getUA()
-      await getInviteId();
+    if (!cookiesArr[0]) {
+        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+        return;
     }
-  }
-
-  for (let i = 0; i < cookiesArr.length; i++) {
-    if (cookiesArr[i]) {
-      cookie = cookiesArr[i];
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-      $.index = i + 1;
-      $.isLogin = true;
-      $.nickName = '';
-      message = '';
-      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-      await getUA()
-      await shareCodesFormat()
-
-      if (i == 0) {
-        let inviteId = $.inviteIdCodesArr[0];
-        let user = $.UserName;
-        let submitRes = await submitCode(inviteId, user)
-        if (submitRes && submitRes.code === 0) {
-          console.log(`互助码已提交！`);
-        } else {
-          console.log(`互助码提交失败！`);
+    console.log('2022年1月9日优先内部助力, 1月9日后优先助力池 \n')
+    if (exchangeFlag+"" == "true") {
+        console.log(`脚本自动抽奖`)
+    } else {
+        console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭(在1.18日自动开启抽奖),如需自动抽奖请设置环境变量  JD_CITY_EXCHANGE 为true`);
+    }
+    $.inviteIdCodesArr = []
+    for (let i = 0; i < cookiesArr.length && true; i++) {
+        if (cookiesArr[i]) {
+            cookie = cookiesArr[i];
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.index = i + 1;
+            await getUA()
+            await getInviteId();
+            await $.wait(500)
         }
-      }
+    }
 
+    for (let i = 0; i < cookiesArr.length; i++) {
+        if (cookiesArr[i]) {
+            cookie = cookiesArr[i];
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.index = i + 1;
+            $.isLogin = true;
+            $.nickName = '';
+            message = '';
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            await getUA()
+            await shareCodesFormat()
 
-      for (let i = 0; i < $.newShareCodes.length && true; ++i) {
-        console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
-        let res = await getInfo($.newShareCodes[i])
-        if (res && res['data'] && res['data']['bizCode'] === 0) {
-          if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
-            console.log(`助力次数已耗尽，跳出`)
-            break
-          }
-          if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0]) {
-            console.log(`助力 【${$.newShareCodes[i]}】:${res.data.result.toasts[0].msg}`)
-          }
-        }
-        if ((res && res['status'] && res['status'] === '3') || (res && res.data && res.data.bizCode === -11)) {
-          // 助力次数耗尽 || 黑号
-          break
-        }
-      }
-      // await getInfo($.newShareCodes[i], true)
-      await getInviteInfo();//雇佣
-      if (exchangeFlag + "" == "true") {
-        const res = await city_lotteryAward();//抽奖
-        if (res && res > 0) {
-          for (let i = 0; i < new Array(res).fill('').length; i++) {
-            await $.wait(1000)
-            await city_lotteryAward();//抽奖
-          }
-        }
-      } else {
-        //默认10.29开启抽奖
-        if ((new Date().getMonth() + 1) === 10 && new Date().getDate() >= 29) {
-          const res = await city_lotteryAward();//抽奖
-          if (res && res > 0) {
-            for (let i = 0; i < new Array(res).fill('').length; i++) {
-              await $.wait(1000)
-              await city_lotteryAward();//抽奖
+            try {
+                let inviteId = $.inviteIdCodesArr[i];
+                let user = $.UserName;
+                let submitRes = await submitCode(inviteId, user)
+                if (submitRes && submitRes.code === 0) {
+                    console.log(`互助码已提交！`);
+                } else {
+                    console.log(`互助码提交失败！`);
+                }
+            }catch (e) {}
+
+            for (let i = 0; i < $.newShareCodes.length && true; ++i) {
+                console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
+                let res = await getInfo($.newShareCodes[i])
+                // console.log(res)
+                if (res && res['data'] && res['data']['bizCode'] === 0) {
+                    if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
+                        console.log(`助力次数已耗尽，跳出`)
+                        break
+                    }
+                    if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0]) {
+                        try {await cityCount($.UserName);}catch (e) {}
+                        console.log(`助力 【${$.newShareCodes[i]}】:${res.data.result.toasts[0].msg}`)
+                    }
+                }
+                if ((res && res['status'] && res['status'] === '3') || (res && res.data && res.data.bizCode === -11)) {
+                    // 助力次数耗尽 || 黑号
+                    break
+                }
             }
-          }
+
+            // await getInfo($.newShareCodes[i], true)
+            await getInviteInfo();//雇佣
+            if (exchangeFlag+"" == "true") {
+                const res = await city_lotteryAward();//抽奖
+                if (res && res > 0) {
+                    for (let i = 0; i < new Array(res).fill('').length; i++) {
+                        await $.wait(1000)
+                        await city_lotteryAward();//抽奖
+                    }
+                }
+            } else {
+                //默认10.29开启抽奖
+                if ((new Date().getMonth()  + 1) === 1 && new Date().getDate() >= 18) {
+                    const res = await city_lotteryAward();//抽奖
+                    if (res && res > 0) {
+                        for (let i = 0; i < new Array(res).fill('').length; i++) {
+                            await $.wait(1000)
+                            await city_lotteryAward();//抽奖
+                        }
+                    }
+                }
+            }
+            await $.wait(1000)
         }
-      }
-      await $.wait(1000)
     }
-  }
 })()
     .catch((e) => {
-      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+        $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
     })
     .finally(() => {
-      $.done();
+        $.done();
     })
 
-function taskPostUrl(functionId, body) {
-  return {
-    url: `${JD_API_HOST}`,
-    body: `functionId=${functionId}&body=${escape(JSON.stringify(body))}&client=wh5&clientVersion=1.0.0`,
-    headers: {
-      'Cookie': cookie,
-      'Host': 'api.m.jd.com',
-      'Connection': 'keep-alive',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      "User-Agent": $.UA,
-      'Accept-Language': 'zh-cn',
-      'Accept-Encoding': 'gzip, deflate, br',
+function taskPostUrl(functionId,body) {
+    return {
+        url: `${JD_API_HOST}`,
+        body: `functionId=${functionId}&body=${escape(JSON.stringify(body))}&client=wh5&clientVersion=1.0.0`,
+        headers: {
+            'Cookie': cookie,
+            'Host': 'api.m.jd.com',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            "User-Agent": $.UA,
+            'Accept-Language': 'zh-cn',
+            'Accept-Encoding': 'gzip, deflate, br',
+        }
     }
-  }
 }
 
 function getInviteId() {
-  let body = {"lbsCity": "16", "realLbsCity": "1315", "inviteId": '', "headImg": "", "userName": "", "taskChannel": "1"}
-  return new Promise((resolve) => {
-    $.post(taskPostUrl("city_getHomeData", body), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            // if (inviteId) $.log(`\n助力结果:\n${data}\n`)
-            data = JSON.parse(data);
-            if (data.code === 0) {
-              if (data.data && data['data']['bizCode'] === 0) {
-                if (data.data && data.data.result.userActBaseInfo.inviteId) {
-                  console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
-                  $.inviteIdCodesArr.push = data.data.result.userActBaseInfo.inviteId
+    let body = {"lbsCity":"16","realLbsCity":"1315","inviteId":'',"headImg":"","userName":"","taskChannel":"1"}
+    return new Promise((resolve) => {
+        $.post(taskPostUrl("city_getHomeDatav1",body), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        // if (inviteId) $.log(`\n助力结果:\n${data}\n`)
+                        data = JSON.parse(data);
+                        if (data.code === 0) {
+                            if (data.data && data['data']['bizCode'] === 0) {
+                                if (data.data && data.data.result.userActBaseInfo.inviteId) {
+                                    console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
+                                    $.inviteIdCodesArr.push(data.data.result.userActBaseInfo.inviteId)
+                                }
+                            } else {
+                                console.log(`\n\n获取邀请码失败:${data.data.bizMsg}`)
+                                if (data.data && !data.data.result.userActBaseInfo.inviteId) {
+                                    console.log(`账号已黑，看不到邀请码\n`);
+                                }
+                            }
+                        } else {
+                            console.log(`\n\ncity_getHomeData失败:${JSON.stringify(data)}\n`)
+                        }
+                    }
                 }
-              } else {
-                console.log(`\n\n获取邀请码失败:${data.data.bizMsg}`)
-                if (data.data && !data.data.result.userActBaseInfo.inviteId) {
-                  console.log(`账号已黑，看不到邀请码\n`);
-                }
-              }
-            } else {
-              console.log(`\n\ncity_getHomeData失败:${JSON.stringify(data)}\n`)
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
             }
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
+        })
     })
-  })
+}
+
+function cityCount(username) {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/cityc?username=${username}`,timeout: 10000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {}
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
 }
 
 function getInfo(inviteId, flag = false) {
-  let body = {
-    "lbsCity": "16",
-    "realLbsCity": "1315",
-    "inviteId": inviteId,
-    "headImg": "",
-    "userName": "",
-    "taskChannel": "1"
-  }
-  return new Promise((resolve) => {
-    $.post(taskPostUrl("city_getHomeData", body), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            // if (inviteId) $.log(`\n助力结果:\n${data}\n`)
-            data = JSON.parse(data);
-            if (data.code === 0) {
-              if (data.data && data['data']['bizCode'] === 0) {
-                console.log(`待提现:￥${data.data.result.userActBaseInfo.poolMoney}`)
-                for (let vo of data.data.result && data.data.result.popWindows || []) {
-                  if (vo && vo.type === "dailycash_second") {
-                    await receiveCash()
-                    await $.wait(2 * 1000)
-                  }
-                }
-                for (let vo of data.data.result && data.data.result.mainInfos || []) {
-                  if (vo && vo.remaingAssistNum === 0 && vo.status === "1") {
-                    console.log(vo.roundNum)
-                    await receiveCash(vo.roundNum)
-                    await $.wait(2 * 1000)
-                  }
-                }
-                if (flag) {
-                  // console.log(data.data.result.taskInfo.taskDetailResultVo.taskVos)
-                  for (let vo of data.data.result && data.data.result.taskInfo.taskDetailResultVo.taskVos && false || []) {
-                    if (vo && vo.status == 1) {
-                      console.log(vo.taskName)
-                      // console.log(vo.roundNum)
-                      // await receiveCash(vo.roundNum)
-                      // await $.wait(2*1000)
+    let body = {"lbsCity":"16","realLbsCity":"1315","inviteId":inviteId,"headImg":"","userName":"","taskChannel":"1"}
+    return new Promise((resolve) => {
+        $.post(taskPostUrl("city_getHomeDatav1",body), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        // if (inviteId) $.log(`\n助力结果:\n${data}\n`)
+                        data = JSON.parse(data);
+                        if (data.code === 0) {
+                            if (data.data && data['data']['bizCode'] === 0) {
+                                console.log(`待提现:￥${data.data.result.userActBaseInfo.poolMoney}`)
+                                for(let vo of data.data.result && data.data.result.popWindows || []){
+                                    if (vo && vo.type === "dailycash_second") {
+                                        await receiveCash()
+                                        await $.wait(2*1000)
+                                    }
+                                }
+                                for(let vo of data.data.result && data.data.result.mainInfos || []){
+                                    if (vo && vo.remaingAssistNum === 0 && vo.status === "1") {
+                                        console.log(vo.roundNum)
+                                        await receiveCash(vo.roundNum)
+                                        await $.wait(2*1000)
+                                    }
+                                }
+                                if(flag){
+                                    // console.log(data.data.result.taskInfo.taskDetailResultVo.taskVos)
+                                    for(let vo of data.data.result && data.data.result.taskInfo.taskDetailResultVo.taskVos && false || []){
+                                        if (vo && vo.status == 1) {
+                                            console.log(vo.taskName)
+                                            // console.log(vo.roundNum)
+                                            // await receiveCash(vo.roundNum)
+                                            // await $.wait(2*1000)
+                                        }
+                                    }
+                                }
+                            } else {
+                                console.log(`\n\n${inviteId ? '助力好友' : '获取邀请码'}失败:${data.data.bizMsg}`)
+                                if (flag) {
+                                    if (data.data && !data.data.result.userActBaseInfo.inviteId) {
+                                        console.log(`账号已黑，看不到邀请码\n`);
+                                    }
+                                }
+                            }
+                        } else {
+                            console.log(`\n\ncity_getHomeData失败:${JSON.stringify(data)}\n`)
+                        }
                     }
-                  }
                 }
-              } else {
-                console.log(`\n\n${inviteId ? '助力好友' : '获取邀请码'}失败:${data.data.bizMsg}`)
-                if (flag) {
-                  if (data.data && !data.data.result.userActBaseInfo.inviteId) {
-                    console.log(`账号已黑，看不到邀请码\n`);
-                  }
-                }
-              }
-            } else {
-              console.log(`\n\ncity_getHomeData失败:${JSON.stringify(data)}\n`)
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
             }
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
+        })
     })
-  })
 }
-
 function receiveCash(roundNum = '') {
-  let body = {"cashType": 2}
-  if (roundNum) body = {"cashType": 1, "roundNum": roundNum}
-  if (roundNum == -1) body = {"cashType": 4}
-  return new Promise((resolve) => {
-    $.post(taskPostUrl("city_receiveCash", body), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            console.log(`领红包结果${data}`);
-            data = JSON.parse(data);
-            if (data['data']['bizCode'] === 0) {
-              console.log(`获得 ${data.data.result.currentTimeCash} 元，共计 ${data.data.result.totalCash} 元`)
+    let body = {"cashType":2}
+    if(roundNum) body = {"cashType":1,"roundNum":roundNum}
+    if(roundNum == -1) body = {"cashType":4}
+    return new Promise((resolve) => {
+        $.post(taskPostUrl("city_receiveCash",body), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        console.log(`领红包结果${data}`);
+                        data = JSON.parse(data);
+                        if (data['data']['bizCode'] === 0) {
+                            console.log(`获得 ${data.data.result.currentTimeCash} 元，共计 ${data.data.result.totalCash} 元`)
+                        }
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
             }
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
+        })
     })
-  })
 }
-
 function getInviteInfo() {
-  let body = {}
-  return new Promise((resolve) => {
-    $.post(taskPostUrl("city_masterMainData", body), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            // console.log(data)
-            data = JSON.parse(data);
-            if (data.data.result.masterData.actStatus == 2) {
-              console.log('领取赚赏金')
-              await receiveCash(-1)
+    let body = {}
+    return new Promise((resolve) => {
+        $.post(taskPostUrl("city_masterMainData",body), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        // console.log(data)
+                        data = JSON.parse(data);
+                        if(data.data.result.masterData.actStatus == 2){
+                            console.log('领取赚赏金')
+                            await receiveCash(-1)
+                        }
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
             }
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
+        })
     })
-  })
 }
-
 function city_lotteryAward() {
-  let body = {}
-  return new Promise((resolve) => {
-    $.post(taskPostUrl("city_lotteryAward", body), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            console.log(`抽奖结果：${data}`);
-            data = JSON.parse(data);
-            if (data['data']['bizCode'] === 0) {
-              const lotteryNum = data['data']['result']['lotteryNum'];
-              resolve(lotteryNum);
+    let body = {}
+    return new Promise((resolve) => {
+        $.post(taskPostUrl("city_lotteryAward",body), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        console.log(`抽奖结果：${data}`);
+                        data = JSON.parse(data);
+                        if (data['data']['bizCode'] === 0) {
+                            const lotteryNum = data['data']['result']['lotteryNum'];
+                            resolve(lotteryNum);
+                        }
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
             }
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
+        })
     })
-  })
 }
 
 //提交互助码
 function submitCode(code = '', user = '') {
-  return new Promise(async resolve => {
-    $.get({
-      url: `http://hz.feverrun.top:99/share/submit/city?code=${code}&user=${user}`,
-      timeout: 50000
-    }, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            //console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data || {"code": 500});
-      }
+    return new Promise(async resolve => {
+        $.get({
+            url: `http://hz.feverrun.top:99/share/submit/city?code=${code}&user=${user}`,
+            timeout: 50000
+        }, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        data = JSON.parse(data);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data || {"code": 500});
+            }
+        })
+        await $.wait(10000);
+        resolve({"code": 500})
     })
-    await $.wait(10000);
-    resolve({"code": 500})
-  })
 }
 
-//读取互助码
 function readShareCode() {
-  console.log(`开始`)
-  return new Promise(async resolve => {
-    $.get({url: `http://hz.feverrun.top:99/share/get/city`, 'timeout': 10000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`助力池 API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
+    console.log(`开始`)
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/get/city`, 'timeout': 10000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`助力池 API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        data = JSON.parse(data);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+        await $.wait(10000);
+        resolve()
     })
-    await $.wait(10000);
-    resolve()
-  })
 }
 
 //格式化助力码
 function shareCodesFormat() {
-  return new Promise(async resolve => {
-    $.newShareCodes = [];
-    try {
-      const readShareCodeRes = await readShareCode();
-      if (readShareCodeRes && readShareCodeRes.code === 0) {
-        $.ownCodes = []; //[firstCode, authorCode];
-        $.newShareCodes = [...new Set([...$.inviteIdCodesArr, ...(readShareCodeRes.data || [])])];
-      }
-    } catch (e) {
-      console.log(e);
-    }
-    resolve();
-  })
+    return new Promise(async resolve => {
+        $.newShareCodes = [];
+        let authorCode = '-ryUMOpeDDs_ImG6IqCEu1v_ZeWz_9c';
+        try {
+            let readShareCodeRes = await readShareCode();
+            if (readShareCodeRes && readShareCodeRes.code === 0) {
+                $.newShareCodes = [...new Set([...[authorCode], ...(readShareCodeRes.data || [])])];
+            } else {
+                $.newShareCodes = [...new Set(...[authorCode], ...$.inviteIdCodesArr)];
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+        resolve();
+    })
 }
-
-function getUA() {
-  $.UA = `jdapp;iPhone;10.2.0;13.1.2;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone8,1;addressid/2308460611;appBuild/167853;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
+function getUA(){
+    $.UA = `jdapp;iPhone;10.2.0;13.1.2;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone8,1;addressid/2308460611;appBuild/167853;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
 }
-
 function randomString(e) {
-  e = e || 32;
-  let t = "abcdef0123456789", a = t.length, n = "";
-  for (i = 0; i < e; i++)
-    n += t.charAt(Math.floor(Math.random() * a));
-  return n
+    e = e || 32;
+    let t = "abcdef0123456789", a = t.length, n = "";
+    for (i = 0; i < e; i++)
+        n += t.charAt(Math.floor(Math.random() * a));
+    return n
 }
-
 function safeGet(data) {
-  try {
-    if (typeof JSON.parse(data) == "object") {
-      return true;
-    }
-  } catch (e) {
-    console.log(e);
-    console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
-    return false;
-  }
-}
-
-function jsonParse(str) {
-  if (typeof str == "string") {
     try {
-      return JSON.parse(str);
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
     } catch (e) {
-      console.log(e);
-      $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
-      return [];
+        console.log(e);
+        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
     }
-  }
+}
+function jsonParse(str) {
+    if (typeof str == "string") {
+        try {
+            return JSON.parse(str);
+        } catch (e) {
+            console.log(e);
+            $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
+            return [];
+        }
+    }
 }
 
 // prettier-ignore

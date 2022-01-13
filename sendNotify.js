@@ -8,7 +8,7 @@ const querystring = require('querystring');
 const exec = require('child_process').exec;
 const $ = new Env();
 const timeout = 15000; //超时时间(单位毫秒)
-console.log("加载sendNotify，当前版本: 20220110");
+console.log("加载sendNotify，当前版本: 20220112");
 // =======================================go-cqhttp通知设置区域===========================================
 //gobot_url 填写请求地址http://127.0.0.1/send_private_msg
 //gobot_token 填写在go-cqhttp文件设置的访问密钥
@@ -159,11 +159,11 @@ let Notify_SkipText = [];
 let isLogin = false;
 if (process.env.NOTIFY_SHOWNAMETYPE) {
     ShowRemarkType = process.env.NOTIFY_SHOWNAMETYPE;
-    if(ShowRemarkType=="2")
+    if (ShowRemarkType == "2")
         console.log("检测到显示备注名称，格式为: 京东别名(备注)");
-    if(ShowRemarkType=="3")
+    if (ShowRemarkType == "3")
         console.log("检测到显示备注名称，格式为: 京东账号(备注)");
-    if(ShowRemarkType=="4")
+    if (ShowRemarkType == "4")
         console.log("检测到显示备注名称，格式为: 备注");
 }
 async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "") {
@@ -310,10 +310,14 @@ async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "
                                 }
                                 if (process.env.CHECKCK_ALLNOTIFY) {
                                     strAllNotify = process.env.CHECKCK_ALLNOTIFY;
-                                    /* if (strTempNotify.length > 0) {
+                                    /*
+                                    if (strTempNotify.length > 0) {
                                         for (var TempNotifyl in strTempNotify) {
                                             strAllNotify += strTempNotify[TempNotifyl] + '\n';
                                         }
+                                    for (var TempNotifyl in strTempNotify) {
+                                    strAllNotify += strTempNotify[TempNotifyl] + '\n';
+                                    }
                                     }
                                     */
                                     console.log(`检测到设定了温馨提示,将在推送信息中置顶显示...`);
@@ -1458,19 +1462,19 @@ function getQLinfo(strCK, intcreated, strTimestamp, strRemark) {
                         if (TempRemarkList[j].length == 13) {
                             DateTimestamp = new Date(parseInt(TempRemarkList[j]));
                             //console.log(strPtPin + ": 获取登录时间成功:" + GetDateTime(DateTimestamp));
+                            //过期时间
+                            var UseDay = Math.ceil((DateToday.getTime() - DateCreated.getTime()) / 86400000);
+                            var LogoutDay = 30 - Math.ceil((DateToday.getTime() - DateTimestamp.getTime()) / 86400000);
+                            if (LogoutDay < 1) {
+                                strReturn = "\n【登录信息】总挂机" + UseDay + "天(账号即将到期，请重登续期)"
+                            } else {
+                                strReturn = "\n【登录信息】总挂机" + UseDay + "天(有效期约剩" + LogoutDay + "天)"
+                            }
                             break;
                         }
                     }
                 }
             }
-        }
-        //过期时间
-        var UseDay = Math.ceil((DateToday.getTime() - DateCreated.getTime()) / 86400000);
-        var LogoutDay = 30 - Math.ceil((DateToday.getTime() - DateTimestamp.getTime()) / 86400000);
-        if (LogoutDay < 1) {
-            strReturn = "\n【登录信息】已服务" + UseDay + "天(登录状态即将到期，请重新登录)"
-        } else {
-            strReturn = "\n【登录信息】已服务" + UseDay + "天(有效期约剩" + LogoutDay + "天)"
         }
 
     }
@@ -1579,7 +1583,7 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n', strsummary
                     console.log("处理完成，开始发送通知...");
                     desp = buildLastDesp(desp, author);
                     if (strAllNotify) {
-                        desp = strAllNotify+"\n" + desp;
+                        desp = strAllNotify + "\n" + desp;
                     }
                     await wxpusherNotifyByOne(text, desp, strsummary);
                 } else {
