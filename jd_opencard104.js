@@ -1,16 +1,16 @@
 /*
-1.13~1.18 联合开卡-103 [jd_opencard103.js]
+1.6~1.14 联合开卡-104 [jd_opencard104.js]
 新增开卡脚本
 一次性脚本
 
-1.邀请一人5豆(有可能没有豆
-2.开12张 成功开1张 可能获得5京豆
+1.邀请一人20豆(有可能没有豆
+2.开6张 成功开1张 可能获得5京豆
   全部开完获得1次抽奖
 3.关注10京豆 获得1次抽奖
-4.加购5京豆 获得1次抽奖(默认不加购 如需加购请设置环境变量[opencard_addSku103]为"true"
-5.抽奖 (默认不抽奖 如需抽奖请设置环境变量[opencard_draw103]为"3"
+4.加购5京豆 获得1次抽奖(默认不加购 如需加购请设置环境变量[opencard_addSku104]为"true"
+5.抽奖 (默认不抽奖 如需抽奖请设置环境变量[opencard_draw104]为"3"
 填写要抽奖的次数 不足已自身次数为准
-opencard_draw103="3"
+opencard_draw104="3"
 填非数字会全都抽奖
 
 第一个账号助力作者 其他依次助力CK1
@@ -18,31 +18,31 @@ opencard_draw103="3"
 
 默认脚本不执行
 如需执行脚本请设置环境变量
-opencard103="true"
+opencard104="true"
 每个账号之间延迟 100=延迟100秒 0=延迟0秒会使用每3个账号延迟60秒
 openwait_All 所有
-openwait103="0"
+openwait104="0"
 
 
 All变量适用
 ————————————————
-入口：[ 1.13~1.18 联合开卡-103 (https://3.cn/10-4FafAy)]
+入口：[ 1.6~1.14 联合开卡-104 (https://3.cn/104R8-Db7)]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
 
 [task_local]
-#1.13~1.18 联合开卡-103
-19 2,15 13-18 1 * jd_opencard103.js, tag=1.13~1.18 联合开卡-103, enabled=true
+#1.6~1.14 联合开卡-104
+12 0 6-14 1 * jd_opencard104.js, tag=1.6~1.14 联合开卡-104, enabled=true
 
 */
 let opencard_addSku = "true"
 let opencard = "true"
 let openwait = "15"
-let opencard_draw = "5"
+let opencard_draw = "10"
 
-const $ = new Env('1.13~1.18 联合开卡-103');
+const $ = new Env('1.6~1.14 联合开卡-104');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cleanCart = ''
@@ -67,14 +67,14 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-opencard_addSku = $.isNode() ? (process.env.opencard_addSku103 ? process.env.opencard_addSku103 : `${opencard_addSku}`) : ($.getdata('opencard_addSku103') ? $.getdata('opencard_addSku103') : `${opencard_addSku}`);
+opencard_addSku = $.isNode() ? (process.env.opencard_addSku104 ? process.env.opencard_addSku104 : `${opencard_addSku}`) : ($.getdata('opencard_addSku104') ? $.getdata('opencard_addSku104') : `${opencard_addSku}`);
 opencard_addSku = $.isNode() ? (process.env.opencard_addSku_All ? process.env.opencard_addSku_All : `${opencard_addSku}`) : ($.getdata('opencard_addSku_All') ? $.getdata('opencard_addSku_All') : `${opencard_addSku}`);
-opencard = $.isNode() ? (process.env.opencard103 ? process.env.opencard103 : `${opencard}`) : ($.getdata('opencard103') ? $.getdata('opencard103') : `${opencard}`);
+opencard = $.isNode() ? (process.env.opencard104 ? process.env.opencard104 : `${opencard}`) : ($.getdata('opencard104') ? $.getdata('opencard104') : `${opencard}`);
 opencard = $.isNode() ? (process.env.opencard_All ? process.env.opencard_All : `${opencard}`) : ($.getdata('opencard_All') ? $.getdata('opencard_All') : `${opencard}`);
-openwait = $.isNode() ? (process.env.openwait103 ? process.env.openwait103 : `${openwait}`) : ($.getdata('openwait103') ? $.getdata('openwait103') : `${openwait}`);
+openwait = $.isNode() ? (process.env.openwait104 ? process.env.openwait104 : `${openwait}`) : ($.getdata('openwait104') ? $.getdata('openwait104') : `${openwait}`);
 openwait = $.isNode() ? (process.env.openwait_All ? process.env.openwait_All : `${openwait}`) : ($.getdata('openwait_All') ? $.getdata('openwait_All') : `${openwait}`);
 openwait = parseInt(openwait, 10) || 0
-opencard_draw = $.isNode() ? (process.env.opencard_draw103 ? process.env.opencard_draw103 : opencard_draw) : ($.getdata('opencard_draw103') ? $.getdata('opencard_draw103') : opencard_draw);
+opencard_draw = $.isNode() ? (process.env.opencard_draw104 ? process.env.opencard_draw104 : opencard_draw) : ($.getdata('opencard_draw104') ? $.getdata('opencard_draw104') : opencard_draw);
 opencard_draw = $.isNode() ? (process.env.opencard_draw ? process.env.opencard_draw : opencard_draw) : ($.getdata('opencard_draw') ? $.getdata('opencard_draw') : opencard_draw);
 openwait = parseInt(openwait, 10) || 0
 allMessage = ""
@@ -87,7 +87,7 @@ let activityCookie =''
 !(async () => {
     if ($.isNode()) {
         if(opencard+"" != "true"){
-            console.log('如需执行脚本请设置环境变量[opencard103]为"true"')
+            console.log('如需执行脚本请设置环境变量[opencard104]为"true"')
         }
         if(opencard+"" != "true"){
             return
@@ -102,10 +102,11 @@ let activityCookie =''
     // return
     $.appkey = '51B59BB805903DA4CE513D29EC448375'
     $.userId = '10299171'
-    $.actId = 'f6b9469f2ce7439a99bb47_220113'
+    $.actId = 'c49b9bf1e3c3487dac8ab_22010601'
     $.MixNicks = ''
     $.inviteNick = 'JnGd3fFQ9edqNXqS3kHNFFs/ye9oluZX4nOTK56TeMXbR7I2OlzZch4hTs22oCUS'
-    console.log(`活动地址:https://3.cn/10-4FafAy`)
+    console.log(`活动地址:https://3.cn/104R8-Db7`)
+
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -120,7 +121,6 @@ let activityCookie =''
             await run();
             if(i == 0 && !$.MixNick) break
             if($.outFlag || $.activityEnd) break
-            await $.wait(5000)
         }
     }
     if($.outFlag) {
@@ -209,7 +209,7 @@ async function run() {
                 }
             }
         }else{
-            console.log('如需加购请设置环境变量[opencard_addSku103]为"true"');
+            console.log('如需加购请设置环境变量[opencard_addSku104]为"true"');
         }
         await takePostRequest('activity_load');
         if(opencard_draw+"" !== "0"){
@@ -229,7 +229,7 @@ async function run() {
                 }
                 await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
             }
-        }else console.log('如需抽奖请设置环境变量[opencard_draw103]为"3" 3为次数');
+        }else console.log('如需抽奖请设置环境变量[opencard_draw104]为"3" 3为次数');
         await takePostRequest('myAward');
         await takePostRequest('missionInviteList');
         console.log($.MixNick)
@@ -417,9 +417,15 @@ async function dealReturn(type, data) {
                                 let value = 0
                                 for(let i in res.data.list || []){
                                     let item = res.data.list[i]
-                                    value += Number(item.awardDes)
+                                    if(item.awardDes == '20'){
+                                        num++
+                                        value = item.awardDes
+                                    }else{
+                                        if(type == "myAward") console.log(`${item.awardName}`)
+                                    }
                                 }
-                                if(value > 0) console.log(`共获得${value}京豆\n无法判断奖励是否为邀请奖励，所以直接显示获得多少豆\n`)
+                                if($.index == 1 || type == "myAwards") $.MAcount = num
+                                if(num > 0 && type == "myAward") console.log(`邀请好友(${num}):${num*parseInt(value, 10) || 30}京豆`)
                             }else if(type == "missionInviteList"){
                                 console.log(`邀请人数(${res.data.invitedLogList.total})`)
                             }

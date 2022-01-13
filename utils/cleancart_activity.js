@@ -25,7 +25,9 @@ async function clean(ck,url,goodsArr){
             let res = jsonParse(data)
             if(typeof res == 'object' && res){
                 if(res.resultCode == 0){
-                    if(!res.clearCartInfo || !res.subTitle){
+                    if(res.mainTitle.indexOf('购物车是空的') > -1){
+                        msg = []
+                    }else if(!res.clearCartInfo || !res.subTitle){
                         console.log(res.mainTitle)
                     }else{
                         let num = 0
@@ -97,7 +99,7 @@ async function clean(ck,url,goodsArr){
                                 }
                             }
                         }else if(res.mainTitle){
-                            if(res.mainTitle == '购物车是空的'){
+                            if(res.mainTitle.indexOf('购物车是空的') > -1){
                                 msg = []
                             }
                             console.log(res.mainTitle)
