@@ -315,9 +315,6 @@ async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "
                                         for (var TempNotifyl in strTempNotify) {
                                             strAllNotify += strTempNotify[TempNotifyl] + '\n';
                                         }
-                                    for (var TempNotifyl in strTempNotify) {
-                                    strAllNotify += strTempNotify[TempNotifyl] + '\n';
-                                    }
                                     }
                                     */
                                     console.log(`检测到设定了温馨提示,将在推送信息中置顶显示...`);
