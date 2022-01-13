@@ -29,7 +29,7 @@ if ($.isNode()) {
         return;
     }
 
-        authorCodeList = ['1105c333da634c419381d385279554b0',]
+    authorCodeList = ['1105c333da634c419381d385279554b0',]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
