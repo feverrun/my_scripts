@@ -26,19 +26,19 @@ openwait105="0"
 
 All变量适用
 ————————————————
-入口：[ 1.6~1.20 山海之巅，冲刺大牌盲盒 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/index/activity?activityId=dz220106100001616201Union&shareUuid=78efeadf279a443ba771d0673a8b022a)]
+入口：[ 1.6~1.20 山海之巅，冲刺大牌盲盒 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/index/activity?activityId=dz220106100001616201Union&shareUuid=29571e18297a4372bf1b6d60e173c81b)]
 请求太频繁会被黑ip
 过10分钟再执行
 
 [task_local]
 #1.6~1.20 山海之巅，冲刺大牌盲盒
-25 0,12 6-20 1 * jd_opencard105.js, tag=1.6~1.20 山海之巅，冲刺大牌盲盒, enabled=true
+2 0 6-20 12 * jd_opencard_shzd.js, tag=1.6~1.20 山海之巅，冲刺大牌盲盒, enabled=true
 
 */
 let opencard_addSku = "true"
 let opencard = "true"
 let openwait = "15"
-let opencard_draw = "10"
+let opencard_draw = "5"
 
 const $ = new Env('1.6~1.20 山海之巅，冲刺大牌盲盒');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
