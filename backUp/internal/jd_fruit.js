@@ -697,7 +697,6 @@ async function masterHelpShare() {
         await masterHelp(code);
         if ($.helpResult.code === '0') {
             if ($.helpResult.helpResult.code === '0') {
-                try {await farmCount($.UserName);}catch (e) {console.log(e.message)}
                 salveHelpAddWater += $.helpResult.helpResult.salveHelpAddWater;
                 console.log(`【助力好友结果】: 已成功给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力`);
                 console.log(`给好友【${$.helpResult.helpResult.masterUserInfo.nickName}】助力获得${$.helpResult.helpResult.salveHelpAddWater}g水滴`)
@@ -872,23 +871,6 @@ async function getAwardInviteFriend() {
     } else {
         console.log(`查询好友列表失败\n`);
     }
-}
-
-function farmCount(username) {
-    return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/submit/farmc?username=${username}`,timeout: 10000}, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {}
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
-    })
 }
 
 //给好友浇水
@@ -1399,48 +1381,6 @@ function taskUrl(function_id, body = {}) {
         },
         timeout: 10000
     }
-}
-
-function submitCode() {
-    return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/submit/farm?code=${$.farmInfo.farmUserPro.shareCode}&user=${$.UserName}`, timeout: 10000}, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (safeGet(data)) {
-                        data = JSON.parse(data);
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
-
-function submitCode0() {
-    return new Promise(async resolve => {
-        $.get({url: `http://hz.feverrun.top:99/share/submit/farm0?code=${$.farmInfo.farmUserPro.shareCode}&user=${$.UserName}`, timeout: 10000}, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (safeGet(data)) {
-                        data = JSON.parse(data);
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
 }
 
 function jsonParse(str) {
