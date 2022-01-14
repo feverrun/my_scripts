@@ -11,7 +11,7 @@
 
 [task_local]
 #1.6-1.31 轩辕虎越,风生水起
-11 1,20 6-31 1 * jd_xyhy.js, tag=1.6-1.31 轩辕虎越,风生水起, enabled=true
+11 1,20 6-31 1 * jd_opencard_xyhy.js, tag=1.6-1.31 轩辕虎越,风生水起, enabled=true
 */
 const $ = new Env("1.6-1.31 轩辕虎越,风生水起");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
