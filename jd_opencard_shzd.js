@@ -37,8 +37,8 @@ All变量适用
 */
 let opencard_addSku = "true"
 let opencard = "true"
-let openwait = "15"
-let opencard_draw = "5"
+let openwait = "10"
+let opencard_draw = "3"
 
 const $ = new Env('1.6~1.20 山海之巅，冲刺大牌盲盒');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

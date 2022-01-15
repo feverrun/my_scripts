@@ -1,7 +1,6 @@
 /*
 #天天压岁钱
-33 1,12 * * * jd_ttysq.js
-PS:(不是玩代码的人，写代码有bug很正常！！)
+33 1,9,13,20 * * * jx_ttysq.js
  */
 const $ = new Env('天天压岁钱');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -148,11 +147,11 @@ function getAuthorShareCode(url) {
 async function main() {
     try{
         await task(`jxnhj/GetUserInfo`, `strInviteId=&nopopup=0`, show = true)
-        await $.wait(500)
+        await $.wait(1500)
         await task(`jxnhj/BestWishes`)
-        await $.wait(500)
+        await $.wait(1500)
         await task(`jxnhj/GetTaskList`)
-        await $.wait(500)
+        await $.wait(1500)
         if(!$.allTaskList){
             console.log(`获取任务列表失败`)
         }else{
