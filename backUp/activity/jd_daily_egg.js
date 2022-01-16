@@ -3,14 +3,13 @@
 定时收鹅蛋,兑换金币
 已支持IOS双京东账号,Node.js支持N个京东账号
 #天天提鹅
-cron "10 * * * *" jd_daily_egg.js,tag=天天提鹅
+cron "5 * * * *" jd_daily_egg.js,tag=天天提鹅
  */
 
 const $ = new Env('天天提鹅');
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://ms.jr.jd.com/gw/generic/uc/h5/m';
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const dailyEggUrl = "https://active.jd.com/forever/btgoose/?channelLv=yxjh&jrcontainer=h5&jrlogin=true"
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const { JSDOM } = $.isNode() ? require('jsdom') : '';

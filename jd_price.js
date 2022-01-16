@@ -1,15 +1,11 @@
 /*
-京东保价
-
-已支持IOS双京东账号,Node.js支持N个京东账号
-cron "41 23 * * *" script-path=jd_price.js,tag=京东保价
+京东保价 已失效
+cron "33 22 * * 1,5" script-path=jd_price.js,tag=京东保价
  */
 const $ = new Env('京东保价');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const jsdom = $.isNode() ? require('jsdom') : '';
-//IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message, allMessage = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -47,7 +43,7 @@ const JD_API_HOST = 'https://api.m.jd.com/';
                 continue
             }
             await price()
-            await $.wait(3000)
+            await $.wait(10000)
         }
     }
     if (allMessage) {
@@ -62,15 +58,11 @@ const JD_API_HOST = 'https://api.m.jd.com/';
     })
 
 async function price() {
-    let num = 0
-    do {
-        $.token = $.jab.getToken() || ''
-        if ($.token) {
-            await siteppM_skuOnceApply();
-            await $.wait(3000)
-        }
-        num++
-    } while (num < 3 && !$.token)
+    $.token = $.jab.getToken() || ''
+    if ($.token) {
+        await siteppM_skuOnceApply();
+        await $.wait(3000)
+    }
     await showMsg()
 }
 
@@ -89,10 +81,11 @@ async function siteppM_skuOnceApply() {
                     console.log(JSON.stringify(err))
                     console.log(`${$.name} siteppM_skuOnceApply API请求失败，请检查网路重试`);
                 } else {
+                    // console.log(data)
                     if (safeGet(data)) {
                         data = JSON.parse(data)
                         if (data.flag) {
-                            await $.wait(25 * 1000)
+                            await $.wait(25000)
                             await siteppM_appliedSuccAmount()
                         } else {
                             console.log(`保价失败：${data.responseMessage}`)
@@ -122,6 +115,7 @@ function siteppM_appliedSuccAmount() {
                     console.log(JSON.stringify(err))
                     console.log(`${$.name} siteppM_appliedSuccAmount API请求失败，请检查网路重试`)
                 } else {
+                    // console.log(data)
                     if (safeGet(data)) {
                         data = JSON.parse(data)
                         if (data.flag) {
@@ -144,14 +138,14 @@ function siteppM_appliedSuccAmount() {
 async function jstoken() {
     const { JSDOM } = jsdom;
     let resourceLoader = new jsdom.ResourceLoader({
-        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+        userAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu"
     });
     let virtualConsole = new jsdom.VirtualConsole();
     let options = {
         url: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
         referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
-        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+        userAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         runScripts: "dangerously",
         resources: resourceLoader,
         includeNodeLocations: true,
@@ -162,7 +156,7 @@ async function jstoken() {
     // const { window } = new JSDOM(``, options);
     // const jdPriceJs = await downloadUrl("https://js-nocaptcha.jd.com/statics/js/main.min.js")
     const dom = new JSDOM(`<body><script src="https://js-nocaptcha.jd.com/statics/js/main.min.js"></script></body>`, options);
-    await $.wait(1000)
+    await $.wait(3000)
     try {
         // window.eval(jdPriceJs)
         // window.HTMLCanvasElement.prototype.getContext = () => {
@@ -172,6 +166,7 @@ async function jstoken() {
             bizId: 'jdjiabao',
             initCaptcha: false
         })
+        await $.wait(3000)
     } catch (e) {}
 }
 
@@ -230,7 +225,7 @@ function TotalBean() {
             headers: {
                 "Host": "me-api.jd.com",
                 "Accept": "*/*",
-                "User-Agent": "ScriptableWidgetExtension/185 CFNetwork/1312 Darwin/21.0.0",
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
                 "Accept-Language": "zh-CN,zh-Hans;q=0.9",
                 "Accept-Encoding": "gzip, deflate, br",
                 "Cookie": cookie
