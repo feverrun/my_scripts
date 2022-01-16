@@ -1,6 +1,6 @@
 /*
 萌虎摇摇乐
-cron 18 8 * * * mhyyl.js
+cron 18 8 * * * jd_mhyyl.js
 * */
 const $ = new Env('萌虎摇摇乐');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
