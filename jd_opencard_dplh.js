@@ -1,5 +1,5 @@
 /*
-6 1,9 17-23 1 * jd_opencardL48.js, tag=1.17~1.23 联合开卡, enabled=true
+6 1,17 17-23 1 * jd_opencard_dplh.js, tag=1.17~1.23 联合开卡, enabled=true
 */
 const $ = new Env("大牌联合");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
