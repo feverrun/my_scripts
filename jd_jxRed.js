@@ -1,6 +1,6 @@
 /*
 年货节红包
-cron 0 0,8,20,22 * * *  jd_jxRed.js
+cron 0 0,10,20,22 * * *  jd_jxRed.js
 整点跑 红包几率大点
 
 https://u.jd.com/SCsfNxf
