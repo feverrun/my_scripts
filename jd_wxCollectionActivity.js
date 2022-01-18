@@ -4,13 +4,13 @@ https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=
 不能并发
 JD_CART_REMOVESIZE || 20; // 运行一次取消多全部已关注的商品。数字0表示不取关任何商品
 JD_CART_REMOVEALL || true;    //是否清空，如果为false，则上面设置了多少就只删除多少条
-cron "5 14,22 * * *" jd_wxPlusCart.js
+cron "5 15,22 * * *" jd_wxCollectionActivity.js
 */
 const $ = new Env('加购物车抽奖');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '' ,isPush = false;
-let activityIdList = ['fe646b9fda604d40932aab0ccecb0042', '713d25a249554ff1a3940fc1dcb56ac5']
+let activityIdList = ['3c953d6da7044dfe970b9ef46fa59a5c']
 let lz_cookie = {}
 
 if (process.env.ACTIVITY_ID && process.env.ACTIVITY_ID != "") {
