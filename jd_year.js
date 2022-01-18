@@ -137,7 +137,7 @@ async function main() {
                     }
                 }
                 if ($.index === 1) {
-                    // await taskPost('invite_friend', `inviter_id=ee&uuid=${$.uuid}&source=shareFriend`);
+                    await taskPost('invite_friend', `inviter_id=61e606938efc431117&uuid=${$.uuid}&source=shareFriend`);
                 }
             }
             await task('get_calendar_detail', `uuid=${$.uuid}&source=shareFriend`);
