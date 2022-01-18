@@ -1,7 +1,7 @@
 /*
 会员联合盛典  年货好物集结
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/5063373?activityId=dzlhkklblsifkpeq0118&shareUuid=3705c4cbf3bc41bf97754ee98cfd5e64
-
+cron "3 19 * * *" jd_opencard_hhjj.js
 */
 const $ = new Env("会员联合盛典  年货好物集结");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
