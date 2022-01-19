@@ -2,7 +2,7 @@
 组队分豆-飞利浦 [jd_teamFLP.js]
 入口：[组队分豆-飞利浦 (https://lzkjdz-isv.isvjcloud.com/pool/captain/4471266?activityId=52c0712263f342308da1287a66702009&signUuid=f4dbc733e0674545aec847ae8bdf5579)]
 IOS等用户直接用NobyDa的jd cookie
-cron "18 1,15,21 * * *" script-path=jd_teamFLP.js,tag=组队分豆-飞利浦
+cron "8 1,14,16,18 15-18 1 *" script-path=jd_teamFLP.js,tag=组队分豆-飞利浦
 */
 const $ = new Env("组队分豆-飞利浦");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
