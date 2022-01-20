@@ -8,7 +8,7 @@ const querystring = require('querystring');
 const exec = require('child_process').exec;
 const $ = new Env();
 const timeout = 15000; //超时时间(单位毫秒)
-console.log("加载sendNotify，当前版本: 20220116");
+console.log("加载sendNotify，当前版本: 20220119");
 // =======================================go-cqhttp通知设置区域===========================================
 //gobot_url 填写请求地址http://127.0.0.1/send_private_msg
 //gobot_token 填写在go-cqhttp文件设置的访问密钥
@@ -168,6 +168,24 @@ if (process.env.NOTIFY_SHOWNAMETYPE) {
 }
 async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "") {
     console.log(`开始发送通知...`);
+
+    //NOTIFY_FILTERBYFILE
+    if (process.env.NOTIFY_FILTERBYFILE) {
+        var no_notify = process.env.NOTIFY_FILTERBYFILE.split('&');
+        if (module.parent.filename) {
+            const script_name = module.parent.filename.split('/').slice(-1)[0];
+            if (no_notify.some(key_word => {
+                const flag = script_name.includes(key_word);
+                if (flag) {
+                    console.log(`${script_name}含有关键字${key_word},不推送`);
+                }
+                return flag;
+            })) {
+                return;
+            }
+        }
+    }
+
     try {
         //Reset 变量
         UseGroupNotify = 1;
