@@ -1,6 +1,7 @@
 /*
 大牌好礼带回家
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/5063373?activityId=dzlhkkkbblnt20220121&shareUuid=1bec24acca224e17b6472dc6d24ae648
+cron "2 1 * * *" jd_opencard_hlhj.js
 */
 const $ = new Env("大牌好礼带回家");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
