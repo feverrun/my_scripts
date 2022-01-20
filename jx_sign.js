@@ -1,6 +1,5 @@
 /*
 京喜签到
-cron 20 1,8 * * * jx_sign.js
 活动入口：京喜APP-我的-京喜签到
 [Script]
 cron "13 1,8 * * *" script-path=jx_sign.js,tag=京喜签到
