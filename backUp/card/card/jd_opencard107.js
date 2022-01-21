@@ -35,14 +35,14 @@ let openwait = "10"
 let opencard_draw = "3"
 
 const $ = new Env('1.14~1.20 大牌会员日');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../../../jdCookie.js') : '';
+const notify = $.isNode() ? require('../../../sendNotify') : '';
 let cleanCart = ''
 if($.isNode()){
     try{
         const fs = require('fs');
         if (fs.existsSync('./utils/cleancart_activity.js')) {
-            cleanCart = require('./utils/cleancart_activity');
+            cleanCart = require('../../../utils/cleancart_activity');
         }
     }catch(e){
     }

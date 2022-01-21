@@ -43,14 +43,14 @@ let openwait = "15"
 let opencard_draw = "5"
 
 const $ = new Env('1.13~1.18 联合开卡-103');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../../../jdCookie.js') : '';
+const notify = $.isNode() ? require('../../../sendNotify') : '';
 let cleanCart = ''
 if($.isNode()){
     try{
         const fs = require('fs');
         if (fs.existsSync('./utils/cleancart_activity.js')) {
-            cleanCart = require('./utils/cleancart_activity');
+            cleanCart = require('../../../utils/cleancart_activity');
         }
     }catch(e){
     }

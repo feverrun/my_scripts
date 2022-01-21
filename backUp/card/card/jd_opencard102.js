@@ -1,54 +1,51 @@
 /*
-1.6~1.20 山海之巅，冲刺大牌盲盒 [jd_opencard105.js]
+1.13~1.20 瓜分千万京豆 免费抽大奖 [jd_opencard102.js]
 新增开卡脚本
 一次性脚本
 
-1.邀请一人200豆
-2.开12张 成功开1张 可能获得30京豆
-3.关注120山海值
-4.加购100山海值(默认不加购 如需加购请设置环境变量[opencard_addSku105]为"true"
-5.抽奖(200山海值) (默认不抽奖 如需抽奖请设置环境变量[opencard_draw105]为"3"
-填写要抽奖的次数 不足已自身次数为准
-opencard_draw105="3"
-填非数字会全都抽奖
-
+1.邀请一人20豆
+2.开3组(共36张) 成功开1张 可能获得5京豆
+  每开完1组 可以抽1次奖
+3.关注5豆
+4.加购3京豆
+  (默认不加购 如需加购请设置环境变量[opencard_addSku102]为"true"
 
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 
 默认脚本不执行
 如需执行脚本请设置环境变量
-opencard105="true"
+opencard102="true"
 每个账号之间延迟 100=延迟100秒 0=延迟0秒会使用每3个账号延迟60秒
 openwait_All 所有
-openwait105="0"
+openwait102="0"
 
 
 All变量适用
 ————————————————
-入口：[ 1.6~1.20 山海之巅，冲刺大牌盲盒 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/index/activity?activityId=dz220106100001616201Union&shareUuid=29571e18297a4372bf1b6d60e173c81b)]
+入口：[ 1.13~1.20 瓜分千万京豆 免费抽大奖 (https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=dz220107100001616201shop&shareUuid=1105c333da634c419381d385279554b0)]
+
 请求太频繁会被黑ip
 过10分钟再执行
 
 [task_local]
-#1.6~1.20 山海之巅，冲刺大牌盲盒
-2 0 6-20 12 * jd_opencard_shzd.js, tag=1.6~1.20 山海之巅，冲刺大牌盲盒, enabled=true
+#1.13~1.20 瓜分千万京豆 免费抽大奖
+10 1 13-20 1 * jd_opencard102.js, tag=1.13~1.20 瓜分千万京豆 免费抽大奖, enabled=true
 
 */
 let opencard_addSku = "true"
 let opencard = "true"
-let openwait = "10"
-let opencard_draw = "3"
+let openwait = "15"
 
-const $ = new Env('1.6~1.20 山海之巅，冲刺大牌盲盒');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const $ = new Env('1.13~1.20 瓜分千万京豆 免费抽大奖');
+const jdCookieNode = $.isNode() ? require('../../../jdCookie.js') : '';
+const notify = $.isNode() ? require('../../../sendNotify') : '';
 let cleanCart = ''
 if($.isNode()){
     try{
         const fs = require('fs');
         if (fs.existsSync('./utils/cleancart_activity.js')) {
-            cleanCart = require('./utils/cleancart_activity');
+            cleanCart = require('../../../utils/cleancart_activity');
         }
     }catch(e){
     }
@@ -66,15 +63,13 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-opencard_addSku = $.isNode() ? (process.env.opencard_addSku105 ? process.env.opencard_addSku105 : `${opencard_addSku}`) : ($.getdata('opencard_addSku105') ? $.getdata('opencard_addSku105') : `${opencard_addSku}`);
+opencard_addSku = $.isNode() ? (process.env.opencard_addSku102 ? process.env.opencard_addSku102 : `${opencard_addSku}`) : ($.getdata('opencard_addSku102') ? $.getdata('opencard_addSku102') : `${opencard_addSku}`);
 opencard_addSku = $.isNode() ? (process.env.opencard_addSku_All ? process.env.opencard_addSku_All : `${opencard_addSku}`) : ($.getdata('opencard_addSku_All') ? $.getdata('opencard_addSku_All') : `${opencard_addSku}`);
-opencard = $.isNode() ? (process.env.opencard105 ? process.env.opencard105 : `${opencard}`) : ($.getdata('opencard105') ? $.getdata('opencard105') : `${opencard}`);
+opencard = $.isNode() ? (process.env.opencard102 ? process.env.opencard102 : `${opencard}`) : ($.getdata('opencard102') ? $.getdata('opencard102') : `${opencard}`);
 opencard = $.isNode() ? (process.env.opencard_All ? process.env.opencard_All : `${opencard}`) : ($.getdata('opencard_All') ? $.getdata('opencard_All') : `${opencard}`);
-openwait = $.isNode() ? (process.env.openwait105 ? process.env.openwait105 : `${openwait}`) : ($.getdata('openwait105') ? $.getdata('openwait105') : `${openwait}`);
+openwait = $.isNode() ? (process.env.openwait102 ? process.env.openwait102 : `${openwait}`) : ($.getdata('openwait102') ? $.getdata('openwait102') : `${openwait}`);
 openwait = $.isNode() ? (process.env.openwait_All ? process.env.openwait_All : `${openwait}`) : ($.getdata('openwait_All') ? $.getdata('openwait_All') : `${openwait}`);
 openwait = parseInt(openwait, 10) || 0
-opencard_draw = $.isNode() ? (process.env.opencard_draw105 ? process.env.opencard_draw105 : opencard_draw) : ($.getdata('opencard_draw105') ? $.getdata('opencard_draw105') : opencard_draw);
-opencard_draw = $.isNode() ? (process.env.opencard_draw ? process.env.opencard_draw : opencard_draw) : ($.getdata('opencard_draw') ? $.getdata('opencard_draw') : opencard_draw);
 allMessage = ""
 message = ""
 $.hotFlag = false
@@ -85,7 +80,7 @@ let activityCookie =''
 !(async () => {
     if ($.isNode()) {
         if(opencard+"" != "true"){
-            console.log('如需执行脚本请设置环境变量[opencard105]为"true"')
+            console.log('如需执行脚本请设置环境变量[opencard102]为"true"')
         }
         if(opencard+"" != "true"){
             return
@@ -97,14 +92,9 @@ let activityCookie =''
         });
         return;
     }
-    $.activityId = "dz220106100001616201Union"
-    $.shareUuid = "29571e18297a4372bf1b6d60e173c81b"
-    console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/index/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
-    let shareUuidArr = [$.shareUuid,"f76b0dcd728548dc8c7bb60dba272f2d","b07290687bec42d7853a56531f6cece3","00828aeec7ce4ebcb28c63a32b1fda34","d9b1c4660a4a400b9225ce9e4c42f08e","1bdc55d58ba74670aa00bc90d19d7c0b","d6bfce0bbd4d41aaa08dbd3f41697da6","50d9a7fcd452463c8668633b01116632","d62d0215e17e4a6890df3e413d5ba403"]
-    let s = Math.floor((Math.random()*10))
-    let n = 0
-    if(s == 1) n = Math.floor((Math.random()*shareUuidArr.length))
-    $.shareUuid = shareUuidArr[n] ? shareUuidArr[n] : $.shareUuid
+    $.activityId = "dz220107100001616201shop"
+    $.shareUuid = "1105c333da634c419381d385279554b0"
+    console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
@@ -120,6 +110,7 @@ let activityCookie =''
             await run();
             if(i == 0 && !$.actorUuid) break
             if($.outFlag || $.activityEnd) break
+            await $.wait(5000)
         }
     }
     if($.outFlag) {
@@ -181,7 +172,6 @@ async function run() {
         $.openList = []
         $.allOpenCard = false
         await takePostRequest('checkOpenCard');
-        await takePostRequest('getTaskInfos');
         // console.log($.actorUuid)
         // return
         if($.allOpenCard == false){
@@ -190,7 +180,7 @@ async function run() {
                 $.openCard = false
                 if(o.status == 0){
                     flag = true
-                    $.joinVenderId = o.venderId
+                    $.joinVenderId = o.value
                     await joinShop()
                     await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
                     await takePostRequest('drawContent');
@@ -202,10 +192,30 @@ async function run() {
         }else{
             console.log('已全部开卡')
         }
+        // if($.openCardScore1 == 1 && !$.outFlag){
+        //   $.startDraw = 1
+        //   flag = true
+        //   await takePostRequest('startDraw');
+        //   await $.wait(parseInt(Math.random() * 1000 + 3000, 10))
+        // }
+        // if($.openCardScore2 == 1 && !$.outFlag){
+        //   $.startDraw = 2
+        //   flag = true
+        //   await takePostRequest('startDraw');
+        //   await $.wait(parseInt(Math.random() * 1000 + 3000, 10))
+        // }
+
+        // if($.openCardScore3 == 1 && !$.outFlag){
+        //   $.startDraw = 3
+        //   flag = true
+        //   await takePostRequest('startDraw');
+        //   await $.wait(parseInt(Math.random() * 1000 + 3000, 10))
+        // }
+
         $.log("关注: " + $.followShop)
         if(!$.followShop && !$.outFlag){
             flag = true
-            $.followShopValue = 23
+            $.followShopValue = 1
             await takePostRequest('followShop');
             await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         }
@@ -213,43 +223,25 @@ async function run() {
         if(!$.addSku && !$.outFlag){
             if(opencard_addSku+"" == "true"){
                 flag = true
-                $.followShopValue = 21
+                $.followShopValue = 2
                 if(cleanCart){
                     goodsArr = await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717','')
                     await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
                 }
-                await takePostRequest('addSkus');
+                await takePostRequest('addSku');
                 await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
                 if(cleanCart && goodsArr !== false){
                     // await $.wait(parseInt(Math.random() * 1000 + 4000, 10))
                     await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717',goodsArr || [])
                 }
             }else{
-                console.log('如需加购请设置环境变量[opencard_addSku105]为"true"');
+                console.log('如需加购请设置环境变量[opencard_addSku102]为"true"');
             }
         }
+        $.runFalag = true
         if(flag){
             await takePostRequest('activityContent');
         }
-        if(opencard_draw+"" !== "0"){
-            $.runFalag = true
-            let count = parseInt($.score/200)
-            opencard_draw = parseInt(opencard_draw, 10)
-            if(count > opencard_draw) count = opencard_draw
-            console.log(`抽奖次数为:${count}`)
-            for(m=1;count--;m++){
-                console.log(`第${m}次抽奖`)
-                await takePostRequest('抽奖');
-                if($.runFalag == false) break
-                if(Number(count) <= 0) break
-                if(m >= 10){
-                    console.log("抽奖太多次，多余的次数请再执行脚本")
-                    break
-                }
-                await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
-            }
-        }else console.log('如需抽奖请设置环境变量[opencard_draw105]为"3" 3为次数');
-
         await $.wait(parseInt(Math.random() * 1000 + 2000, 10))
         await takePostRequest('getDrawRecordHasCoupon');
         await takePostRequest('getShareRecord');
@@ -308,7 +300,7 @@ async function takePostRequest(type) {
             body = `pin=${encodeURIComponent($.Pin)}`;
             break;
         case 'activityContent':
-            url = `${domain}/dz/customized/common/activityContent`;
+            url = `${domain}/dingzhi/shop/league/activityContent`;
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&pinImg=${encodeURIComponent($.attrTouXiang)}&nick=${encodeURIComponent($.nickname)}&cjyxPin=&cjhyPin=&shareUuid=${$.shareUuid}`
             break;
         case 'drawContent':
@@ -316,24 +308,17 @@ async function takePostRequest(type) {
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}`
             break;
         case 'checkOpenCard':
-            url = `${domain}/tongrentang/union/checkOpenCard`;
+            url = `${domain}/dingzhi/shop/league/checkOpenCard`;
             body = `activityId=${$.activityId}&actorUuid=${$.actorUuid}&pin=${encodeURIComponent($.Pin)}&shareUuid=${$.shareUuid}`
-            break;
-        case 'getTaskInfos':
-            url = `${domain}/tongrentang/union/getTaskInfos`;
-            body = `activityId=${$.activityId}&actorUuid=${$.actorUuid}&pin=${encodeURIComponent($.Pin)}`
             break;
         case 'startDraw':
             url = `${domain}/dingzhi/shop/league/startDraw`;
             body = `activityId=${$.activityId}&actorUuid=${$.actorUuid}&pin=${encodeURIComponent($.Pin)}${$.startDraw && '&type='+$.startDraw || ''}`
             break;
         case 'followShop':
-            url = `${domain}/tongrentang/union/saveTask`;
-            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&taskType=${$.followShopValue}`
-            break;
-        case 'addSkus':
-            url = `${domain}/tongrentang/union/saveTask`;
-            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&taskType=${$.followShopValue}`
+            url = `${domain}/dingzhi/shop/league/saveTask`;
+            // url = `${domain}/dingzhi/dz/openCard/saveTask`;
+            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&shareUuid=${$.shareUuid}&taskType=1&taskValue=${$.followShopValue}`
             break;
         case 'viewVideo':
         case 'visitSku':
@@ -358,16 +343,12 @@ async function takePostRequest(type) {
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&taskType=${taskType}&taskValue=${taskValue}`
             break;
         case 'getDrawRecordHasCoupon':
-            url = `${domain}/dz/customized/common/myPrize`;
+            url = `${domain}/dingzhi/taskact/common/getDrawRecordHasCoupon`;
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}`
             break;
         case 'getShareRecord':
-            url = `${domain}/tongrentang/union/getMyFriend`;
+            url = `${domain}/dingzhi/taskact/common/getShareRecord`;
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}`
-            break;
-        case '抽奖':
-            url = `${domain}/tongrentang/union/start-draw`;
-            body = `activityId=${$.activityId}&actorUuid=${$.actorUuid}&pin=${encodeURIComponent($.Pin)}`
             break;
         default:
             console.log(`错误${type}`);
@@ -472,10 +453,11 @@ async function dealReturn(type, data) {
             case 'activityContent':
                 if(typeof res == 'object'){
                     if(res.result && res.result === true){
-                        $.endTime = res.data.endTime || (res.data.activityVO && res.data.activityVO.endTime) || 0
+                        $.endTime = res.data.endTime || 0
                         $.hasEnd = res.data.hasEnd || false
-                        $.actorUuid = res.data.actorUuid || (res.data.actorVO && res.data.actorVO.uuid) || ''
-                        $.score = res.data.actorVO && res.data.actorVO.score || 0
+                        $.actorUuid = res.data.actorUuid || ''
+                        $.followShop = res.data.followShop.allStatus || false
+                        $.addSku = res.data.addSku.allStatus || false
                         if(res.data.followShop && res.data.followShop.settings && res.data.followShop.settings[0]){
                             $.followShopValue = res.data.followShop.settings[0].value || 1
                         }
@@ -491,33 +473,18 @@ async function dealReturn(type, data) {
                     console.log(`${type} ${data}`)
                 }
                 break;
-            case 'getTaskInfos':
-                if(typeof res == 'object'){
-                    if(res.result && res.result === true){
-                        $.followShop = res.data.followShopTaskVO.allStatus || false
-                        $.addSku = res.data.addCartTaskVO.allStatus || false
-                    }else if(res.errorMessage){
-                        console.log(`${type} ${res.errorMessage || ''}`)
-                    }else{
-                        console.log(`${type} ${data}`)
-                    }
-                }else{
-                    console.log(`${type} ${data}`)
-                }
-                break;
             case 'checkOpenCard':
                 if(typeof res == 'object'){
                     if(res.result && res.result === true){
                         let cardList1 = res.data.cardList1 || []
                         let cardList2 = res.data.cardList2 || []
                         let cardList = res.data.cardList || []
-                        let infoSettingVos = res.data.infoSettingVos || []
-                        $.openList = [...cardList,...cardList1,...cardList2,...infoSettingVos]
-                        $.allOpenCard = res.data.allOpenCard || res.data.allOpenCardStatus || false
+                        $.openList = [...cardList,...cardList1,...cardList2]
+                        $.allOpenCard = res.data.allOpenCard || false
                         $.openCardScore1 = res.data.score1 || res.data.drawScore1 || 0
                         $.openCardScore2 = res.data.score2 || res.data.drawScore2 || 0
                         $.openCardScore3 = res.data.score3 || res.data.drawScore3 || 0
-                        if(res.data.sendBeanNum) console.log(`开卡获得：${res.data.sendBeanNum}京豆`)
+                        $.drawScore = res.data.drawScore || 0
                     }else if(res.errorMessage){
                         console.log(`${type} ${res.errorMessage || ''}`)
                     }else{
@@ -580,14 +547,11 @@ async function dealReturn(type, data) {
                         console.log(`我的奖品：`)
                         let num = 0
                         let value = 0
-                        for(let i in res.data.recordList){
-                            let item = res.data.recordList[i]
-                            if(item.infoName == '200京豆'){
-                                num++;
-                                value = item.infoName.replace('京豆','');
-                            }else{
-                                console.log(`${item.infoName}`)
-                            }
+                        for(let i in res.data){
+                            let item = res.data[i]
+                            if(item.value == '邀请好友') num++;
+                            if(item.value == '邀请好友') value = item.infoName.replace('京豆','');
+                            if(item.value != '邀请好友') console.log(`${item.infoType != 10 && item.value +':' || ''}${item.infoName}`)
                         }
                         if(num > 0) console.log(`邀请好友(${num}):${num*parseInt(value, 10) || 30}京豆`)
                     }else if(res.errorMessage){
@@ -602,8 +566,8 @@ async function dealReturn(type, data) {
             case 'getShareRecord':
                 if(typeof res == 'object'){
                     if(res.result && res.result === true && res.data){
-                        $.ShareCount = res.data.shareList.length
-                        $.log(`=========== 你邀请了:${$.ShareCount}个`)
+                        $.ShareCount = res.data.length
+                        $.log(`=========== 你邀请了:${res.data.length}个`)
                     }else if(res.errorMessage){
                         console.log(`${type} ${res.errorMessage || ''}`)
                     }else{
@@ -643,7 +607,7 @@ function getPostRequest(url, body, method="POST") {
         "X-Requested-With": "XMLHttpRequest"
     }
     if(url.indexOf('https://lzdz1-isv.isvjcloud.com') > -1){
-        headers["Referer"] = `https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/index/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`
+        headers["Referer"] = `https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`
         headers["Cookie"] = `${lz_jdpin_token_cookie && lz_jdpin_token_cookie || ''}${$.Pin && "AUTH_C_USER=" + $.Pin + ";" || ""}${activityCookie}`
     }
     // console.log(headers)
@@ -654,7 +618,7 @@ function getPostRequest(url, body, method="POST") {
 function getCk() {
     return new Promise(resolve => {
         let get = {
-            url:`https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/index/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`,
+            url:`https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`,
             followRedirect:false,
             headers: {
                 "User-Agent": $.UA,
@@ -817,7 +781,6 @@ function jsonParse(str) {
         }
     }
 }
-
 
 // prettier-ignore
 function Env(t,e){"undefined"!=typeof process&&JSON.stringify(process.env).indexOf("GITHUB")>-1&&process.exit(0);class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==typeof t?{url:t}:t;let s=this.get;return"POST"===e&&(s=this.post),new Promise((e,i)=>{s.call(this,t,(t,s,r)=>{t?i(t):e(s)})})}get(t){return this.send.call(this.env,t)}post(t){return this.send.call(this.env,t,"POST")}}return new class{constructor(t,e){this.name=t,this.http=new s(this),this.data=null,this.dataFile="box.dat",this.logs=[],this.isMute=!1,this.isNeedRewrite=!1,this.logSeparator="\n",this.startTime=(new Date).getTime(),Object.assign(this,e),this.log("",`🔔${this.name}, 开始!`)}isNode(){return"undefined"!=typeof module&&!!module.exports}isQuanX(){return"undefined"!=typeof $task}isSurge(){return"undefined"!=typeof $httpClient&&"undefined"==typeof $loon}isLoon(){return"undefined"!=typeof $loon}toObj(t,e=null){try{return JSON.parse(t)}catch{return e}}toStr(t,e=null){try{return JSON.stringify(t)}catch{return e}}getjson(t,e){let s=e;const i=this.getdata(t);if(i)try{s=JSON.parse(this.getdata(t))}catch{}return s}setjson(t,e){try{return this.setdata(JSON.stringify(t),e)}catch{return!1}}getScript(t){return new Promise(e=>{this.get({url:t},(t,s,i)=>e(i))})}runScript(t,e){return new Promise(s=>{let i=this.getdata("@chavy_boxjs_userCfgs.httpapi");i=i?i.replace(/\n/g,"").trim():i;let r=this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");r=r?1*r:20,r=e&&e.timeout?e.timeout:r;const[o,h]=i.split("@"),n={url:`http://${h}/v1/scripting/evaluate`,body:{script_text:t,mock_type:"cron",timeout:r},headers:{"X-Key":o,Accept:"*/*"}};this.post(n,(t,e,i)=>s(i))}).catch(t=>this.logErr(t))}loaddata(){if(!this.isNode())return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e);if(!s&&!i)return{};{const i=s?t:e;try{return JSON.parse(this.fs.readFileSync(i))}catch(t){return{}}}}}writedata(){if(this.isNode()){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e),r=JSON.stringify(this.data);s?this.fs.writeFileSync(t,r):i?this.fs.writeFileSync(e,r):this.fs.writeFileSync(t,r)}}lodash_get(t,e,s){const i=e.replace(/\[(\d+)\]/g,".$1").split(".");let r=t;for(const t of i)if(r=Object(r)[t],void 0===r)return s;return r}lodash_set(t,e,s){return Object(t)!==t?t:(Array.isArray(e)||(e=e.toString().match(/[^.[\]]+/g)||[]),e.slice(0,-1).reduce((t,s,i)=>Object(t[s])===t[s]?t[s]:t[s]=Math.abs(e[i+1])>>0==+e[i+1]?[]:{},t)[e[e.length-1]]=s,t)}getdata(t){let e=this.getval(t);if(/^@/.test(t)){const[,s,i]=/^@(.*?)\.(.*?)$/.exec(t),r=s?this.getval(s):"";if(r)try{const t=JSON.parse(r);e=t?this.lodash_get(t,i,""):e}catch(t){e=""}}return e}setdata(t,e){let s=!1;if(/^@/.test(e)){const[,i,r]=/^@(.*?)\.(.*?)$/.exec(e),o=this.getval(i),h=i?"null"===o?null:o||"{}":"{}";try{const e=JSON.parse(h);this.lodash_set(e,r,t),s=this.setval(JSON.stringify(e),i)}catch(e){const o={};this.lodash_set(o,r,t),s=this.setval(JSON.stringify(o),i)}}else s=this.setval(t,e);return s}getval(t){return this.isSurge()||this.isLoon()?$persistentStore.read(t):this.isQuanX()?$prefs.valueForKey(t):this.isNode()?(this.data=this.loaddata(),this.data[t]):this.data&&this.data[t]||null}setval(t,e){return this.isSurge()||this.isLoon()?$persistentStore.write(t,e):this.isQuanX()?$prefs.setValueForKey(t,e):this.isNode()?(this.data=this.loaddata(),this.data[e]=t,this.writedata(),!0):this.data&&this.data[e]||null}initGotEnv(t){this.got=this.got?this.got:require("got"),this.cktough=this.cktough?this.cktough:require("tough-cookie"),this.ckjar=this.ckjar?this.ckjar:new this.cktough.CookieJar,t&&(t.headers=t.headers?t.headers:{},void 0===t.headers.Cookie&&void 0===t.cookieJar&&(t.cookieJar=this.ckjar))}get(t,e=(()=>{})){t.headers&&(delete t.headers["Content-Type"],delete t.headers["Content-Length"]),this.isSurge()||this.isLoon()?(this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.get(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)})):this.isQuanX()?(this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t))):this.isNode()&&(this.initGotEnv(t),this.got(t).on("redirect",(t,e)=>{try{if(t.headers["set-cookie"]){const s=t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();s&&this.ckjar.setCookieSync(s,null),e.cookieJar=this.ckjar}}catch(t){this.logErr(t)}}).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)}))}post(t,e=(()=>{})){if(t.body&&t.headers&&!t.headers["Content-Type"]&&(t.headers["Content-Type"]="application/x-www-form-urlencoded"),t.headers&&delete t.headers["Content-Length"],this.isSurge()||this.isLoon())this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.post(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)});else if(this.isQuanX())t.method="POST",this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t));else if(this.isNode()){this.initGotEnv(t);const{url:s,...i}=t;this.got.post(s,i).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)})}}time(t,e=null){const s=e?new Date(e):new Date;let i={"M+":s.getMonth()+1,"d+":s.getDate(),"H+":s.getHours(),"m+":s.getMinutes(),"s+":s.getSeconds(),"q+":Math.floor((s.getMonth()+3)/3),S:s.getMilliseconds()};/(y+)/.test(t)&&(t=t.replace(RegExp.$1,(s.getFullYear()+"").substr(4-RegExp.$1.length)));for(let e in i)new RegExp("("+e+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?i[e]:("00"+i[e]).substr((""+i[e]).length)));return t}msg(e=t,s="",i="",r){const o=t=>{if(!t)return t;if("string"==typeof t)return this.isLoon()?t:this.isQuanX()?{"open-url":t}:this.isSurge()?{url:t}:void 0;if("object"==typeof t){if(this.isLoon()){let e=t.openUrl||t.url||t["open-url"],s=t.mediaUrl||t["media-url"];return{openUrl:e,mediaUrl:s}}if(this.isQuanX()){let e=t["open-url"]||t.url||t.openUrl,s=t["media-url"]||t.mediaUrl;return{"open-url":e,"media-url":s}}if(this.isSurge()){let e=t.url||t.openUrl||t["open-url"];return{url:e}}}};if(this.isMute||(this.isSurge()||this.isLoon()?$notification.post(e,s,i,o(r)):this.isQuanX()&&$notify(e,s,i,o(r))),!this.isMuteLog){let t=["","==============📣系统通知📣=============="];t.push(e),s&&t.push(s),i&&t.push(i),console.log(t.join("\n")),this.logs=this.logs.concat(t)}}log(...t){t.length>0&&(this.logs=[...this.logs,...t]),console.log(t.join(this.logSeparator))}logErr(t,e){const s=!this.isSurge()&&!this.isQuanX()&&!this.isLoon();s?this.log("",`❗️${this.name}, 错误!`,t.stack):this.log("",`❗️${this.name}, 错误!`,t)}wait(t){return new Promise(e=>setTimeout(e,t))}done(t={}){const e=(new Date).getTime(),s=(e-this.startTime)/1e3;this.log("",`🔔${this.name}, 结束! 🕛 ${s} 秒`),this.log(),(this.isSurge()||this.isQuanX()||this.isLoon())&&$done(t)}}(t,e)}
