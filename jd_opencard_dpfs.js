@@ -1,7 +1,7 @@
 /*
 大牌服饰盛典
 https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz2021101420000sjleowq&shareUuid=5bbf0cd1dc054167874d6ff75772c546
-cron "3 12 * * *" jd_opencard_fssd.js
+cron "11 13 * * *" jd_opencard_dpfs.js
 */
 const $ = new Env("大牌服饰盛典");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
