@@ -15,7 +15,7 @@ if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    jd_mhurlList = process.env.jd_mhurlList ? process.env.jd_mhurlList : "https://anmp.jd.com/babelDiy/Zeus/4ZRoEPUncW1xHAUuz2CC7QhqYFSk/index.html";
+    jd_mhurlList = process.env.jd_mhurlList ? process.env.jd_mhurlList : "";
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
