@@ -136,7 +136,7 @@ async function run(type = 0){
         rebateCodes = rebateCodes[Math.floor((Math.random() * rebateCodes.length))]
         rebateCodes = $.isNode() ? (process.env.jd_rebateCode ? process.env.jd_rebateCode : `${rebateCodes}`) : ($.getdata('jd_rebateCode') ? $.getdata('jd_rebateCode') : `${rebateCodes}`);
         rebateCode = rebateCodes
-        console.log(rebateCode)
+        // console.log(rebateCode)
         resMsg = ''
         let s = 0
         let t = 0
