@@ -122,6 +122,17 @@ async function healthyDay_getHomeData(type = true) {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if (type) {
+              for (let key of Object.keys(data.data.result.hotTaskVos).reverse()) {
+                let vo = data.data.result.hotTaskVos[key]
+                if (vo.status !== 2) {
+                  if (vo.taskType === 12) {
+                    console.log(`点击热区`)
+                    await harmony_collectScore({"appId":appId,"taskToken":vo.simpleRecordInfoVo.taskToken,"taskId":vo.taskId,"actionType":"0"}, vo.taskType)
+                  }
+                }else {
+                  console.log(`【${vo.taskName}】已完成\n`)
+                }
+              }
               for (let key of Object.keys(data.data.result.taskVos).reverse()) {
                 let vo = data.data.result.taskVos[key]
                 if (vo.status !== 2 && vo.status !== 0) {
