@@ -62,6 +62,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                     continue
                 }
                 await queryRedRainTemplateNew(id)
+                await $.wait(2000)
             }
         }
     }

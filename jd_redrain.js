@@ -81,6 +81,7 @@ if ($.isNode()) {
                     continue
                 }
                 await queryRedRainTemplateNew($.activityId)
+                await $.wait(2000)
             }
         }
     }
