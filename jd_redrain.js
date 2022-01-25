@@ -4,18 +4,19 @@
 [Script]
 cron "0 * * * *" script-path=jd_redrain.js,tag=整点京豆雨
 */
-const $ = new Env('整点红包雨');
+const $ = new Env('整点京豆雨');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '';
 let jd_redrain_activityId = '';
+let jd_redrain_url =  '';
 let allMessage = '', message = '';
-
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
     if (process.env.jd_redrain_activityId) jd_redrain_activityId = process.env.jd_redrain_activityId
+    if (process.env.jd_redrain_url) jd_redrain_url = process.env.jd_redrain_url
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
     };
 } else {
@@ -28,20 +29,24 @@ if ($.isNode()) {
         return;
     }
     if (!jd_redrain_activityId) {
-        $.log(`\n甘露殿提醒你:本地红包雨配置获取错误，尝试从远程读取配置\n`);
-        let RedRainIds = await getRedRainIds();
+        $.log(`\n本地红包雨配置获取错误，尝试从远程读取配置\n`);
+        await $.wait(1000);
+        let RedRainIds = await getRedRainIds(jd_redrain_url);
+        if (!RedRainIds) {
+            await $.wait(1000)
+            RedRainIds = await getRedRainIds('https://gitee.com/feverrun/json/raw/master/redrain.json')
+        }
         for (let i = 0; i < 1; i++) {
             jd_redrain_activityId = RedRainIds[0];
         }
     }
     if (!jd_redrain_activityId) {
-        $.log(`\n甘露殿提醒你:今日龙王🐲出差，天气晴朗☀️，改日再来～\n`);
+        $.log(`\n今日龙王🐲出差，天气晴朗☀️，改日再来～\n`);
         return;
     }
-
     let codeList = jd_redrain_activityId.split("@");
     let hour = (new Date().getUTCHours() + 8) % 24;
-    console.log(`\n甘露殿提醒你:龙王就位: ${codeList}\n\n准备领取${hour}点京豆雨\n`);
+    console.log(`\n龙王就位: ${codeList}\n\n准备领取${hour}点京豆雨\n`);
     for (let codeItem of codeList) {
         let ids = {};
         for (let i = 0; i < 24; i++) {
@@ -51,31 +56,32 @@ if ($.isNode()) {
             $.activityId = ids[hour];
             $.log(`\nRRA: ${codeItem}`);
         } else {
-            $.log(`\n甘露殿提醒你:无法从本地读取配置，请检查运行时间\n`);
+            $.log(`\n无法从本地读取配置，请检查运行时间\n`);
             return;
         }
         if (!/^RRA/.test($.activityId)) {
-            console.log(`\n甘露殿提醒你:RRA: "${$.activityId}"不符合规则\n`);
+            console.log(`\nRRA: "${$.activityId}"不符合规则\n`);
             continue;
         }
         for (let i = 0; i < cookiesArr.length; i++) {
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            message = '';
-            await TotalBean();
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-                if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n${tswb}`);
+            if (cookiesArr[i]) {
+                cookie = cookiesArr[i];
+                $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+                $.index = i + 1;
+                $.isLogin = true;
+                $.nickName = '';
+                message = '';
+                await TotalBean();
+                console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+                if (!$.isLogin) {
+                    $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+                    if ($.isNode()) {
+                        await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n${tswb}`);
+                    }
+                    continue
                 }
-                continue
+                await queryRedRainTemplateNew($.activityId)
             }
-            await noahRedRainLottery();
-            await $.wait(500)
         }
     }
     if (allMessage) {
@@ -91,11 +97,12 @@ if ($.isNode()) {
     })
 
 
-function noahRedRainLottery() {
-    const body = { "actId": $.activityId };
+// 查询红包
+function queryRedRainTemplateNew(actId) {
+    const body = { "actId": actId };
     return new Promise(async resolve => {
         const options = {
-            url: `https://api.m.jd.com/client.action?functionId=noahRedRainLottery&client=wh5&clientVersion=1.0.0&&body=${encodeURIComponent(JSON.stringify(body))}&_=${(new Date).getTime()}`,
+            url: `https://api.m.jd.com/client.action?appid=redrain-2021&functionId=queryRedRainTemplateNew&client=wh5&clientVersion=1.0.0&body=${encodeURIComponent(JSON.stringify(body))}&_=${(new Date).getTime()}`,
             headers: {
                 Host: "api.m.jd.com",
                 origin: 'https://h5.m.jd.com/',
@@ -111,17 +118,52 @@ function noahRedRainLottery() {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
-                    console.log(`noahRedRainLottery api请求失败，请检查网路重试`)
+                    console.log(`queryRedRainTemplateNew api请求失败，请检查网路重试`)
                 } else {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
-                        if (data.subCode === '0') {
-                            console.log(`领取成功，获得${data.lotteryResult.jPeasList[0].quantity}个京豆`);
-                            message += `领取成功，获得 ${data.lotteryResult.jPeasList[0].quantity}个京豆`
-                            allMessage += `京东账号${$.index}${$.nickName || $.UserName}\n领取成功，获得 ${(data.lotteryResult.jPeasList[0].quantity)}京豆${$.index !== cookiesArr.length ? '\n\n' : ''}`;
-                        } else if (data.subCode === '8') {
-                            console.log(`领取失败：本场已领过`)
-                            message += `领取失败，本场已领过`;
+                        //console.log(data);
+                        await doInteractiveAssignment(data.activityInfo.encryptProjectId, data.activityInfo.encryptAssignmentId);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
+
+// 拆红包
+function doInteractiveAssignment(encryptProjectId, encryptAssignmentId) {
+    const body = { "encryptProjectId": encryptProjectId, "encryptAssignmentId": encryptAssignmentId, "completionFlag": true, "sourceCode": "acehby20210924" };
+    return new Promise(async resolve => {
+        const options = {
+            url: `https://api.m.jd.com/client.action?appid=redrain-2021&functionId=doInteractiveAssignment&client=wh5&clientVersion=1.0.0&body=${encodeURIComponent(JSON.stringify(body))}&_=${(new Date).getTime()}`,
+            headers: {
+                Host: "api.m.jd.com",
+                origin: 'https://h5.m.jd.com/',
+                Accept: "*/*",
+                "Accept-Language": "zh-cn",
+                "Accept-Encoding": "gzip, deflate, br",
+                Cookie: cookie,
+                "User-Agent": "Mozilla/5.0 (Linux; Android 10; WLZ-AN00 Build/HUAWEIWLZ-AN00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 MQQBrowser/6.2 TBS/045811 Mobile Safari/537.36 MMWEBID/2874 MicroMessenger/8.0.15.2020(0x28000F39) Process/tools WeChat/arm64 Weixin NetType/4G Language/zh_CN ABI/arm64",
+                "Referer": `https://h5.m.jd.com/`
+            }
+        }
+        $.get(options, async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`doInteractiveAssignment api请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        data = JSON.parse(data);
+                        if (data.subCode == "0") {
+                            //console.log(`${data.rewardsInfo.successRewards[3][0].rewardName}`);
+                            message += `领取成功，获得 ${data.rewardsInfo.successRewards[3][0].rewardName}`
+                            allMessage += `京东账号${$.index}${$.nickName || $.UserName}\n领取成功，获得 ${data.rewardsInfo.successRewards[3][0].rewardName}${$.index !== cookiesArr.length ? '\n\n' : ''}`;
                         } else {
                             console.log(data);
                         }
@@ -136,7 +178,7 @@ function noahRedRainLottery() {
     })
 }
 
-function getRedRainIds(url = "https://gitee.com/feverrun/json/raw/master/redrain.json") {
+function getRedRainIds(url) {
     return new Promise(async resolve => {
         const options = {
             url: `${url}?${new Date()}`, "timeout": 10000, headers: {
