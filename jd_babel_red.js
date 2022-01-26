@@ -58,7 +58,7 @@ async function main() {
             let taskInfo = await task('hby_lottery', { "babelProjectId": e.actId, "babelPageId": e.pageId, "latitude": "", "longitude": "" });
             await $.wait(2000)
             if (taskInfo.code === 0 && taskInfo.data.bizCode === 0) {
-                console.log(JSON.stringify(taskInfo.result.hbInfo));
+                console.log(JSON.stringify(taskInfo));
             } else {
                 console.log(JSON.stringify(taskInfo));
             }

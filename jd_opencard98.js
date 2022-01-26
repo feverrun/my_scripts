@@ -226,6 +226,7 @@ async function run() {
         }
         await takePostRequest('getCardInfo');
         if($.drawCardNum && $.compositeCard+"" == "true"){
+            $.runFalag = true
             let count = $.drawCardNum
             for(m=1;count--;m++){
                 console.log(`第${m}次集卡`)
@@ -240,6 +241,7 @@ async function run() {
                 await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
             }
             if($.compositeCardNum){
+                $.runFalag = true
                 let count = $.compositeCardNum
                 for(m=1;count--;m++){
                     console.log(`第${m}次合卡`)
@@ -258,7 +260,8 @@ async function run() {
             console.log(`${c.cardName}:${c.cardNum}`)
         }
         if ($.compositeCardFinishCount >= 1 && nowTime > new Date(activeEndTime).getTime()) {
-            allMessage += `【京东账号${$.index}】${$.nickName || $.UserName}\n`
+            // allMessage += `【京东账号${$.index}】${$.nickName || $.UserName}\n`
+            await takePostRequest('瓜分奖励');
         }
         console.log(`${$.score}值 福卡:${$.compositeCardFinishCount}`)
         if(opencard_draw+"" !== "0"){
@@ -363,6 +366,10 @@ async function takePostRequest(type) {
             break;
         case '集卡':
             url = `${domain}/play/monopoly/drawCard`;
+            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}`
+            break;
+        case '瓜分奖励':
+            url = `${domain}/play/monopoly/carveUpPrize`;
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}`
             break;
         case '合卡':
@@ -653,7 +660,7 @@ async function dealReturn(type, data) {
                                 num++
                                 value = item.infoName.replace('京豆','')
                             }else{
-                                console.log(`${item.infoType != 10 && item.drawId && item.drawId +':' || ''}${item.infoName}`)
+                                console.log(`${item.infoType != 10 && item.drawId && ((item.drawId == "cardPrize" && "瓜分奖励") || item.drawId) +':' || ''}${item.infoName}`)
                             }
                         }
                         if(num > 0) console.log(`邀请好友(${num}):${num*parseInt(value, 10) || 30}京豆`)
@@ -699,6 +706,7 @@ async function dealReturn(type, data) {
                             $.drawCardNum = res.data.drawCardNum || 0
                         }
                     }else if(res.errorMessage){
+                        $.runFalag = false;
                         console.log(`${type} ${res.errorMessage || ''}`)
                     }else{
                         console.log(`${type} ${data}`)
