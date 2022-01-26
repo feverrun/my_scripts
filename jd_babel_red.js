@@ -44,9 +44,14 @@ if ($.isNode()) {
                 }
                 continue
             }
-            await main();
-            await $.wait(5000)
+            try {
+                await main();
+                await $.wait(5000)
+            }catch (e) {
+                console.log(e.message)
+            }
         }
+        await $.wait(3000)
     }
 })().catch((e) => { $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '') }).finally(() => { $.done(); })
 
