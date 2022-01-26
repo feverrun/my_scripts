@@ -1,7 +1,5 @@
 /**
  * 京东到家果园水车收水滴任务脚本,支持qx,loon,shadowrocket,surge,nodejs
- 兼容京东jdCookie.js
- cron "5 0-23/1 * * *" script-path=jddj_fruit_collectWater.js,tag=京东到家果园水车收水滴
 */
 
 const $ = new API("京东到家果园水车收水滴");
