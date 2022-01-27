@@ -38,6 +38,7 @@ message = ""
         console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
         await getJoyBaseInfo()
+        await $.wait(3000)
         if ($.joyBaseInfo && $.joyBaseInfo.invitePin) {
             $.log(`${$.name} - ${$.UserName}  助力码: ${$.joyBaseInfo.invitePin}`);
             $.invitePinTaskList.push($.joyBaseInfo.invitePin);
@@ -49,25 +50,28 @@ message = ""
             continue
         }
         await getTaskList();
+        await $.wait(3000)
 
         // 签到 / 逛会场 / 浏览商品
         for (const task of $.taskList) {
             if (task.taskType === 'SIGN') {
                 $.log(`${task.taskTitle}`)
                 await apDoTask(task.id, task.taskType, undefined);
+                await $.wait(2000)
                 $.log(`${task.taskTitle} 领取奖励`)
                 await apTaskDrawAward(task.id, task.taskType);
+                await $.wait(2000)
             }
             if (task.taskType === 'BROWSE_PRODUCT' || task.taskType === 'BROWSE_CHANNEL' && task.taskLimitTimes !== 1) {
                 let productList = await apTaskDetail(task.id, task.taskType);
                 let productListNow = 0;
                 if (productList.length === 0) {
                     let resp = await apTaskDrawAward(task.id, task.taskType);
-
+                    await $.wait(2000)
                     if (!resp.success) {
                         $.log(`${task.taskTitle}|${task.taskShowTitle} 领取完成!`)
                         productList = await apTaskDetail(task.id, task.taskType);
-
+                        await $.wait(2000)
                     }
                 }
                 //做
@@ -79,7 +83,7 @@ message = ""
                     }
                     $.log(`${task.taskTitle} ${task.taskDoTimes}/${task.taskLimitTimes}`);
                     let resp = await apDoTask(task.id, task.taskType, productList[productListNow].itemId, productList[productListNow].appid);
-
+                    await $.wait(2000)
                     if (resp.code === 2005 || resp.code === 0) {
                         $.log(`${task.taskTitle}|${task.taskShowTitle} 任务完成！`)
                     } else {
@@ -94,6 +98,7 @@ message = ""
                 //领
                 for (let j = 0; j < task.taskLimitTimes; j++) {
                     let resp = await apTaskDrawAward(task.id, task.taskType);
+                    await $.wait(2000)
 
                     if (!resp.success) {
                         $.log(`${task.taskTitle}|${task.taskShowTitle} 领取完成!`)
@@ -104,6 +109,7 @@ message = ""
                 $.yq_taskid = task.id
                 for (let j = 0; j < 5; j++) {
                     let resp = await apTaskDrawAward($.yq_taskid, 'SHARE_INVITE');
+                    await $.wait(2000)
                     if (!resp.success) {
                         break
                     }
@@ -113,8 +119,10 @@ message = ""
             if (task.taskType === 'BROWSE_CHANNEL' && task.taskLimitTimes === 1) {
                 $.log(`${task.taskTitle}|${task.taskShowTitle}`)
                 await apDoTask2(task.id, task.taskType, task.taskSourceUrl);
+                await $.wait(2000)
                 $.log(`${task.taskTitle}|${task.taskShowTitle} 领取奖励`)
                 await apTaskDrawAward(task.id, task.taskType);
+                await $.wait(2000)
             }
             if (task.taskType === 'SHARE_INVITE') {
                 $.yq_taskid = task.id

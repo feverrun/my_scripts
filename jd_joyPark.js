@@ -85,17 +85,22 @@ message = ""
     //下地后还有有钱买Joy并且买了Joy
     $.hasJoyCoin = true
     await getJoyBaseInfo(undefined, undefined, undefined, true);
+    await $.wait(3000)
     $.activityJoyList = []
     $.workJoyInfoList = []
     await getJoyList(true);
+    await $.wait(3000)
     await getGameShopList()
+    await $.wait(3000)
     //清理工位
     await doJoyMoveDownAll($.workJoyInfoList)
+    await $.wait(3000)
     //从低合到高
     await doJoyMergeAll($.activityJoyList)
+    await $.wait(3000)
     await getGameMyPrize()
+    await $.wait(5000)
 
-    await $.wait(1500)
   }
 
 })()
