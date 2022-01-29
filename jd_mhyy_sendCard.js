@@ -2,10 +2,11 @@
 萌虎摇摇乐送卡，一次性脚本，需要就运行下，不用加定时
 环境变量：SSCK,从第几个CK开始送卡，例如你有5个CK，BYTYPE填2，则会获取前2个CK的卡片缺失情况，然后若后3个ck有前2个ck缺失的卡，则会赠送（一张卡也会送）
 PS：一旦开始执行脚本，则不要暂停，暂停可能导致卡片消失
+cron "31 7,18,22 * * *" jd_mhyy_sendCard.js
 * */
 const $ = new Env('萌虎摇摇乐送卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const SSCK = $.isNode() ? (process.env.SSCK ? process.env.SSCK : `***`):`***`;
+const SSCK = $.isNode() ? (process.env.SSCK ? process.env.SSCK : 1) : 1;
 let cookiesArr = [];
 let needKardInfo = {};
 let haveCardInfo = {};
@@ -30,7 +31,7 @@ if ($.isNode()) {
         console.log(`活动结束`);
         return ;
     }
-    if(SSCK === '***'){
+    if(!SSCK){
         console.log(`请先设置环境变量【SSCK】`);
         console.log(`环境变量：SSCK,从第几个CK开始送卡，例如你有5个CK，BYTYPE填2，则会获取前2个CK的卡片缺失情况，然后若后3个ck有前2个ck缺失的卡，则会赠送（一张卡也会送`);
         return
