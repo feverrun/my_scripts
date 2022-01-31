@@ -5,7 +5,7 @@
 活动入口：京东APP首页搜索 "玩一玩"即可
 
 [Script]
-cron "13 1,6,22 * * *" script-path=jd_health.js, tag=东东健康社区
+cron "13 1,7,11,18,22 * * *" script-path=jd_health.js, tag=东东健康社区
  */
 const $ = new Env("东东健康社区");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";

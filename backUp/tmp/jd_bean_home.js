@@ -2,7 +2,7 @@
 领京豆额外奖励&抢京豆
 脚本自带助力码，介意者可将 29行 helpAuthor 变量设置为 false
 活动入口：京东APP首页-领京豆
-cron "23 1,12,22 * * *" script-path=jd_bean_home.js, tag=领京豆额外奖励
+cron "33 1,11,22 * * *" script-path=jd_bean_home.js, tag=领京豆额外奖励
  */
 
 const $ = new Env('领京豆额外奖励');

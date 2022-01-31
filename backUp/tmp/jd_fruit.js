@@ -4,7 +4,7 @@
 活动入口：京东APP我的-更多工具-东东农场
 东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
 一天只能帮助3个人。多出的助力码无效
-cron "5 6,8,12,18,20 * * *" script-path=jd_fruit.js,tag=东东农场
+cron "3 6,9,12,18,20 * * *" script-path=jd_fruit.js,tag=东东农场
 export DO_TEN_WATER_AGAIN="" 默认再次浇水
 */
 
