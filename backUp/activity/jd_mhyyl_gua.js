@@ -5,7 +5,7 @@
 
 [task_local]
 #京东手机狂欢城
-12 21 31,1 1,2 * jd_carnivalcity.js, tag=京东手机狂欢城, enabled=true
+12 21 31,1 1,2 * jd_mhyyl_gua.js, tag=京东手机狂欢城, enabled=true
 
 */
 const $ = new Env('萌虎摇摇乐');

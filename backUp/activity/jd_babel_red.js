@@ -1,5 +1,5 @@
 /**
- cron 2 20-23/1 * * * jd_babel_red.js
+ cron 1 18-23/1 * * * jd_babel_red.js
  */
 const $ = new Env('会场红包');
 const notify = $.isNode() ? require('./sendNotify') : '';
