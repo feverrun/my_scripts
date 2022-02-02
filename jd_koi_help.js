@@ -185,7 +185,7 @@ async function openRedPacket(cookie) {
 async function requestApi(functionId, cookie, body = {}) {
     return new Promise(resolve => {
         $.post({
-            url: `${JD_API_HOST}/api?appid=jinlihongbao&functionId=${functionId}&loginType=2&client=jinlihongbao&clientVersion=10.2.4&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi`,
+            url: `${JD_API_HOST}/api?appid=jinlihongbao&functionId=${functionId}&loginType=2&client=jinlihongbao&t=${Date.now()}&clientVersion=10.3.5&osVersion=AndroidOS&d_brand=Xiaomi&d_model=Xiaomi`,
             headers: {
                 "Cookie": cookie,
                 "origin": "https://h5.m.jd.com",
