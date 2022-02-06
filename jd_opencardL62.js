@@ -14,7 +14,7 @@
 
 [task_local]
 #1.24~2.14 联合开卡
-33 1,20 24-31,1-14 1,2 * jd_opencardL62.js, tag=1.24~2.14 联合开卡, enabled=true
+3 0 24-31,1-14 1,2 * jd_opencardL62.js, tag=1.24~2.14 联合开卡, enabled=true
 
 */
 
