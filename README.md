@@ -12,7 +12,7 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJD
 **拉库后安装好依赖无需做额外配置**
 
 ## 加入助力池
-[点此入群](https://t.me/proenv) 联系我加入白名单 
+[点此加入](https://t.me/proenv) 联系我加入白名单 
 
 ## 定时更新库
 任务名:   myScripts
@@ -90,9 +90,3 @@ ws
 js-base64
 qrcode-terminal
 ```
-
-## [点此入群](https://t.me/proenv)
-
-
-
-
