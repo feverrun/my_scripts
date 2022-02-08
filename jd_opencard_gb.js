@@ -1,6 +1,6 @@
 /*
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/3776344?activityId=dzlhkkkbblnt20220208&shareUuid=ffc52e94957d4d9f96af9375682a2b4a
-cron "3 0,20 8-16 2 *" jd_opencard_tmgb.js
+cron "2 0 8-16 2 *" jd_opencard_tmgb.js
 */
 const $ = new Env("甜蜜告白");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
