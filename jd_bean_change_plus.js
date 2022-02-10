@@ -336,8 +336,8 @@ if(DisableIndex!=-1){
       }
 
       //汪汪乐园
-      if(EnableJoyPark)
-        await getJoyBaseInfo();
+      // if(EnableJoyPark)
+      //   await getJoyBaseInfo();
 
       //京东赚赚
       if(EnableJdZZ)
