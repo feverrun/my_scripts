@@ -373,7 +373,7 @@ if(DisableIndex!=-1){
         console.log("开始获取月数据，请稍后...");
         await Monthbean();
         console.log("月数据获取完毕，暂停10秒防止IP被黑...");
-        await $.wait(10 * 1000);
+        await $.wait(10000);
       }
 
       //京喜工厂
@@ -385,8 +385,8 @@ if(DisableIndex!=-1){
         await getDdFactoryInfo();
 
       //领现金
-      if(EnableCash)
-        await jdCash();
+      // if(EnableCash)
+        // await jdCash();
 
       //喜豆查询
       if(EnableJxBeans){
@@ -495,7 +495,7 @@ if(DisableIndex!=-1){
       await notify.sendNotify(`${$.name}#2`, `${allMessageGp2}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       }, '\n',TempMessage)
-      await $.wait(10 * 1000);
+      await $.wait(10000);
     }
     if ($.isNode() && allMessageGp3) {
       var TempMessage=allMessageGp3;
@@ -504,7 +504,7 @@ if(DisableIndex!=-1){
       await notify.sendNotify(`${$.name}#3`, `${allMessageGp3}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       }, '\n',TempMessage)
-      await $.wait(10 * 1000);
+      await $.wait(10000);
     }
     if ($.isNode() && allMessageGp4) {
       var TempMessage=allMessageGp4;
@@ -513,7 +513,7 @@ if(DisableIndex!=-1){
       await notify.sendNotify(`${$.name}#4`, `${allMessageGp4}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       }, '\n',TempMessage)
-      await $.wait(10 * 1000);
+      await $.wait(10000);
     }
     if ($.isNode() && allMessage) {
       var TempMessage=allMessage;
@@ -523,32 +523,32 @@ if(DisableIndex!=-1){
       await notify.sendNotify(`${$.name}`, `${allMessage}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       }, '\n',TempMessage)
-      await $.wait(10 * 1000);
+      await $.wait(10000);
     }
 
     if ($.isNode() && allMessageMonthGp2) {
       await notify.sendNotify(`京东月资产变动#2`, `${allMessageMonthGp2}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       })
-      await $.wait(10 * 1000);
+      await $.wait(10000);
     }
     if ($.isNode() && allMessageMonthGp3) {
       await notify.sendNotify(`京东月资产变动#3`, `${allMessageMonthGp3}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       })
-      await $.wait(10 * 1000);
+      await $.wait(10000);
     }
     if ($.isNode() && allMessageMonthGp4) {
       await notify.sendNotify(`京东月资产变动#4`, `${allMessageMonthGp4}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       })
-      await $.wait(10 * 1000);
+      await $.wait(10000);
     }
     if ($.isNode() && allMessageMonth) {
       await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       })
-      await $.wait(10 * 1000);
+      await $.wait(10000);
     }
   }
 
@@ -557,28 +557,28 @@ if(DisableIndex!=-1){
     await notify.sendNotify("京东提醒榜#2", `${allMessage2Gp2}`, {
       url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
     })
-    await $.wait(10 * 1000);
+    await $.wait(10000);
   }
   if ($.isNode() && allMessage2Gp3) {
     allMessage2Gp3 += RemainMessage;
     await notify.sendNotify("京东提醒榜#3", `${allMessage2Gp3}`, {
       url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
     })
-    await $.wait(10 * 1000);
+    await $.wait(10000);
   }
   if ($.isNode() && allMessage2Gp4) {
     allMessage2Gp4 += RemainMessage;
     await notify.sendNotify("京东提醒榜#4", `${allMessage2Gp4}`, {
       url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
     })
-    await $.wait(10 * 1000);
+    await $.wait(10000);
   }
   if ($.isNode() && allMessage2) {
     allMessage2 += RemainMessage;
     await notify.sendNotify("京东提醒榜", `${allMessage2}`, {
       url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
     })
-    await $.wait(10 * 1000);
+    await $.wait(10000);
   }
 
 })()
