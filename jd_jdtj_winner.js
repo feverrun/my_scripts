@@ -2,7 +2,7 @@
 京东特价翻翻乐
 一天可翻多次，但有上限
 运气好每次可得0.3元以上的微信现金(需京东账号绑定到微信)
-cron "37 5-10 * * *" script-path=jd_jdtj_winner.js,tag=京东特价翻翻乐
+cron "28 5-11 * * *" script-path=jd_jdtj_winner.js,tag=京东特价翻翻乐
  */
 const $ = new Env('京东特价翻翻乐');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -57,6 +57,7 @@ async function main() {
         $.changeReward = true;
         $.canOpenRed = true;
         await gambleHomePage();
+        await $.wait(1000)
         if (!$.time) {
             console.log(`开始进行翻翻乐拿红包\n`)
             await gambleOpenReward();//打开红包
@@ -64,12 +65,14 @@ async function main() {
             if ($.canOpenRed) {
                 while (!$.canApCashWithDraw && $.changeReward) {
                     await openRedReward();
-                    await $.wait(2000);
+                    await $.wait(3000);
                 }
                 if ($.canApCashWithDraw) {
                     //提现
                     await openRedReward('gambleObtainReward', $.rewardData.rewardType);
+                    await $.wait(1500)
                     await apCashWithDraw($.rewardData.id, $.rewardData.poolBaseId, $.rewardData.prizeGroupId, $.rewardData.prizeBaseId, $.rewardData.prizeType);
+                    await $.wait(1500)
                 }
             }
         }

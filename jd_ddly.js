@@ -58,7 +58,7 @@ const JD_API_HOST = `https://api.m.jd.com/client.action`;
             }catch (e) {
                 console.log(e.message)
             }
-
+            await $.wait(3000)
         }
     }
 

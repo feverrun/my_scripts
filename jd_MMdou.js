@@ -47,6 +47,7 @@ if ($.isNode()) {
       console.log(`\n*****开始【京东账号${$.index}】${$.UserName}****\n`);
       await run();
       if($.bean > 0) message += `【京东账号${$.index}】获得${$.bean}京豆\n`
+      await $.wait(5000)
     }
   }
   if(message){

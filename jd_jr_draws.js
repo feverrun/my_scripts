@@ -46,7 +46,7 @@ if ($.isNode()) {
             continue
         }
         await queryNewRightsDetail();
-        await $.wait(2000)
+        await $.wait(6000)
     }
 })()
     .catch((e) => {
@@ -77,10 +77,12 @@ function queryNewRightsDetail() {
                     console.log(`${$.toStr(err)}`)
                     console.log(`queryNewRightsDetail API请求失败，请检查网路重试`)
                 } else {
+                    console.log(data)
                     data = JSON.parse(data);
                     for (let v of data.resultData.data.subRightsList1) {
                         if (v.lifeRightsSubRightsOneMainTitle.indexOf('京豆') !== -1) {
                             await drawNewMemberRights1(v.rightsId);
+                            await $.wait(2500)
                         }
                     }
                 }
@@ -114,8 +116,8 @@ function drawNewMemberRights1(rightsId) {
                     console.log(`${$.toStr(err)}`)
                     console.log(`queryNewRightsDetail API请求失败，请检查网路重试`)
                 } else {
-                    data = JSON.parse(data);
                     console.log(data);
+                    data = JSON.parse(data);
                 }
             } catch (e) {
                 $.logErr(e, resp)

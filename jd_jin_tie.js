@@ -1,18 +1,8 @@
 /*
 领金贴(只做签到以及互助任务里面的部分任务)
 活动入口：京东APP首页-领金贴，[活动地址](https://active.jd.com/forever/cashback/index/)
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-=================QuantumultX==============
-[task_local]
-#领金贴
-10 0 * * * jd_jin_tie.js, tag=领金贴, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-===========Loon===============
 [Script]
 cron "10 0 * * *" script-path=jd_jin_tie.js,tag=领金贴
-=======Surge===========
-领金贴 = type=cron,cronexp="10 0 * * *",wake-system=1,timeout=3600,script-path=jd_jin_tie.js
-==============小火箭=============
-领金贴 = type=cron,script-path=jd_jin_tie.js, cronexpr="10 0 * * *", timeout=3600, enable=true
  */
 const $ = new Env('领金贴');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -47,6 +37,7 @@ if ($.isNode()) {
       message = '';
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       await main();
+      await $.wait(5000)
     }
   }
 })()

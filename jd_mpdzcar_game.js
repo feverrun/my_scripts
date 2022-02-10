@@ -84,6 +84,7 @@ async function mpdzCar() {
             "source": "01",
             // "ceshi": "1000004065"
         })
+        await $.wait(5000)
         // console.log($.buyerNick)
         if ($.buyerNick) {
             console.log("游戏")
@@ -92,6 +93,7 @@ async function mpdzCar() {
                 "behavior": "run",
                 "energyValue": 10000,
             })
+            await $.wait(5000)
         } else {
             console.log("can't got buyerNick");
         }

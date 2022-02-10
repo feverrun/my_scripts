@@ -41,6 +41,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
 
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       await jdHealth()
+      await $.wait(15000)
     }
   }
 })()

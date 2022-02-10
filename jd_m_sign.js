@@ -64,9 +64,9 @@ async function jdsign() {
     try {
         console.log(`签到开始........`)
         await getInfo("https://pro.m.jd.com/mall/active/3S28janPLYmtFxypu37AYAGgivfp/index.html");//拍拍二手签到
-        await $.wait(1000)
-        await getInfo("https://pro.m.jd.com/mall/active/4QjXVcRyTcRaLPaU6z2e3Sw1QzWE/index.html");//全城购签到
-        await $.wait(1000)
+        await $.wait(10000)
+        //await getInfo("https://pro.m.jd.com/mall/active/4QjXVcRyTcRaLPaU6z2e3Sw1QzWE/index.html");//全城购签到
+        await $.wait(10000)
         await getInfo("https://pro.m.jd.com/mall/active/kPM3Xedz1PBiGQjY4ZYGmeVvrts/index.html");//陪伴
         // await $.wait(1000)
         // await getInfo("https://prodev.m.jd.com/mall/active/whyxjHX23eNgT6Xvej19JnamfEH/index.html");//签到1.14结束
@@ -86,6 +86,7 @@ async function getInfo(url) {
             }
         }, async (err, resp, data) => {
             try {
+                // console.log(resp.body)
                 $.encryptProjectId = resp.body.match(/"encryptProjectId\\":\\"(.*?)\\"/)[1];
                 $.encryptAssignmentId = resp.body.match(/"encryptAssignmentId\\":\\"(.*?)\\"/)[1];
                 await doInteractiveAssignment($.encryptProjectId, $.encryptAssignmentId);

@@ -1,14 +1,6 @@
-
 /*
 京东饭粒
-已支持IOS双京东账号,Node.js支持N个京东账号
-[task_local]
-#京东饭粒
-14 0,9,17 * * * jd_fanli.js, tag=京东饭粒, img-url=x.png, enabled=true
-
-================Loon==============
-[Script]
-cron "14 0,9,17 * * *" script-path=jd_fanli.js,tag=京东饭粒
+cron "16 4,15 * * *" script-path=jd_fanli.js,tag=京东饭粒
 */
 
 const $ = new Env('京东饭粒');

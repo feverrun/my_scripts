@@ -4,7 +4,7 @@
 活动入口：京东APP搜索领现金进入
 更新时间：2021-06-07
 #签到领现金
-1 4-22/4 * * * jd_cash.js, tag=签到领现金, img-url=jd.png, enabled=true
+21 8,15 * * * jd_cash.js, tag=签到领现金, img-url=jd.png, enabled=true
  */
 
 const $ = new Env('签到领现金');
@@ -48,6 +48,7 @@ let allMessage = '';
         continue
       }
       await jdCash()
+      await $.wait(10000)
     }
   }
   if (allMessage) {
@@ -65,10 +66,13 @@ async function jdCash() {
   $.signMoney = 0;
 
   await appindex()
+  await $.wait(2000)
   await index()
+  await $.wait(2000)
 
   $.exchangeBeanNum = 0;
   await appindex(true)
+  await $.wait(2000)
 }
 
 async function appindex(info=false) {
@@ -83,6 +87,7 @@ async function appindex(info=false) {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
+          await $.wait(5000)
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
@@ -150,6 +155,7 @@ function index() {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
+          await $.wait(5000)
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
@@ -192,41 +198,13 @@ function index() {
     })
   })
 }
-function helpFriend(helpInfo) {
-  return new Promise((resolve) => {
-    $.get(taskUrl("cash_mob_assist", {...helpInfo,"source":1}), (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            data = JSON.parse(data);
-            if( data.code === 0 && data.data.bizCode === 0){
-              console.log(`助力成功，获得${data.data.result.cashStr}`)
-              // console.log(data.data.result.taskInfos)
-            } else if (data.data.bizCode===207){
-              console.log(data.data.bizMsg)
-              $.canHelp = false
-            } else{
-              console.log(data.data.bizMsg)
-            }
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-  })
-}
 
 async function appdoTask(type,taskInfo) {
   let functionId = 'cash_doTask'
   let body = escape(JSON.stringify({"type":type,"taskInfo":taskInfo}))
   let uuid = randomString(16)
   let sign = await getSign(functionId, decodeURIComponent(body), uuid)
+  await $.wait(3000)
   let url = `${JD_API_HOST}?functionId=${functionId}&build=167774&client=apple&clientVersion=10.1.0&uuid=${uuid}&${sign}`
   return new Promise((resolve) => {
     $.post(apptaskUrl(url, body), (err, resp, data) => {

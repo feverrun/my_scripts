@@ -38,6 +38,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
       await jdWish()
       await showMsg();
+      await $.wait(3500)
     }
   }
 
@@ -57,8 +58,10 @@ async function jdWish() {
   $.hasOpen = false;
   $.assistStatus = 0;
   await getTaskList(true)
+  await $.wait(1000)
 
   await getUserInfo()
+  await $.wait(1000)
   $.nowBean = parseInt($.totalBeanNum)
   $.nowNum = parseInt($.totalNum)
   for (let i = 0; i < $.taskList.length; ++i) {
@@ -68,14 +71,30 @@ async function jdWish() {
       await doTask({ "taskId": task['taskId'], "taskItem": {}, "actionType": 0, "taskToken": task['taskToken'], "mpVersion": "3.4.0" })
     } else if (task['taskId'] !== 3 && task['status'] !== 2) {
       console.log(`去做任务：${task.taskName}`)
-      if (task['itemId'])
-        await doTask({ "itemId": task['itemId'], "taskId": task['taskId'], "taskItem": {}, "actionType": 0, "taskToken": task['taskToken'], "mpVersion": "3.4.0" })
-      else
-        await doTask({ "taskId": task['taskId'], "taskItem": {}, "actionType": 0, "taskToken": task['taskToken'], "mpVersion": "3.4.0" })
+      if (task['itemId']) {
+        await doTask({
+          "itemId": task['itemId'],
+          "taskId": task['taskId'],
+          "taskItem": {},
+          "actionType": 0,
+          "taskToken": task['taskToken'],
+          "mpVersion": "3.4.0"
+        })
         await $.wait(3000)
+      } else {
+        await doTask({
+          "taskId": task['taskId'],
+          "taskItem": {},
+          "actionType": 0,
+          "taskToken": task['taskToken'],
+          "mpVersion": "3.4.0"
+        })
+        await $.wait(3000)
+      }
     }
   }
   await getTaskList();
+  await $.wait(1000)
 }
 
 function showMsg() {
