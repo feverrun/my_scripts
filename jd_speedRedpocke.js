@@ -6,7 +6,7 @@
 活动地址：https://prodev.m.jd.com/jdlite/active/31U4T6S4PbcK83HyLPioeCWrD63j/index.html
 活动入口：京东极速版-领红包
 记得时间岔开
-cron "51 2,8,15,21 * * *" script-path=jd_speed_redpocke.js,tag=京东极速版红包
+cron "15 0,21 * * *" script-path=jd_speedRedpocke.js,tag=京东极速版红包
 */
 
 const $ = new Env('京东极速版红包');
