@@ -6,7 +6,7 @@
 活动地址：https://prodev.m.jd.com/jdlite/active/31U4T6S4PbcK83HyLPioeCWrD63j/index.html
 活动入口：京东极速版-领红包
 记得时间岔开
-cron "51 6,9,18 * * *" script-path=jd_speed_redpocke.js,tag=京东极速版红包
+cron "51 2,8,15,21 * * *" script-path=jd_speed_redpocke.js,tag=京东极速版红包
 */
 
 const $ = new Env('京东极速版红包');
@@ -52,7 +52,7 @@ if ($.isNode()) {
         await jsRedPacket()
         await $.wait(3000)
       }
-      await $.wait(3000)
+      await $.wait(10000)
     }
   }
 })()
@@ -66,22 +66,22 @@ if ($.isNode()) {
 async function jsRedPacket() {
   try {
     await invite2();
-    await $.wait(1500)
+    await $.wait(2000)
     // 极速版签到提现
     // await sign();
-    await reward_query();
+    // await reward_query();
     if (!isBlack) {
-      await $.wait(2000)
-      for (let i = 0; i < 3; ++i) {
-        await redPacket();
-        await $.wait(5000)
-      }
+      // await $.wait(2000)
+      // for (let i = 0; i < 3; ++i) {
+      //   await redPacket();
+      //   await $.wait(5000)
+      // }
 
       // 领红包提现
-      await getPacketList();
-      await $.wait(2000)
-      await signPrizeDetailList();
-      await $.wait(2000)
+      // await getPacketList();
+      // await $.wait(2000)
+      // await signPrizeDetailList();
+      // await $.wait(2000)
       await showMsg()
     }
 

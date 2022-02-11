@@ -1,5 +1,5 @@
 /*
-cron "56 3 * * *" jd_speed_sign_part3.js, tag:京东极速版任务3
+cron "5 10 * * *" jd_speed_sign_part3.js, tag:京东极速版任务3
 */
 const $ = new Env('京东极速版任务3');
 
@@ -60,7 +60,7 @@ const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
                 continue
             }
             await jdGlobal()
-            await $.wait(15000)
+            await $.wait(5000)
         }
     }
 })()
@@ -73,7 +73,7 @@ const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
 
 async function jdGlobal() {
     try {
-        await richManIndex()
+        // await richManIndex()
 
         await wheelsHome()
         await apTaskList()

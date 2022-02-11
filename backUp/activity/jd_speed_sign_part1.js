@@ -1,5 +1,5 @@
 /*
-cron "56 3 * * *" jd_speed_sign_part1.js, tag:京东极速版任务1
+cron "5 0 * * *" jd_speed_sign_part1.js, tag:京东极速版任务1
 */
 const $ = new Env('京东极速版任务1');
 
@@ -62,7 +62,7 @@ const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
 async function jdGlobal() {
     try {
 
-        await richManIndex()
+        // await richManIndex()
 
         await wheelsHome()
         await apTaskList()
