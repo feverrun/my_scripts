@@ -143,28 +143,34 @@ function getTaskDetail(taskId = '') {
                                     console.log(`去完成${vo.taskName}任务`)
                                     if (vo.taskType === 13) {
                                         await doTask(vo.simpleRecordInfoVo?.taskToken, vo?.taskId)
+                                        await $.wait(3000)
                                     } else if (vo.taskType === 8) {
                                         await doTask(vo.productInfoVos[i]?.taskToken, vo?.taskId, 1)
-                                        await $.wait(1000 * 10)
+                                        await $.wait(10000)
                                         await doTask(vo.productInfoVos[i]?.taskToken, vo?.taskId, 0)
+                                        await $.wait(3000)
                                     } else if (vo.taskType === 9) {
                                         await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId, 1)
-                                        await $.wait(1000 * 10)
+                                        await $.wait(10000)
                                         await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId, 0)
+                                        await $.wait(3000)
                                     } else if (vo.taskType === 10) {
                                         await doTask(vo.threeMealInfoVos[0]?.taskToken, vo?.taskId)
+                                        await $.wait(3000)
                                     } else if (vo.taskType === 26 || vo.taskType === 3) {
                                         await doTask(vo.shoppingActivityVos[0]?.taskToken, vo?.taskId)
+                                        await $.wait(3000)
                                     } else if (vo.taskType === 1) {
                                         for (let key of Object.keys(vo.followShopVo)) {
                                             let taskFollow = vo.followShopVo[key]
                                             if (taskFollow.status !== 2) {
                                                 await doTask(taskFollow.taskToken, vo.taskId, 0)
+                                                await $.wait(3000)
                                                 break
                                             }
                                         }
                                     }
-                                    await $.wait(2000)
+                                    await $.wait(3000)
                                 }
                             }
                         }
