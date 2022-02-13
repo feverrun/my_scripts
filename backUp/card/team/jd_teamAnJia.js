@@ -2,9 +2,10 @@
 组队分豆-安佳 [jd_teamAnJia.js]
 
 ————————————————
-入口：[组队分豆-安佳 (https://lzkjdz-isv.isvjcloud.com/pool/captain/12318?activityId=e7c37c2548284d1eb7920079fbf6be68&shareUuid=30da66fa1e694fedb5f12035729c1c61)]
-IOS等用户直接用NobyDa的jd cookie
-cron "1 0,7,12,18,22 * * *" script-path=jd_teamAnJia.js,tag=组队分豆-安佳
+入口：[组队分豆-安佳 (
+https://lzkjdz-isv.isvjcloud.com/pool/captain/12318?activityId=9222c59c4de14e039d124ba1d88d7004&shareUuid=584bd1bcbd0a4fe5bdaa9b530fa727a6
+)]
+cron "22 2,13,19,22 * * *" script-path=jd_teamAnJia.js,tag=组队分豆-安佳
 */
 const $ = new Env("组队分豆-安佳");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -30,7 +31,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    console.log(`若之前做过该活动，则无法重复入队。\n入口:\nhttps://lzkjdz-isv.isvjcloud.com/pool/captain/12318?activityId=e7c37c2548284d1eb7920079fbf6be68&shareUuid=30da66fa1e694fedb5f12035729c1c61`)
+    console.log(`若之前做过该活动，则无法重复入队。\n入口:\nhttps://lzkjdz-isv.isvjcloud.com/pool/captain/12318?activityId=9222c59c4de14e039d124ba1d88d7004&shareUuid=584bd1bcbd0a4fe5bdaa9b530fa727a6`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -50,10 +51,10 @@ if ($.isNode()) {
                 }
                 continue
             }
-            authorCodeList = ['30da66fa1e694fedb5f12035729c1c61']
+            authorCodeList = ['584bd1bcbd0a4fe5bdaa9b530fa727a6']
             $.bean = 0;
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
-            $.activityId = 'e7c37c2548284d1eb7920079fbf6be68'
+            $.activityId = '9222c59c4de14e039d124ba1d88d7004'
             $.activityShopId = '1000014486'
             $.randomNum = random(1000000, 9999999)
             $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.randomNum}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`

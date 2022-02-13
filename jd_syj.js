@@ -1,9 +1,8 @@
 /*
 赚京豆-瓜分京豆脚本，一：做任务 天天领京豆(加速领京豆)
-Last Modified time: 2022-2-8
 活动入口：赚京豆-瓜分京豆(微信小程序)-赚京豆-瓜分京豆-瓜分京豆
 更新地址：jd_syj.js
-cron "9 0,11,14,20 * * *" script-path=jd_zjd.js, tag=赚京豆-瓜分京豆
+cron "39 0,10,13,20 * * *" script-path=jd_syj.js, tag=赚京豆-瓜分京豆
  */
 const $ = new Env('赚京豆-瓜分京豆');
 $.appId = 'dde2b';
