@@ -1,5 +1,5 @@
 /*
-cron 23 6-21/3 * * * jd_xinruimz.js
+cron 23 6-21/3 * * * jd_beauty_plant.js
 需要自己手动选择种植
 入口:
 25:/！WAc2QAFnRZ！，颜究种植园
