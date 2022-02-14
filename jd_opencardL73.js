@@ -16,7 +16,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=un
 
 [task_local]
 #2.14~2.21 臻宠会员，甜蜜告白
-4 0,14 8-15 2 * jd_opencardL73.js, tag=2.14~2.21 臻宠会员，甜蜜告白, enabled=true
+4 0 8-15 2 * jd_opencardL73.js, tag=2.14~2.21 臻宠会员，甜蜜告白, enabled=true
 
 */
 const $ = new Env("2.8~2.15 臻宠会员，甜蜜告白");
@@ -197,7 +197,7 @@ async function run() {
         }
         console.log(`${$.score}值 游戏:${$.point}`)
         $.runFalag = true
-        count = parseInt($.score/1000)
+        count = parseInt($.score/100)
         console.log(`抽奖次数为:${count}`)
         for(m=1;count--;m++){
             console.log(`第${m}次抽奖`)
@@ -225,6 +225,7 @@ async function run() {
             console.log(`后面的号都会助力:${$.shareUuid}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
+
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
 
         if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
@@ -335,7 +336,7 @@ async function takePostRequest(type) {
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}`
             break;
         case '抽奖':
-            url = `${domain}/dingzhi/linkgame/draw`;
+            url = `${domain}/dingzhi/opencard/draw`;
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}`
             break;
         default:

@@ -1,23 +1,25 @@
 /*
-2.13~2.19 联合开卡
+2.12~3.8 联合开卡
 新增开卡脚本，一次性脚本
 
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 
 ————————————————
-入口：[ 2.13~2.19 联合开卡]
+入口：[ 2.12~3.8 联合开卡 (
+https://mpdz3-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220212/unitedCardNew20220212?actId=628b293b355c42e39d5fea6f583e_20220212
+)]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
 
-#2.13~2.19 联合开卡
-20 0 13-19 2 * jd_opencardL71.js, tag=2.13~2.19 联合开卡, enabled=true
+#2.12~3.8 联合开卡
+11 1 12-28,1-8 2,3 * jd_opencardL70.js, tag=2.12~3.8 联合开卡, enabled=true
 
 */
 
-const $ = new Env('2.13~2.19 联合开卡');
+const $ = new Env('2.12~3.8 联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
@@ -50,10 +52,10 @@ let activityCookie =''
     // return
     $.appkey = '51B59BB805903DA4CE513D29EC448375'
     $.userId = '10299171'
-    $.actId = '98a976e9f0_22021301'
+    $.actId = '628b293b355c42e39d5fea6f583e_20220212'
     $.MixNicks = ''
     $.inviteNick = 'JnGd3fFQ9edqNXqS3kHNFFs/ye9oluZX4nOTK56TeMXbR7I2OlzZch4hTs22oCUS'
-    console.log(`活动地址:`)
+    console.log(`活动地址:https://mpdz3-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220212/unitedCardNew20220212?actId=628b293b355c42e39d5fea6f583e_20220212`)
     console.log(`请自行测试有水无水。`)
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
@@ -179,7 +181,7 @@ async function run() {
 
 async function takePostRequest(type) {
     if($.outFlag) return
-    let domain = 'https://jinggengjcq-isv.isvjcloud.com';
+    let domain = 'https://mpdz3-isv.isvjcloud.com';
     let body = ``;
     let method = 'POST'
     let admJson = ''
@@ -394,8 +396,8 @@ function getPostRequest(url, body, method="POST") {
         "User-Agent": $.UA,
         "X-Requested-With": "XMLHttpRequest"
     }
-    if(url.indexOf('https://jinggengjcq-isv.isvjcloud.com') > -1){
-        headers["Origin"] = `https://jinggengjcq-isv.isvjcloud.com`
+    if(url.indexOf('https://mpdz3-isv.isvjcloud.com') > -1){
+        headers["Origin"] = `https://mpdz3-isv.isvjcloud.com`
         headers["Content-Type"] = `application/json; charset=utf-8`
         delete headers["Cookie"]
     }

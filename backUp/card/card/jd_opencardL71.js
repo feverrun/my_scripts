@@ -1,23 +1,23 @@
 /*
-2.10~2.16 联合开卡
+2.13~2.19 联合开卡
 新增开卡脚本，一次性脚本
 
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 
 ————————————————
-入口：[ 2.10~2.16 联合开卡（https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220210/unitedCardNew20220210?actId=b802b95813e14b41ae_22021001）]
+入口：[ 2.13~2.19 联合开卡]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
-[task_local]
-#2.10~2.16 联合开卡
-30 0 10-16 2 * jd_opencardL72.js, tag=2.10~2.16 联合开卡, enabled=true
+
+#2.13~2.19 联合开卡
+20 2 13-19 2 * jd_opencardL71.js, tag=2.13~2.19 联合开卡, enabled=true
 
 */
 
-const $ = new Env('2.10~2.16 联合开卡');
+const $ = new Env('2.13~2.19 联合开卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
@@ -50,10 +50,10 @@ let activityCookie =''
     // return
     $.appkey = '51B59BB805903DA4CE513D29EC448375'
     $.userId = '10299171'
-    $.actId = 'b802b95813e14b41ae_22021001'
+    $.actId = '98a976e9f0_22021301'
     $.MixNicks = ''
     $.inviteNick = 'JnGd3fFQ9edqNXqS3kHNFFs/ye9oluZX4nOTK56TeMXbR7I2OlzZch4hTs22oCUS'
-    console.log(`活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220210/unitedCardNew20220210?actId=b802b95813e14b41ae_22021001`)
+    console.log(`活动地址:`)
     console.log(`请自行测试有水无水。`)
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
