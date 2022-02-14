@@ -1347,7 +1347,7 @@ function shareCodesFormat() {
     })
 }
 
-function request(function_id, body = {}, timeout = 1000){
+function request(function_id, body = {}, timeout = 1500){
     return new Promise(resolve => {
         setTimeout(() => {
             $.get(taskUrl(function_id, body), (err, resp, data) => {

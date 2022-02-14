@@ -51,7 +51,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
             }
 
             await main()
-            await $.wait(2000)
+            await $.wait(5000)
         }
     }
 

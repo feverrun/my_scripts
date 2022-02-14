@@ -698,7 +698,7 @@ function requestGet(function_id, body = {}) {
 
 function request(function_id, body = {}){
     return new Promise(async resolve => {
-        await $.wait(2000);
+        await $.wait(2500);
         $.post(taskUrl(function_id, body), (err, resp, data) => {
             try {
                 // console.log(data)
