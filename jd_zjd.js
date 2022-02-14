@@ -2,7 +2,7 @@
 赚京豆-瓜分京豆脚本，一：做任务 天天领京豆(加速领京豆)
 活动入口：赚京豆-瓜分京豆(微信小程序)-赚京豆-瓜分京豆-瓜分京豆
 更新地址：jd_syj.js
-cron "39 0,10,13,20 * * *" script-path=jd_syj.js, tag=赚京豆-瓜分京豆
+cron "39 5,10,13,15,20 * * *" script-path=jd_zjd.js, tag=赚京豆-瓜分京豆
  */
 const $ = new Env('赚京豆-瓜分京豆');
 $.appId = 'dde2b';
@@ -14,6 +14,7 @@ let cookiesArr = [], cookie = '', message;
 $.tuanList = [];
 $.authorTuanList = [];
 inviteCodes=[]
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -50,7 +51,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
             }
 
             await main()
-
+            await $.wait(2000)
         }
     }
 
@@ -100,9 +101,13 @@ function showMsg() {
 async function main() {
     try {
         await getUA()
+        await $.wait(1000)
         await requestAlgo()
+        await $.wait(1000)
         await distributeBeanActivity();
+        await $.wait(1000)
         await showMsg();
+        await $.wait(1000)
     } catch (e) {
         $.logErr(e)
     }
