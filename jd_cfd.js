@@ -28,7 +28,6 @@ $.newShareCodes = [];
 let cookiesArr = [], cookie = '', token = '';
 let UA, UAInfo = {};
 let nowTimes;
-const randomCount = $.isNode() ? 20 : 3;
 $.appId = "92a36";
 
 if ($.isNode()) {
@@ -61,9 +60,8 @@ if ($.isNode()) {
             $.allTask = []
             $.info = {}
             token = await getJxToken()
-
+            await $.wait(1000)
             await cfd();
-            await $.wait(3000);
 
             try {
                 if (i === 0) {
@@ -74,6 +72,7 @@ if ($.isNode()) {
             } catch (e) {
                 console.log(e.message)
             }
+            await $.wait(5000);
         }
     }
 
@@ -154,7 +153,7 @@ async function cfd() {
         await $.wait(3000)
         await getTakeAggrPage('helpdraw')
 
-        console.log('')
+        //console.log('')
         //卖贝壳
         // await $.wait(3000)
         // await querystorageroom('1')
@@ -219,8 +218,10 @@ async function cfd() {
                     if (vo.Mermaid.dwIsToday === 1) {
                         console.log(`可怜的美人鱼困在沙滩上了，快去解救她吧~`)
                         await mermaidOper(vo.strStoryId, '1', vo.ddwTriggerDay)
+                        await $.wait(3000)
                     } else if (vo.Mermaid.dwIsToday === 0) {
                         await mermaidOper(vo.strStoryId, '4', vo.ddwTriggerDay)
+                        await $.wait(3000)
                     }
                 } else {
                     console.log(`当前暂无美人鱼\n`)
@@ -952,8 +953,8 @@ async function getBuildInfo(body, buildList, type = true) {
                         await getUserInfo(false)
                         console.log(`升级建筑`)
                         console.log(`【${buildNmae}】当前等级：${buildList.dwLvl}`)
-                        console.log(`【${buildNmae}】升级需要${data.ddwNextLvlCostCoin}金币，保留升级需要的3倍${data.ddwNextLvlCostCoin * 3}金币，当前拥有${$.info.ddwCoinBalance}金币`)
-                        if(data.dwCanLvlUp > 0 && $.info.ddwCoinBalance >= (data.ddwNextLvlCostCoin * 3)) {
+                        console.log(`【${buildNmae}】升级需要${data.ddwNextLvlCostCoin}金币，保留升级需要的2倍${data.ddwNextLvlCostCoin * 2}金币，当前拥有${$.info.ddwCoinBalance}金币`)
+                        if(data.dwCanLvlUp > 0 && $.info.ddwCoinBalance >= (data.ddwNextLvlCostCoin * 2)) {
                             console.log(`【${buildNmae}】满足升级条件，开始升级`)
                             const body = `strBuildIndex=${data.strBuildIndex}&ddwCostCoin=${data.ddwNextLvlCostCoin}`
                             await $.wait(3000)
