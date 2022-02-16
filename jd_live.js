@@ -271,8 +271,13 @@ function getSign(functionid, body, uuid) {
       "client":"apple",
       "clientVersion":"10.1.0"
     }
+    let Host = ""
     let HostArr = ['jdsign.cf', 'signer.nz.lu']
-    let Host = HostArr[Math.floor((Math.random() * HostArr.length))]
+    if (process.env.SIGN_URL) {
+      Host = process.env.SIGN_URL
+    } else {
+      Host = HostArr[Math.floor((Math.random() * HostArr.length))]
+    }
     let options = {
       url: `https://cdn.nz.lu/ddo`,
       body: JSON.stringify(data),

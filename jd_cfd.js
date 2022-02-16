@@ -163,7 +163,7 @@ async function cfd() {
         await $.wait(3000)
         for(let key of Object.keys($.info.buildInfo.buildList)) {
             let vo = $.info.buildInfo.buildList[key]
-            let body = `strBuildIndex=${vo.strBuildIndex}`
+            let body = `strBuildIndex=${vo.strBuildIndex}&dwType=1`
             await getBuildInfo(body, vo)
             await $.wait(3000)
         }
@@ -811,6 +811,7 @@ async function getActTask(type = true) {
                         for (let key of Object.keys(data.Data.TaskList)) {
                             let vo = data.Data.TaskList[key]
                             if ([0, 1, 2].includes(vo.dwOrderId) && (vo.dwCompleteNum !== vo.dwTargetNum) && vo.dwTargetNum < 10) {
+                                if (vo.strTaskName === "升级1个建筑") continue
                                 console.log(`开始【🐮牛牛任务】${vo.strTaskName}`)
                                 for (let i = vo.dwCompleteNum; i < vo.dwTargetNum; i++) {
                                     console.log(`【🐮牛牛任务】${vo.strTaskName} 进度：${i + 1}/${vo.dwTargetNum}`)
@@ -954,7 +955,7 @@ async function getBuildInfo(body, buildList, type = true) {
                         console.log(`【${buildNmae}】升级需要${data.ddwNextLvlCostCoin}金币，保留升级需要的3倍${data.ddwNextLvlCostCoin * 3}金币，当前拥有${$.info.ddwCoinBalance}金币`)
                         if(data.dwCanLvlUp > 0 && $.info.ddwCoinBalance >= (data.ddwNextLvlCostCoin * 3)) {
                             console.log(`【${buildNmae}】满足升级条件，开始升级`)
-                            const body = `ddwCostCoin=${data.ddwNextLvlCostCoin}&strBuildIndex=${data.strBuildIndex}`
+                            const body = `strBuildIndex=${data.strBuildIndex}&ddwCostCoin=${data.ddwNextLvlCostCoin}`
                             await $.wait(3000)
                             let buildLvlUpRes = await buildLvlUp(body)
                             if (buildLvlUpRes.iRet === 0) {

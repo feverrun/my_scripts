@@ -385,8 +385,8 @@ if(DisableIndex!=-1){
         await getDdFactoryInfo();
 
       //领现金
-      // if(EnableCash)
-        // await jdCash();
+      if(EnableCash)
+        await jdCash();
 
       //喜豆查询
       if(EnableJxBeans){
@@ -1129,22 +1129,21 @@ async function Monthbean() {
 
 async function jdCash() {
   let functionId = "cash_homePage";
-  let body = "%7B%7D";
-  let uuid = randomString(16);
+  let body = {};
   console.log(`正在获取领现金任务签名...`);
   isSignError = false;
-  let sign = await getSign(functionId, decodeURIComponent(body), uuid)
+  let sign = await getSign(functionId, body);
   if (isSignError) {
     console.log(`领现金任务签名获取失败,等待2秒后再次尝试...`)
     await $.wait(2 * 1000);
     isSignError = false;
-    sign = await getSign(functionId, decodeURIComponent(body), uuid);
+    sign =await getSign(functionId, body);
   }
   if (isSignError) {
     console.log(`领现金任务签名获取失败,等待2秒后再次尝试...`)
     await $.wait(2 * 1000);
     isSignError = false;
-    sign = await getSign(functionId, decodeURIComponent(body), uuid);
+    sign =await getSign(functionId, body);
   }
   if (!isSignError) {
     console.log(`领现金任务签名获取成功...`)
@@ -1153,9 +1152,9 @@ async function jdCash() {
     $.jdCash = 0;
     return
   }
-  let url = `${JD_API_HOST}?functionId=${functionId}&build=167774&client=apple&clientVersion=10.1.0&uuid=${uuid}&${sign}`
+  
   return new Promise((resolve) => {
-    $.post(apptaskUrl(url, body), async(err, resp, data) => {
+    $.post(apptaskUrl(functionId, sign), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -1178,10 +1177,11 @@ async function jdCash() {
     })
   })
 }
-function apptaskUrl(url, body) {
+
+function apptaskUrl(functionId = "", body = "") {
   return {
-    url,
-    body: `body=${body}`,
+    url: `${JD_API_HOST}?functionId=${functionId}`,
+    body,
     headers: {
       'Cookie': cookie,
       'Host': 'api.m.jd.com',
@@ -1194,14 +1194,14 @@ function apptaskUrl(url, body) {
     }
   }
 }
-function getSign(functionid, body, uuid) {
+
+function getSign(functionId, body) {
   return new Promise(async resolve => {
     let data = {
-      "functionId": functionid,
-      "body": body,
-      "uuid": uuid,
-      "client": "apple",
-      "clientVersion": "10.1.0"
+      functionId,
+      body: JSON.stringify(body),
+      "client":"apple",
+      "clientVersion":"10.3.0"
     }
     let HostArr = ['jdsign.cf', 'signer.nz.lu']
     let Host = HostArr[Math.floor((Math.random() * HostArr.length))]
@@ -1212,24 +1212,25 @@ function getSign(functionid, body, uuid) {
         Host,
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
       },
-      timeout: 15000
+      timeout: 30 * 1000
     }
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${JSON.stringify(err)}`);
-          isSignError = true;
-          //console.log(`${$.name} getSign API请求失败，请检查网路重试`)
-        } else {}
+          console.log(JSON.stringify(err))
+          console.log(`${$.name} getSign API请求失败，请检查网路重试`)
+        } else {
+
+        }
       } catch (e) {
         $.logErr(e, resp)
-      }
-      finally {
+      } finally {
         resolve(data);
       }
     })
   })
 }
+
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {
