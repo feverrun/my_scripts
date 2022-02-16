@@ -12,6 +12,7 @@ let activityIdList = [
     'e39ad393c36f4ce3aabde391921da884',
     'af34045f9ab84b68a5f12f9922feb911',
     '08f9de8ba0c14adeabd655eb27f778a1',
+    '06f4df6ff5b54840867b343ba8974655',
 ]
 let lz_cookie = {}
 

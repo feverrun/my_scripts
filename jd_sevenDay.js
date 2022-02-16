@@ -3,7 +3,7 @@
 不能并发,超级无线黑号不能跑,建议别跑太多号
 环境变量:
 SEVENDAY_LIST,SEVENDAY_LIST2,SEVENDAY_LIST3
-6 0,17 * * * jd_sevenDay.js
+16 5,17 * * * jd_sevenDay.js
 */
 const $ = new Env('超级无线店铺签到');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -11,41 +11,21 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 // https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=
 let activityIdList = [
-    'eaf0e5313fa1484db90c3fc467af33e5',
-    'ba2d672b1fc44814aef1c3ee4c3ac5fa',
-    '202f8daefb63452ebcdd68ef2d3db135',
-    '3a9885564c6a4633b55b6bfcd083d3a4',
-    'e181d252d0354331ad6226c407745ad6',
-    '52a339445cba489f8df00cf18666d2be',
-    'eaf0e5313fa1484db90c3fc467af33e5',
-    '1b2a84030440442f977978f535331cf5',
-    '5df741d7b82740309217a40247b67674',
+    '600fe9fc7a21450d9842c9056f3b0653',
+    '9997107887f249c489d1492a43e3e329',
 ]
 // https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=
 let activityIdList2 = [
-    'af38e0ae3c534e5882a2c29cbd08a355',
-    '478c9f15a4fc43f691db0451d956cfef',
-    'b688a802471443d092343821a8403531',
-    'ab51ff694beb41948a554aade50d5608',
-    '462aae0d426443cd962257afce4b760f',
-    'c3fde07f69bb43e79f12686013b45f8b',
-    'd7d28539c7e54d0896cec5089f1b82f2',
-    'e170e27eb0374b01bfed88138a82f968',
-    'bea32e6d4a6749ec98a990dbf276278f',
-    '7fb38e10addf49b487c84f579971cbd4',
-    '393ddb3a8ce04f19aed59fb458e2425f',
-    'cbf22d6dfbde42ac98fb3f693530132e',
-    'c2560ac2bcc94894ae41bb66e5921640',
-    '4b6dca90e4874cf3980dee3b80c41fc4',
-    'b0b0f2816de14971ae1118a5e39fcedc',
-    'c23c2c321e6e4f81bc1a524315d082f5',
-    '66144d35dbf64a90adf695abc46caaa2',
-    '7d2b4b54987f435794075b613e03abf4',
-    '5ff6afb5b5a84312bbb27709ebc22e16',
-    'cdb2ec07dca24451891a6a025d0718b9',
-    '5c4a8fc391b6416c97687b3aa6803d43',
-    'caaeb263f50a49808b940427888c732f',
-    'fd13800334a1421299183698c255db30'
+    "913a1b38ed8a47d2a43ae1daf72aa19f",
+    "7d7615f2df6b4e9196ec5b3b8485c845",
+    "b27cf28cb13e41c7a1c4a8f144c567a0",
+    "26eda074760e40ce948cd8d7d0f8d26a",
+    "bfafaaa4961b441a8e2bcb4b7de6bdf1",
+    "6d58dc7941a8427e8d2220cbfdc7da60",
+    "393ddb3a8ce04f19aed59fb458e2425f",
+    "66bfae05823c4b4f8cf67e09765524eb",
+    "0260f46de12c4499bf9874f734add39a",
+    "b10be16dc4ed48409e434f71fd3af3bc",
 ]
 let activityIdList3 = [
     '456de0f620024cbda71e9a9cbaaf95e1',
@@ -108,21 +88,21 @@ if ($.isNode()) {
                 $.activityUrl = `https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
                 $.activityId = activityIdList[a];
                 await signActivity();
-                await $.wait(3000)
+                await $.wait(2000)
             }
             console.log("签到类型2")
             for(let a in activityIdList2){
                 $.activityUrl = `https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
                 $.activityId = activityIdList2[a];
                 await signActivity2();
-                await $.wait(3000)
+                await $.wait(2000)
             }
             console.log("签到类型3")
             for(let a in activityIdList3){
                 $.activityUrl = `https://cjhy-isv.isvjcloud.com/sign/signActivity?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
                 $.activityId = activityIdList3[a];
                 await signActivity3();
-                await $.wait(3000)
+                await $.wait(2000)
             }
             if ($.bean > 0) {
                 message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
@@ -238,10 +218,11 @@ function task(function_id, body, isCommon = 0) {
                                     break;
                                 case 'sign/sevenDay/wx/signUp':
                                     if(data){
+                                        // console.log(data);
                                         if (data.isOk) {
                                             console.log("签到成功");
-                                            if (data.signResult.giftName) {
-                                                console.log(data.signResult.giftName);
+                                            if (data.signResult && data.signResult.gift) {
+                                                console.log(data.signResult.gift.giftName);
                                             }
                                         } else {
                                             console.log(data.msg);
@@ -250,9 +231,10 @@ function task(function_id, body, isCommon = 0) {
                                     break
                                 case 'sign/wx/signUp':
                                     if(data){
+                                        // console.log(data);
                                         if (data.isOk) {
                                             console.log("签到成功");
-                                            if (data.gift.giftName) {
+                                            if (data.gift.giftName && data.signResult.gift) {
                                                 console.log(data.gift.giftName);
                                             }
                                         } else {
