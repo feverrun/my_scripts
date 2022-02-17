@@ -15,11 +15,25 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJD
 [点此加入](https://t.me/proenv) 联系我加入白名单 
 
 ## 定时更新库
+青龙配置GithubProxyUrl选项请设置为
+```
+GithubProxyUrl=""
+或者
+GithubProxyUrl="可用的其他代理默认是https://ghproxy.com/已不可用"
+```
+
 任务名:   myScripts
 
 定时 :    1 * * * *
 
 任务 :
+
+国内主机
+```
+ql repo https://e.coding.net/feverrun/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
+```
+
+国外主机
 ```
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
