@@ -81,6 +81,7 @@ npm install -g tunnel
 npm install -g ws
 npm install -g js-base64
 npm install -g qrcode-terminal
+npm install -g moment
 ```
 ### 方法二：进入青龙后台安装依赖
 依赖管理》NodeJs》添加依赖》选择自动拆分，把以下内容全部复制到名称里，之后点击确定
@@ -103,4 +104,5 @@ tunnel
 ws
 js-base64
 qrcode-terminal
+moment
 ```
