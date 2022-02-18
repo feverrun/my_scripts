@@ -1,8 +1,9 @@
 /*
 星系牧场
 活动入口：QQ星儿童牛奶京东自营旗舰店->品牌会员->星系牧场
-#星系牧场
-19 4-24/4 * * * jd_qqxing.js
+活动入口:
+27:/(N8TI00iLrM)，星系牧场养牛牛，可获得DHA专属奶！
+19 4-23/4 * * * jd_qqxing.js
 */
 const $ = new Env('QQ星系牧场');
 //Node.js用户请在jdCookie.js处填写京东ck;
