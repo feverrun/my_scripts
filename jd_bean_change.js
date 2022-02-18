@@ -1,8 +1,8 @@
 /*
  * 简化版京东日资产变动通知
- * 支持环境变量控制每次发送的账号个数，默认为2
+ * 支持环境变量控制每次发送的账号个数，默认为6
  * 环境变量一次发送几个：JD_BEAN_CHANGE_SENDNUM
- * cron "6 8,18 * * *" jd_bean_change.js
+ * cron "46 10 * * *" jd_bean_change.js
  * */
 const $ = new Env("京东日资产变动");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
