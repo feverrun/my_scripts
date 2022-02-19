@@ -425,46 +425,46 @@ if(DisableIndex!=-1){
   }
   //组1通知
   if (ReceiveMessageGp4) {
-    allMessage2Gp4 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp4;
+    allMessage2Gp4 = `【⏰商品活动领取提醒⏰】\n` + ReceiveMessageGp4;
   }
   if (WarnMessageGp4) {
     if (allMessage2Gp4) {
       allMessage2Gp4 = `\n` + allMessage2Gp4;
     }
-    allMessage2Gp4 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp4 + allMessage2Gp4;
+    allMessage2Gp4 = `【⏰商品活动任务提醒⏰】\n` + WarnMessageGp4 + allMessage2Gp4;
   }
 
   //组2通知
   if (ReceiveMessageGp2) {
-    allMessage2Gp2 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp2;
+    allMessage2Gp2 = `【⏰商品活动领取提醒⏰】\n` + ReceiveMessageGp2;
   }
   if (WarnMessageGp2) {
     if (allMessage2Gp2) {
       allMessage2Gp2 = `\n` + allMessage2Gp2;
     }
-    allMessage2Gp2 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp2 + allMessage2Gp2;
+    allMessage2Gp2 = `【⏰商品活动任务提醒⏰】\n` + WarnMessageGp2 + allMessage2Gp2;
   }
 
   //组3通知
   if (ReceiveMessageGp3) {
-    allMessage2Gp3 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp3;
+    allMessage2Gp3 = `【⏰商品活动领取提醒⏰】\n` + ReceiveMessageGp3;
   }
   if (WarnMessageGp3) {
     if (allMessage2Gp3) {
       allMessage2Gp3 = `\n` + allMessage2Gp3;
     }
-    allMessage2Gp3 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp3 + allMessage2Gp3;
+    allMessage2Gp3 = `【⏰商品活动任务提醒⏰】\n` + WarnMessageGp3 + allMessage2Gp3;
   }
 
   //其他通知
   if (allReceiveMessage) {
-    allMessage2 = `【⏰商品白嫖活动领取提醒⏰】\n` + allReceiveMessage;
+    allMessage2 = `【⏰商品活动领取提醒⏰】\n` + allReceiveMessage;
   }
   if (allWarnMessage) {
     if (allMessage2) {
       allMessage2 = `\n` + allMessage2;
     }
-    allMessage2 = `【⏰商品白嫖活动任务提醒⏰】\n` + allWarnMessage + allMessage2;
+    allMessage2 = `【⏰商品活动任务提醒⏰】\n` + allWarnMessage + allMessage2;
   }
 
   if (intPerSent > 0) {
@@ -962,7 +962,7 @@ async function showMsg() {
 
     if (TempBaipiao) {
       strsummary=strSubNotify+TempBaipiao +strsummary;
-      TempBaipiao = `【⏰商品白嫖活动提醒⏰】\n` + TempBaipiao;
+      TempBaipiao = `【⏰商品活动提醒⏰】\n` + TempBaipiao;
       ReturnMessage = TempBaipiao + `\n` + ReturnMessage;
     } else {
       strsummary = strSubNotify + strsummary;
