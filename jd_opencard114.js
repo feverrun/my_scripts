@@ -34,7 +34,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=un
 
 [task_local]
 #2.19～2.26 奢宠会员 瓜分百万京豆
-2 0 21-26 2 * jd_opencard114.js, tag=2.19～2.26 奢宠会员 瓜分百万京豆, enabled=true
+25 0 24-26 2 * jd_opencard114.js, tag=2.19～2.26 奢宠会员 瓜分百万京豆, enabled=true
 */
 
 let opencard_addSku = "true"

@@ -2,16 +2,12 @@
 2.21-2.28 大牌联合 宠爱有礼
 新增开卡脚本,一次性脚本
 
-————————————————
 入口：[ 2.21-2.28 大牌联合 宠爱有礼 (
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=unionkbblnt20220221dzlhkk&shareUuid=4599ff8b929843eaa8ee6ccd00249fe3
 )]
 
-
-[task_local]
 #2.21-2.28 大牌联合 宠爱有礼
-6 12 21-28 2 * jd_opencardL80.js, tag=2.21-2.28 大牌联合 宠爱有礼, enabled=true
-
+15 1 24-28 2 * jd_opencardL80.js, tag=2.21-2.28 大牌联合 宠爱有礼, enabled=true
 */
 const $ = new Env('2.21-2.28 大牌联合 宠爱有礼');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
