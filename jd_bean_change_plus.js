@@ -315,6 +315,12 @@ if(DisableIndex!=-1){
       $.todayOutJxBean=0;
       $.xibeanCount = 0;
       $.PigPet = '';
+      $.YunFeiTitle="";
+      $.YunFeiQuan = 0;
+      $.YunFeiQuanEndTime = "";
+      $.YunFeiTitle2="";
+      $.YunFeiQuan2 = 0;
+      $.YunFeiQuanEndTime2 = "";
       TempBaipiao = "";
       strGuoqi="";
       console.log(`******开始查询【京东账号${$.index}】${$.nickName || $.UserName}*********`);
@@ -940,6 +946,24 @@ async function showMsg() {
   ReturnMessage += `🧧🧧🧧红包明细🧧🧧🧧\n`;
   ReturnMessage += `${$.message}`;
   strsummary +=`${$.message}`;
+
+  if($.YunFeiQuan){
+    var strTempYF="【免运费券】"+$.YunFeiQuan+"张";
+    if($.YunFeiQuanEndTime)
+      strTempYF+=",有效期至"+$.YunFeiQuanEndTime;
+    strTempYF+="\n";
+    ReturnMessage +=strTempYF
+    strsummary +=strTempYF;
+  }
+  if($.YunFeiQuan2){
+    var strTempYF2="【免运费券】"+$.YunFeiQuan2+"张";
+    if($.YunFeiQuanEndTime2)
+      strTempYF+=",有效期至"+$.YunFeiQuanEndTime;
+    strTempYF2+="\n";
+    ReturnMessage +=strTempYF2
+    strsummary +=strTempYF2;
+  }
+
 
   if (userIndex2 != -1) {
     allMessageGp2 += ReturnMessageTitle+ReturnMessage + `\n`;
@@ -1615,6 +1639,30 @@ function getCoupon() {
 
             }
           }
+
+          if (useable[i].couponTitle.indexOf('运费券') > -1 && useable[i].limitStr.indexOf('自营商品运费') > -1) {
+            if (!$.YunFeiTitle) {
+              $.YunFeiTitle = useable[i].couponTitle;
+              $.YunFeiQuanEndTime = new Date(parseInt(useable[i].endTime)).Format('yyyy-MM-dd');
+              $.YunFeiQuan += 1;
+            } else {
+              if ($.YunFeiTitle == useable[i].couponTitle) {
+                $.YunFeiQuanEndTime = new Date(parseInt(useable[i].endTime)).Format('yyyy-MM-dd');
+                $.YunFeiQuan += 1;
+              } else {
+                if (!$.YunFeiTitle2)
+                  $.YunFeiTitle2 = useable[i].couponTitle;
+
+                if ($.YunFeiTitle2 == useable[i].couponTitle) {
+                  $.YunFeiQuanEndTime2 = new Date(parseInt(useable[i].endTime)).Format('yyyy-MM-dd');
+                  $.YunFeiQuan2 += 1;
+                }
+              }
+
+            }
+
+          }
+
           /* if (useable[i].couponTitle.indexOf('极速版APP活动') > -1) {
               $.couponEndTime = useable[i].endTime;
               $.startIndex = useable[i].couponTitle.indexOf('-') - 3;
