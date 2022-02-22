@@ -23,7 +23,6 @@ $.result = [];
 $.shareCodes = [];
 let cookiesArr = [], cookie = '', token = '';
 let UA, UAInfo = {};
-let nowTimes;
 const randomCount = $.isNode() ? 20 : 3;
 $.appId = "92a36";
 
@@ -99,7 +98,6 @@ if ($.isNode()) {
 
 async function cfd() {
     try {
-        nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000)
         let beginInfo = await getUserInfo();
         if (beginInfo.LeadInfo.dwLeadType === 2) {
             console.log(`还未开通活动，尝试初始化`)
@@ -110,9 +108,13 @@ async function cfd() {
                 console.log(`初始化成功\n`)
             } else {
                 console.log(`初始化失败\n`)
-
             }
         }
+
+        if (!beginInfo.MarkList.daily_task_win) {
+            await setMark()
+        }
+
     } catch (e) {
         $.logErr(e)
     }
@@ -158,6 +160,25 @@ function helpByStage(shareCodes) {
     })
 }
 
+function setMark() {
+    return new Promise(resolve => {
+        $.get(taskUrl("user/SetMark", `strMark=daily_task_win&strValue=1&dwType=1`), (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`);
+                    console.log(`${$.name} SetMark API请求失败，请检查网路重试`);
+                } else {
+                    data = JSON.parse(data.replace(/\n/g, "").match(new RegExp(/jsonpCBK.?\((.*);*\)/))[1]);
+                }
+            } catch (e) {
+                $.logErr(e, resp);
+            } finally{
+                resolve();
+            }
+        })
+    })
+}
+
 // 获取用户信息
 function getUserInfo(showInvite = true) {
     return new Promise(async (resolve) => {
@@ -176,6 +197,8 @@ function getUserInfo(showInvite = true) {
                         dwLandLvl,
                         LeadInfo = {},
                         Business = {},
+                        XbStatus = {},
+                        MarkList = {}
                     } = data;
                     if (showInvite) {
                         console.log(`获取用户信息：${sErrMsg}\n${$.showLog ? data : ""}`);
@@ -193,12 +216,16 @@ function getUserInfo(showInvite = true) {
                         strMyShareId,
                         dwLandLvl,
                         LeadInfo,
+                        XbStatus,
+                        MarkList
                     };
                     resolve({
                         ddwRichBalance,
                         ddwCoinBalance,
                         strMyShareId,
                         LeadInfo,
+                        XbStatus,
+                        MarkList
                     });
                 }
             } catch (e) {
