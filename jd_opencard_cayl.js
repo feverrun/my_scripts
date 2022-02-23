@@ -7,7 +7,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=un
 )]
 
 #2.21-2.28 大牌联合 宠爱有礼
-15 1 24-28 2 * jd_opencardL80.js, tag=2.21-2.28 大牌联合 宠爱有礼, enabled=true
+6 1,12 22-28 2 * jd_opencard_cayl.js, tag=2.21-2.28 大牌联合 宠爱有礼, enabled=true
 */
 const $ = new Env('2.21-2.28 大牌联合 宠爱有礼');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

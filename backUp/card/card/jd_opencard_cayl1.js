@@ -2,7 +2,7 @@
 大牌联合 宠爱有礼
 
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/5063373?activityId=dzlhkklblzms20220108&shareUuid=dab0df6051074e9b82b8bfcb35f17bb0
-cron "5 5 7-16 1 *" jd_opencard_caly.js
+cron "5 5 7-16 1 *" jd_opencard_caly1.js
 */
 const $ = new Env("大牌联合 宠爱有礼");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
