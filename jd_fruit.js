@@ -358,6 +358,7 @@ async function getTenWaterAward() {
 async function doTenWaterAgain() {
     console.log('开始检查剩余水滴能否再次浇水再次浇水\n');
     await initForFarm();
+    await $.wait(700)
     let totalEnergy  = $.farmInfo.farmUserPro.totalEnergy;
     console.log(`剩余水滴${totalEnergy}g\n`);
     await myCardInfoForFarm();
@@ -370,6 +371,7 @@ async function doTenWaterAgain() {
             console.log(`使用翻倍水滴卡结果:${JSON.stringify($.userMyCardRes)}`);
         }
         await initForFarm();
+        await $.wait(800)
         totalEnergy = $.farmInfo.farmUserPro.totalEnergy;
     }
     if (signCard > 0) {
@@ -379,6 +381,7 @@ async function doTenWaterAgain() {
             console.log(`使用加签卡结果:${JSON.stringify($.userMyCardRes)}`);
         }
         await initForFarm();
+        await $.wait(900)
         totalEnergy = $.farmInfo.farmUserPro.totalEnergy;
     }
     jdFruitBeanCard = $.getdata('jdFruitBeanCard') ? $.getdata('jdFruitBeanCard') : jdFruitBeanCard;
@@ -1021,7 +1024,7 @@ async function getFullCollectionReward() {
         $.post(taskUrl("getFullCollectionReward", body), (err, resp, data) => {
             try {
                 if (err) {
-                    console.log('\n东东农场: API查询请求失败 ‼️‼️');
+                    console.log('\n东东农场: getFullCollectionReward API查询请求失败 ‼️‼️');
                     console.log(JSON.stringify(err));
                     $.logErr(err);
                 } else {
@@ -1075,8 +1078,8 @@ async function gotStageAwardForFarm(type) {
 }
 //浇水API
 async function waterGoodForFarm() {
-    await $.wait(1000);
-    console.log('等待了1秒');
+    await $.wait(2000);
+    console.log('等待了2秒');
 
     const functionId = arguments.callee.name.toString();
     $.waterResult = await request(functionId);
@@ -1086,8 +1089,8 @@ async function initForTurntableFarm() {
     $.initForTurntableFarmRes = await request(arguments.callee.name.toString(), {version: 4, channel: 1});
 }
 async function lotteryForTurntableFarm() {
-    await $.wait(2000);
-    console.log('等待了2秒');
+    await $.wait(3000);
+    console.log('等待了3秒');
     $.lotteryRes = await request(arguments.callee.name.toString(), {type: 1, version: 4, channel: 1});
 }
 
@@ -1271,7 +1274,7 @@ async function initForFarm() {
         $.post(option, (err, resp, data) => {
             try {
                 if (err) {
-                    console.log('\n东东农场: API查询请求失败 ‼️‼️');
+                    console.log('\n东东农场: initForFarm API查询请求失败 ‼️‼️');
                     console.log(JSON.stringify(err));
                     $.logErr(err);
                 } else {
@@ -1353,7 +1356,7 @@ function request(function_id, body = {}, timeout = 1500){
             $.get(taskUrl(function_id, body), (err, resp, data) => {
                 try {
                     if (err) {
-                        console.log('\n东东农场: API查询请求失败 ‼️‼️')
+                        console.log('\n东东农场: '+function_id+' API查询请求失败 ‼️‼️')
                         console.log(JSON.stringify(err));
                         console.log(`function_id:${function_id}`)
                         $.logErr(err);
