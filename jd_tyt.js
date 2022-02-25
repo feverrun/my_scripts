@@ -66,7 +66,7 @@ if ($.isNode()) {
         $.index = i + 1;
 
         if (!cookie) continue
-        try {if (i===0 && $.UserName !='18862988021_p'){let pcode = await getTyt();await helpCoinDozer(pcode);await $.wait(10000);console.log(pcode);let res = await help(pcode);}}catch (e) {}
+        try {if (i===0 && $.UserName !='18862988021_p'){let pcode = await getTyt();await helpCoinDozer(pcode);await $.wait(10000); await help(pcode);}}catch (e) {}
         for (let code of inviteCodes) {
             if ($.UserName === code['user']) continue;
             if ($.index === 1 && 2)
