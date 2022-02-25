@@ -52,7 +52,7 @@ if ($.isNode()) {
 
         //获取列表提现
         await signPrizeDetailList();
-        await $.wait(1500)
+        await $.wait(3000)
     }
 
     if ($.isNode() && allMessage) {
@@ -148,6 +148,7 @@ function signPrizeDetailList() {
                                 if(item.prizeTypeVO.prizeUsed===0){
                                     console.log(`提现${item.prizeTypeVO.prizeValue}微信现金`)
                                     await apCashWithDraw(item.prizeTypeVO.id,item.prizeTypeVO.poolBaseId,item.prizeTypeVO.prizeGroupId,item.prizeTypeVO.prizeBaseId)
+                                    await $.wait(1500)
                                 }
                             }
                         } else {
