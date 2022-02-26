@@ -10,7 +10,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dzb1830e
 
 [task_local]
 #2.24~3.4 常青藤联合开卡
-35 0,9 27-28,1-4 2,3 * jd_opencardL83.js, tag=2.24~3.4 常青藤联合开卡, enabled=true
+25 0,9 27-28,1-4 2,3 * jd_opencard_cqt.js, tag=2.24~3.4 常青藤联合开卡, enabled=true
 */
 
 const $ = new Env("常青藤联合开卡");
@@ -73,6 +73,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             authorCodeList = [
                 'b3979d5067cc43278a82810e30e6b588',
+                '0be284c6b6344c649b58fc9aff71bc7c',
             ]
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)]
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
@@ -89,6 +90,7 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             // if ($.bean > 0) {
             //     message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
             // }
+            await $.wait(5000)
         }
     }
     // if (message !== '') {
