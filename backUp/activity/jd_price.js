@@ -335,7 +335,7 @@ async function getAlgo(id) {
             'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7'
         },
         'body': JSON.stringify({
-            "version": "3.1",
+            "version": "3.0",
             "fp": fp,
             "appId": id.toString(),
             "timestamp": Date.now(),

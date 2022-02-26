@@ -182,7 +182,7 @@ async function UserSignNew() {
     return res;
 }
 
-function decrypturl(url, stk, params, appId = 10012) {
+function decrypturl(url, stk, params, appId = 37409) {
     for (const [key, val] of Object.entries(params)) {
         url += `&${key}=${val}`
     }

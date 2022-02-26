@@ -21,7 +21,7 @@ $.notifyTime = $.getdata("cfd_notifyTime");
 $.result = [];
 $.shareCodes = [];
 let cookiesArr = [], cookie = '', token = '', UA, UAInfo = {};
-$.appId = "92a36";
+$.appId = 10032;
 $.hot = {}
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -322,7 +322,7 @@ async function requestAlgo() {
             'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7'
         },
         'body': JSON.stringify({
-            "version": "3.1",
+            "version": "1.0",
             "fp": $.fingerprint,
             "appId": $.appId.toString(),
             "timestamp": Date.now(),
