@@ -14,7 +14,6 @@ cron "5 6-18/6 * * *" script-path=jd_fruit_mod.js,tag=东东农场
 const $ = new Env('东东农场互助版');
 let cookiesArr = [], cookie = '', isBox = false, notify,allMessage = '';
 //助力好友分享码(最多3个,否则后面的助力失败),原因:京东农场每人每天只有3次助力机会
-
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
 
@@ -35,7 +34,6 @@ if ($.isNode() && process.env.CC_NOHELPAFTER8) {
         }
     }
 }
-
 const fs = require('fs');
 let boolneedUpdate=false;
 let strShare = './Fruit_ShareCache.json';
@@ -67,6 +65,7 @@ if (WP_APP_TOKEN_ONE) {
     console.log(`检测到未配置Wxpusher的Token，禁用一对一推送...`);
 let lnrun=0;
 let llgetshare=false;
+let NoNeedCodes = [];
 !(async () => {
 
     await requireConfig();
@@ -771,6 +770,19 @@ async function masterHelpShare() {
     if(llhelp){
         console.log('开始助力好友')
         for (let code of newShareCodes) {
+            if(NoNeedCodes){
+                var llnoneed=false;
+                for (let NoNeedCode of NoNeedCodes) {
+                    if (code==NoNeedCode){
+                        llnoneed=true;
+                        break;
+                    }
+                }
+                if(llnoneed){
+                    console.log(`${code}助力已满，跳过...`);
+                    continue;
+                }
+            }
             console.log(`${$.UserName}开始助力: ${code}`);
             if (!code) continue;
             if (!$.farmInfo.farmUserPro) {
@@ -794,6 +806,7 @@ async function masterHelpShare() {
                 } else if ($.helpResult.helpResult.code === '9') {
                     console.log(`【助力好友结果】: 之前给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
                 } else if ($.helpResult.helpResult.code === '10') {
+                    NoNeedCodes.push(code);
                     console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
                 } else {
                     console.log(`助力其他情况：${JSON.stringify($.helpResult.helpResult)}`);
