@@ -96,7 +96,7 @@ function info() {
     return new Promise((resolve) => {
         const nm= {
             url: `${JD_API_HOST}`,
-                body:`functionId=initiateCoinDozer&body={"actId":"${actId}","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636014459632&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
+            body:`functionId=initiateCoinDozer&body={"actId":"${actId}","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636014459632&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
             headers: {
                 "Cookie": cookie,
                 "Origin": "https://pushgold.jd.com",
