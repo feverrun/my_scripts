@@ -8,15 +8,15 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=un
 集卡记得瓜分奖励
 
 #3.1-3.15 集卡女王驾到
-5 2,14 1-15 3 * jd_opencard_nwjd.js, tag=3.1-3.15 集卡女王驾到, enabled=true
+12 3,11 1-15 3 * jd_opencard_nwjd.js, tag=3.1-3.15 集卡女王驾到, enabled=true
 */
 
 const $ = new Env('3.1-3.15 集卡女王驾到');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
-let cookiesArr = [],
-    cookie = '';
+let cookiesArr = [], cookie = '';
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -58,6 +58,7 @@ let activityCookie =''
             await run();
             if(i == 0 && !$.actorUuid) break
             if($.outFlag || $.activityEnd) break
+            await $.wait(1000)
         }
     }
     if($.outFlag) {
@@ -172,16 +173,36 @@ async function run() {
         if(flag){
             await takePostRequest('activityContent');
         }
-        console.log(`${$.score}值 游戏:${$.point}`)
+        console.log(`${$.score}值`)
         $.runFalag = true
-        let count = parseInt($.score/100)
+        let count = parseInt($.score/50)
+        console.log(`集卡次数为:${count}`)
+        for(m=1;count--;m++){
+            if($.compositeCardNum > 0) break
+            console.log(`第${m}次集卡`)
+            await takePostRequest('getCardInfo');
+            await takePostRequest('集卡');
+            if($.runFalag == false || $.compositeCardNum > 0) break
+            if(Number(count) <= 0) break
+            if(m >= 5){
+                console.log("集卡太多次，多余的次数请再执行脚本")
+                break
+            }
+            await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
+        }
+        if(flag){
+            await takePostRequest('activityContent');
+        }
+        console.log(`${$.score}值`)
+        $.runFalag = true
+        count = parseInt($.score/100)
         console.log(`抽奖次数为:${count}`)
         for(m=1;count--;m++){
             console.log(`第${m}次抽奖`)
             await takePostRequest('抽奖');
             if($.runFalag == false) break
             if(Number(count) <= 0) break
-            if(m >= 10){
+            if(m >= 5){
                 console.log("抽奖太多次，多余的次数请再执行脚本")
                 break
             }
@@ -206,6 +227,7 @@ async function run() {
 
         if($.index % 3 == 0) console.log('休息一下，别被黑ip了\n可持续发展')
         if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 30000, 10))
+
     } catch (e) {
         console.log(e)
     }
@@ -263,6 +285,14 @@ async function takePostRequest(type) {
             url = `${domain}/play/monopoly/doTasks`;
             // url = `${domain}/dingzhi/dz/openCard/saveTask`;
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&taskType=1`
+            break;
+        case 'getCardInfo':
+            url = `${domain}/collect/card/getCardInfo`;
+            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}`
+            break;
+        case '集卡':
+            url = `${domain}/collect/card/drawCard`;
+            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}`
             break;
         case 'sign':
         case 'addCart':
@@ -559,6 +589,23 @@ async function dealReturn(type, data) {
                     if(res.result && res.result === true && res.data){
                         $.ShareCount = res.data.assistCount
                         $.log(`=========== 你邀请了:${res.data.assistCount}个`)
+                    }else if(res.errorMessage){
+                        console.log(`${type} ${res.errorMessage || ''}`)
+                    }else{
+                        console.log(`${type} ${data}`)
+                    }
+                }else{
+                    console.log(`${type} ${data}`)
+                }
+                break;
+            case 'getCardInfo':
+            case '集卡':
+                if(typeof res == 'object'){
+                    if(res.result && res.result === true && res.data){
+                        if(type == "集卡"){
+                            if(res.data.status == 1) console.log(`集卡成功->${res.data.cardName}`)
+                            else console.log('集卡失败'+ res.data.cardName && '->'+res.data.cardName || '\n'+data)
+                        }
                     }else if(res.errorMessage){
                         console.log(`${type} ${res.errorMessage || ''}`)
                     }else{
