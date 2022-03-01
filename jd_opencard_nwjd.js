@@ -129,6 +129,7 @@ async function run() {
                 if(o.status == 0){
                     flag = true
                     $.joinVenderId = o.venderId
+                    await $.wait(parseInt(Math.random() * 3000 + 2000, 10))
                     await joinShop()
                     if($.joinShopresmessage === '活动太火爆，请稍后再试'){
                         console.log('重新开卡')
@@ -204,9 +205,8 @@ async function run() {
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
         if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
 
-        if($.index % 5 == 0) console.log('休息一下，别被黑ip了\n可持续发展')
-        if($.index % 5 == 0) await $.wait(parseInt(Math.random() * 5000 + 10000, 10))
-
+        if($.index % 3 == 0) console.log('休息一下，别被黑ip了\n可持续发展')
+        if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 10000, 10))
     } catch (e) {
         console.log(e)
     }
