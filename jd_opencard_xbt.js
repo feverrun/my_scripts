@@ -7,7 +7,7 @@
 
 [task_local]
 #3.1-3.8 约惠女神节，惊喜享不停
-15 1 3-8 3 * jd_opencard_xbt.js, tag=3.1-3.8 约惠女神节，惊喜享不停, enabled=true
+35 0,11 4-8 3 * jd_opencard_xbt.js, tag=3.1-3.8 约惠女神节，惊喜享不停, enabled=true
 
 */
 const $ = new Env('3.1-3.8 约惠女神节，惊喜享不停');
@@ -125,6 +125,10 @@ async function run() {
                     flag = true
                     $.joinVenderId = o.venderId
                     await joinShop()
+                    if($.joinShopresmessage === '活动太火爆，请稍后再试'){
+                        console.log('重新开卡')
+                        await joinShop()
+                    }
                     await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
                     await takePostRequest('activityContent');
                     await takePostRequest('drawContent');
@@ -714,6 +718,7 @@ function joinShop() {
                 if(typeof res == 'object'){
                     if(res.success === true){
                         console.log(res.message)
+                        $.joinShopresmessage = res.message
                         if(res.result && res.result.giftInfo){
                             for(let i of res.result.giftInfo.giftList){
                                 console.log(`入会获得:${i.discountString}${i.prizeName}${i.secondLineDesc}`)
