@@ -191,6 +191,9 @@ async function run() {
             console.log(`后面的号都会助力:${$.shareUuid}`)
         }
         await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
+        if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
+        if($.index % 3 == 0) console.log('休息一下，别被黑ip了\n可持续发展')
+        if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 30000, 10))
     } catch (e) {
         console.log(e)
     }
