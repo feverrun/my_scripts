@@ -7,7 +7,7 @@
 
 [task_local]
 #3.1-3.8 约惠女神节，惊喜享不停
-5 3,12 1-8 3 * jd_opencard_xbt.js, tag=3.1-3.8 约惠女神节，惊喜享不停, enabled=true
+15 1 3-8 3 * jd_opencard_xbt.js, tag=3.1-3.8 约惠女神节，惊喜享不停, enabled=true
 
 */
 const $ = new Env('3.1-3.8 约惠女神节，惊喜享不停');
