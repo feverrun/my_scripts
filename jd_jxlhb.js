@@ -3,7 +3,7 @@
 活动入口：京喜APP-我的-签到领红包-天天领红包
 助力逻辑：先自己京东账号相互助力，如有剩余助力机会，则助力作者
 温馨提示：如提示助力火爆，可尝试寻找京东客服
-cron "18 8,11,13,20 * * *" script-path=jd_jxlhb.js,tag=京喜领88元红包
+cron "18 11,13,21 * * *" script-path=jd_jxlhb.js,tag=京喜领88元红包
  */
 
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
@@ -80,7 +80,7 @@ $.appId = "e395f"
       }
       $.max = false;
       await enrollFriend($.packetIdArr[j].strUserPin);
-      await $.wait(5000);
+      await $.wait(3000);
       if ($.max) {
         $.packetIdArr.splice(j, 1)
         j--
@@ -93,7 +93,7 @@ $.appId = "e395f"
         console.log(`【${$.UserName}】去助力作者的邀请码：${$.authorMyShareIds[j]}`);
         $.max = false;
         await enrollFriend($.authorMyShareIds[j]);
-        await $.wait(5000);
+        await $.wait(3000);
         if ($.max) {
           $.authorMyShareIds.splice(j, 1)
           j--
@@ -128,6 +128,8 @@ async function main() {
   await joinActive();
   await $.wait(2000);
   await getUserInfo();
+  await $.wait(1000);
+
 }
 //参与活动
 function joinActive() {
