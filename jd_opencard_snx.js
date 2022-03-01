@@ -156,7 +156,18 @@ async function run() {
             await takePostRequest('邀请');
         }
         //await takePostRequest('startDraw');
+        if(!$.viewVideo && !$.outFlag){
+            flag = true
+            await takePostRequest('viewVideo');
+            await $.wait(parseInt(Math.random() * 1000 + 3000, 10))
 
+        }
+        if(!$.addSku && !$.outFlag){
+            flag = true
+            await takePostRequest('addSku');
+            await $.wait(parseInt(Math.random() * 1000 + 3000, 10))
+
+        }
         if(flag){
             await takePostRequest('activityContent');
         }
@@ -273,12 +284,12 @@ async function takePostRequest(type) {
         case 'visitSku':
         case 'toShop':
         case 'addSku':
-            url = `${domain}/dingzhi/dz/openCard/saveTask`;
+            url = `${domain}/play/monopoly/doTasks`;
             let taskType = ''
             let taskValue = ''
             if(type == 'viewVideo'){
-                taskType = 31
-                taskValue = 31
+                taskType = 0
+                taskValue = 0
             }else if(type == 'visitSku'){
                 taskType = 5
                 taskValue = $.visitSkuValue || 5
@@ -286,10 +297,10 @@ async function takePostRequest(type) {
                 taskType = 14
                 taskValue = $.toShopValue || 14
             }else if(type == 'addSku'){
-                taskType = 2
-                taskValue = $.addSkuValue || 2
+                taskType = 21
+                taskValue = $.addSkuValue || 21
             }
-            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&taskType=${taskType}&taskValue=${taskValue}`
+            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&taskType=${taskType}`
             break;
         case 'getDrawRecordHasCoupon':
             url = `${domain}/play/monopoly/getPrizeList`;
