@@ -4,6 +4,8 @@
 
 ————————————————
 入口：[ 3.1-3.15 集卡王冠下的少女心]
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=uniongame20220301ul6ar3g76a&shareUuid=81cbea005e154dc795522694015bcdb8
+集卡记得瓜分奖励
 
 #3.1-3.15 集卡王冠下的少女心
 16 2,10 2-15 3 * jd_opencard_snx.js, tag=3.1-3.15 集卡王冠下的少女心, enabled=true

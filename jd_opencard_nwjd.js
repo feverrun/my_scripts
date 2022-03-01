@@ -4,12 +4,11 @@
 
 ————————————————
 入口：[ 3.1-3.15 集卡女王驾到]
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=uniongame2022030101goddess&shareUuid=ac6dd808f9534dd89ec936141f3f5239
+集卡记得瓜分奖励
 
-
-[task_local]
 #3.1-3.15 集卡女王驾到
 5 2,14 1-15 3 * jd_opencard_nwjd.js, tag=3.1-3.15 集卡女王驾到, enabled=true
-
 */
 
 const $ = new Env('3.1-3.15 集卡女王驾到');
