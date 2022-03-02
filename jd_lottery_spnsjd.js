@@ -1,7 +1,7 @@
 /*
 [task_local]
 #3.2-3.8食品女神价到 抽奖机 活动
-10 9 * * * jd_lottery_spnsjd.js, tag=3.2-3.8食品女神价到抽奖机活动, enabled=true
+39 8 * * * jd_lottery_spnsjd.js, tag=3.2-3.8食品女神价到抽奖机活动, enabled=true
  */
 const $ = new Env('3.2-3.8食品女神价到抽奖机活动');
 const notify = $.isNode() ? require('./sendNotify') : '';
