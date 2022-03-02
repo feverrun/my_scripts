@@ -1,14 +1,15 @@
 /*
-#2.25-3.8女神节抽奖机活动
-45 0 * * * jd_nsjcj.js, tag=2.25-3.8女神节抽奖机活动, enabled=true
+[task_local]
+#3.2-3.8食品女神价到 抽奖机 活动
+10 9 * * * jd_lottery_spnsjd.js, tag=3.2-3.8食品女神价到抽奖机活动, enabled=true
  */
-const $ = new Env('2.25-3.8女神节抽奖机活动');
+const $ = new Env('3.2-3.8食品女神价到抽奖机活动');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
-$.configCode = "02f742eb50cc4e2dbf98d6adc53bc492";
-
+$.configCode = "d82abd6d08c948a08fa87958430eb638";
 let cookiesArr = [], cookie = '', message;
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -19,7 +20,7 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 !(async () => {
-    console.log('入口下拉：https://prodev.m.jd.com/mall/active/4ZocDBKbsGTxFHQyPzUfat9S1Sv6/index.html')
+    console.log('入口下拉：https://prodev.m.jd.com/mall/active/47qob8cnh96GeqphcRJ7Hk2Y3DLd/index.html')
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
@@ -42,7 +43,6 @@ if ($.isNode()) {
                 continue
             }
             await jdmodule();
-            await $.wait(5000)
             //await showMsg();
         }
     }
@@ -66,13 +66,11 @@ async function jdmodule() {
     let runTime = 0;
     do {
         await getinfo(); //获取任务
-        await $.wait(1000)
         $.hasFinish = true;
         await run();
         runTime++;
     } while (!$.hasFinish && runTime < 10);
     await getinfo();
-    await $.wait(1000)
     console.log("开始抽奖");
     for (let x = 0; x < $.chanceLeft; x++) {
         await join();
@@ -167,7 +165,6 @@ function getinfo() {
 //抽奖
 function join() {
     return new Promise(async (resolve) => {
-        await $.wait(1500)
         $.get({
             url: `https://jdjoy.jd.com/module/task/draw/join?configCode=${$.configCode}&fp=${randomWord(false, 32, 32)}&eid=`,
             headers: {

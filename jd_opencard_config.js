@@ -1,10 +1,9 @@
 /*
-
 个护女神节
 一次性脚本
 入口：https://prodev.m.jd.com/mall/active/4ZocDBKbsGTxFHQyPzUfat9S1Sv6/index.html
 
-cron "33 2,4 1 3 *" script-path=jd_opencard_nsj.js,tag=个护女神节
+cron "33 10 1-8 3 *" script-path=jd_opencard_config.js,tag=个护女神节
 */
 const $ = new Env('个护女神节');
 const Faker=require('./utils/sign_graphics_validate.js')
@@ -62,8 +61,8 @@ async function run() {
             return
         }
         let config = [
+            {configCode:'f7e00cba17fb461ab7204f06a688f957',configName:'食品女神价到'},
             {configCode:'1c099a15608f48dc905af5befaa623d9',configName:'个护女神节'},
-
         ]
         for(let i in config){
             $.hotFlag = false
