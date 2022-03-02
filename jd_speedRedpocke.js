@@ -65,8 +65,8 @@ if ($.isNode()) {
 
 async function jsRedPacket() {
   try {
-    await invite()
-    await $.wait(2000)
+    // await invite()
+    // await $.wait(2000)
     await invite2();
     await $.wait(2000)
     // 极速版签到提现
