@@ -107,11 +107,6 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     $.activityId = "uniongame20220303molpd624p"
     $.shareUuid = "f97ec982adca4f80bdffc7961cd37cf0"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
-    let shareUuidArr = [$.shareUuid]
-    let s = Math.floor((Math.random()*10))
-    let n = 0
-    if(s == 1) n = Math.floor((Math.random()*shareUuidArr.length))
-    if($.time("dd") == "03") $.shareUuid = shareUuidArr[n] ? shareUuidArr[n] : $.shareUuid
 
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
