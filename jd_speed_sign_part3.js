@@ -76,20 +76,24 @@ async function jdGlobal() {
         // await richManIndex()
 
         await wheelsHome()
+        await $.wait(1000)
         await apTaskList()
+        await $.wait(1000)
         await wheelsHome()
+        await $.wait(1000)
 
-        // await signInit()
-        // await sign()
         // await invite()
-        // await invite2()
+        await invite2()
+        await $.wait(2000)
 
         $.score = 0
         $.total = 0
         await taskList()
+        await $.wait(1000)
         await queryJoy()
-        // await signInit()
+        await $.wait(1000)
         await cash()
+        await $.wait(1000)
         await showMsg()
     } catch (e) {
         $.logErr(e)
@@ -102,63 +106,6 @@ function showMsg() {
         message += `本次运行获得${$.score}金币，共计${$.total}金币\n可兑换 ${($.total/10000).toFixed(2)} 元京东红包\n兑换入口：京东极速版->我的->金币`
         $.msg($.name, '', `京东账号${$.index}${$.nickName}\n${message}`);
         resolve()
-    })
-}
-
-async function signInit() {
-    return new Promise(resolve => {
-        $.get(taskUrl('speedSignInit', {
-            "activityId": "9WA12jYGulArzWS7vcrwhw",
-            "kernelPlatform": "RN",
-            "inviterId":"QeIexkaFC5uOTXe1H68kGw=="
-        }), async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (safeGet(data)) {
-                        data = JSON.parse(data);
-                        //console.log(data)
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
-
-async function sign() {
-    return new Promise(resolve => {
-        $.get(taskUrl('speedSign', {
-                "kernelPlatform": "RN",
-                "activityId": "9WA12jYGulArzWS7vcrwhw",
-                "noWaitPrize": "false"
-            }),
-            async (err, resp, data) => {
-                try {
-                    if (err) {
-                        console.log(`${JSON.stringify(err)}`)
-                        console.log(`${$.name} API请求失败，请检查网路重试`)
-                    } else {
-                        if (safeGet(data)) {
-                            data = JSON.parse(data);
-                            if (data.subCode === 0) {
-                                console.log(`签到获得${data.data.signAmount}现金，共计获得${data.data.cashDrawAmount}`)
-                            } else {
-                                console.log(`签到失败，${data.msg}`)
-                            }
-                        }
-                    }
-                } catch (e) {
-                    $.logErr(e, resp)
-                } finally {
-                    resolve(data);
-                }
-            })
     })
 }
 
