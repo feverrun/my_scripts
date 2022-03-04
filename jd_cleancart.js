@@ -1,5 +1,5 @@
 /*
-cron "1 5,9,11,14,16,20,22 * * *" jd_cleancart.js
+cron "49 8,13,17,23 * * *" jd_cleancart.js
 */
 const $ = new Env('清空购物车');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -50,11 +50,11 @@ $.keywordsNum = 0;
             await requireConfig();
             do {
                 await getCart();
-                await $.wait(500);
+                await $.wait(2000);
                 $.keywordsNum = 0
                 if($.beforeRemove !== "0"){
                     await cartFilter(venderCart);
-                    await $.wait(500)
+                    await $.wait(1500)
                     if(parseInt($.beforeRemove) !== $.keywordsNum) {
                         await removeCart();
                         await $.wait(1500)
