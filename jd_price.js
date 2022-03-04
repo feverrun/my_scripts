@@ -93,6 +93,7 @@ async function siteppM_skuOnceApply() {
         body: body
     });
     return new Promise(async resolve => {
+        await $.wait(2000);
         $.post(taskUrl("siteppM_skuOnceApply", body, h5st, time), async (err, resp, data) => {
             try {
                 if (err) {
@@ -188,12 +189,13 @@ async function jstoken() {
   <script src="https://static.360buyimg.com/siteppStatic/script/utils.js"></script>
   <script src="https://js-nocaptcha.jd.com/statics/js/main.min.js"></script>
   </body>`, options);
-    await $.wait(1000)
+    await $.wait(5000)
     try {
         $.jab = new dom.window.JAB({
             bizId: 'jdjiabao',
             initCaptcha: false
         });
+        await $.wait(2500)
         $.signWaap = dom.window.signWaap;
     } catch (e) {}
 }

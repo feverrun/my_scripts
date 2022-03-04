@@ -31,7 +31,21 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
         return;
     }
 
-    for (let i = 0; i < cookiesArr.length; i++) {
+    let tmpLength = 0;
+    let ckLength = cookiesArr.length;
+    if (ckLength >= 100) {
+        tmpLength = 50;
+    } else if (ckLength >= 50) {
+        tmpLength = 25;
+    } else if (ckLength >= 20) {
+        tmpLength = 10;
+    } else if (ckLength >= 6) {
+        tmpLength = 4;
+    } else {
+        tmpLength = ckLength;
+    }
+
+    for (let i = 0; i < tmpLength; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -101,13 +115,13 @@ function showMsg() {
 async function main() {
     try {
         await getUA()
-        await $.wait(1000)
+        await $.wait(1500)
         await requestAlgo()
-        await $.wait(1000)
+        await $.wait(2500)
         await distributeBeanActivity();
-        await $.wait(1000)
+        await $.wait(1500)
         await showMsg();
-        await $.wait(1000)
+        await $.wait(1500)
     } catch (e) {
         $.logErr(e)
     }
@@ -121,8 +135,10 @@ async function distributeBeanActivity() {
         await getUserTuanInfo()
         if (!$.tuan && ($.assistStatus === 3 || $.assistStatus === 2 || $.assistStatus === 0) && $.canStartNewAssist) {
             console.log(`准备再次开团`)
+            await $.wait(2000)
             await openTuan()
             if ($.hasOpen) await getUserTuanInfo()
+            await $.wait(2000)
         }
         if ($.tuan && $.tuan.hasOwnProperty('assistedPinEncrypted') && $.assistStatus !== 3) {
             // console.log(JSON.stringify($.tuan))
@@ -666,7 +682,7 @@ async function requestAlgo() {
         'body':`{"version":"3.0","fp":${getRandomIDPro()},"appId":"dde2b","timestamp":${Date.now()},"platform":"applet","expandParams":""}`,
     };
     return new Promise(async _0x53c7f3 => {
-
+        await $.wait(2500)
         if (_0x5722('‫19', '9I9J') === _0x236f59[_0x5722('‮1a', 'IzVh')]) {
             t = new Date(time);
         } else {
