@@ -5,7 +5,7 @@
 活动入口：京东APP首页-闪购-闪购盲盒
 
 [Script]
-cron "20 8 * * *" script-path=jd_sgmh.js, tag=闪购盲盒
+cron "49 7 * * *" script-path=jd_sgmh.js, tag=闪购盲盒
  */
 const $ = new Env('闪购盲盒互助版');
 
