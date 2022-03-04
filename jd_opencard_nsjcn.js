@@ -1,7 +1,7 @@
 /*
 ck1 助力作者, 后续助力ck1, ck1别黑号
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=unionkbblnt20220304dzlhkk
-cron "3 3,15 4-10 3 *" jd_opencard_nscn.js
+cron "5 4,16 4-10 3 *" jd_opencard_nsjcn.js
 */
 const $ = new Env("大牌联合 女神节宠你");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

@@ -13,7 +13,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/fashion/union/activity?activityId=dz3438
 
 [task_local]
 #3.2-3.8 诠释你的每一面
-15 15 2-8 3 * jd_opencard_qs.js, tag=3.2-3.8 诠释你的每一面, enabled=true
+15 5,15 2-8 3 * jd_opencard_qs.js, tag=3.2-3.8 诠释你的每一面, enabled=true
 
 */
 
