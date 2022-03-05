@@ -30,7 +30,6 @@ $.invitePin = ['So1GaedHGcIYZaFuv10dTw']
 const JD_API_HOST = `https://api.m.jd.com/client.action`;
 message = ""
 !(async () => {
-  $.user_agent = require('./USER_AGENTS').USER_AGENT
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
       "open-url": "https://bean.m.jd.com/"
@@ -489,7 +488,7 @@ function taskPostClientActionUrl(body, functionId) {
     url: `https://api.m.jd.com/client.action?${functionId ? `functionId=${functionId}` : ``}`,
     body: body,
     headers: {
-      'User-Agent': $.user_agent,
+      'User-Agent': $.isNode() ? (process.env.JS_USER_AGENT ? process.env.JS_USER_AGENT : (require('./JS_USER_AGENTS').USER_AGENT)) : ($.getdata('JSUA') ? $.getdata('JSUA') : "'jdltapp;iPad;3.8.10;14.4;network/wifi;Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
       'Content-Type': 'application/x-www-form-urlencoded',
       'Host': 'api.m.jd.com',
       'Origin': 'https://joypark.jd.com',
@@ -504,7 +503,7 @@ function taskGetClientActionUrl(body, functionId) {
     url: `https://api.m.jd.com/client.action?functionId=${functionId}${body ? `&${body}` : ``}`,
     // body: body,
     headers: {
-      'User-Agent': $.user_agent,
+      'User-Agent': $.isNode() ? (process.env.JS_USER_AGENT ? process.env.JS_USER_AGENT : (require('./JS_USER_AGENTS').USER_AGENT)) : ($.getdata('JSUA') ? $.getdata('JSUA') : "'jdltapp;iPad;3.8.10;14.4;network/wifi;Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
       'Content-Type': 'application/x-www-form-urlencoded',
       'Host': 'api.m.jd.com',
       'Origin': 'https://joypark.jd.com',
