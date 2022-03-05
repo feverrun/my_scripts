@@ -13,7 +13,7 @@ import re
 import sys
 import time
 from urllib.parse import unquote
-from sendNotify import send
+#from sendNotify import send
 import jieba.analyse
 import requests
 
@@ -431,7 +431,7 @@ def start():
         msg = ''
         for i in Cent:
             msg += f'{i}\n{Cent[i]}\n\n'
-        send('京东全自动评价',msg)
+        #send('京东全自动评价',msg)
     except Exception as e:
         pass
 
