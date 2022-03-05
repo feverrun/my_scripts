@@ -1,7 +1,7 @@
 /*
 ck1 助力作者, 后续助力ck1, ck1别黑号
-
-cron "5 11 * * *" jd_opencard_hjlx.js
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=unionkbblnt20220305dzlhkk
+cron "45 11 * * *" jd_opencard_hjlx.js
 */
 
 const $ = new Env("女王驾到 钜惠来袭");
