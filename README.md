@@ -3,9 +3,7 @@
 ### 只支持青龙拉取  (建议服务器通过docker安装青龙)
 #### 青龙环境搭建教程
 https://github.com/feverrun/my_scripts/wiki/%E9%9D%92%E9%BE%99%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B
-```
-ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
-```
+
 ## 只收不混跑多个集成库的，号越多越好
 **你们青龙所在车头优先，非车头随机**
 
@@ -30,12 +28,12 @@ GithubProxyUrl="可用的其他代理默认是https://ghproxy.com/已不可用"
 
 国内主机
 ```
-ql repo https://e.coding.net/feverrun/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
+ql repo https://e.coding.net/feverrun/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils|jdCookie"
 ```
 
 国外主机
 ```
-ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
+ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils|jdCookie"
 ```
 
 ### 长久活动(已接入助力池)
