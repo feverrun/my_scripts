@@ -1,13 +1,21 @@
 /*
 锦鲤红包互助
 入口：[京东App》我的》锦鲤红包]
-author: feverrun
+author feverrun
+支持配置单环境(正常) 和 配置多环境(正常) 和 共享日志池子(放弃维护)
 
-export JD_KOI_OPENRED="" 非必须 自动开红包。如果不想自动开红包设置 JD_KOI_OPENRED 为false
-export JD_KOI_RANDOM=""  必须 抓包获取的随机数 例如  "74989111"
-export JD_KOI_LOG=""     必须 抓包获取的日志  例如  "1646488443877~1aqwFnFGw2jMDFkc1hobDAyMQ==.VUVsXlhcS2tQW1JDYRYiFzkTEV5VMWsxElVfbkRaSEImWhJVDSBRKAlLOyIeUD03WT8IGzU..."
-export JD_KOI_CODE=""    非必须 未设置默认助力第一个号 例如 "438721140"
-export JD_USER_AGENT=""  非必须 user-agent 值
+支持单参数值 和 多参数值 但是一定要对应
+参数较长一定要在环境变量配置变量！！！
+参数较长一定要在环境变量配置变量！！！
+参数较长一定要在环境变量配置变量！！！
+
+环境变量 JD_KOI_RANDOM="random1&random2&random3"  必须 抓包获取的随机数 例如  "74989111"
+环境变量 JD_KOI_LOG="log1&log2&log3"     必须 抓包获取的日志  例如  "1646488443877~1aqwFnFGw2jMDFkc1hobDAyMQ==..."
+
+环境变量 JD_KOI_OPENRED="" 非必须 自动开红包。如果不想自动开红包设置 JD_KOI_OPENRED 为false
+环境变量 JD_KOI_CODE=""    非必须 未设置默认助力第一个号 例如 "438721140"
+环境变量 JD_USER_AGENT=""  非必须 user-agent 值
+cron "41 2,10,16 * * *" script-path=jd_koi_help.js, tag=锦鲤红包互助
 */
 
 const $ = new Env("锦鲤红包互助")
