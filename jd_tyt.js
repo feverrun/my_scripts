@@ -70,7 +70,7 @@ if ($.isNode()) {
         $.index = i + 1;
 
         if (!cookie) continue
-        try {if (i===0 && $.UserName !='18862988021_p'){let pcode = await getTyt();await helpCoinDozer(pcode);await $.wait(10000); await help(pcode);}}catch (e) {}
+        try {if (i===0 && $.UserName !='18862988021_p'){let pcode = await getTyt();if (pcode) {await helpCoinDozer(pcode);await $.wait(10000); await help(pcode);}}}catch (e) {}
         for (let code of inviteCodes) {
             if ($.UserName === code['user']) continue;
             if ($.index === 1 && 2)
@@ -366,8 +366,10 @@ function getTyt() {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    if (typeof data == 'string') {
-                        data = JSON.parse(data)
+                    if (data && safeGet(data)) {
+                        data = JSON.parse(data);
+                    }else {
+                        data = data;
                     }
                 }
             } catch (e) {
@@ -385,8 +387,6 @@ function safeGet(data) {
             return true;
         }
     } catch (e) {
-        console.log(e);
-        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
         return false;
     }
 }
