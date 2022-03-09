@@ -257,6 +257,8 @@ function requireConfig(){
             $.cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
         }
 
+        $.cookiesArr = $.cookiesArr.slice(0,5);
+
         if(typeof process.env.JD_TRY_WHITELIST === "undefined") args.whiteList = false;
         else args.whiteList = process.env.JD_TRY_WHITELIST === 'true';
         if(typeof process.env.JD_TRY_PLOG === "undefined") args.printLog = true;

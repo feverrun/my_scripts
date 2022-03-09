@@ -28,12 +28,12 @@ GithubProxyUrl="可用的其他代理默认是https://ghproxy.com/已不可用"
 
 国内主机
 ```
-ql repo https://e.coding.net/feverrun/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils|jdCookie"
+ql repo https://e.coding.net/feverrun/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
 国外主机
 ```
-ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils|jdCookie"
+ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
 ### 长久活动(已接入助力池)
