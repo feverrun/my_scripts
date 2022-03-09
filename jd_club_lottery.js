@@ -57,6 +57,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
       await clubLottery();
       await showMsg();
+      await $.wait(3000);
     }
   }
   for (let v = 0; v < cookiesArr.length; v++) {
