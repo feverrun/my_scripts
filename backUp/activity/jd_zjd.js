@@ -2,7 +2,9 @@
 赚京豆-瓜分京豆脚本，一：做任务 天天领京豆(加速领京豆)
 活动入口：赚京豆-瓜分京豆(微信小程序)-赚京豆-瓜分京豆-瓜分京豆
 更新地址：jd_syj.js
-cron "39 5,10,13,15,20 * * *" script-path=jd_zjd.js, tag=赚京豆-瓜分京豆
+已支持IOS双京东账号, Node.js支持N个京东账号
+[Script]
+cron "39 6,8,13,23 * * *" script-path=jd_zjd.js, tag=赚京豆-瓜分京豆
  */
 const $ = new Env('赚京豆-瓜分京豆');
 $.appId = 'dde2b';
@@ -10,11 +12,12 @@ CryptoScripts()
 $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
+const randomCount = $.isNode() ? 20 : 5;
 let cookiesArr = [], cookie = '', message;
 $.tuanList = [];
 $.authorTuanList = [];
 inviteCodes=[]
-
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -25,27 +28,17 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/api';
+let do_syj = process.env.JD_SYJ ? process.env.JD_SYJ : true;    //默认执行
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-
-    let tmpLength = 0;
-    let ckLength = cookiesArr.length;
-    if (ckLength >= 100) {
-        tmpLength = 50;
-    } else if (ckLength >= 50) {
-        tmpLength = 25;
-    } else if (ckLength >= 20) {
-        tmpLength = 10;
-    } else if (ckLength >= 6) {
-        tmpLength = 4;
-    } else {
-        tmpLength = ckLength;
+    console.log("搬运脚本[搞鸡玩家],有加密部份,不放心的慎用!!!, 需要执行设置环境变量 JD_SYJ = true")
+    if (do_syj === false) {
+        return
     }
-
-    for (let i = 0; i < tmpLength; i++) {
+    for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -65,7 +58,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
             }
 
             await main()
-            await $.wait(5000)
+
         }
     }
 
@@ -86,6 +79,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                     await $.wait(3000)
                 }
             }
+
             if ($.canHelp) {
                 let authorTuanInfo = await getSyj();
                 console.log(`开始账号内部互助 赚京豆-瓜分京豆 活动`)
@@ -94,7 +88,6 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
                 if(!$.canHelp) break
                 await $.wait(3000)
             }
-
         }
     }
 
@@ -115,13 +108,9 @@ function showMsg() {
 async function main() {
     try {
         await getUA()
-        await $.wait(1500)
         await requestAlgo()
-        await $.wait(2500)
         await distributeBeanActivity();
-        await $.wait(1500)
         await showMsg();
-        await $.wait(1500)
     } catch (e) {
         $.logErr(e)
     }
@@ -135,16 +124,14 @@ async function distributeBeanActivity() {
         await getUserTuanInfo()
         if (!$.tuan && ($.assistStatus === 3 || $.assistStatus === 2 || $.assistStatus === 0) && $.canStartNewAssist) {
             console.log(`准备再次开团`)
-            await $.wait(2000)
             await openTuan()
             if ($.hasOpen) await getUserTuanInfo()
-            await $.wait(2000)
         }
         if ($.tuan && $.tuan.hasOwnProperty('assistedPinEncrypted') && $.assistStatus !== 3) {
             // console.log(JSON.stringify($.tuan))
             $.tuanList.push($.tuan);
             if ($.UserName === '18862988021_p') {
-                await submitSyj(JSON.stringify($.tuan), $.UserName)
+                await submitSyj(JSON.stringify($.tuan), $.UserName);
             }
         }
     } catch (e) {
@@ -682,7 +669,7 @@ async function requestAlgo() {
         'body':`{"version":"3.0","fp":${getRandomIDPro()},"appId":"dde2b","timestamp":${Date.now()},"platform":"applet","expandParams":""}`,
     };
     return new Promise(async _0x53c7f3 => {
-        await $.wait(2500)
+
         if (_0x5722('‫19', '9I9J') === _0x236f59[_0x5722('‮1a', 'IzVh')]) {
             t = new Date(time);
         } else {
@@ -907,7 +894,6 @@ function format(_0x3b3946, _0x57ab39) {
     return _0x117011;
 };
 _0xode = 'jsjiami.com.v6';
-
 
 function CryptoScripts() {
     // prettier-ignore
