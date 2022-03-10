@@ -68,6 +68,7 @@ message = ""
           $.log("开始帮作者助力开工位\n");
           $.invitePin  = [...($.invitePin  || [])][Math.floor((Math.random() * $.invitePin .length))];
           let resp = await getJoyBaseInfo(undefined, 2, $.invitePin );
+          await $.wait(1500);
           if (resp.helpState && resp.helpState === 1) {
             $.log("帮作者开工位成功，感谢！\n");
           } else if (resp.helpState && resp.helpState === 3) {
@@ -120,9 +121,9 @@ async function getJoyBaseInfo(taskId = '', inviteType = '', inviterPin = '', pri
           if (printLog) {
             $.log(`等级: ${data.data.level}|金币: ${data.data.joyCoin}`);
             if (data.data.level >= 30 && $.isNode()) {
-              await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `【京东账号${$.index}】${$.nickName || $.UserName}\n当前等级: ${data.data.level}\n已达到单次最高等级奖励\n请前往京东极速版APP查看使用优惠券\n活动入口：京东极速版APP->我的->汪汪乐园`);
-              $.log(`\n开始解锁新场景...\n`);
-              await doJoyRestart()
+            //   await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `【京东账号${$.index}】${$.nickName || $.UserName}\n当前等级: ${data.data.level}\n已达到单次最高等级奖励\n请前往京东极速版APP查看使用优惠券\n活动入口：京东极速版APP->我的->汪汪乐园`);
+              $.log(`\n请去极速版app手动解锁新场景...\n`);
+            //   await doJoyRestart()
             }
           }
           $.joyBaseInfo = data.data
@@ -137,7 +138,6 @@ async function getJoyBaseInfo(taskId = '', inviteType = '', inviterPin = '', pri
 }
 
 function getJoyList(printLog = false) {
-  //await $.wait(20)
   return new Promise(resolve => {
     $.get(taskGetClientActionUrl(`appid=activities_platform&body={"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}`, `joyList`), async (err, resp, data) => {
       try {
@@ -150,17 +150,17 @@ function getJoyList(printLog = false) {
             $.log(`\n===== 【京东账号${$.index}】${$.nickName || $.UserName} joy 状态 start =====`)
             $.log("在逛街的joy⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️")
             for (let i = 0; i < data.data.activityJoyList.length; i++) {
-              //$.wait(50);
+              await $.wait(1500);
               $.log(`id:${data.data.activityJoyList[i].id}|name: ${data.data.activityJoyList[i].name}|level: ${data.data.activityJoyList[i].level}`);
               if (data.data.activityJoyList[i].level >= 30 && $.isNode()) {
-                await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `【京东账号${$.index}】${$.nickName || $.UserName}\n当前等级: ${data.data.level}\n已达到单次最高等级奖励\n请尽快前往活动查看领取\n活动入口：京东极速版APP->汪汪乐园\n`);
-                $.log(`\n开始解锁新场景...\n`);
-                await doJoyRestart()
+                // await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `【京东账号${$.index}】${$.nickName || $.UserName}\n当前等级: ${data.data.level}\n已达到单次最高等级奖励\n请尽快前往活动查看领取\n活动入口：京东极速版APP->汪汪乐园\n`);
+                $.log(`\n请去极速版app手动解锁新场景...\n`);
+                // await doJoyRestart()
               }
             }
             $.log("\n在铲土的joy⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️")
             for (let i = 0; i < data.data.workJoyInfoList.length; i++) {
-              //$.wait(50)
+              await $.wait(1500);
               $.log(`工位: ${data.data.workJoyInfoList[i].location} [${data.data.workJoyInfoList[i].unlock ? `已开` : `未开`}]|joy= ${data.data.workJoyInfoList[i].joyDTO ? `id:${data.data.workJoyInfoList[i].joyDTO.id}|name: ${data.data.workJoyInfoList[i].joyDTO.name}|level: ${data.data.workJoyInfoList[i].joyDTO.level}` : `毛都没有`}`)
             }
             $.log(`===== 【京东账号${$.index}】${$.nickName || $.UserName} joy 状态  end  =====\n`)
@@ -227,6 +227,7 @@ async function joyCoinMaximize(workJoyInfoUnlockList) {
         $.log(`买一只 ${shopList[i].userLevel}级的！`);
         joyCoin = joyCoin - shopList[i].consume;
         let buyResp = await doJoyBuy(shopList[i].userLevel);
+        await $.wait(1500);
         if (!buyResp.success) {
           break;
         } else {
@@ -235,11 +236,14 @@ async function joyCoinMaximize(workJoyInfoUnlockList) {
           i++
         }
       }
+      await $.wait(1500);
     }
     $.hasJoyCoin = false
     if (newBuyCount) {
-      await getJoyList()
-      await doJoyMoveUpAll($.activityJoyList, $.workJoyInfoList)
+      await getJoyList();
+      await $.wait(1500);
+      await doJoyMoveUpAll($.activityJoyList, $.workJoyInfoList);
+      await $.wait(1500);
       await getJoyBaseInfo();
     }
   }
@@ -255,11 +259,14 @@ async function doJoyMoveDownAll(workJoyInfoList) {
     if (workJoyInfoList[i].unlock && workJoyInfoList[i].joyDTO) {
       $.log(`从工位移除 => id:${workJoyInfoList[i].joyDTO.id}|name: ${workJoyInfoList[i].joyDTO.name}|level: ${workJoyInfoList[i].joyDTO.level}`)
       await doJoyMove(workJoyInfoList[i].joyDTO.id, 0)
+      await $.wait(1500);
     }
   }
   //check
-  await getJoyList()
-  await doJoyMoveDownAll($.workJoyInfoList)
+  await getJoyList();
+  await $.wait(1500);
+  await doJoyMoveDownAll($.workJoyInfoList);
+  await $.wait(1500);
 }
 
 async function doJoyMergeAll(activityJoyList) {
@@ -350,7 +357,7 @@ function doJoyMerge(joyId1, joyId2) {
 }
 
 async function doJoyBuy(level, activityJoyList) {
-  //await $.wait(20)
+  await $.wait(1500);
   return new Promise(resolve => {
     $.post(taskPostClientActionUrl(`body={"level":${level},"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&appid=activities_platform`, `joyBuy`), async (err, resp, data) => {
       try {
@@ -449,6 +456,7 @@ function getGameMyPrize() {
                 $.prizeBaseId = $.Vos[i].prizeTypeVO.prizeBaseId
                 await apCashWithDraw($.id, $.poolBaseId, $.prizeGroupId, $.prizeBaseId)
               }
+              await $.wait(1500);
             }
           }
         }
