@@ -1,5 +1,5 @@
 /*
-50 8 * * * jd_lottery_plus.js
+39 8 * * * jd_lottery_plus.js
 */
 const $ = new Env('逛plus，抽京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -23,7 +23,7 @@ if ($.isNode()) {
     }
     UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
     for (let i = 0; i < cookiesArr.length; i++) {
-        UA = `jdapp;iPhone;10.0.8;14.6;${UUID};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
+        UA = `jdapp;iPhone;10.4.4;14.6;${UUID};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -41,14 +41,14 @@ if ($.isNode()) {
                 continue
             }
             await main()
-            await $.wait(2500)
+            await $.wait(5000)
         }
     }
 })().catch((e) => { $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '') }).finally(() => { $.done(); })
 
 async function main() {
     id = await task("queryInteractiveInfo", {"encryptProjectId":`${encryptProjectId}`,"ext":{"rewardEncryptAssignmentId":null,"needNum":50},"sourceCode":"aceaceqingzhan"})
-    await $.wait(1000)
+    await $.wait(2500)
     let drawId = "21qucmvBdAxp8A4NifVZmKxN11w1"
     for(let i of id.assignmentList) {
         if(i.assignmentName !== "积分抽奖赢好礼"){
@@ -56,6 +56,7 @@ async function main() {
             if(i.userVerificationInfo) {
                 for(let j of i.ext.shoppingActivity){
                     b = await task("doInteractiveAssignment", {"encryptProjectId":`${encryptProjectId}`,"encryptAssignmentId":`${i.encryptAssignmentId}`,"itemId":`${j.advId}`,"sourceCode":"aceaceqingzhan"})
+                    await $.wait(2000)
                     console.log(b.msg)
                     if(b.msg == "该用户不符合资质校验条件"){
                         return
@@ -63,18 +64,21 @@ async function main() {
                 }
             }else {
                 console.log("账号返回数据为空，请到活动页面查看是否黑号")
+                await $.wait(2000)
                 return
             }
 
             await $.wait(2000)
         }else if(i.assignmentName == "积分抽奖赢好礼"){
             drawId = i.encryptAssignmentId;
+
         }
+        await $.wait(3000)
     }
     console.log("开始抽奖")
     for(i = 0; i < 3; i++) {
         c = await task("doInteractiveAssignment", {"encryptProjectId":`${encryptProjectId}`,"encryptAssignmentId":`${drawId}`,"completionFlag":true,"ext":{"exchangeNum":1},"sourceCode":"aceaceqingzhan"})
-        await $.wait(3500)
+        await $.wait(3000)
         if(c.msg == "兑换积分不足") {
             console.log("兑换积分不足")
             return
@@ -91,7 +95,7 @@ async function main() {
             console.log("账号异常，请到活动页面查看是否黑号")
             return
         }
-        await $.wait(2500)
+        await $.wait(6000)
     }
 }
 
