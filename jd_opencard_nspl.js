@@ -64,11 +64,11 @@ if (process.env.NO_RUSH && process.env.NO_RUSH != "") {
             $.activityShopId = '1000005754'
             $.activityUrl = `https://lzdz1-isv.isvjd.com/dingzhi/dz/openCard/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
             await rush();
-            await $.wait(3000)
             // if ($.bean > 0) {
             //     message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
             // }
 
+    }
     }
     // if (message !== '') {
     //     if ($.isNode()) {
