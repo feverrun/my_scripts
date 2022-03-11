@@ -17,8 +17,7 @@ https://t.me/proenv
 
 环境变量 JD_KOI_OPENRED="" 非必须 自动开红包。如果不想自动开红包设置 JD_KOI_OPENRED 为false
 环境变量 JD_KOI_CODE=""    非必须 未设置默认助力第一个号 例如 "438721140"
-环境变量 JD_USER_AGENT=""  非必须 user-agent 值
-cron "37 1,20 * * *" script-path=jd_koi_help.js, tag=锦鲤红包互助
+cron "37 1,21 * * *" script-path=jd_koi_help.js, tag=锦鲤红包互助
 */
 const $ = new Env("锦鲤红包互助");
 const JD_API_HOST = 'https://api.m.jd.com/client.action';

@@ -38,24 +38,23 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJ
 
 ### 长久活动(已接入助力池)
 ```
-东东农场
-种豆得豆
-京东萌宠
-东东工厂
-惊喜工厂
-京东健康
-惊喜财富岛   (优先内部)
-闪购盲盒
-京喜牧场    (优先内部)
+fruit
+bean
+pet
+ddfactory
+dreamFactory
+health
+cfd         internal priofity
+sgmh
+jxmc        internal priofity
 ```
 
 ### 临时活动(已接入助力池)
 ```
-惊喜领取88      (优先内部) - 活动结束
-锦鲤红包        (优先内部)
-5G超级盲盒      
-城城分金        (优先内部) - 活动结束
-手机狂欢城活动   (优先内部) - 活动结束     
+jxlhb           internal priofity    end
+koi             internal priofity    end
+city            internal priofity    end
+carnivalcity    internal priofity    end
 ```
 
 ## nodejs模块安装
