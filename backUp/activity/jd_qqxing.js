@@ -1,23 +1,27 @@
 /*
 星系牧场
-活动入口：QQ星儿童牛奶京东自营旗舰店->星系牧场
-每次都要手动打开才能跑 不知道啥问题
-号1默认给我助力,后续接龙 2给1 3给2
-26:/#2EmMk7SbsZXa7@，☃星系牧场养牛牛，可获得DHA专属奶！
-#星系牧场
-cron "11 7,12,19 * * *" jd_qqxing.js
+活动入口：QQ星儿童牛奶京东自营旗舰店->品牌会员->星系牧场
+活动入口:
+27:/(N8TI00iLrM)，星系牧场养牛牛，可获得DHA专属奶！
+19 4-23/4 * * * jd_qqxing.js
 */
 const $ = new Env('QQ星系牧场');
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const randomCount = $.isNode() ? 20 : 5;
 const notify = $.isNode() ? require('./sendNotify') : '';
 let merge = {}
 let codeList = []
-let continueFlag = false;
 Exchange = true;
+let cookiesArr = [], cookie = '';
 
-let cookiesArr = [],
-    cookie = '';
+function oc(fn, defaultVal) {//optioanl chaining
+    try {
+        return fn()
+    } catch (e) {
+        return undefined
+    }
+}
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -29,7 +33,7 @@ if ($.isNode()) {
 
 const JD_API_HOST = `https://api.m.jd.com/client.action`;
 message = ""
-$.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
+$.shareuuid = ["8fb0fae6d1264a6186b0eab80a6f6237"][Math.floor((Math.random() * 1))];
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
@@ -37,7 +41,6 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
         });
         return;
     }
-
     for (let i = 0; i <cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         if (cookie) {
@@ -52,18 +55,32 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
             $.nickName = '';
             $.drawresult = ""
             $.exchange =0
-            console.log(`\n******开始【京东账号${$.index}】${$.UserName || $.UserName}*********\n`);
-
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {
+                    "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+                });
+                if ($.isNode()) {
+                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+                }
+                continue
+            }
             await genToken()
+            await $.wait(500)
             await getActCk()
+            await $.wait(600)
             await getToken2()
+            await $.wait(700)
             await getshopid()
+            await $.wait(800)
             await getMyPin()
+            await $.wait(900)
             await adlog()
+            await $.wait(1000)
+            await getUserInfo()
             if ($.cando) {
-                await getinfo()
                 await getUid($.shareuuid)
-                if (continueFlag == true) continue;
+                await getinfo()
                 taskList = [...$.taskList, ...$.taskList2]
                 for (j = 0; j < taskList.length; j++) {
                     task = taskList[j]
@@ -86,17 +103,16 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
                 for (k = 0; k < $.drawchance; k++) {
                     await draw()
                 }
-                let exchanges = Math.floor($.foodNum/10000)
+                let exchanges =Math.floor($.foodNum/10000)
                 console.log(`可兑换 ${exchanges} 次 100京🐶`)
-                for (q = 0; q < exchanges && Exchange; q++) {
-                    await exchange(16)   //16是100豆，14是50豆，13是20豆
+                for(q = 0;q<exchanges && Exchange;q++){
+                    await exchange(14)   //16是100豆，14是50豆，13是20豆
                 }
                 await getinfo()
                 if(!Exchange){console.log("你 默认 不兑换东西,请自行进去活动兑换")}
                 message += `【京东账号${$.index}】${$.nickName || $.UserName}\n${$.cow} 兑换京🐶 ${$.exchange}  ${$.drawresult}\n`
                 console.log("休息休息~")
                 await $.wait(80*1000)
-
             } else {
                 $.msg($.name, "", "跑不起来了~请自己进去一次牧场")
             }
@@ -104,7 +120,7 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
     }
     if (message.length != 0) {
         if ($.isNode()) {
-            await notify.sendNotify("星系牧场", `${message}\n牧场入口：QQ星儿童牛奶京东自营旗舰店->星系牧场\n`);
+            await notify.sendNotify("星系牧场", `${message}\n牧场入口：QQ星儿童牛奶京东自营旗舰店->星系牧场\n\n`);
         }  else {
             $.msg($.name, "", '星系牧场' + message)
         }
@@ -117,7 +133,7 @@ $.shareuuid = "8fb0fae6d1264a6186b0eab80a6f6237"
 // 更新cookie
 
 function updateCookie (resp) {
-    if (!resp?.headers['set-cookie']){
+    if (!oc(() => resp.headers['set-cookie'])){
         return
     }
     let obj = {}
@@ -149,7 +165,7 @@ function jdUrl(functionId, body) {
         headers: {
             'Host': 'api.m.jd.com',
             'accept': '*/*',
-            'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
             'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
             'content-type': 'application/x-www-form-urlencoded',
             'Cookie': cookie
@@ -164,7 +180,7 @@ function genToken() {
         headers: {
             'Host': 'api.m.jd.com',
             'accept': '*/*',
-            'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
             'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
             'content-type': 'application/x-www-form-urlencoded',
             'Cookie': cookie
@@ -202,7 +218,7 @@ function getToken2() {
         headers: {
             'Host': 'api.m.jd.com',
             'accept': '*/*',
-            'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'user-agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
             'accept-language': 'zh-Hans-JP;q=1, en-JP;q=0.9, zh-Hant-TW;q=0.8, ja-JP;q=0.7, en-US;q=0.6',
             'content-type': 'application/x-www-form-urlencoded',
             'Cookie': cookie
@@ -217,8 +233,9 @@ function getToken2() {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     data = JSON.parse(data);
-                    // console.log(data)
-                    $.token2 = data.token
+                    //console.log(data)
+                    $.token2 = data['token']
+                    //     console.log($.token2)
                 }
             } catch (e) {
                 $.logErr(e, resp)
@@ -351,6 +368,35 @@ function adlog() {
 
 
 // 获得用户信息
+function getUserInfo() {
+    return new Promise(resolve => {
+        let body = `pin=${encodeURIComponent($.pin)}`
+        let config = taskPostUrl('/wxActionCommon/getUserInfo', body)
+        //   console.log(config)
+        $.post(config, async (err, resp, data) => {
+            updateCookie(resp)
+            try {
+                if (err) {
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    data = JSON.parse(data);
+                    if (data.data) {
+                        $.userId = data.data.id
+                        $.pinImg = data.data.yunMidImageUrl
+                        $.nick = data.data.nickname
+                    } else {
+                        $.cando = false
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+
 function getUid() {
     return new Promise(resolve => {
         let body = `activityId=90121061401&pin=${encodeURIComponent($.pin)}&pinImg=${$.pinImg }&nick=${encodeURIComponent($.nick)}&cjyxPin=&cjhyPin=&shareUuid=${$.shareuuid}`
@@ -364,12 +410,9 @@ function getUid() {
                     if (data.result) {
                         if(data.data.openCardStatus !=3){
                             console.log("当前未开卡,无法助力和兑换奖励哦")
-                            $.shareuuid = '';
-                            continueFlag = 1;
-                        }else {
-                            $.shareuuid = data.data.uid
-                            console.log(`${$.UserName}互助码${$.shareuuid}\n`);
                         }
+                        // $.shareuuid = data.data.uid
+                        console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.shareuuid}\n`);
                     }
                 }
             } catch (e) {
@@ -428,6 +471,7 @@ function getinfo() {
 
 }
 
+
 // 获取浏览商品
 function getproduct() {
     return new Promise(resolve => {
@@ -460,6 +504,7 @@ function getproduct() {
 function writePersonInfo(vid) {
     return new Promise(resolve => {
         let body = `jdActivityId=1404370&pin=${encodeURIComponent($.pin)}&actionType=5&venderId=${vid}&activityId=90121061401`
+
         $.post(taskPostUrl('/interaction/write/writePersonInfo', body), async (err, resp, data) => {
             updateCookie(resp)
             try {
@@ -507,6 +552,7 @@ function exchange(id) {
 
 function dotask(taskId, params) {
     let config = taskPostUrl("/dingzhi/qqxing/pasture/doTask", `taskId=${taskId}&${params?("param="+params+"&"):""}activityId=90121061401&pin=${encodeURIComponent($.pin)}&actorUuid=${$.uuid}&userUuid=${$.shareuuid}`)
+    //     console.log(config)
     return new Promise(resolve => {
         $.post(config, async (err, resp, data) => {
             updateCookie(resp)
@@ -536,6 +582,7 @@ function dotask(taskId, params) {
 
 function draw() {
     let config = taskPostUrl("/dingzhi/qqxing/pasture/luckydraw", `activityId=90121061401&pin=${encodeURIComponent($.pin)}&actorUuid=&userUuid=`)
+    //  console.log(config)
     return new Promise(resolve => {
         $.post(config, async (err, resp, data) => {
             updateCookie(resp)
@@ -567,6 +614,7 @@ function draw() {
 
 function taskUrl(url, body) {
     const time = Date.now();
+    //  console.log(cookie)
     return {
         url: `https://lzdz-isv.isvjcloud.com${url}?${body}`,
         headers: {
@@ -574,9 +622,10 @@ function taskUrl(url, body) {
             'Accept': 'application/json',
             //     'X-Requested-With': 'XMLHttpRequest',
             'Referer': 'https://lzdz-isv.isvjcloud.com/dingzhi/qqxing/pasture/activity/6318274?activityId=90121061401&shareUuid=15739046ca684e8c8fd303c8a14e889a&adsource=null&shareuserid4minipg=Ej42XlmwUZpSlF8TzjHBW2Sy3WQlSnqzfk0%2FaZMj9YjTmBx5mleHyWG1kOiKkz%2Fk&shopid=undefined&lng=107.146945&lat=33.255267&sid=cad74d1c843bd47422ae20cadf6fe5aw&un_area=8_573_6627_52446',
-            'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'user-agent': 'jdapp;android;10.0.4;11;2393039353533623-7383235613364343;network/wifi;model/Redmi K30;addressid/138549750;aid/290955c2782e1c44;oaid/b30cf82cacfa8972;osVer/30;appBuild/88641;partner/xiaomi001;eufv/1;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; Redmi K30 Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045537 Mobile Safari/537.36',
             'content-type': 'application/x-www-form-urlencoded',
             'Cookie': cookie,
+            // 'Cookie': `${cookie} IsvToken=${$.IsvToken};AUTH_C_USER=${$.pin}`,
         }
     }
 }
@@ -590,9 +639,10 @@ function taskPostUrl(url, body) {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
             'Referer': 'https://lzdz-isv.isvjcloud.com/dingzhi/qqxing/pasture/activity/6318274?activityId=90121061401&shareUuid=15739046ca684e8c8fd303c8a14e889a&adsource=null&shareuserid4minipg=Ej42XlmwUZpSlF8TzjHBW2Sy3WQlSnqzfk0%2FaZMj9YjTmBx5mleHyWG1kOiKkz%2Fk&shopid=undefined&lng=107.146945&lat=33.255267&sid=cad74d1c843bd47422ae20cadf6fe5aw&un_area=8_573_6627_52446',
-            'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'user-agent': 'jdapp;android;10.0.4;11;2393039353533623-7383235613364343;network/wifi;model/Redmi K30;addressid/138549750;aid/290955c2782e1c44;oaid/b30cf82cacfa8972;osVer/30;appBuild/88641;partner/xiaomi001;eufv/1;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; Redmi K30 Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045537 Mobile Safari/537.36',
             'content-type': 'application/x-www-form-urlencoded',
             'Cookie': cookie,
+            // 'Cookie': `${cookie} IsvToken=${$.IsvToken};AUTH_C_USER=${$.pin};`,
         }
     }
 }
