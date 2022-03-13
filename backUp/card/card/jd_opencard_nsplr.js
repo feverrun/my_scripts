@@ -1,6 +1,7 @@
 /*
 男士品类日
-3 15 10-16 * * jd_opencard_nspl.js
+https://lzdz1-isv.isvjd.com/dingzhi/dz/openCard/activity?activityId=dz04bfe2a64b46bbcb1110fc0ca9bf&shopid=1000005754
+3 15 10-16 * * jd_opencard_nsplr.js
 */
 const $ = new Env("男士品类日");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
