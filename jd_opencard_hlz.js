@@ -27,7 +27,7 @@ All变量适用
 
 [task_local]
 #海蓝之谜邀请入会有礼
-5 1,9 15-31 3 * jd_opencard_hlzm.js, tag=海蓝之谜邀请入会有礼, enabled=true
+5 1,13,15 15-31 3 * jd_opencard_hlz.js, tag=海蓝之谜邀请入会有礼, enabled=true
 
 */
 let opencard = "true"
