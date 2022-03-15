@@ -1,5 +1,5 @@
 /*
-海蓝之谜邀请入会有礼 [jd_opencard_hzl.js]
+海蓝之谜邀请入会有礼 [jd_opencard_hlzm.js]
 新增开卡脚本
 一次性脚本
 
@@ -27,7 +27,7 @@ All变量适用
 
 [task_local]
 #海蓝之谜邀请入会有礼
-5 1,9 15-31 3 * jd_opencard_hzl.js, tag=海蓝之谜邀请入会有礼, enabled=true
+5 1,9 15-31 3 * jd_opencard_hlzm.js, tag=海蓝之谜邀请入会有礼, enabled=true
 
 */
 let opencard = "true"
