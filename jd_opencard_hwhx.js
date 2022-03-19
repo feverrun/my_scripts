@@ -1,5 +1,5 @@
 /*
-3.17~3.25 大牌联合 好物焕新季 [jd_opencard_lhhx.js]
+3.17~3.25 大牌联合 好物焕新季 [jd_opencard_hwhx.js]
 新增开卡脚本
 一次性脚本
 
@@ -34,7 +34,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dz
 
 [task_local]
 #3.17~3.25 大牌联合 好物焕新季
-22 1,17 21-25 3 * jd_opencard_hx.js, tag=3.17~3.25 大牌联合 好物焕新季, enabled=true
+5 1,21 19-25 3 * jd_opencard_hwhx.js, tag=3.17~3.25 大牌联合 好物焕新季, enabled=true
 
 */
 
