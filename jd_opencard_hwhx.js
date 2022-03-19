@@ -34,7 +34,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dz
 
 [task_local]
 #3.17~3.25 大牌联合 好物焕新季
-5 1,21 19-25 3 * jd_opencard_hwhx.js, tag=3.17~3.25 大牌联合 好物焕新季, enabled=true
+5 1,11 19-25 3 * jd_opencard_hwhx.js, tag=3.17~3.25 大牌联合 好物焕新季, enabled=true
 
 */
 
