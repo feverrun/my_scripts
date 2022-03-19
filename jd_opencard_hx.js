@@ -34,14 +34,14 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dz
 
 [task_local]
 #3.17~3.25 大牌联合 好物焕新季
-5 1,12 17-25 3 * jd_opencard_hx.js, tag=3.17~3.25 大牌联合 好物焕新季, enabled=true
+2 1,19 21-25 3 * jd_opencard_hx.js, tag=3.17~3.25 大牌联合 好物焕新季, enabled=true
 
 */
 
 let opencard_addSku = "true"
 let opencard = "true"
 let openwait = "10"
-let opencard_draw = "0"
+let opencard_draw = "3"
 
 const $ = new Env('3.17~3.25 大牌联合 好物焕新季');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
