@@ -241,12 +241,12 @@ if(DisableIndex!=-1){
 }
 
 //金融养猪
-let EnablePigPet=true;
-DisableIndex=strDisableList.findIndex((item) => item === "金融养猪");
-if(DisableIndex!=-1){
-  console.log("检测到设定关闭金融养猪查询");
-  EnablePigPet=false;
-}
+// let EnablePigPet=true;
+// DisableIndex=strDisableList.findIndex((item) => item === "金融养猪");
+// if(DisableIndex!=-1){
+//   console.log("检测到设定关闭金融养猪查询");
+//   EnablePigPet=false;
+// }
 //东东萌宠
 let EnableJDPet=true;
 DisableIndex=strDisableList.findIndex((item) => item === "东东萌宠");
@@ -408,8 +408,8 @@ if(DisableIndex!=-1){
       }
 
       //金融养猪
-      if(EnablePigPet)
-        await GetPigPetInfo();
+      // if(EnablePigPet)
+      //   await GetPigPetInfo();
 
       await showMsg();
       if (intPerSent > 0) {
@@ -2583,38 +2583,38 @@ function timeFormat(time) {
 }
 
 
-function GetPigPetInfo() {
-  return new Promise(async resolve => {
-    const body = {
-      "shareId": "",
-      "source": 2,
-      "channelLV": "juheye",
-      "riskDeviceParam": "{}",
-    }
-    $.post(taskPetPigUrl('pigPetLogin', body), async(err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`GetPigPetInfo API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-            if (data.resultData.resultData.wished && data.resultData.resultData.wishAward) {
-              $.PigPet=`${data.resultData.resultData.wishAward.name}`
-            }
-          } else {
-            console.log(`GetPigPetInfo: 京东服务器返回空数据`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      }
-      finally {
-        resolve();
-      }
-    })
-  })
-}
+// function GetPigPetInfo() {
+//   return new Promise(async resolve => {
+//     const body = {
+//       "shareId": "",
+//       "source": 2,
+//       "channelLV": "juheye",
+//       "riskDeviceParam": "{}",
+//     }
+//     $.post(taskPetPigUrl('pigPetLogin', body), async(err, resp, data) => {
+//       try {
+//         if (err) {
+//           console.log(`${JSON.stringify(err)}`)
+//           console.log(`GetPigPetInfo API请求失败，请检查网路重试`)
+//         } else {
+//           if (data) {
+//             data = JSON.parse(data);
+//             if (data.resultData.resultData.wished && data.resultData.resultData.wishAward) {
+//               $.PigPet=`${data.resultData.resultData.wishAward.name}`
+//             }
+//           } else {
+//             console.log(`GetPigPetInfo: 京东服务器返回空数据`)
+//           }
+//         }
+//       } catch (e) {
+//         $.logErr(e, resp)
+//       }
+//       finally {
+//         resolve();
+//       }
+//     })
+//   })
+// }
 
 function taskPetPigUrl(function_id, body) {
   return {
