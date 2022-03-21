@@ -2,10 +2,10 @@
 3.21-3.31 精致宅家 春尚焕新
 开卡脚本,一次性脚本
 
-
+https://lzdz1-isv.isvjcloud.com/dingzhi/womenWear/union/activity/?activityId=dz6054741f4dfaa17788a046da6c1c&shopid=1000351442
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
-————————————————
+
 入口：[ 3.21-3.31 精致宅家 春尚焕新 ]
 
 请求太频繁会被黑ip
@@ -13,10 +13,10 @@
 
 [task_local]
 #3.21-3.31 精致宅家 春尚焕新
-3 1,13 21-31 3 * jd_opencard_cshx.js, tag=3.21-3.31 精致宅家 春尚焕新, enabled=true
+13 1 21-31 3 * jd_opencard_cshx.js, tag=3.21-3.31 精致宅家 春尚焕新, enabled=true
 */
 
-const $ = new Env("精致宅家 春尚焕新");
+const $ = new Env("3.21~3.31精致宅家 春尚焕新");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require("./sendNotify") : "";
 let cookiesArr = [], cookie = "", message = "";
