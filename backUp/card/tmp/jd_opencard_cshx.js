@@ -145,6 +145,7 @@ async function member() {
             console.log("去助力 -> " + $.authorCode);
             await task("linkgame/assist/status", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&shareUuid=${$.authorCode}`);
             await task("linkgame/assist", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&shareUuid=${$.authorCode}`);
+            await task("womenWear/union/draw", `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}`);
             // await task('linkgame/help/list', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}`)
 
             // await task('linkgame/task/info', `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}`)
@@ -207,7 +208,7 @@ function task(function_id, body, isCommon = 0, own = 0) {
                                 case "womenWear/union/saveTask":
                                     console.log(data);
                                     break;
-                                case "linkgame/sign":
+                                case "womenWear/union/draw":
                                     console.log(data);
                                     break;
                                 case "opencard/addCart":
