@@ -22,7 +22,7 @@ GithubProxyUrl="可用的其他代理默认是https://ghproxy.com/已不可用"
 
 任务名:   myScripts
 
-定时 :    1 * * * *
+定时 :    1,30 * * * *
 
 任务 :
 ```

@@ -1,7 +1,7 @@
 /*
 春日风尚 入会焕新
 https://lzdz1-isv.isvjcloud.com/dingzhi/march/fashionUnion/activity?activityId=dz1a8e2d544da69c0cfc0ef18187ba&shopid=48034
-cron "33 2 21-27 3 *" jd_opencard_rhhx.js
+cron "10 2 23-27 3 *" jd_opencard_rhhx.js
 */
 const $ = new Env("3.21~3.27春日风尚 入会焕新");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
