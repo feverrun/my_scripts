@@ -26,7 +26,7 @@ openwait119="0"
 All变量适用
 ————————————————
 入口：[ 3.17~3.25 大牌联合 好物焕新季 (
-https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk068d4d0ab8a6609723002f50&shareUuid=addfa32e84144402a9eaf713934ae94e
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk068d4d0ab8a6609723002f50&shareUuid=1240f2db3b0048b998f265ae96a95333
 )]
 
 请求太频繁会被黑ip
@@ -103,7 +103,7 @@ let activityCookie =''
         return;
     }
     $.activityId = "dzlhkk068d4d0ab8a6609723002f50"
-    $.shareUuid = "addfa32e84144402a9eaf713934ae94e"
+    $.shareUuid = "1240f2db3b0048b998f265ae96a95333"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
