@@ -34,7 +34,7 @@ All变量适用
 
 [task_local]
 #3.21~3.31 酒水会员盛典
-13 2 21-31 3 * jd_opencard_jssd.js, tag=3.21~3.31 酒水会员盛典, enabled=true
+6 0 21-31 3 * jd_opencard_js.js, tag=3.21~3.31 酒水会员盛典, enabled=true
 
 */
 let opencard_addSku = "true"
