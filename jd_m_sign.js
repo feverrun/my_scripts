@@ -70,6 +70,8 @@ async function jdsign() {
         await getInfo("https://pro.m.jd.com/mall/active/3SC6rw5iBg66qrXPGmZMqFDwcyXi/index.html");//京东图书
         await $.wait(2000)
         await getInfo("https://prodev.m.jd.com/mall/active/hPJiMgUQmc34bamrApLUBRUy82W/index.html");//3.31结束
+        await $.wait(2000)
+        await getInfo("https://prodev.m.jd.com/mall/active/2FzVtkSfUtvU8YoiTeALkJ68PxAs/index.html");//医疗馆 12.31结束
     } catch (e) {
         $.logErr(e)
     }
