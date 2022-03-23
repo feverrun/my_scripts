@@ -12,8 +12,8 @@ https://t.me/proenv
 加密脚本!!! 不偷CK!!! 有条件跑的可以跑.
 
 支持单参数值 和 多参数值 但是一定要对应
-环境变量 JD_KOI_RANDOM="random1&random2&random3"  非必须 抓包获取的随机数 例如  "74989111"
-环境变量 JD_KOI_LOG="log1&log2&log3"     非必须 抓包获取的日志  例如  "1646488443877~1aqwFnFGw2jMDFkc1hobDAyMQ==..."
+环境变量 JD_KOI_RANDOM="random1＆random2＆random3"  非必须 抓包获取的随机数 例如  "74989111"
+环境变量 JD_KOI_LOG="log1＆log2＆log3"     非必须 抓包获取的日志  例如  "1646488443877~1aqwFnFGw2jMDFkc1hobDAyMQ==..."
 
 环境变量 JD_KOI_OPENRED="" 非必须 自动开红包。如果不想自动开红包设置 JD_KOI_OPENRED 为false
 环境变量 JD_KOI_CODE=""    非必须 未设置默认助力第一个号 例如 "438721140"
