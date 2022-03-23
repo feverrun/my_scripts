@@ -30,7 +30,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/divi/active/activity?activityId=dz5ba3b5
   
 [task_local]
 #3.23~4.10 动感乐活，约惠精彩
-5 13 2,5,8,10,23-31 3,4 * jd_opencard_dg.js, tag=3.23~4.10 动感乐活，约惠精彩, enabled=true
+2 13 2,5,8,10,23-31 3,4 * jd_opencard_dg.js, tag=3.23~4.10 动感乐活，约惠精彩, enabled=true
 
 */
 let opencard_addSku = "true"
@@ -99,7 +99,7 @@ let activityCookie =''
         return;
     }
     $.activityId = "dz5ba3b5b44e35b7d350806a736090"
-    $.shareUuid = "94b413ad16024330941c661aee6ffe7f"
+    $.shareUuid = "f827383f5e1a4189a28f1785fd06e526"
     console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/divi/active/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
