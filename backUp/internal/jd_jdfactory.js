@@ -654,30 +654,6 @@ function jdfactory_getHomeData() {
         })
     })
 }
-function readShareCode() {
-    console.log(`开始`)
-    return new Promise(async resolve => {
-        $.get({url: `https://api.jdsharecode.xyz/api/ddfactory/${randomCount}`, timeout: 10000}, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (data) {
-                        console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
-                        data = JSON.parse(data);
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-        await $.wait(10000);
-        resolve()
-    })
-}
 
 function taskPostUrl(function_id, body = {}, function_id2) {
     let url = `${JD_API_HOST}`;
