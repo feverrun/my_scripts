@@ -9,7 +9,7 @@
 
 已支持IOS双京东账号,Node.js支持N个京东账号
 [Script]
-cron "10 0,10,16,21 * * *" script-path=jd_jdfactory.js,tag=东东工厂
+cron "10 0,10,16,21 * * *" script-path=jd_jdfactorys.js,tag=东东工厂
  */
 
 const $ = new Env('东东工厂互助版');

@@ -4,7 +4,7 @@
 活动入口：京东APP首页搜索 "玩一玩"即可
 
 [Script]
-cron "33 1,8,22 * * *" script-path=jd_health.js, tag=东东健康社区
+cron "33 1,8,22 * * *" script-path=jd_healths.js, tag=东东健康社区
  */
 
 const $ = new Env("东东健康社区互助版");
