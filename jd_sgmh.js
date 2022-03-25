@@ -7,7 +7,7 @@
 更新地址：jd_sgmh.js
 
 [Script]
-cron "20 6,7,8,20 * * *" script-path=jd_sgmh.js, tag=闪购盲盒
+cron "20 6,9,13,20 * * *" script-path=jd_sgmh.js, tag=闪购盲盒
  */
 
 const $ = new Env('闪购盲盒');

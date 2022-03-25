@@ -7,7 +7,7 @@
 或者: 京东APP首页搜索 "玩一玩" ,造物工厂即可
 
 [Script]
-cron "10 0,5-23 * * *" script-path=jd_dreamFactory.js,tag=京喜工厂
+cron "25 0,6,14,21 * * *" script-path=jd_dreamFactory.js,tag=京喜工厂
  */
 
 const $ = new Env('京喜工厂');
