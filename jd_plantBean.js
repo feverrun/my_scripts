@@ -6,7 +6,7 @@
 注：会自动关注任务中的店铺跟商品，介意者勿使用。
 每个京东账号每天只能帮助3个人。多出的助力码将会助力失败。
 
-cron "1 5,7,13,15,18,21 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
+cron "1 5,13,15,21 * * *" script-path=jd_plantBean.js,tag=京东种豆得豆
 */
 
 const $ = new Env('京东种豆得豆');
