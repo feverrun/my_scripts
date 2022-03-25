@@ -1,6 +1,6 @@
 /*
 #3.17-3.25科沃斯联合活动抽奖机
-10 6,19 * * * jd_ksw.js, tag=3.17-3.25科沃斯联合活动抽奖机, enabled=true
+10 6,19 * * * jd_lottery_ksw.js, tag=3.17-3.25科沃斯联合活动抽奖机, enabled=true
  */
 const $ = new Env('3.17-3.25科沃斯联合活动抽奖机');
 const notify = $.isNode() ? require('./sendNotify') : '';

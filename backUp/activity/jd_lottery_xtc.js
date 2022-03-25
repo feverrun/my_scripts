@@ -1,6 +1,6 @@
 /*
 #3.18-3.31小天才联合活动抽奖机
-40 6 * * * jd_xtc.js, tag=3.18-3.31小天才联合活动抽奖机, enabled=true
+40 6 * * * jd_lottery_xtc.js, tag=3.18-3.31小天才联合活动抽奖机, enabled=true
  */
 
 const $ = new Env('3.18-3.31小天才联合活动抽奖机');
