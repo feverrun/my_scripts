@@ -13,7 +13,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/womenWear/union/activity/?activityId=dz6
 
 [task_local]
 #3.21-3.31 精致宅家 春尚焕新
-6 0,12 22-31 3 * jd_opencard_jzzj.js, tag=3.21-3.31 精致宅家 春尚焕新, enabled=true
+6 0,12 22-31 3 * jd_opencard_cshx.js, tag=3.21-3.31 精致宅家 春尚焕新, enabled=true
 */
 
 const $ = new Env("3.21~3.31精致宅家 春尚焕新");
