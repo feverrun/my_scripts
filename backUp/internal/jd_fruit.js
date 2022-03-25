@@ -791,31 +791,36 @@ async function masterHelpShare() {
                 continue
             }
             await masterHelp(code);
-            if ($.helpResult.code === '0') {
-                if ($.helpResult.helpResult.code === '0') {
-                    //助力成功
-                    salveHelpAddWater += $.helpResult.helpResult.salveHelpAddWater;
-                    console.log(`【助力好友结果】: 已成功给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力`);
-                    console.log(`给好友【${$.helpResult.helpResult.masterUserInfo.nickName}】助力获得${$.helpResult.helpResult.salveHelpAddWater}g水滴`)
-                    helpSuccessPeoples += ($.helpResult.helpResult.masterUserInfo.nickName || '匿名用户') + ',';
-                } else if ($.helpResult.helpResult.code === '8') {
-                    console.log(`【助力好友结果】: 助力【${$.helpResult.helpResult.masterUserInfo.nickName}】失败，您今天助力次数已耗尽`);
-                } else if ($.helpResult.helpResult.code === '9') {
-                    console.log(`【助力好友结果】: 之前给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
-                } else if ($.helpResult.helpResult.code === '10') {
-                    NoNeedCodes.push(code);
-                    console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
+
+            try {
+                if ($.helpResult.code === '0') {
+                    if ($.helpResult.helpResult.code === '0') {
+                        //助力成功
+                        salveHelpAddWater += $.helpResult.helpResult.salveHelpAddWater;
+                        console.log(`【助力好友结果】: 已成功给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力`);
+                        console.log(`给好友【${$.helpResult.helpResult.masterUserInfo.nickName}】助力获得${$.helpResult.helpResult.salveHelpAddWater}g水滴`)
+                        helpSuccessPeoples += ($.helpResult.helpResult.masterUserInfo.nickName || '匿名用户') + ',';
+                    } else if ($.helpResult.helpResult.code === '8') {
+                        console.log(`【助力好友结果】: 助力【${$.helpResult.helpResult.masterUserInfo.nickName}】失败，您今天助力次数已耗尽`);
+                    } else if ($.helpResult.helpResult.code === '9') {
+                        console.log(`【助力好友结果】: 之前给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
+                    } else if ($.helpResult.helpResult.code === '10') {
+                        NoNeedCodes.push(code);
+                        console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
+                    } else {
+                        console.log(`助力其他情况：${JSON.stringify($.helpResult.helpResult)}`);
+                    }
+                    console.log(`【今日助力次数还剩】${$.helpResult.helpResult.remainTimes}次\n`);
+                    remainTimes = $.helpResult.helpResult.remainTimes;
+                    if ($.helpResult.helpResult.remainTimes === 0) {
+                        console.log(`您当前助力次数已耗尽，跳出助力`);
+                        break
+                    }
                 } else {
-                    console.log(`助力其他情况：${JSON.stringify($.helpResult.helpResult)}`);
+                    console.log(`助力失败::${JSON.stringify($.helpResult)}`);
                 }
-                console.log(`【今日助力次数还剩】${$.helpResult.helpResult.remainTimes}次\n`);
-                remainTimes = $.helpResult.helpResult.remainTimes;
-                if ($.helpResult.helpResult.remainTimes === 0) {
-                    console.log(`您当前助力次数已耗尽，跳出助力`);
-                    break
-                }
-            } else {
-                console.log(`助力失败::${JSON.stringify($.helpResult)}`);
+            }catch (e) {
+                console.log(`助力好友出现异常`);
             }
         }
     }
@@ -1246,6 +1251,7 @@ async function lotteryMasterHelp() {
         version: 4,
         channel: 1
     });
+    await $.wait(2000);
 }
 
 //领取5人助力后的额外奖励API

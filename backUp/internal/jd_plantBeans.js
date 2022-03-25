@@ -447,25 +447,29 @@ async function doHelp() {
             continue
         }
         await helpShare(plantUuid);
-        if ($.helpResult && $.helpResult.code === '0') {
-            // console.log(`助力好友结果: ${JSON.stringify($.helpResult.data.helpShareRes)}`);
-            if ($.helpResult.data.helpShareRes) {
-                if ($.helpResult.data.helpShareRes.state === '1') {
-                    console.log(`助力好友${plantUuid}成功`)
-                    console.log(`${$.helpResult.data.helpShareRes.promptText}\n`);
-                } else if ($.helpResult.data.helpShareRes.state === '2') {
-                    console.log('您今日助力的机会已耗尽，已不能再帮助好友助力了\n');
-                    break;
-                } else if ($.helpResult.data.helpShareRes.state === '3') {
-                    console.log('该好友今日已满9人助力/20瓶营养液,明天再来为Ta助力吧\n')
-                } else if ($.helpResult.data.helpShareRes.state === '4') {
-                    console.log(`${$.helpResult.data.helpShareRes.promptText}\n`)
-                } else {
-                    console.log(`助力其他情况：${JSON.stringify($.helpResult.data.helpShareRes)}`);
+        try {
+            if ($.helpResult && $.helpResult.code === '0') {
+                // console.log(`助力好友结果: ${JSON.stringify($.helpResult.data.helpShareRes)}`);
+                if ($.helpResult.data.helpShareRes) {
+                    if ($.helpResult.data.helpShareRes.state === '1') {
+                        console.log(`助力好友${plantUuid}成功`)
+                        console.log(`${$.helpResult.data.helpShareRes.promptText}\n`);
+                    } else if ($.helpResult.data.helpShareRes.state === '2') {
+                        console.log('您今日助力的机会已耗尽，已不能再帮助好友助力了\n');
+                        break;
+                    } else if ($.helpResult.data.helpShareRes.state === '3') {
+                        console.log('该好友今日已满9人助力/20瓶营养液,明天再来为Ta助力吧\n')
+                    } else if ($.helpResult.data.helpShareRes.state === '4') {
+                        console.log(`${$.helpResult.data.helpShareRes.promptText}\n`)
+                    } else {
+                        console.log(`助力其他情况：${JSON.stringify($.helpResult.data.helpShareRes)}`);
+                    }
                 }
+            } else {
+                console.log(`助力好友失败: ${JSON.stringify($.helpResult)}`);
             }
-        } else {
-            console.log(`助力好友失败: ${JSON.stringify($.helpResult)}`);
+        }catch (e) {
+            console.log(`助力好友出现异常`);
         }
     }
 }
@@ -576,6 +580,7 @@ async function helpShare(plantUuid) {
     }
     $.helpResult = await request(`plantBeanIndex`, body);
     console.log(`助力结果的code:${$.helpResult && $.helpResult.code}`);
+    await $.wait(1500);
 }
 async function plantBeanIndex() {
     $.plantBeanIndexResult = await request('plantBeanIndex');//plantBeanIndexBody
