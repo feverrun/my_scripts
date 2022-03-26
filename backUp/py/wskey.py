@@ -68,6 +68,8 @@ def get_qltoken(username, password):  # 方法 用于获取青龙 Token
 # 返回值 Token
 def ql_login():  # 方法 青龙登录(获取Token 功能同上)
     path = '/ql/config/auth.json'  # 设置青龙 auth文件地址
+    if not os.path.isfile(path):
+        path = '/ql/data/config/auth.json'  # 尝试设置青龙 auth 新版文件地址
     if os.path.isfile(path):  # 进行文件真值判断
         with open(path, "r") as file:  # 上下文管理
             auth = file.read()  # 读取文件
@@ -495,7 +497,7 @@ if __name__ == '__main__':   # Python主函数执行入口
                         else:  # 判断分支
                             eid = return_serch[2]  # 读取 return_serch[2] -> eid
                             logger.info(str(wspin) + "账号禁用")  # 标准日志输出
-                            #ql_disable(eid)  # 执行方法[ql_disable] 传递 eid
+                            ql_disable(eid)  # 执行方法[ql_disable] 传递 eid
                             text = "账号: {0} WsKey疑似失效, 已禁用Cookie".format(wspin)  # 设置推送内容
                         try:  # 异常捕捉
                             send('WsKey转换脚本', text)  # 推送消息
