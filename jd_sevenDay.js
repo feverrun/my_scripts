@@ -11,8 +11,8 @@ SEVENDAY_LIST,SEVENDAY_LIST2,SEVENDAY_LIST3, 多活动id , 分开,活动具体�
 内置更新签到ID,看自行添加签到ID,部份ID需要签到几天才给奖品,先到先得
 
 脚本加密!!!介意别跑!!!
-
 */
+
 const $ = new Env('超级无线店铺签到');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -25,20 +25,10 @@ let activityIdList = [
 // https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=
 let activityIdList2 = [
     '84e9d04debf4415989b6728ef6a605df',
-    '60c1fb112db749bf8b23a80e030061d3',
-    '393ddb3a8ce04f19aed59fb458e2425f',
-    'b27cf28cb13e41c7a1c4a8f144c567a0',
-    '305dc7e23f284675a999e638321394f6',
-    '61f22cf58f814211a06dfd1db2852ba7',
-    'd493e2e4e96b447d9a39b151a0a81119',
-    'eaa9ea5d7e1943c09805ea222a58c701',
-    'a5dc177d0ef8437d987468789e673b04',
-    'c2560ac2bcc94894ae41bb66e5921640',
 ]
 // https://cjhy-isv.isvjcloud.com/sign/signActivity?activityId=
 let activityIdList3 = [
     'e9691d1d181a470cbc8119e34d3cb891',
-    'd227aaeb83c0409fb00e37a32dfd1d40',
 ]
 let lz_cookie = {}
 
