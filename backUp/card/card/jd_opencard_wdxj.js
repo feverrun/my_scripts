@@ -1,10 +1,9 @@
 /*
-家装
-
+#3.25-3.31 我的新家 超级配
 https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz2021101420000sjleowq&shareUuid=c202651ff93b42418a496a13dbb66977
-cron "3 9 * * *" jd_opencard_jz.js
+cron "3 9 25-31 3 *" jd_opencard_wdxj.js
 */
-const $ = new Env("家装");
+const $ = new Env("25~31我的新家 超级配");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
