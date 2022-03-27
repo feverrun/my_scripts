@@ -233,7 +233,7 @@ if(DisableIndex!=-1){
   EnableJDGC=false;
 }
 //领现金
-let EnableCash=true;
+let EnableCash=false;
 DisableIndex=strDisableList.findIndex((item) => item === "领现金");
 if(DisableIndex!=-1){
   console.log("检测到设定关闭领现金查询");
