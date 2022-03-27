@@ -3,10 +3,10 @@
 const got = require('got');
 require('dotenv').config();
 const { readFile } = require('fs/promises');
-const path = require('path');
+const fs = require('fs');
 
-const qlDir = '/ql';
-const authFile = path.join(qlDir, 'config/auth.json');
+let Fileexists = fs.existsSync('/ql/data/config/auth.json');
+let authFile = Fileexists ? "/ql/data/config/auth.json" : "/ql/config/auth.json";
 
 const api = got.extend({
     prefixUrl: 'http://127.0.0.1:5600',

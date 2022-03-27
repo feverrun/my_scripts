@@ -33,6 +33,14 @@ if($.isNode()){
     }
 
     for(let i = 0; i < cookiesArr.length; i++){
+        $.beanPage = 1;
+        $.todayIncome = 0
+        $.todayExpenditure = 0
+        $.yestodayIncome = 0
+        $.yestodayExpenditure = 0
+        $.beanFlag = true;
+        $.beanCount = 0;
+
         cookie = cookiesArr[i];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
         $.index = i + 1;
@@ -87,16 +95,9 @@ if($.isNode()){
 });
 
 async function bean(){
-    $.beanPage = 1;
-    $.todayIncome = 0
-    $.todayExpenditure = 0
-    $.yestodayIncome = 0
-    $.yestodayExpenditure = 0
-    $.beanFlag = true;
-    $.beanCount = 0;
     do {
         getJingBeanBalanceDetail($.beanPage);
-        await $.wait(1000)
+        await $.wait(1500)
     } while($.beanFlag === true)
 }
 
