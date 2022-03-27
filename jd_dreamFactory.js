@@ -559,22 +559,12 @@ function userInfo() {
                                 try {
                                     if ($.index === 1) {
                                         submitRes = await submitCode0(data.user.encryptPin);
-                                        if (submitRes && submitRes.code === 0) {
-                                            console.log(`🏭京喜工厂-互助码已提交！🏭`);
-                                        }else {
-                                            console.log(`🏭京喜工厂-互助码提交失败！🏭`);
-                                        }
+                                        if (submitRes && submitRes.code === 0) {console.log(`🏭京喜工厂-互助码已提交！🏭`);}else {console.log(`🏭京喜工厂-互助码提交失败！🏭`);}
                                     }else {
                                         submitCodeRes = await submitCode(data.user.encryptPin);
-                                        if (submitCodeRes && submitCodeRes.code === 0) {
-                                            console.log(`🏭京喜工厂-互助码已提交！🏭`);
-                                        }else {
-                                            console.log(`🏭京喜工厂-互助码提交失败！🏭`);
-                                        }
+                                        if (submitCodeRes && submitCodeRes.code === 0) {console.log(`🏭京喜工厂-互助码已提交！🏭`);}else {console.log(`🏭京喜工厂-互助码提交失败！🏭`);}
                                     }
-                                }catch (e) {
-
-                                }
+                                }catch (e) {}
 
                                 console.log(`已投入电力：${production.investedElectric}`);
                                 console.log(`所需电力：${production.needElectric}`);

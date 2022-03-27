@@ -93,22 +93,12 @@ async function jdPlantBean() {
             try {
                 if ($.index === 1) {
                     let submitRes = await submitCode0();
-                    if (submitRes && submitRes.code === 0) {
-                        console.log(`🥑种豆得豆-互助码已提交！🥑`);
-                    } else {
-                        console.log(`🥑种豆得豆-互助码提交失败！🥑`);
-                    }
+                    if (submitRes && submitRes.code === 0) {console.log(`🥑种豆得豆-互助码已提交！🥑`);} else {console.log(`🥑种豆得豆-互助码提交失败！🥑`);}
                 } else {
                     let submitCodeRes = await submitCode();
-                    if (submitCodeRes && submitCodeRes.code === 0) {
-                        console.log(`🥑种豆得豆-互助码已提交！🥑`);
-                    } else {
-                        console.log(`🥑种豆得豆-互助码提交失败！🥑`);
-                    }
+                    if (submitCodeRes && submitCodeRes.code === 0) {console.log(`🥑种豆得豆-互助码已提交！🥑`);} else {console.log(`🥑种豆得豆-互助码提交失败！🥑`);}
                 }
-            } catch (e) {
-                console.log(e.message);
-            }
+            } catch (e) {}
 
             roundList = $.plantBeanIndexResult.data.roundList;
             currentRoundId = roundList[num].roundId;//本期的roundId
@@ -580,6 +570,7 @@ async function helpShare(plantUuid) {
     await $.wait(2000)
 }
 async function plantBeanIndex() {
+    await $.wait(1000);
     $.plantBeanIndexResult = await request('plantBeanIndex');//plantBeanIndexBody
 }
 

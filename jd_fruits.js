@@ -85,22 +85,12 @@ async function jdFruit() {
             try {
                 if ($.index === 1) {
                     let submitRes = await submitCode0();
-                    if (submitRes && submitRes.code === 0) {
-                        console.log(`🐔东东农场-互助码已提交！🐔`);
-                    } else {
-                        console.log(`🐔东东农场-互助码提交失败！🐔`);
-                    }
+                    if (submitRes && submitRes.code === 0) {console.log(`🐔东东农场-互助码已提交！🐔`);} else {console.log(`🐔东东农场-互助码提交失败！🐔`);}
                 } else {
                     let submitCodeRes = await submitCode();
-                    if (submitCodeRes && submitCodeRes.code === 0) {
-                        console.log(`🐔东东农场-互助码已提交！🐔`);
-                    } else {
-                        console.log(`🐔东东农场-互助码提交失败！🐔`);
-                    }
+                    if (submitCodeRes && submitCodeRes.code === 0) {console.log(`🐔东东农场-互助码已提交！🐔`);} else {console.log(`🐔东东农场-互助码提交失败！🐔`);}
                 }
-            } catch (e) {
-                console.log(e.message);
-            }
+            } catch (e) {}
 
             console.log(`\n【已成功兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`);
             message += `【已兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`;
