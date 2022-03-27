@@ -7,7 +7,10 @@ const $ = new Env("测试");
 
 !(async () => {
     console.log('让我们开始吧!');
-    await test2();
+    // await test2();
+    console.log('hello');
+    await test3();
+    console.log('wolrd');
 })().catch((e) => {
     console.log('', `❌失败! 原因: ${e}!`, '');
 }).finally(() => {
@@ -41,6 +44,13 @@ async function test2(){
         //     }
         // })
     })
+}
+
+async function test3(){
+    console.log('开始');
+    await $.wait(10000);
+    console.log('1111');
+    console.log('22222');
 }
 
 // prettier-ignore

@@ -484,6 +484,7 @@ async function collectUserNutr(paradiseUuid) {
         "paradiseUuid": paradiseUuid,
         "roundId": currentRoundId
     }
+    await $.wait(1000);
     $.stealFriendRes = await request(functionId, body);
 }
 async function receiveNutrients() {
@@ -565,9 +566,10 @@ async function helpShare(plantUuid) {
         "shareUuid": "",
         "followType": "1",
     }
+    await $.wait(1000);
     $.helpResult = await request(`plantBeanIndex`, body);
+    await $.wait(1000);
     console.log(`助力结果的code:${$.helpResult && $.helpResult.code}`);
-    await $.wait(2000)
 }
 async function plantBeanIndex() {
     await $.wait(1000);
