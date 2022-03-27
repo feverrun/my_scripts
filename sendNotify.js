@@ -8,7 +8,7 @@ const querystring = require('querystring');
 const exec = require('child_process').exec;
 const $ = new Env();
 const timeout = 15000; //超时时间(单位毫秒)
-console.log("加载sendNotify，当前版本: 20220302");
+console.log("加载sendNotify，当前版本: 20220327");
 // =======================================go-cqhttp通知设置区域===========================================
 //gobot_url 填写请求地址http://127.0.0.1/send_private_msg
 //gobot_token 填写在go-cqhttp文件设置的访问密钥
@@ -126,7 +126,11 @@ const {
     getEnvByPtPin
 } = require('./utils/ql');
 const fs = require('fs');
-let strCKFile = '/ql/scripts/CKName_cache.json';
+
+let isnewql = fs.existsSync('/ql/data/config/auth.json');
+let strCKFile = isnewql ? '/ql/data/scripts/CKName_cache.json' : '/ql/scripts/CKName_cache.json';
+let strUidFile = isnewql ? '/ql/data/scripts/CK_WxPusherUid.json' : '/ql/scripts/CK_WxPusherUid.json';
+
 let Fileexists = fs.existsSync(strCKFile);
 let TempCK = [];
 if (Fileexists) {
@@ -137,7 +141,6 @@ if (Fileexists) {
         TempCK = JSON.parse(TempCK);
     }
 }
-let strUidFile = '/ql/scripts/CK_WxPusherUid.json';
 let UidFileexists = fs.existsSync(strUidFile);
 let TempCKUid = [];
 if (UidFileexists) {
@@ -1438,7 +1441,11 @@ async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "
                             $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
                             text = text.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
                             if (text == "京东资产变动" || text == "京东资产变动#2" || text == "京东资产变动#3" || text == "京东资产变动#4") {
-                                var Tempinfo = getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
+                                var Tempinfo = "";
+                                if(envs[i].created)
+                                    Tempinfo=getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
+                                else
+                                    Tempinfo=getQLinfo(cookie, envs[i].createdAt, envs[i].timestamp, envs[i].remarks);
                                 if (Tempinfo) {
                                     $.Remark += Tempinfo;
                                 }
@@ -1692,7 +1699,12 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n', strsummary
                             //额外处理1，nickName包含星号
                             $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
 
-                            var Tempinfo = getQLinfo(cookie, tempEnv.created, tempEnv.timestamp, tempEnv.remarks);
+                            var Tempinfo = "";
+                            if(tempEnv.created)
+                                Tempinfo=getQLinfo(cookie, tempEnv.created, tempEnv.timestamp, tempEnv.remarks);
+                            else
+                                Tempinfo=getQLinfo(cookie, tempEnv.createdAt, tempEnv.timestamp, tempEnv.remarks);
+
                             if (Tempinfo) {
                                 Tempinfo = $.nickName + Tempinfo;
                                 desp = desp.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), Tempinfo);
@@ -1968,57 +1980,58 @@ function BarkNotify(text, desp, params = {}) {
 }
 
 function tgBotNotify(text, desp) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         if (TG_BOT_TOKEN && TG_USER_ID) {
             const options = {
                 url: `https://${TG_API_HOST}/bot${TG_BOT_TOKEN}/sendMessage`,
-                body: `chat_id=${TG_USER_ID}&text=${text}\n\n${desp}&disable_web_page_preview=true`,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                json: {
+                    chat_id: `${TG_USER_ID}`,
+                    text: `${text}\n\n${desp}`,
+                    disable_web_page_preview:true,
                 },
-                timeout,
-            };
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                timeout
+            }
             if (TG_PROXY_HOST && TG_PROXY_PORT) {
-                const tunnel = require('tunnel');
+                const tunnel = require("tunnel");
                 const agent = {
                     https: tunnel.httpsOverHttp({
                         proxy: {
                             host: TG_PROXY_HOST,
                             port: TG_PROXY_PORT * 1,
-                            proxyAuth: TG_PROXY_AUTH,
-                        },
-                    }),
-                };
-                Object.assign(options, {
-                    agent
-                });
+                            proxyAuth: TG_PROXY_AUTH
+                        }
+                    })
+                }
+                Object.assign(options, {agent})
             }
             $.post(options, (err, resp, data) => {
                 try {
                     if (err) {
-                        console.log('telegram发送通知消息失败！！\n');
+                        console.log('telegram发送通知消息失败！！\n')
                         console.log(err);
                     } else {
                         data = JSON.parse(data);
                         if (data.ok) {
-                            console.log('Telegram发送通知消息成功🎉。\n');
+                            console.log('Telegram发送通知消息成功�。\n')
                         } else if (data.error_code === 400) {
-                            console.log('请主动给bot发送一条消息并检查接收用户ID是否正确。\n');
+                            console.log('请主动给bot发送一条消息并检查接收用户ID是否正确。\n')
                         } else if (data.error_code === 401) {
-                            console.log('Telegram bot token 填写错误。\n');
+                            console.log('Telegram bot token 填写错误。\n')
                         }
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
-            });
+            })
         } else {
-            resolve();
+            resolve()
         }
-    });
+    })
 }
 
 function ddBotNotify(text, desp) {
