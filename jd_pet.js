@@ -274,36 +274,43 @@ async function masterHelpInit() {
  * 运行脚本时你自己的shareCode会在控制台输出, 可以将其分享给他人
  */
 async function slaveHelp() {
+    await $.wait(1500);
     //$.log(`\n因1.6日好友助力功能下线。故暂时屏蔽\n`)
     //return
     let helpPeoples = '';
-    for (let code of newShareCodes) {
-        console.log(`开始助力京东账号${$.index} - ${$.nickName}的好友: ${code}`);
-        if (!code) continue;
-        let response = await request(arguments.callee.name.toString(), {'shareCode': code});
-        // console.log(JSON.stringify(response))
-        if (response.code === '0' && response.resultCode === '0') {
-            if (response.result.helpStatus === 0) {
-                console.log('已给好友: 【' + response.result.masterNickName + '】助力成功');
-                helpPeoples += response.result.masterNickName + '，';
-            } else if (response.result.helpStatus === 1) {
-                // 您今日已无助力机会
-                console.log(`助力好友${response.result.masterNickName}失败，您今日已无助力机会`);
-                break;
-            } else if (response.result.helpStatus === 2) {
-                //该好友已满5人助力，无需您再次助力
-                console.log(`该好友${response.result.masterNickName}已满5人助力，无需您再次助力`);
+    try {
+        for (let code of newShareCodes) {
+            console.log(`开始助力京东账号${$.index} - ${$.nickName}的好友: ${code}`);
+            if (!code) continue;
+            let response = await request(arguments.callee.name.toString(), {'shareCode': code});
+            // console.log(JSON.stringify(response))
+            if (response.code === '0' && response.resultCode === '0') {
+                if (response.result.helpStatus === 0) {
+                    console.log('已给好友: 【' + response.result.masterNickName + '】助力成功');
+                    helpPeoples += response.result.masterNickName + '，';
+                } else if (response.result.helpStatus === 1) {
+                    // 您今日已无助力机会
+                    console.log(`助力好友${response.result.masterNickName}失败，您今日已无助力机会`);
+                    break;
+                } else if (response.result.helpStatus === 2) {
+                    //该好友已满5人助力，无需您再次助力
+                    console.log(`该好友${response.result.masterNickName}已满5人助力，无需您再次助力`);
+                } else {
+                    console.log(`助力其他情况：${JSON.stringify(response)}`);
+                }
             } else {
-                console.log(`助力其他情况：${JSON.stringify(response)}`);
+                console.log(`助力好友结果: ${response.message}`);
             }
-        } else {
-            console.log(`助力好友结果: ${response.message}`);
+            await $.wait(1000)
         }
-        await $.wait(1000)
+        if (helpPeoples && helpPeoples.length > 0) {
+            message += `【您助力的好友】${helpPeoples.substr(0, helpPeoples.length - 1)}\n`;
+        }
+    }catch (e) {
+        console.log('异常: 助力失败!');
     }
-    if (helpPeoples && helpPeoples.length > 0) {
-        message += `【您助力的好友】${helpPeoples.substr(0, helpPeoples.length - 1)}\n`;
-    }
+
+
 }
 // 遛狗, 每天次数上限10次, 随机给狗粮, 每次遛狗结束需调用getSportReward领取奖励, 才能进行下一次遛狗
 async function petSport() {
@@ -514,12 +521,12 @@ function shareCodesFormat() {
 
 // 请求
 async function request(function_id, body = {}) {
-    await $.wait(5000); //歇口气儿, 不然会报操作频繁
+    await $.wait(5500); //歇口气儿, 不然会报操作频繁
     return new Promise((resolve, reject) => {
         $.post(taskUrl(function_id, body), (err, resp, data) => {
             try {
                 if (err) {
-                    console.log('\n东东萌宠: API查询请求失败 ‼️‼️');
+                    console.log(`\n东东萌宠: ${function_id}API查询请求失败 ‼️‼️`);
                     // console.log(JSON.stringify(err));
                     $.logErr(err);
                 } else {
