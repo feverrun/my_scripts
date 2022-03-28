@@ -1,25 +1,23 @@
 /*
-锦鲤红包互助
+锦鲤红包
 入口：[京东App》我的》锦鲤红包]
 author: feverrun
-https://t.me/proenv
-支持配置单环境(正常) 和 配置多环境(正常) 和 共享日志(只针对白名单内的用户)
-参数较长一定要在环境变量配置变量！！！
-加密脚本!!! 我不偷CK!!! 有条件跑的可以跑.
+讨论组:https://t.me/proenv
+火爆的查看下面说明，加入讨论组
+火爆的查看下面说明，加入讨论组
+火爆的查看下面说明，加入讨论组
 
-支持单参数值 和 多参数值 但是一定要对应
-单参数
-JD_KOI_RANDOM="random1"
-JD_KOI_LOG="log1"
-多参数
+主要功能多账号自动助力+多账号自动开红包。运行(白名单内不火爆，白名单内不火爆，白名单内不火爆)
+注意！！！
+ip白名单内的，支持到几千个号不火爆
+ip白名单外的 跑10个号就火爆
+
+本地配置变量跑10个号就火爆
 JD_KOI_RANDOM="random1&random2&random3"  非必须 抓包获取的随机数 例如  "74989111"
-JD_KOI_LOG="log1&log2&log3"     非必须 抓包获取的日志  例如  "1646488443877~1aqwFnFGw2jMDFkc1hobDAyMQ==..."
-共享日志
-只提供给白名单用户
-
-JD_KOI_OPENRED="" 非必须 自动开红包。如果不想自动开红包设置 JD_KOI_OPENRED 为false
-JD_KOI_CODE=""    非必须 未设置默认助力第一个号 例如 "438721140" 如果设置助力满则退出不会自动开红包
-cron "37 1,21 * * *" script-path=jd_koi_help.js, tag=锦鲤红包互助
+JD_KOI_LOG="log1&log2&log3"     非必须 抓包获取的日志  例如  "1646488443877~1aqwFMQ==..."
+JD_KOI_OPENRED="" 非必须 自动开红包。若不想自动开红包 JD_KOI_OPENRED  设置为 false
+JD_KOI_CODE=""    非必须 未设置默认助力第一个号 例如 "438721140" 如果设置助力满指定码则退出，不会自动开红包。
+cron "37 2 * * *" script-path=jd_koi_help.js, tag=锦鲤红包互助
 */
 const $ = new Env("锦鲤红包互助");
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
