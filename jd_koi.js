@@ -17,7 +17,8 @@ JD_KOI_RANDOM="random1&random2&random3"  非必须 抓包获取的随机数 例�
 JD_KOI_LOG="log1&log2&log3"     非必须 抓包获取的日志  例如  "1646488443877~1aqwFMQ==..."
 JD_KOI_OPENRED="" 非必须 自动开红包。若不想自动开红包 JD_KOI_OPENRED  设置为 false
 JD_KOI_CODE=""    非必须 未设置默认助力第一个号 例如 "438721140" 如果设置助力满指定码则退出，不会自动开红包。
-cron "37 2 * * *" script-path=jd_koi_help.js, tag=锦鲤红包互助
+
+一般一天只需执行一次 不需要指定定时
 */
 const $ = new Env("锦鲤红包互助");
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
