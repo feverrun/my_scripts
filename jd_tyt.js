@@ -1,7 +1,7 @@
 /*
 入口 极速版 赚金币 推一推
 #推一推
-22 0 * * * jd_tyt.js, tag=推一推, img-url=jd.png, enabled=true
+不需要指定定时
 */
 
 const $ = new Env('推一推');
@@ -69,18 +69,14 @@ if ($.isNode()) {
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
         $.index = i + 1;
 
-        if (!cookie) continue
         try {if (i===0 && $.UserName !='18862988021_p'){let pcode = await getTyt();if (pcode) {await helpCoinDozer(pcode);await $.wait(10000); await help(pcode);}}}catch (e) {}
         for (let code of inviteCodes) {
             if ($.UserName === code['user']) continue;
-            if ($.index === 1 && 2)
-                break
+            if ($.index === 1) break;
             await helpCoinDozer(code['packetId'])
             console.log(`\n【${$.UserName}】去助力【${code['user']}】邀请码：${code['packetId']}`);
-            if (status == 1) {
-                break
-            }
-            await $.wait(10000)
+            if (status == 1) {break}
+            await $.wait(6000)
             let res = await help(code['packetId'])
         }
     }
@@ -137,8 +133,9 @@ function info() {
     })
 }
 
-function coinDozerBackFlow() {
-    return new Promise((resolve) => {
+async function coinDozerBackFlow() {
+    await $.wait(1000);
+    return new Promise(async (resolve) => {
         const nm= {
             url: `${JD_API_HOST}`,
             body:`functionId=coinDozerBackFlow&body={"actId":"${actId}","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636015617899&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
@@ -148,6 +145,7 @@ function coinDozerBackFlow() {
                 "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
             }
         }
+        await $.wait(2500);
         $.post(nm, async (err, resp, data) => {
             try {
                 if (err) {
@@ -171,8 +169,9 @@ function coinDozerBackFlow() {
     })
 }
 
-function helpCoinDozer(packetId) {
-    return new Promise((resolve) => {
+async function helpCoinDozer(packetId) {
+    await $.wait(1500);
+    return new Promise(async (resolve) => {
         const nm= {
             url: `${JD_API_HOST}`,
             body:`functionId=helpCoinDozer&appid=station-soa-h5&client=H5&clientVersion=1.0.0&t=1636015855103&body={"actId":"${actId}","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s","packetId":"${packetId}"}&_ste=1&_stk=appid,body,client,clientVersion,functionId,t&h5st=20211104165055104;9806356985655163;10005;tk01wd1ed1d5f30nBDriGzaeVZZ9vuiX+cBzRLExSEzpfTriRD0nxU6BbRIOcSQvnfh74uInjSeb6i+VHpnHrBJdVwzs;017f330f7a84896d31a8d6017a1504dc16be8001273aaea9a04a8d04aad033d9`,
@@ -182,6 +181,7 @@ function helpCoinDozer(packetId) {
                 "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
             }
         }
+        await $.wait(1500);
         $.post(nm, async (err, resp, data) => {
             try {
                 if (err) {
@@ -206,8 +206,9 @@ function helpCoinDozer(packetId) {
     })
 }
 
-function help(packetId) {
-    return new Promise((resolve) => {
+async function help(packetId) {
+    await $.wait(1500);
+    return new Promise(async (resolve) => {
         const nm= {
             url: `${JD_API_HOST}`,
             body:`functionId=helpCoinDozer&appid=station-soa-h5&client=H5&clientVersion=1.0.0&t=1623120183787&body={"actId":"${actId}","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s","packetId":"${packetId}","helperStatus":"0"}&_ste=1&_stk=appid,body,client,clientVersion,functionId,t&h5st=20210608104303790;8489907903583162;10005;tk01w89681aa9a8nZDdIanIyWnVuWFLK4gnqY+05WKcPY3NWU2dcfa73B7PBM7ufJEN0U+4MyHW5N2mT/RNMq72ycJxH;7e6b956f1a8a71b269a0038bbb4abd24bcfb834a88910818cf1bdfc55b7b96e5`,
@@ -217,6 +218,7 @@ function help(packetId) {
                 "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
             }
         }
+        await $.wait(2500);
         $.post(nm, async (err, resp, data) => {
             try {
                 if (err) {
@@ -246,8 +248,9 @@ function help(packetId) {
     })
 }
 
-function getCoinDozerInfo() {
-    return new Promise((resolve) => {
+async function getCoinDozerInfo() {
+    await $.wait(1500);
+    return new Promise(async (resolve) => {
         const nm= {
             url: `${JD_API_HOST}`,
             body:`functionId=getCoinDozerInfo&body={"actId":"${actId}","channel":"coin_dozer","antiToken":"","referer":"-1","frontendInitStatus":"s"}&appid=megatron&client=ios&clientVersion=14.3&t=1636015858295&networkType=4g&eid=&fp=-1&frontendInitStatus=s&uuid=8888&osVersion=14.3&d_brand=&d_model=&agent=-1&pageClickKey=-1&screen=400*700&platform=3&lang=zh_CN`,
@@ -257,6 +260,7 @@ function getCoinDozerInfo() {
                 "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
             }
         }
+        await $.wait(1500);
         $.post(nm, async (err, resp, data) => {
             try {
                 if (err) {
@@ -266,7 +270,7 @@ function getCoinDozerInfo() {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
                         if(data.success==true){
-                            console.log('叼毛：'+data.data.sponsorActivityInfo.initiatorNickname)
+                            console.log('用户名：'+data.data.sponsorActivityInfo.initiatorNickname)
                             console.log('邀请码：'+data.data.sponsorActivityInfo.packetId)
                             try {if ($.UserName == '18862988021_p') {await submitTyt(data.data.sponsorActivityInfo.packetId, $.UserName);}}catch (e) {console.log(e.message())}
                             console.log('推出：'+data.data.sponsorActivityInfo.dismantledAmount)
