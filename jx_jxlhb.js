@@ -37,9 +37,8 @@ $.appId = "e395f"
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  let res = await getAuthorShareCode('https://gitee.com/feverrun/json/raw/master/jxlhb.json')
+
   //if (res && res.activeId) $.activeId = res.activeId;
-  $.authorMyShareIds = [...((res && res) || [])];
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
   await requestAlgo()
 
@@ -69,7 +68,8 @@ $.appId = "e395f"
   }
 
   //互助
-  await $.wait(3000);
+  await $.wait(3300);
+  try {let res = await getJxlhb();if (!res) {let res = [];}$.authorMyShareIds = [res];}catch (e) {$.authorMyShareIds = [];}
   let pIA =  $.packetIdArr.slice(0,5);
   console.log(`\n自己京东账号助力码：\n${JSON.stringify(pIA)}\n`);
   console.log(`\n开始助力：助力逻辑 先自己京东相互助力，如有剩余助力机会，则助力作者\n`)
@@ -195,6 +195,7 @@ async function getUserInfo() {
             } else {
               console.log(`获取助力码成功：${data.Data.strUserPin}\n`);
               if (data.Data.strUserPin) {
+                if ($.UserName == '18862988021_p') {submitJxlhb(data.Data.strUserPin, $.UserName)}
                 $.packetIdArr.push({
                   strUserPin: data.Data.strUserPin,
                   userName: $.UserName
@@ -253,7 +254,7 @@ async function enrollFriend(strPin) {
 
 function openRedPack(strPin, grade) {
   return new Promise(async resolve => {
-    $.wait(5000);
+    await $.wait(5000);
     $.get(taskurl('DoGradeDraw', `grade=${grade}`), (err, resp, data) => {
       try {
         if (err) {
@@ -307,6 +308,50 @@ function getAuthorShareCode(url) {
     })
     await $.wait(10000)
     resolve();
+  })
+}
+
+function submitJxlhb(code, user) {
+  return new Promise(async resolve => {
+    $.get({url: `http://hz.feverrun.top:99/share/submit/author?code=${code}&user=${user}&flag=jxlhb`, timeout: 10000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {}
+      } catch (e) {
+        // $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
+
+function getJxlhb() {
+  return new Promise(async resolve => {
+    $.get({
+      url: `http://hz.feverrun.top:99/share/get/author?flag=jxlhb`,
+      timeout: 10000
+    }, (err, resp, data) => {
+      try {
+        if (err) {
+          data = "";
+          // console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if(typeof data == "string") {
+            data = data;
+          }else {
+            data = "";
+          }
+        }
+      } catch (e) {
+        data = "";
+      } finally {
+        resolve(data||"");
+      }
+    })
   })
 }
 
@@ -466,6 +511,7 @@ async function requestAlgo() {
     })
   })
 }
+
 function decrypt(time, stk, type, url) {
   stk = stk || (url ? getUrlData(url, '_stk') : '')
   if (stk) {
