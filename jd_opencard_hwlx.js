@@ -1,6 +1,6 @@
 /*
 约惠春天 好物来袭
-cron "5 14 * * *" jd_opencard_hwlx.js
+cron "5 23 * * *" jd_opencard_hwlx.js
 */
 const $ = new Env("约惠春天 好物来袭");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
