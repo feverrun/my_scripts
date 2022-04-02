@@ -208,7 +208,7 @@ async function appdoTask(type,taskInfo) {
   let body = {"type":type,"taskInfo":taskInfo}
   // let sign = await getSign(functionId, body)
   let sign = await getSignfromPanda(functionId, body)
-  console.log(sign);
+  // console.log(sign);
 
   return new Promise((resolve) => {
     $.post(apptaskUrl(functionId, sign), (err, resp, data) => {
@@ -346,7 +346,6 @@ function getSignfromPanda(functionId, body) {
     })
   })
 }
-
 
 function randomString(e) {
   e = e || 32;

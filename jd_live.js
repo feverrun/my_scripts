@@ -4,7 +4,8 @@
 活动入口：京东APP首页-京东直播
 地址：https://h5.m.jd.com/babelDiy/Zeus/2zwQnu4WHRNfqMSdv69UPgpZMnE2/index.html/
 [Script]
-cron "10-20/5 12 * * *" script-path=jd_live.js,tag=京东直播
+随机定时跑一次 或者自行定时
+10-20/5 12
  */
 
 const $ = new Env('京东直播');
@@ -15,6 +16,9 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 
 let cookiesArr = [], cookie = '', message;
 let uuid
+let jdPandaToken = '';
+jdPandaToken = $.isNode() ? (process.env.PandaToken ? process.env.PandaToken : `${jdPandaToken}`) : ($.getdata('PandaToken') ? $.getdata('PandaToken') : `${jdPandaToken}`);
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -27,6 +31,10 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+    return;
+  }
+  if (!jdPandaToken) {
+    console.log('请填写Panda获取的Token,变量是PandaToken');
     return;
   }
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -97,10 +105,14 @@ function getTaskList() {
             }
             console.log(`去做分享直播间任务`)
             await shareTask()
+            await $.wait(1500);
             await awardTask()
+            await $.wait(1500);
             console.log(`去做浏览直播间任务`)
             await viewTask()
+            await $.wait(1500);
             await awardTask("commonViewTask")
+            await $.wait(1500);
           }
         }
       } catch (e) {
@@ -114,9 +126,10 @@ function getTaskList() {
 
 async function getauthorId(liveId) {
   let functionId = `liveDetailV910`
-  let body = escape(JSON.stringify({"liveId":liveId,"fromId":"","liveList":[],"sku":"","source":"17","d":"","direction":"","isNeedVideo":1}))
+  let body = encodeURIComponent(JSON.stringify({"liveId":liveId,"fromId":"","liveList":[],"sku":"","source":"17","d":"","direction":"","isNeedVideo":1}))
   let uuid = randomString(16)
-  let sign = await getSign(functionId, decodeURIComponent(body), uuid)
+  // let sign = await getSign(functionId, decodeURIComponent(body), uuid)
+  let sign = await getSignfromPanda(functionId, body)
   let url = `https://api.m.jd.com/client.action?functionId=${functionId}&build=167774&client=apple&clientVersion=10.1.0&uuid=${uuid}&${sign}`
   return new Promise(resolve => {
     $.post(taskPostUrl(functionId, body, url), async (err, resp, data) => {
@@ -140,9 +153,10 @@ async function getauthorId(liveId) {
 
 async function superTask(liveId, authorId) {
   let functionId = `liveChannelReportDataV912`
-  let body = escape(JSON.stringify({"liveId":liveId,"type":"viewTask","authorId":authorId,"extra":{"time":60}}))
+  let body = encodeURIComponent(JSON.stringify({"liveId":liveId,"type":"viewTask","authorId":authorId,"extra":{"time":60}}))
   let uuid = randomString(16)
-  let sign = await getSign(functionId, decodeURIComponent(body), uuid)
+  // let sign = await getSign(functionId, decodeURIComponent(body), uuid)
+  let sign = await getSignfromPanda(functionId, body)
   let url = `https://api.m.jd.com/client.action?functionId=${functionId}&build=167774&client=apple&clientVersion=10.1.0&uuid=${uuid}&${sign}`
   return new Promise(resolve => {
     $.post(taskPostUrl(functionId, body, url), async (err, resp, data) => {
@@ -234,6 +248,7 @@ function awardTask(type="shareTask", liveId = '2942545') {
     })
   })
 }
+
 function sign() {
   return new Promise(resolve => {
     $.get(taskUrl("getChannelTaskRewardToM", {"type":"signTask","itemId":"1"}), async (err, resp, data) => {
@@ -327,7 +342,7 @@ function taskPostUrl(function_id, body = {}, url=null) {
 }
 function taskUrl(function_id, body = {}) {
   return {
-    url: `${JD_API_HOST}?functionId=${function_id}&appid=h5-live&body=${escape(JSON.stringify(body))}&v=${new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000}&uuid=${uuid}`,
+    url: `${JD_API_HOST}?functionId=${function_id}&appid=h5-live&body=${encodeURIComponent(JSON.stringify(body))}&v=${new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000}&uuid=${uuid}`,
     headers: {
       "Host": "api.m.jd.com",
       "Accept": "application/json, text/plain, */*",

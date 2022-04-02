@@ -9,6 +9,9 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 let cookiesArr = [], cookie = '', message;
+let jdPandaToken = '';
+jdPandaToken = $.isNode() ? (process.env.PandaToken ? process.env.PandaToken : `${jdPandaToken}`) : ($.getdata('PandaToken') ? $.getdata('PandaToken') : `${jdPandaToken}`);
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -22,6 +25,10 @@ let allMessage = '';
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+        return;
+    }
+    if (!jdPandaToken) {
+        console.log('请填写Panda获取的Token,变量是PandaToken');
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -62,7 +69,8 @@ async function jdSign() {
 async function getCouponConfig() {
     let functionId = `getCouponConfig`
     let body = {"childActivityUrl":"openapp.jdmobile://virtual?params={\"category\":\"jump\",\"des\":\"couponCenter\"}","incentiveShowTimes":0,"monitorRefer":"","monitorSource":"ccresource_android_index_config","pageClickKey":"Coupons_GetCenter","rewardShowTimes":0,"sourceFrom":"1"}
-    let sign = await getSign(functionId, body)
+    // let sign = await getSign(functionId, body)
+    let sign = await getSignfromPanda(functionId, body)
     return new Promise(async resolve => {
         $.post(taskUrl(functionId, sign), async (err, resp, data) => {
             try {
@@ -73,6 +81,7 @@ async function getCouponConfig() {
                     if (data) {
                         data = JSON.parse(data)
                         let functionId, body
+                        console.log(JSON.stringify(data));
                         if (data.result.couponConfig.signNecklaceDomain) {
                             if (data.result.couponConfig.signNecklaceDomain.roundData.ynSign === '1') {
                                 console.log(`签到失败：今日已签到~`)
@@ -102,7 +111,8 @@ async function getCouponConfig() {
     })
 }
 async function ccSign(functionId, body) {
-    let sign = await getSign(functionId, body)
+    // let sign = await getSign(functionId, body)
+    let sign = await getSignfromPanda(functionId, body)
     return new Promise(async resolve => {
         $.post(taskUrl(functionId, sign), async (err, resp, data) => {
             try {
@@ -275,6 +285,51 @@ function TotalBean() {
         })
     })
 }
+
+function getSignfromPanda(functionId, body) {
+    var strsign = '';
+    let data = {
+        "fn":functionId,
+        "body": body
+    }
+    return new Promise((resolve) => {
+        let url = {
+            url: "https://api.jds.codes/jd/sign",
+            body: JSON.stringify(data),
+            followRedirect: false,
+            headers: {
+                'Accept': '*/*',
+                "accept-encoding": "gzip, deflate, br",
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jdPandaToken
+            },
+            timeout: 30000
+        }
+        $.post(url, async(err, resp, data) => {
+            try {
+                data = JSON.parse(data);
+                if (data && data.code == 200) {
+                    lnrequesttimes = data.request_times;
+                    console.log("连接Panda服务成功，当前Token使用次数为" + lnrequesttimes);
+                    if (data.data.sign)
+                        strsign = data.data.sign || '';
+                    if (strsign != '')
+                        resolve(strsign);
+                    else
+                        console.log("签名获取失败,可能Token使用次数上限或被封.");
+                } else {
+                    console.log("签名获取失败.");
+                }
+
+            }catch (e) {
+                $.logErr(e, resp);
+            }finally {
+                resolve(strsign);
+            }
+        })
+    })
+}
+
 function safeGet(data) {
     try {
         if (typeof JSON.parse(data) == "object") {
