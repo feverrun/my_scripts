@@ -6,7 +6,6 @@
 author:duck 小埋
 活动地址：https://prodev.m.jd.com/jdlite/active/31U4T6S4PbcK83HyLPioeCWrD63j/index.html
 活动入口：京东极速版-领红包
-cron "29 1,21 * * *" script-path=jd_speed_redpocke.js,tag=京东极速版红包
 */
 
 const $ = new Env('京东极速版红包');
@@ -68,8 +67,8 @@ if ($.isNode()) {
 
 async function jsRedPacket() {
     try {
-        await getSigns();
-        await $.wait(2000);
+        // await getSigns();
+        // await $.wait(2000);
         await sign();//极速版签到提现
         await $.wait(5000);
         await reward_query();
