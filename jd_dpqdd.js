@@ -1,6 +1,7 @@
 /*
 店铺签到，各类店铺签到，有新的店铺直接添加token即可
-cron "15,35,55 0 * * *" script-path=jd_dpqd.js,tag=店铺签到
+店铺签到的定时可采取随机定时,每天运行一次即可
+cron "15 0,4 * * *" script-path=jd_dpqdd.js,tag=店铺签到
 */
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -13,6 +14,7 @@ let vender = ''
 let num = 0
 
 const token = [
+  "EE77A6D921FBCB19A11A0D1B0BCCAA89",
   "C521378DAAEA4D57BE44C0D5212060F3",
   "8E3E6081738C9C30446C20F347516649",
   "BAF9032D06CA9D81F746BA7F95E27966",
@@ -39,7 +41,16 @@ const token = [
   "1B2F8250713AD30F335B092B70A4DBF5",
   "6B00C48608C4FAFA8D73FE58BC2B6099",
   "032C7983152472648378B72028B62C40",
-  "2593927DBC99178C9E835A607D67482C"
+  "2593927DBC99178C9E835A607D67482C",
+  "3C17106279994F61484D172F388DDC1D",
+  "8C00826D27DA33A520F06E5C5C2E302B",
+  "BA1063C108CD0642AD3A5C21A6952136",
+  "642395217049DBC4F56F105B3FBA0633",
+  "7C21504827C3A3923BFAEEC850810301",
+  "CA4DE825AAE4DCAEC7979216EF6D3451",
+  "C7671CB73E0BE699998307ADB36D8708",
+  "53F6D4EDD9DB32478341300332E5AE3E",
+  "EA281B5F2CD68CDA09EE992B1FEA8DDA",
 ]
 
 if ($.isNode()) {
@@ -76,7 +87,7 @@ if ($.isNode()) {
 
       await dpqd()
       await showMsg()
-      await $.wait(1500)
+      await $.wait(1000)
     }
   }
   if ($.isNode() && allMessage) {
@@ -102,19 +113,16 @@ async function dpqd() {
       continue
     }
     await getvenderName(vender)
-    await $.wait(300);
     await getActivityInfo(token[j], vender)
-    await $.wait(500);
     await signCollectGift(token[j], vender, activityId)
-    await $.wait(700);
     await taskUrl(token[j], vender)
-    await $.wait(800);
   }
 }
 
 //获取店铺ID
-function getvenderId(token) {
-  return new Promise(resolve => {
+async function getvenderId(token) {
+  await $.wait(300);
+  return new Promise(async resolve => {
     const options = {
       url: `https://api.m.jd.com/api?appid=interCenter_shopSign&t=${Date.now()}&loginType=2&functionId=interact_center_shopSign_getActivityInfo&body={%22token%22:%22${token}%22,%22venderId%22:%22%22}&jsonp=jsonp1000`,
       headers: {
@@ -126,6 +134,7 @@ function getvenderId(token) {
         "User-Agent": `Mozilla/5.0 (Linux; U; Android 10; zh-cn; MI 8 Build/QKQ1.190828.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/79.0.3945.147 Mobile Safari/537.36 XiaoMi/MiuiBrowser/13.5.40`
       }
     }
+    await $.wait(400);
     $.get(options, (err, resp, data) => {
       try {
         if (err) {
@@ -152,8 +161,9 @@ function getvenderId(token) {
 }
 
 //获取店铺名称
-function getvenderName(venderId) {
-  return new Promise(resolve => {
+async function getvenderName(venderId) {
+  await $.wait(200);
+  return new Promise(async resolve => {
     const options = {
       url: `https://wq.jd.com/mshop/QueryShopMemberInfoJson?venderId=${venderId}`,
       headers: {
@@ -164,6 +174,7 @@ function getvenderName(venderId) {
         "User-Agent": `Mozilla/5.0 (Linux; U; Android 10; zh-cn; MI 8 Build/QKQ1.190828.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/79.0.3945.147 Mobile Safari/537.36 XiaoMi/MiuiBrowser/13.5.40`
       }
     }
+    await $.wait(600);
     $.get(options, (err, resp, data) => {
       try {
         if (err) {
@@ -187,8 +198,9 @@ function getvenderName(venderId) {
 
 
 //获取店铺活动信息
-function getActivityInfo(token, venderId) {
-  return new Promise(resolve => {
+async function getActivityInfo(token, venderId) {
+  await $.wait(400);
+  return new Promise(async resolve => {
     const options = {
       url: `${JD_API_HOST}&t=${Date.now()}&loginType=2&functionId=interact_center_shopSign_getActivityInfo&body={%22token%22:%22${token}%22,%22venderId%22:${venderId}}&jsonp=jsonp1005`,
       headers: {
@@ -200,6 +212,7 @@ function getActivityInfo(token, venderId) {
         "User-Agent": `Mozilla/5.0 (Linux; U; Android 10; zh-cn; MI 8 Build/QKQ1.190828.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/79.0.3945.147 Mobile Safari/537.36 XiaoMi/MiuiBrowser/13.5.40`
       }
     }
+    await $.wait(700);
     $.get(options, (err, resp, data) => {
       try {
         if (err) {
@@ -230,8 +243,9 @@ function getActivityInfo(token, venderId) {
 }
 
 //店铺签到
-function signCollectGift(token, venderId, activitytemp) {
-  return new Promise(resolve => {
+async function signCollectGift(token, venderId, activitytemp) {
+  await $.wait(500);
+  return new Promise(async resolve => {
     const options = {
       url: `${JD_API_HOST}&t=${Date.now()}&loginType=2&functionId=interact_center_shopSign_signCollectGift&body={%22token%22:%22${token}%22,%22venderId%22:688200,%22activityId%22:${activitytemp},%22type%22:56,%22actionType%22:7}&jsonp=jsonp1004`,
       headers: {
@@ -243,6 +257,7 @@ function signCollectGift(token, venderId, activitytemp) {
         "User-Agent": `Mozilla/5.0 (Linux; U; Android 10; zh-cn; MI 8 Build/QKQ1.190828.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/79.0.3945.147 Mobile Safari/537.36 XiaoMi/MiuiBrowser/13.5.40`
       }
     }
+    await $.wait(800);
     $.get(options, (err, resp, data) => {
       try {
         if (err) {
@@ -262,8 +277,9 @@ function signCollectGift(token, venderId, activitytemp) {
 }
 
 //店铺获取签到信息
-function taskUrl(token, venderId) {
-  return new Promise(resolve => {
+async function taskUrl(token, venderId) {
+  await $.wait(300);
+  return new Promise(async resolve => {
     const options = {
       url: `${JD_API_HOST}&t=${Date.now()}&loginType=2&functionId=interact_center_shopSign_getSignRecord&body={%22token%22:%22${token}%22,%22venderId%22:${venderId},%22activityId%22:${activityId},%22type%22:56}&jsonp=jsonp1006`,
       headers: {
@@ -275,6 +291,7 @@ function taskUrl(token, venderId) {
         "user-agent": `Mozilla/5.0 (Linux; U; Android 10; zh-cn; MI 8 Build/QKQ1.190828.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/79.0.3945.147 Mobile Safari/537.36 XiaoMi/MiuiBrowser/13.5.40`
       }
     }
+    await $.wait(800);
     $.get(options, (err, resp, data) => {
       try {
         if (err) {

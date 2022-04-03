@@ -56,7 +56,7 @@ if ($.isNode()) {
             await $.wait(1000)
             await getCoinDozerInfo()
             await $.wait(1000)
-            console.log('\n注意全部助力给账号一\n');
+            console.log('\n注意全部助力给前三个账号\n');
             if (i >= 2) {
                 break;
             }
