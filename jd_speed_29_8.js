@@ -1,6 +1,6 @@
 /*
 极速版抢卷
-cron "59 8,11,14,16,19 * * *" script-path=jd_29_8.js,tag=极速版抢卷
+cron "59 8,11,14,16,19 * * *" script-path=jd_speed_29_8.js,tag=极速版抢卷
 npm install -g moment
 降低抢券的频率
  */
@@ -29,8 +29,8 @@ let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
         return;
     }
 
-    await wait(60 * 1000);
-    for (let i = 0; i < cookiesArr.length; i++) {
+    await wait(59 * 1000);
+    for (let i = 0; i < cookiesArr.slice(0,7).length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -40,7 +40,6 @@ let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
             $.nickName = '';
             message = '';
             await qiang();
-            await $.wait(500);
         }
     }
 
