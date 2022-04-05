@@ -30,7 +30,7 @@ https://lzkjdz-isv.isvjcloud.com/esteelauder/inviteNew/activityPage?activityId=2
 
 [task_local]
 #雅诗兰黛奢雅邀请入会有礼
-27 1 21-31 3 * jd_opencard_ysld.js, tag=雅诗兰黛奢雅邀请入会有礼, enabled=true
+5 11 1-30 4 * jd_opencard_ysld.js, tag=雅诗兰黛奢雅邀请入会有礼, enabled=true
 
 */
 let opencard = "true"
@@ -83,8 +83,8 @@ let activityCookie =''
         return;
     }
     $.joinStatus = false
-    $.activityId = "2203100037674501"
-    $.shareUuid = "9518d5d85b2b420bbbe95b53297fbc88"
+    $.activityId = "2204100037674501"
+    $.shareUuid = "294a9095239e4d24bc4c8bccd7eefb38"
     console.log(`入口:\nhttps://lzkjdz-isv.isvjcloud.com/esteelauder/inviteNew/activityPage?activityId=2203100037674501&inviterUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
