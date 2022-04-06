@@ -24,7 +24,7 @@ openwait125="0"
 All变量适用
 ————————————————
 入口：[ 4.01～4.10 米粉节联合活动 (
-https://lzdz1-isv.isvjcloud.com/dingzhi/mar2022/miFenJie/activity/563603?activityId=dzlhkk068d4d0ab8a1234853002f66&shareUuid=3373a2581e724af4a5aa3d2b6f7e3dae)]
+https://lzdz1-isv.isvjcloud.com/dingzhi/mar2022/miFenJie/activity/563603?activityId=dzlhkk068d4d0ab8a1234853002f66&shareUuid=3373a2581e724af4a5aa3d2b6f7e3dae
 
 请求太频繁会被黑ip
 过10分钟再执行

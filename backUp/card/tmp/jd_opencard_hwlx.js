@@ -1,8 +1,9 @@
 /*
 约惠春天 好物来袭
-cron "5 23 * * *" jd_opencard_hwlx.js
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkb306433997033e689d45c00a
+cron "5 23 30-31,1-8 3,4 *" jd_opencard_hwlx.js
 */
-const $ = new Env("约惠春天 好物来袭");
+const $ = new Env("2022年3.30~4.8约惠春天 好物来袭");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require("./sendNotify") : "";
 let cookiesArr = [], cookie = "", message = "";

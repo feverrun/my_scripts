@@ -1,8 +1,9 @@
 /*
 宝妈省钱有计，邀您一起领京豆
-cron "5 18 * * *" jd_opencard_yqjd.js
+https://lzdz1-isv.isvjcloud.com/dingzhi/baby/pairysactivity?activityId=dzf14101834564a0b1336646135829&a258555&shopid=1000001683;
+cron "5 18 1-12 4 *" jd_opencard_bmyj.js
 */
-const $ = new Env("宝妈省钱有计，邀您一起领京豆");
+const $ = new Env("2022年4.1~4.12宝妈有计，童言无忌");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require("./sendNotify") : "";
 let cookiesArr = [], cookie = "", message = "";

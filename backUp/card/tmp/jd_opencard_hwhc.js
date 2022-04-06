@@ -1,8 +1,9 @@
 /*
 早鸟派对 好物焕春
-cron "5 13 * * *" jd_opencard_hwhc.js
+https://lzdz1-isv.isvjcloud.com/dingzhi/april/springUnion/activity?activityId=dzfbeaffca4eaca899cd85de890ade
+cron "5 13 1-15 4 *" jd_opencard_hwhc.js
 */
-const $ = new Env("早鸟派对 好物焕春");
+const $ = new Env("2022年4.1~4.15早鸟派对 好物焕春");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require("./sendNotify") : "";
 let cookiesArr = [], cookie = "", message = "";
