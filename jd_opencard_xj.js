@@ -2,7 +2,7 @@
 家装
 
 https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz2021101420000sjleowq&shareUuid=b61e730cb8554a91811a03400ee30d0b
-cron "5 14 * * *" jd_opencard_xj.js
+cron "5 15 * * *" jd_opencard_xj.js
 */
 const $ = new Env("家装");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
