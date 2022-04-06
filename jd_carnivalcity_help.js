@@ -3,7 +3,7 @@
 活动时间: 2021-8-9至2021-8-28
 活动入口：暂无 [活动地址](https://carnivalcity.m.jd.com/)
 
-cron "10 0,10 * * *" script-path=jd_carnivalcity_help.js, tag=京东手机狂欢城助力
+cron "10 0,10,19 * * *" script-path=jd_carnivalcity_help.js, tag=京东手机狂欢城助力
 */
 const $ = new Env('京东手机狂欢城助力');
 const notify = $.isNode() ? require('./sendNotify') : '';

@@ -8,7 +8,7 @@ a、第1名、第618名可获得实物手机一部
 b、 每日第2-10000名，可获得50个京豆
 c、 每日第10001-30000名可获得20个京豆
 d、 30000名之外，0京豆
-cron "2 0,18 * * *" script-path=jd_carnivalcity.js, tag=京东手机狂欢城
+cron "2 0,12 * * *" script-path=jd_carnivalcity.js, tag=京东手机狂欢城
 */
 const $ = new Env('京东手机狂欢城');
 const notify = $.isNode() ? require('./sendNotify') : '';
