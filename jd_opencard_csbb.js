@@ -23,15 +23,15 @@ openwait127="0"
 
 All变量适用
 ————————————————
-入口：[ 4.1~4.12 京东超市宝贝趴 (https://lzdz1-isv.isvjcloud.com/dingzhi/baby/pairysactivity?activityId=dzf14101834564a0b1336646135829&shareUuid=6bd1801dda594b0394c5f86acdb32bf7)]
+入口：[ 4.1~4.12 京东超市宝贝趴 (
+https://lzdz1-isv.isvjcloud.com/dingzhi/baby/pairysactivity?activityId=dzf14101834564a0b1336646135829&shareUuid=6bd1801dda594b0394c5f86acdb32bf7
+)]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
-============Quantumultx===============
-[task_local]
 #4.1~4.12 京东超市宝贝趴
-5 18 5-11 4 * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard127.js, tag=4.1~4.12 京东超市宝贝趴, enabled=true
+5 19 1-12 4 * jd_opencard_csbb.js, tag=4.1~4.12 京东超市宝贝趴, enabled=true
 
 */
 let opencard_addSku = "true"
