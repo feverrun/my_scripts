@@ -36,7 +36,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/baby/pairysactivity?activityId=dzf141018
 */
 let opencard_addSku = "true"
 let opencard = "true"
-let openwait = "0"
+let openwait = "10"
 let opencard_draw = "0"
 
 const $ = new Env('4.1~4.12 京东超市宝贝趴');
