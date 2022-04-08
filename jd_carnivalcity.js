@@ -102,7 +102,7 @@ async function JD818() {
     await getListRank();
     await getListIntegral();
     await getListJbean();
-    await check();//查询抽奖记录(未兑换的，发送提醒通知);
+    //await check();  //查询抽奖记录(未兑换的，发送提醒通知);
     await showMsg()
   } catch (e) {
     $.logErr(e)
@@ -567,10 +567,10 @@ function getListIntegral() {
             $.integralCount = data.data.integralNum || 0;//累计活动积分
             message += `累计获得积分：${$.integralCount}\n`;
             console.log(`开始抽奖，当前积分可抽奖${parseInt($.integralCount / 50)}次\n`);
-            for (let i = 0; i < parseInt($.integralCount / 50); i ++) {
-              await lottery();
-              await $.wait(500);
-            }
+            // for (let i = 0; i < parseInt($.integralCount / 50); i ++) {
+              // await lottery();
+              // await $.wait(500);
+            // }
           } else {
             console.log(`integralRecord失败：${JSON.stringify(data)}`);
           }
