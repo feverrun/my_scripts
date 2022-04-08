@@ -31,7 +31,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/baby/pairysactivity?activityId=dzf141018
 过10分钟再执行
 
 #4.1~4.12 京东超市宝贝趴
-5 19 1-12 4 * jd_opencard_csbb.js, tag=4.1~4.12 京东超市宝贝趴, enabled=true
+5 19 1-12 4 * jd_opencard_bbp.js, tag=4.1~4.12 京东超市宝贝趴, enabled=true
 
 */
 let opencard_addSku = "true"
