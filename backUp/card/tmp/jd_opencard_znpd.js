@@ -1,7 +1,7 @@
 /*
 早鸟派对 好物来袭
 https://lzdz1-isv.isvjcloud.com/dingzhi/april/springUnion2/activity?activityId=dz40c5c3a14fd59a0c47466d63f0c7
-cron "5 12 8-22 4 *" jd_opencard_znpd.js
+cron "5 13 8-22 4 *" jd_opencard_znpd.js
 */
 const $ = new Env("2022年4.8~4.22早鸟派对 好物来袭");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
