@@ -71,6 +71,7 @@ async function getCouponConfig() {
     let body = {"childActivityUrl":"openapp.jdmobile://virtual?params={\"category\":\"jump\",\"des\":\"couponCenter\"}","incentiveShowTimes":0,"monitorRefer":"","monitorSource":"ccresource_android_index_config","pageClickKey":"Coupons_GetCenter","rewardShowTimes":0,"sourceFrom":"1"}
     // let sign = await getSign(functionId, body)
     let sign = await getSignfromPanda(functionId, body)
+    await $.wait(3500);
     return new Promise(async resolve => {
         $.post(taskUrl(functionId, sign), async (err, resp, data) => {
             try {
@@ -81,22 +82,37 @@ async function getCouponConfig() {
                     if (data) {
                         data = JSON.parse(data)
                         let functionId, body
-                        console.log(JSON.stringify(data));
-                        if (data.result.couponConfig.signNecklaceDomain) {
+                        // console.log(JSON.stringify(data));
+                        if (data.result.couponConfig.signNecklaceDomain && data.result.couponConfig.signNecklaceDomain != null) {
                             if (data.result.couponConfig.signNecklaceDomain.roundData.ynSign === '1') {
                                 console.log(`签到失败：今日已签到~`)
                             } else {
                                 let pin = await getsecretPin($.UserName)
                                 functionId = `ccSignInNecklace`
-                                body = {"childActivityUrl":"openapp.jdmobile://virtual?params={\"category\":\"jump\",\"des\":\"couponCenter\"}","monitorRefer":"appClient","monitorSource":"cc_sign_android_index_config","pageClickKey":"Coupons_GetCenter","sessionId":"","signature":data.result.couponConfig.signNecklaceDomain.signature,"pin":pin,"verifyToken":""}
+                                body = {
+                                    "childActivityUrl": "openapp.jdmobile://virtual?params={\"category\":\"jump\",\"des\":\"couponCenter\"}",
+                                    "monitorRefer": "appClient",
+                                    "monitorSource": "cc_sign_android_index_config",
+                                    "pageClickKey": "Coupons_GetCenter",
+                                    "sessionId": "",
+                                    "signature": data.result.couponConfig.signNecklaceDomain.signature,
+                                    "pin": pin,
+                                    "verifyToken": ""
+                                }
                             }
                         } else {
-                            if (data.result.couponConfig.signNewDomain.roundData.ynSign === '1') {
+                            if (data.result.couponConfig.signNecklaceDomain != null && data.result.couponConfig.signNewDomain.roundData.ynSign === '1') {
                                 console.log(`签到失败：今日已签到~`)
                             } else {
                                 let pin = await getsecretPin($.UserName)
                                 functionId = `ccSignInNew`
-                                body = {"childActivityUrl":"openapp.jdmobile://virtual?params={\"category\":\"jump\",\"des\":\"couponCenter\"}","monitorRefer":"appClient","monitorSource":"cc_sign_android_index_config","pageClickKey":"Coupons_GetCenter","pin":pin}
+                                body = {
+                                    "childActivityUrl": "openapp.jdmobile://virtual?params={\"category\":\"jump\",\"des\":\"couponCenter\"}",
+                                    "monitorRefer": "appClient",
+                                    "monitorSource": "cc_sign_android_index_config",
+                                    "pageClickKey": "Coupons_GetCenter",
+                                    "pin": pin
+                                }
                             }
                         }
                         if (functionId && body) await ccSign(functionId, body)
@@ -110,9 +126,11 @@ async function getCouponConfig() {
         })
     })
 }
+
 async function ccSign(functionId, body) {
     // let sign = await getSign(functionId, body)
     let sign = await getSignfromPanda(functionId, body)
+    await $.wait(3500);
     return new Promise(async resolve => {
         $.post(taskUrl(functionId, sign), async (err, resp, data) => {
             try {
