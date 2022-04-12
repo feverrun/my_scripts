@@ -1,14 +1,20 @@
 /**
  粉丝互动，尽量自己设置定时，在0点和1点抽奖，白天基本没水
  注意：脚本会加购，脚本会加购，脚本会加购
- 若发现脚本里没有的粉丝互动活动。欢迎反馈给我
- cron 34 1,5 * * * jd_fan.js
+ cron "10 0 * * *" jd_fan.js
  * */
 const $ = new Env('粉丝互动');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 const activityList = [
+    {'id':'ce6abe2a33c74978902cf81e992688f4','endTime':1651248000000},//2022-04-01---2022-04-30 容声冰箱洗衣机自营旗舰店
+    {'id':'28738b8f7bb14496bb210ddb98796180','endTime':1651334399000},//2022-04-01---2022-04-30 卡西欧京东自营店
+    {'id':'ad7344e9be334f0098fb33767397fcab','endTime':1651334399000},//2022-04-01---2022-04-30 MARSHALL影音京东自营旗舰店
+    {'id':'23350576f5b14d26933a838dbc695525','endTime':1649088000000},//2022-04-01---2022-04-05 张裕葡萄酒京东自营旗舰店
+    {'id':'2644b19819bf411d89d359d98f70fdac','endTime':1651248000000},//2022-04-01---2022-04-30 倔强的尾巴京东自营旗舰店
+    {'id':'c75b9bbe3e04465b8dbe45ddc89d01ef','endTime':1651334399000},//2022-04-01---2022-04-30 卡西欧手表官方旗舰店
+    {'id':'53bae4e2d5264cc589bc84aea3535d7d','endTime':1651334399000},//2022-04-01---2022-04-30 微软京东自营官方旗舰店
 ]
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -26,6 +32,10 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
+    if(!activityList.length){
+        console.log(`\n没有活动，退出！！！`);
+        return;
+    }
     for (let i = 0; i < cookiesArr.length; i++) {
         await getUA();
         $.index = i + 1;
@@ -40,7 +50,7 @@ if ($.isNode()) {
         $.hotFlag = false;
         for (let j = 0; j < activityList.length && !$.hotFlag; j++) {
             $.activityInfo = activityList[j];
-            $.activityID = $.activityInfo.actid;
+            $.activityID = $.activityInfo.id;
             console.log(`互动ID：${JSON.stringify($.activityInfo)}`);
             console.log(`活动地址：https://lzkjdz-isv.isvjcloud.com/wxFansInterActionActivity/activity/${$.activityID}?activityId=${$.activityID}`);
             if($.activityInfo.endTime && Date.now() > $.activityInfo.endTime){
@@ -48,7 +58,7 @@ if ($.isNode()) {
                 continue;
             }
             await main();
-            await $.wait(1000);
+            await $.wait(2500);
             console.log('\n')
         }
     }
@@ -57,12 +67,14 @@ if ($.isNode()) {
 async function main() {
     $.token = ``;
     await getToken();
+    await $.wait(1500);
     if($.token === ``){
         console.log(`获取token失败`);return;
     }
     console.log(`token:${$.token}`);
     await $.wait(1000);
     await getActCk();
+    await $.wait(1500);
     $.shopId = ``;
     await takePostRequest('getSimpleActInfoVo');
     if($.shopid === ``){
@@ -300,6 +312,7 @@ async function takePostRequest(type){
             console.log(`错误${type}`);
     }
     let myRequest = getPostRequest(url,body);
+    await $.wait(2500);
     return new Promise(async resolve => {
         $.post(myRequest, (err, resp, data) => {
             try {
