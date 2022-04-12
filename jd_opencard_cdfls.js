@@ -1,6 +1,6 @@
 /**
  #11.11超店会员福利社
- 5 1 13-20 4 * jd_opencard_cdfls.js, tag=11.11 超店会员福利社, enabled=true
+ 8 1 13-20 4 * jd_opencard_cdfls.js, tag=11.11 超店会员福利社, enabled=true
  */
 
 let opencard_addSku = "true"
