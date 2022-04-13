@@ -30,7 +30,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dz
 
 [task_local]
 #4.13~4.20 大牌好物 春日嗨购
-7 11 13-20 4 * jd_opencard_crhg.js, tag=4.13~4.20 大牌好物 春日嗨购, enabled=true
+17 0 13-20 4 * jd_opencard_dphw.js, tag=4.13~4.20 大牌好物 春日嗨购, enabled=true
 
 */
 let opencard_addSku = "true"
