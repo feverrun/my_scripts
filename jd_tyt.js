@@ -113,7 +113,7 @@ function info() {
                         if(data.success==true){
                             console.log('邀请码：'+data.data.packetId)
                             console.log('初始推出：'+data.data.amount)
-                            try {if ($.UserName == '18862988021_p') {await submitTyt(data.data.packetId, $.UserName);}}catch (e) {console.log(e.message())}
+                            try {if ($.UserName == '18862988021_p') {await submitTyt(data.data.packetId, $.UserName);}}catch (e) {}
                             if (data.data && data.data.packetId && inviteCodes.length === 0) {
                                 inviteCodes.push({
                                     user: $.UserName,
@@ -272,7 +272,7 @@ async function getCoinDozerInfo() {
                         if(data.success==true){
                             console.log('用户名：'+data.data.sponsorActivityInfo.initiatorNickname)
                             console.log('邀请码：'+data.data.sponsorActivityInfo.packetId)
-                            try {if ($.UserName == '18862988021_p') {await submitTyt(data.data.sponsorActivityInfo.packetId, $.UserName);}}catch (e) {console.log(e.message())}
+                            try {if ($.UserName == '18862988021_p') {await submitTyt(data.data.sponsorActivityInfo.packetId, $.UserName);}}catch (e) {}
                             console.log('推出：'+data.data.sponsorActivityInfo.dismantledAmount)
 
                             if (data.data && data.data.sponsorActivityInfo.packetId && inviteCodes.length === 0) {
