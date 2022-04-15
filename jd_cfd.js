@@ -1714,10 +1714,10 @@ async function requestAlgo() {
                             $.token = data.data.result.tk;
                             let enCryptMethodJDString = data.data.result.algo;
                             if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
-                            console.log(`获取签名参数成功！`)
-                            console.log(`fp: ${$.fingerprint}`)
-                            console.log(`token: ${$.token}`)
-                            console.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
+                            // console.log(`获取签名参数成功！`)
+                            // console.log(`fp: ${$.fingerprint}`)
+                            // console.log(`token: ${$.token}`)
+                            // console.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
                         } else {
                             console.log(`fp: ${$.fingerprint}`)
                             console.log('request_algo 签名参数API请求失败:')
