@@ -56,7 +56,7 @@ if ($.isNode()) {
             $.activityId = 'ecaf4a23237e403896efdc9507a31ea2'
             $.activityShopId = '1000014486'
             $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.authorNum}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
-            await anjia();
+            await main();
             await $.wait(5000)
             if ($.bean > 0) {
                 message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
@@ -79,12 +79,14 @@ if ($.isNode()) {
     })
 
 
-async function anjia() {
+async function main() {
     $.token = null;
     $.secretPin = null;
     $.openCardActivityId = null
-    await getFirstLZCK()
+    await getFirstLZCK();
+    await $.wait(1000);
     await getToken();
+    await $.wait(1000);
     await task('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
     await $.wait(2000)
     if ($.token) {
@@ -402,44 +404,52 @@ function getMyPing() {
     })
 }
 function getFirstLZCK() {
-    return new Promise(resolve => {
-        $.get({ url: $.activityUrl }, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(err)
-                } else {
-                    if (resp['headers']['set-cookie']) {
-                        cookie = `${originCookie}`
-                        if ($.isNode()) {
-                            for (let sk of resp['headers']['set-cookie']) {
-                                cookie = `${cookie}${sk.split(";")[0]};`
+    return new Promise((resolve) => {
+        $.get(
+            {
+                url: $.activityUrl,
+                headers: {
+                    "user-agent": $.isNode() ? process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : require("./USER_AGENTS").USER_AGENT : $.getdata("JDUA") ? $.getdata("JDUA") : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
+                },
+            },
+            (err, resp, data) => {
+                try {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        if (resp["headers"]["set-cookie"]) {
+                            cookie = `${originCookie}`;
+                            if ($.isNode()) {
+                                for (let sk of resp["headers"]["set-cookie"]) {
+                                    cookie = `${cookie}${sk.split(";")[0]};`;
+                                }
+                            } else {
+                                for (let ck of resp["headers"]["Set-Cookie"].split(",")) {
+                                    cookie = `${cookie}${ck.split(";")[0]};`;
+                                }
                             }
-                        } else {
-                            for (let ck of resp['headers']['Set-Cookie'].split(',')) {
-                                cookie = `${cookie}${ck.split(";")[0]};`
+                        }
+                        if (resp["headers"]["Set-Cookie"]) {
+                            cookie = `${originCookie}`;
+                            if ($.isNode()) {
+                                for (let sk of resp["headers"]["set-cookie"]) {
+                                    cookie = `${cookie}${sk.split(";")[0]};`;
+                                }
+                            } else {
+                                for (let ck of resp["headers"]["Set-Cookie"].split(",")) {
+                                    cookie = `${cookie}${ck.split(";")[0]};`;
+                                }
                             }
                         }
                     }
-                    if (resp['headers']['Set-Cookie']) {
-                        cookie = `${originCookie}`
-                        if ($.isNode()) {
-                            for (let sk of resp['headers']['set-cookie']) {
-                                cookie = `${cookie}${sk.split(";")[0]};`
-                            }
-                        } else {
-                            for (let ck of resp['headers']['Set-Cookie'].split(',')) {
-                                cookie = `${cookie}${ck.split(";")[0]};`
-                            }
-                        }
-                    }
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    resolve();
                 }
-            } catch (error) {
-                console.log(error)
-            } finally {
-                resolve();
             }
-        })
-    })
+        );
+    });
 }
 function getToken() {
     let opt = {

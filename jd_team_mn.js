@@ -1,6 +1,4 @@
 /*
-默认执行脚本。如果需要不执行
-环境变量 NO_RUSH=false
 活动地址:
 https://lzkjdz-isv.isvjcloud.com/pool/captain/55667?activityId=4e3b9b6233104c199c0c44ff6edbc85d
 &signUuid=f24703dd855b4925b170350b528fb8bd&shareuserid4minipg=null&shopid=1000014803
@@ -62,8 +60,8 @@ if ($.isNode()) {
             $.activityId = '4e3b9b6233104c199c0c44ff6edbc85d'
             $.activityShopId = '1000014803'
             $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.authorNum}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&shareuserid4minipg=null&shopid=${$.activityShopId}`
-            await rush();
-            await $.wait(3500)
+            await main();
+            await $.wait(3500);
             if ($.bean > 0) {
                 message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
             }
@@ -85,7 +83,7 @@ if ($.isNode()) {
     })
 
 
-async function rush() {
+async function main() {
     $.token = null;
     $.secretPin = null;
     $.shopactivityId = null
