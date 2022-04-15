@@ -105,6 +105,7 @@ async function main() {
                 if ($.activityContent.canJoin) {
                     $.log("加入队伍成功，请等待队长瓜分京豆")
                     await task('saveCandidate', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}&pinImg=${encodeURIComponent(`https://img10.360buyimg.com/imgzone/jfs/t1/21383/2/6633/3879/5c5138d8E0967ccf2/91da57c5e2166005.jpg`)}`)
+                    await $.wait(1700);
                     if (!$.activityContent.openCard) {
                         await $.wait(2000)
                         await getShopOpenCardInfo({ "venderId": "1000014803", "channel": 401 }, 1000014803);
@@ -295,16 +296,6 @@ async function bindWithVender(body, venderId) {
                     console.log(data);
                     data = data && data.match(/jsonp_.*?\((.*?)\);/) && data.match(/jsonp_.*?\((.*?)\);/)[1] || data
                     // console.log(JSON.stringify(data));
-                    // if (res.success) {
-                    //     if (res.result.giftInfo && res.result.giftInfo.giftList) {
-                    //         for (const vo of res.result.giftInfo.giftList) {
-                    //             if (vo.prizeType === 4) {
-                    //                 $.log(`==>获得【${vo.quantity}】京豆`)
-                    //                 $.bean += vo.quantity
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 }
             } catch (error) {
                 console.log(error)

@@ -1,9 +1,9 @@
 /*
 组队分豆-飞利浦 [jd_teamFLP.js]
 入口：[组队分豆-飞利浦 (
-https://lzkjdz-isv.isvjcloud.com/pool/captain/4471266?activityId=52c0712263f342308da1287a66702009&signUuid=f4dbc733e0674545aec847ae8bdf5579
-)]
-cron "38 0,10,22 10-28 2 *" script-path=jd_teamFLP.js,tag=组队分豆-飞利浦
+https://lzkjdz-isv.isvjcloud.com/pool/captain/2?activityId=52c0712263f342308da1287a66702009
+&signUuid=f4dbc733e0674545aec847ae8bdf5579
+cron "38 8,20 12-30 4 *" script-path=jd_teamFLP.js,tag=组队分豆-飞利浦
 */
 const $ = new Env("组队分豆-飞利浦");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -30,7 +30,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    console.log(`若之前做过该活动，则无法重复入队。\n入口:\nhttps://lzkjdz-isv.isvjcloud.com/pool/captain/4471266?activityId=52c0712263f342308da1287a66702009&signUuid=f4dbc733e0674545aec847ae8bdf5579`)
+    console.log(`若之前做过该活动，则无法重复入队。\n入口:\nhttps://lzkjdz-isv.isvjcloud.com/pool/captain/2?activityId=52c0712263f342308da1287a66702009&signUuid=f4dbc733e0674545aec847ae8bdf5579`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -55,10 +55,11 @@ if ($.isNode()) {
             $.bean = 0;
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.activityId = '52c0712263f342308da1287a66702009'
-            $.activityShopId = '1000003691'
+            $.activityShopId = '1000003691';
+            $.activityVenderId = '100000000000085';
             $.randomNum = random(1000000, 9999999)
-            $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.randomNum}?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
-            $.returnUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/${$.randomNum}?activityId=${$.activityId}`;
+            $.activityUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/2?activityId=${$.activityId}&signUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=${$.activityShopId}&lng=00.000000&lat=00.000000&sid=&un_area=`
+            $.returnUrl = `https://lzkjdz-isv.isvjcloud.com/pool/captain/2?activityId=${$.activityId}`;
             await main();
             await $.wait(3000)
             if ($.bean > 0) {
@@ -91,7 +92,7 @@ async function main() {
     await getToken();
     await $.wait(1000);
     await task('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
-    await $.wait(2000)
+    await $.wait(2000);
     if ($.token) {
         await getMyPing();
         await $.wait(1000);
@@ -101,16 +102,17 @@ async function main() {
             await $.wait(2000)
             await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`)
             if ($.activityContent) {
+                console.log($.activityContent.canJoin)
                 if ($.activityContent.canJoin) {
                     $.log("加入队伍成功，请等待队长瓜分京豆")
                     await $.wait(2000)
                     await task('saveCandidate', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}&pinImg=${encodeURIComponent(`https://img10.360buyimg.com/imgzone/jfs/t1/21383/2/6633/3879/5c5138d8E0967ccf2/91da57c5e2166005.jpg`)}`)
-                    $.log("加入会员")
+                    await $.wait(1700);
                     if (!$.activityContent.openCard) {
-                        $.log("加入会员")
-                        await $.wait(2000)
-                        await getShopOpenCardInfo({ "venderId": "100000000000085", "channel": 7014 }, 1000003691)
-                        await bindWithVender({ "venderId": "100000000000085", "shopId": "1000003691", "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "channel": 7014}, $.activityShopId)
+                        await $.wait(2000);
+                        await getShopOpenCardInfo({ "venderId": "100000000000085", "channel": 7001, "payUpShop":true }, 100000000000085);
+                        await $.wait(2200);
+                        await bindWithVender({ "venderId": "100000000000085", "shopId": "1000003691", "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "channel": 7001}, $.activityVenderId)
                     }
                     await $.wait(2000)
                     await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`, 0, 1)
@@ -214,9 +216,10 @@ function task(function_id, body, isCommon = 0) {
         })
     })
 }
-function getShopOpenCardInfo(body, venderId) {
+async function getShopOpenCardInfo(body, venderId) {
+    let h5st = '20220415180031962%3B3100587562417508%3Bef79a%3Btk02wce8e1c6018nJkUm06nZXMFfxyboRimYhwSIVWToGU0VkNveK4Q0EMEzkutxtm8HS0u%2FXzVQbrF%2Bvey3g%2B744o57%3B5a1f4de637565db3fba89c3eeb9f1ccb2f41ec31f35baa5b8332016b9b79129e%3B3.0%3B1650016831962';
     let opt = {
-        url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=getShopOpenCardInfo&body=${encodeURIComponent(JSON.stringify(body))}&client=H5&clientVersion=9.2.0&uuid=88888`,
+        url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=getShopOpenCardInfo&body=${encodeURIComponent(JSON.stringify(body))}&client=H5&clientVersion=9.2.0&uuid=88888&h5st=${h5st}&jsonp=jsonp_1650016831584_55635`,
         headers: {
             Host: 'api.m.jd.com',
             Accept: '*/*',
@@ -224,20 +227,24 @@ function getShopOpenCardInfo(body, venderId) {
             Cookie: cookie,
             'User-Agent': `jdapp;iPhone;9.5.4;13.6;${getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')};network/wifi;ADID/${getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1)};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
             'Accept-Language': 'zh-cn',
-            Referer: `https://shopmember.m.jd.com/shopcard/?venderId=${venderId}}&channel=7005&returnUrl=${encodeURIComponent($.returnUrl)}`,
+            Referer: `https://shopmember.m.jd.com/`,
             'Accept-Encoding': 'gzip, deflate, br'
         }
     }
-    return new Promise(resolve => {
+    await $.wait(3500);
+    return new Promise(async resolve => {
         $.get(opt, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(err)
                 } else {
-                    res = JSON.parse(data)
+                    console.log(data);
+                    res = data && data.match(/jsonp_.*?\((.*?)\);/) && data.match(/jsonp_.*?\((.*?)\);/)[1] || data
                     if (res.success) {
-                        if (res.result.interestsRuleList) {
-                            $.openCardActivityId = res.result.interestsRuleList[0].interestsInfo.activityId;
+                        if (res.result) {
+                            console.log(`入会:${res.result.shopMemberCardInfo.venderCardName || ''}`);
+                    //         console.log(`activityId:${res.result.interestsRuleList[0].interestsInfo.activityId}`);
+                    //         $.shopactivityId = res.result.interestsRuleList[0].interestsInfo.activityId;
                         }
                     }
                 }
@@ -247,12 +254,14 @@ function getShopOpenCardInfo(body, venderId) {
                 resolve();
             }
         })
+        await $.wait(1500);
 
     })
 }
-function bindWithVender(body, venderId) {
+async function bindWithVender(body, venderId) {
+    $.h5st = '20220412164641157%3B197ee697d50ca316f3582488c7fa9d34%3B169f1%3Btk02wd9451deb18n1P31JunSGTfZhmebuivwsEwYWUQF1ZkpdtuSmKOES5DnIMFdyOvKikdguelIiBUnJbeCgoNlcEvv%3B6e090cbde337590b51a514718fee391d46fece6b953ed1084a052f6d76ffbd92%3B3.0%3B1649753201157'
     let opt = {
-        url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=bindWithVender&body=${encodeURIComponent(JSON.stringify(body))}&client=H5&clientVersion=9.2.0&uuid=88888`,
+        url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=bindWithVender&body=${encodeURIComponent(JSON.stringify(body))}&client=H5&clientVersion=9.2.0&uuid=88888&h5st=${$.h5st}`,
         headers: {
             Host: 'api.m.jd.com',
             Accept: '*/*',
@@ -264,23 +273,15 @@ function bindWithVender(body, venderId) {
             'Accept-Encoding': 'gzip, deflate, br'
         }
     }
-    return new Promise(resolve => {
+    await $.wait(2500);
+    return new Promise(async resolve => {
         $.get(opt, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(err)
                 } else {
-                    res = JSON.parse(data)
-                    if (res.success) {
-                        if (res.result.giftInfo && res.result.giftInfo.giftList) {
-                            for (const vo of res.result.giftInfo.giftList) {
-                                if (vo.prizeType === 4) {
-                                    $.log(`==>获得【${vo.quantity}】京豆`)
-                                    $.bean += vo.quantity
-                                }
-                            }
-                        }
-                    }
+                    console.log(data);
+                    data = data && data.match(/jsonp_.*?\((.*?)\);/) && data.match(/jsonp_.*?\((.*?)\);/)[1] || data
                 }
             } catch (error) {
                 console.log(error)
