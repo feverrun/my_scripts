@@ -280,8 +280,9 @@ async function bindWithVender(body, venderId) {
                 if (err) {
                     console.log(err)
                 } else {
-                    console.log(data);
+                    // console.log(data);
                     data = data && data.match(/jsonp_.*?\((.*?)\);/) && data.match(/jsonp_.*?\((.*?)\);/)[1] || data
+                    // console.log(JSON.stringify(data));
                 }
             } catch (error) {
                 console.log(error)
