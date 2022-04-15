@@ -133,6 +133,11 @@ async function main() {
                         }
                     } else {
                         $.log("无法加入队伍")
+                        await $.wait(2000)
+                        await getShopOpenCardInfo({ "venderId": "1000014803", "channel": 401 }, 1000014803);
+                        await $.wait(1000);
+                        // console.log($.shopactivityId);
+                        await bindWithVender({ "venderId": "1000014803", "shopId": "1000014803", "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "activityId": $.shopactivityId, "channel": 401 }, 100000000000085)
                     }
                 }
             } else {
