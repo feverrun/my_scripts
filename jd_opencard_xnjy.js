@@ -1,5 +1,5 @@
 /*
-5    14 8-22 4 * jd_opencard_xnjy.js
+5 14 8-22 4 * jd_opencard_xnjy.js
 */
 let opencard_addSku = "true"
 let opencard = "true"
