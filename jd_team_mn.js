@@ -301,6 +301,8 @@ async function bindWithVender(body, venderId) {
 
     })
 }
+
+
 function taskUrl(function_id, body, isCommon) {
     return {
         url: isCommon ? `https://lzkjdz-isv.isvjcloud.com/${function_id}` : `https://lzkjdz-isv.isvjcloud.com/pool/${function_id}`,
