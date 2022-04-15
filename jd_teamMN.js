@@ -3,7 +3,7 @@
 https://lzkjdz-isv.isvjcloud.com/pool/captain/55667?activityId=4e3b9b6233104c199c0c44ff6edbc85d
 &signUuid=f24703dd855b4925b170350b528fb8bd&shareuserid4minipg=null&shopid=1000014803
 瓜分脚本单独跑
-cron "8 5,17 6-30,1-31 4,5 *" jd_team_mn.js
+cron "8 5,18 6-30,1-31 4,5 *" jd_teamMN.js
 */
 const $ = new Env("蒙牛");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
