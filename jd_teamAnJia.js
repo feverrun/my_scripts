@@ -1,9 +1,9 @@
 /*
 入口：组队分豆-安佳
 https://lzkjdz-isv.isvjcloud.com/pool/captain/3282322?activityId=568479da7bc245ffba932962b22287d9
-&shareUuid=3c6d741af15841d48d7db0ef42b02aae
+&shareUuid=5144db80f4854acb987153431b341f59
 组过的没法组队
-cron "22 2,11 1-30 4 *" jd_teamAJ.js
+cron "12 3,11 1-30 4 *" jd_teamAnJia.js
 */
 const $ = new Env("安佳");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -30,7 +30,7 @@ if ($.isNode()) {
         return;
     }
 
-    authorCodeList = ['3c6d741af15841d48d7db0ef42b02aae',]
+    authorCodeList = ['5144db80f4854acb987153431b341f59',]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
