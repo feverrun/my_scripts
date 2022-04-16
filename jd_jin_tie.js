@@ -50,9 +50,9 @@ if ($.isNode()) {
 async function main() {
   try {
     await signInforOfJinTie();
-    await queryMission();
-    await doTask();
-    await queryMission(false);
+    // await queryMission();
+    // await doTask();
+    // await queryMission(false);
     await queryAvailableSubsidyAmount();
   } catch (e) {
     $.logErr(e)
