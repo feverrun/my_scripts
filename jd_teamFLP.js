@@ -238,7 +238,7 @@ async function getShopOpenCardInfo(body, venderId) {
                 if (err) {
                     console.log(err)
                 } else {
-                    console.log(data);
+                    // console.log(data);
                     res = data && data.match(/jsonp_.*?\((.*?)\);/) && data.match(/jsonp_.*?\((.*?)\);/)[1] || data
                     if (res.success) {
                         if (res.result) {
