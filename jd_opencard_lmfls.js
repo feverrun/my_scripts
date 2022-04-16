@@ -8,6 +8,7 @@
 
 ————————————————
 入口：[ 4.13-4.20 京东粉丝联盟福利社 入会赢专享好礼 ]
+https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=dz39d46a394915bfa150a01f62shop&shareUuid=0095667db4a04332ace3ca131cdf9357
 
 请求太频繁会被黑ip
 过10分钟再执行

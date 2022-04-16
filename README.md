@@ -63,7 +63,7 @@ npm install -g md5
 npm install -g ts-md5
 npm install -g tslib
 npm install -g @types/node
-npm install -g requests
+npm install -g request
 npm install -g tough-cookie
 npm install -g jsdom
 npm install -g download
@@ -86,7 +86,7 @@ md5
 ts-md5
 tslib
 @types/node
-requests
+request
 tough-cookie
 jsdom
 download
