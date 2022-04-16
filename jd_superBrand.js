@@ -1,7 +1,7 @@
 /**
  特务Z
  脚本没有自动开卡，会尝试领取开卡奖励
- cron 33 9,20 * * * jd_superBrand.js
+ cron 33 0,9 * * * jd_superBrand.js
  一天要跑2次
  */
 const $ = new Env('特务Z');
@@ -73,7 +73,7 @@ if ($.isNode()) {
             $.encryptAssignmentId = $.codeInfo.encryptAssignmentId;
             console.log(`\n${$.UserName},去助力:${$.code}`);
             await takeRequest('help');
-            await $.wait(1000);
+            await $.wait(2500);
         }
     }
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();})
