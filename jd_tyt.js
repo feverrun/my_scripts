@@ -56,8 +56,8 @@ if ($.isNode()) {
             await $.wait(1000)
             await getCoinDozerInfo()
             await $.wait(1000)
-            console.log('\n注意全部助力给前三个账号\n');
-            if (i >= 2) {
+            console.log('\n注意全部助力给第一个账号\n');
+            if (i >= 1) {
                 break;
             }
         }
@@ -76,7 +76,7 @@ if ($.isNode()) {
             await helpCoinDozer(code['packetId'])
             console.log(`\n【${$.UserName}】去助力【${code['user']}】邀请码：${code['packetId']}`);
             if (status == 1) {break}
-            await $.wait(6000)
+            await $.wait(6000);
             let res = await help(code['packetId'])
         }
     }
