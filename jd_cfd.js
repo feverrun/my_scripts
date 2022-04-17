@@ -2,7 +2,7 @@
 京喜财富岛
 更新时间：2021-11-2
 活动入口：京喜APP-我的-京喜财富岛
-cron "1 0,5-22 * * *" jd_cfd.js
+cron "1 0,5,8,14,17,19,22 * * *" jd_cfd.js
  */
 
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
