@@ -36,7 +36,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dz
 5 13 1-5,18-30 4,5 * jd_opencard_zxdp.js, tag=4.18~5.5 甄选大牌 品质嗨购, enabled=true
 
 */
-let opencard_addSku = "false"
+let opencard_addSku = "true"
 let opencard = "true"
 let openwait = "5"
 let opencard_draw = "0"
