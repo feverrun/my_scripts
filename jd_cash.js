@@ -12,6 +12,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 let cookiesArr = [], cookie = '', message;
 let jdPandaToken = '';
+$.break = false;
 jdPandaToken = $.isNode() ? (process.env.PandaToken ? process.env.PandaToken : `${jdPandaToken}`) : ($.getdata('PandaToken') ? $.getdata('PandaToken') : `${jdPandaToken}`);
 
 if ($.isNode()) {
@@ -52,8 +53,14 @@ let allMessage = '';
         }
         continue
       }
+
       await jdCash()
-      await $.wait(10000)
+      if ($.break) {
+        console.log(`获取 PandaToken 找 小熊猫 (https://t.me/pang_da_bot) ，每七天找小熊猫续期一次Token。`);
+        await notify.sendNotify(`${$.name}签名获取失败 - ${$.UserName}`, `获取 PandaToken 找 小熊猫 (https://t.me/pang_da_bot) ，每七天找小熊猫续期一次Token。`);
+        break;
+      }
+      await $.wait(10000);
     }
   }
   if (allMessage) {
@@ -67,6 +74,7 @@ let allMessage = '';
     .finally(() => {
       $.done();
     })
+
 async function jdCash() {
   $.signMoney = 0;
 
@@ -336,6 +344,7 @@ function getSignfromPanda(functionId, body) {
             console.log("签名获取失败,可能Token使用次数上限或被封.");
         } else {
           console.log("签名获取失败.");
+          $.break = true;
         }
 
       }catch (e) {
