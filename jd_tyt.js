@@ -57,7 +57,7 @@ if ($.isNode()) {
             await getCoinDozerInfo()
             await $.wait(1000)
             console.log('\n注意全部助力给第一个账号\n');
-            if (i >= 1) {
+            if ($.index >= 1) {
                 break;
             }
         }
@@ -89,7 +89,6 @@ if ($.isNode()) {
     .finally(() => {
         $.done();
     })
-
 
 function info() {
     return new Promise((resolve) => {
