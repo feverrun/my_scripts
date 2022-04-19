@@ -1,5 +1,5 @@
 /*
-cron "5 2 * * *" jd_opencard_jssd.js
+cron "5 14 * * *" jd_opencard_jssd.js
 酒水会员盛典
 */
 const $ = new Env("酒水会员盛典");
