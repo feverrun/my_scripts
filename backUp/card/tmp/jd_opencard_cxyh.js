@@ -1,7 +1,7 @@
 /*
 大牌联合 春夏约会
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkc99b60200kk081f1bc4bacd1
-cron "5 12 19-26 4 *" jd_opencard_cxyh.js
+cron "5 17 19-26 4 *" jd_opencard_cxyh.js
 */
 const $ = new Env("2022年4.19~4.26大牌联合 春夏约会");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
