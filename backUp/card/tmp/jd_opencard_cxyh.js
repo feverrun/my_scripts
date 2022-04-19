@@ -112,13 +112,13 @@ async function member() {
                     // console.log(vo)
                     $.log(`>>> 去加入${vo.name} ${vo.venderId}`);
                     await task("crm/pageVisit/insertCrmPageVisit", `venderId=1000000576&elementId=入会跳转&pageId=dzlhkk068d4d0ab8a6609723002f50&pin=${encodeURIComponent($.secretPin)}`, 1);
-                    await $.wait(500);
+                    await $.wait(900);
                     await getFirstLZCK();
                     await getToken();
                     if (vo.status == 0) {
                         await getShopOpenCardInfo({ venderId: `${vo.venderId}`, channel: "401" }, vo.venderId);
                         await bindWithVender({ venderId: `${vo.venderId}`, bindByVerifyCodeFlag: 1, registerExtend: {}, writeChildFlag: 0, activityId: $.openCardActivityId, channel: 401 }, vo.venderId);
-                        await $.wait(1000);
+                        await $.wait(1500);
                     } else {
                         $.log(`>>> 已经是会员`);
                     }
