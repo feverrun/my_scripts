@@ -308,7 +308,7 @@ function biz(contents) {
         let option = {
             url: `https://m.jingxi.com/webmonitor/collect/biz.json?contents=${contents}&t=${Math.random()}&sceneval=2`,
             headers: {
-                Cookie: cookie,
+                Cookie: `cid=4;${cookie}`,
                 Accept: "*/*",
                 Connection: "keep-alive",
                 Referer: "https://st.jingxi.com/fortune_island/index.html?ptag=138631.26.55",
@@ -343,7 +343,7 @@ function taskUrl(function_path, body = '', dwEnv = 7) {
             "User-Agent": UA,
             "Accept-Language": "zh-CN,zh-Hans;q=0.9",
             "Referer": "https://st.jingxi.com/",
-            "Cookie": cookie
+            "Cookie": `cid=4;${cookie}`
         }
     };
 }

@@ -136,7 +136,7 @@ async function userCashOutState() {
         let options = {
             url,
             headers: {
-                Cookie: cookie,
+                Cookie: `cid=4;${cookie}`,
                 Accept: "*/*",
                 Connection: "keep-alive",
                 Referer:"https://st.jingxi.com/fortune_island/index.html?ptag=138631.26.55",

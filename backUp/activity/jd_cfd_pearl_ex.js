@@ -147,7 +147,7 @@ async function refresh_perl() {
         $.get({
             url,
             headers: {
-                Cookie: cookie,
+                Cookie: `cid=4;${cookie}`,
                 Accept: "*/*",
                 Connection: "keep-alive",
                 Referer:"https://st.jingxi.com/",
@@ -184,7 +184,7 @@ function taskUrl_perl(function_path, dwLvl,dwIsRandHb,ddwVirHb,strPoolName) {
     return {
         url,
         headers: {
-            Cookie: cookie,
+            Cookie: `cid=4;${cookie}`,
             Accept: "*/*",
             Connection: "keep-alive",
             Referer:"https://st.jingxi.com/",
