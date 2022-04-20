@@ -1,6 +1,6 @@
 /*
 我的新家 超级配
-https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz2021101420000sjleowq
+https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=d1d801f6b58c49279abd443958d46eb4
 &shareUuid=a25afe77890d4a599ed6f576e643d00d
 cron "5 16 * * *" jd_opencard_wdxj.js
 */

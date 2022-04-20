@@ -1463,7 +1463,6 @@ function biz(contents){
         let option = {
             url:`https://m.jingxi.com/webmonitor/collect/biz.json?contents=${contents}&t=${Math.random()}&sceneval=2`,
             headers: {
-                Cookie: cookie,
                 Accept: "*/*",
                 Connection: "keep-alive",
                 Referer: "https://st.jingxi.com/fortune_island/index.html?ptag=138631.26.55",
@@ -1471,6 +1470,7 @@ function biz(contents){
                 Host: 'm.jingxi.com',
                 "User-Agent": UA,
                 "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+                Cookie: `cid=4;${cookie}`,
             }
         }
         $.get(option, async (err, resp, _data) => {
@@ -1500,7 +1500,7 @@ function taskUrl(function_path, body = '', dwEnv = 7) {
             "User-Agent": UA,
             "Accept-Language": "zh-CN,zh-Hans;q=0.9",
             "Referer": "https://st.jingxi.com/",
-            "Cookie": cookie
+            "Cookie": `cid=4;${cookie}`
         }
     }
 }
@@ -1518,7 +1518,7 @@ function taskListUrl(function_path, body = '', bizCode = 'jxbfd') {
             "Accept-Language": "zh-CN,zh-Hans;q=0.9",
             "User-Agent": UA,
             "Referer": "https://st.jingxi.com/",
-            "Cookie": cookie
+            "Cookie": `cid=4;${cookie}`
         }
     }
 }
@@ -1692,12 +1692,12 @@ async function requestAlgo() {
             'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7'
         },
         'body': JSON.stringify({
-            "version": "1.0",
-            "fp": $.fingerprint,
             "appId": $.appId.toString(),
-            "timestamp": Date.now(),
+            "expandParams": "",
+            "fp": $.fingerprint,
             "platform": "web",
-            "expandParams": ""
+            "timestamp": Date.now(),
+            "version": "1.0",
         })
     }
     return new Promise(async resolve => {
@@ -1746,7 +1746,7 @@ function decrypt(time, stk, type, url) {
             $.token = `tk01wcdf61cb3a8nYUtHcmhSUFFCfddDPRvKvYaMjHkxo6Aj7dhzO+GXGFa9nPXfcgT+mULoF1b1YIS1ghvSlbwhE0Xc`;
             $.fingerprint = 5287160221454703;
             const str = `${$.token}${$.fingerprint}${timestamp}${$.appId}${random}`;
-            hash1 = $.CryptoJS.SHA512(str, $.token).toString($.CryptoJS.enc.Hex);
+            hash1 = $.CryptoJS.HmacSHA512(str, $.token).toString($.CryptoJS.enc.Hex);
         }
         let st = '';
         stk.split(',').map((item, index) => {
