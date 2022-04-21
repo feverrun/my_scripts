@@ -1,7 +1,8 @@
 /*
 #3.25-3.31 我的新家 超级配
-https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz2021101420000sjleowq&shareUuid=c202651ff93b42418a496a13dbb66977
-cron "3 9 25-31 3 *" jd_opencard_wdxj.js
+https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dz2021101420000sjleowq
+&shareUuid=c202651ff93b42418a496a13dbb66977
+cron "3 9 25-31 3 *" jd_opencard_wdxj1.js
 */
 const $ = new Env("25~31我的新家 超级配");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
