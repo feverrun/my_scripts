@@ -1,9 +1,9 @@
 /*
 京东小魔方
-Last Modified time: 2022-1-21
 活动入口：京东 首页新品 魔方
-[Script]
-cron "39 4,19 * * *" script-path=jd_mofang.js, tag=京东小魔方
+更新地址：jd_xmf.js
+已支持IOS双京东账号, Node.js支持N个京东账号
+不指定执行时间， 随机执行
  */
 const $ = new Env('京东小魔方');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -11,6 +11,14 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '';
 var timestamp = Math.round(new Date().getTime()).toString();
 $.shareCodes = [];
+let RabbitUrl = process.env.Rabbit_Url ?? ""; // logurl
+let jdPandaToken = '';
+jdPandaToken = $.isNode() ? (process.env.PandaToken ? process.env.PandaToken : `${jdPandaToken}`) : ($.getdata('jdPandaToken') ? $.getdata('jdPandaToken') : `${jdPandaToken}`);
+if (!jdPandaToken && !RabbitUrl){
+    console.log(`请填写Panda获取的Token,变量是PandaToken 或者填写Rabbit获取的logurl，变量是Rabbit_Url`)
+    return;
+}
+var logs;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -100,8 +108,10 @@ async function main() {
         $.log('没有获取到活动信息')
     }
 }
-function doInteractiveAssignment(projectId, encryptAssignmentId, itemId, actionType) {
-    let body = { "encryptProjectId": projectId, "encryptAssignmentId": encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": itemId, "actionType": actionType, "completionFlag": "", "ext": {},"extParam":{"businessData":{"random":25500725},"signStr":timestamp+"~1hj9fq9","sceneid":"XMFhPageh5"} }
+async function doInteractiveAssignment(projectId, encryptAssignmentId, itemId, actionType) {
+    logs = await getJinliLogs()
+    let random = logs["random"].toString(),log =logs["log"].toString()
+    let body = { "encryptProjectId": projectId, "encryptAssignmentId": encryptAssignmentId, "sourceCode": "acexinpin0823", "itemId": itemId, "actionType": actionType, "completionFlag": "", "ext": {},"extParam":{"businessData":{"random":random},"signStr":log,"sceneid":"XMFhPageh5"} }
     return new Promise(resolve => {
         $.post(taskPostUrl("doInteractiveAssignment", body), async (err, resp, data) => {
             //$.log(data)
@@ -192,6 +202,101 @@ function taskPostUrl(function_id, body) {
             "Cookie": cookie,
         }
     }
+}
+function getJinliLogs() {
+    if (jdPandaToken && RabbitUrl){
+        let nums = Math.floor(Math.random() * 9)+1;
+        if (nums<5){
+            console.info('随机从panda接口获取log!')
+            return pandaLogs();
+        }else {
+            console.info('随机从rabbit接口获取log!')
+            return rabbitLogs();
+        }
+    }
+    if(jdPandaToken && !RabbitUrl){
+        console.info('进入panda接口获取log!')
+        return pandaLogs();
+    }
+    if(RabbitUrl && !jdPandaToken){
+        console.info('进入rabbit接口获取log!')
+        return rabbitLogs();
+    }
+    return '';
+}
+function pandaLogs(){
+    var logs = '';
+    return new Promise((resolve) => {
+        let url = {
+            url: "https://api.jds.codes/jd/log",
+            followRedirect: false,
+            headers: {
+                'Accept': '*/*',
+                "accept-encoding": "gzip, deflate, br",
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jdPandaToken
+            },
+            timeout: 30000
+        }
+        $.get(url, async(err, resp, data) => {
+            try {
+                data = JSON.parse(data);
+                if (data && data.code == 200) {
+                    lnrequesttimes = data.request_times;
+                    console.log("连接Panda服务成功，当前Token使用次数为" + lnrequesttimes);
+                    console.log(data);
+                    if (data.data)
+                        logs = data.data || '';
+                    //console.info(logs['random']+"----"+logs['log'])
+                    if (logs != '')
+                        resolve(logs);
+                    else
+                        console.log("签名获取失败,可能Token使用次数上限或被封.");
+                } else {
+                    console.log("签名获取失败.");
+                }
+
+            }catch (e) {
+                $.logErr(e, resp);
+            }finally {
+                resolve(logs);
+            }
+        })
+    })
+}
+function rabbitLogs(){
+    var logs = '';
+    return new Promise((resolve) => {
+        let url = {
+            url:`${RabbitUrl}`,
+            followRedirect: false,
+            timeout: 30000
+        }
+        $.get(url, async(err, resp, data) => {
+            try {
+                data = JSON.parse(data);
+                if (data && data.status == 0) {
+                    lnrequesttimes = data.request_times;
+                    logs = {
+                        random: data.random,
+                        log: data.log
+                    }
+                    //console.info(logs['random']+"----"+logs['log'])
+                    if (logs != '')
+                        resolve(logs);
+                    else
+                        console.log("log获取失败.");
+                } else {
+                    console.log("log获取失败.");
+                }
+
+            }catch (e) {
+                $.logErr(e, resp);
+            }finally {
+                resolve(logs);
+            }
+        })
+    })
 }
 
 function getUUID(x = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", t = 0) { return x.replace(/[xy]/g, function (x) { var r = 16 * Math.random() | 0, n = "x" == x ? r : 3 & r | 8; return uuid = t ? n.toString(36).toUpperCase() : n.toString(36), uuid }) }
