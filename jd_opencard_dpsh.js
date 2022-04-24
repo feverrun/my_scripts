@@ -34,7 +34,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dz
 
 [task_local]
 #4.19~4.26 大牌联合 春夏约惠
-8 8 25-30,1-5 4,5 * jd_opencard_dpsh, tag=4.25~5.5 大牌生活范 优价放心购, enabled=true
+8 8 25-30,1-5 4,5 * jd_opencard_dpsh.js, tag=4.25~5.5 大牌生活范 优价放心购, enabled=true
 
 */
 
