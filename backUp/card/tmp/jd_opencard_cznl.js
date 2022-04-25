@@ -39,7 +39,7 @@ let opencard_addSku = "true"
 let opencard = "true"
 let opencard_compositeCard = "true" // 集卡 默认不集卡 需要请设置"true"
 let openwait = "5"
-let opencard_draw = "0"
+let opencard_draw = "3"
 
 const $ = new Env('4.15~4.25 充值能量 魅力加满');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
