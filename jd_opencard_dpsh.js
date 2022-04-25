@@ -40,8 +40,8 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dz
 
 let opencard_addSku = "true"
 let opencard = "true"
-let openwait = "10"
-let opencard_draw = ""
+let openwait = "5"
+let opencard_draw = "0"
 
 const $ = new Env('4.25~5.5 大牌生活范 优价放心购')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
