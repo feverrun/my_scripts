@@ -32,7 +32,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dz
 
 [task_local]
 #4.15~4.25 充值能量 魅力加满
-7 13 26,15-25 4 * jd_opencard_cznl.js, tag=4.15~4.25 充值能量 魅力加满, enabled=true
+7 13 26 4 * jd_opencard_cznl.js, tag=4.15~4.25 充值能量 魅力加满, enabled=true
 
 */
 let opencard_addSku = "true"
