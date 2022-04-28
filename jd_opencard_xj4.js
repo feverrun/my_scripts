@@ -1,6 +1,6 @@
 /*
 家装
-cron "15 8 * * *" jd_opencard_xj4.js
+cron "6 12 * * *" jd_opencard_xj4.js
 */
 let guaopencard_addSku = "true"
 let guaopencard = "true"
