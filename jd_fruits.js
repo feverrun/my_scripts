@@ -67,7 +67,7 @@ if ($.isNode()) {
 
             await shareCodesFormat();
             await jdFruit();
-            break;
+            await $.wait(1500);
         }
     }
     if ($.isNode() && allMessage && $.ctrTemp) {
