@@ -64,6 +64,7 @@ if ($.isNode()) {
 
             await shareCodesFormat();
             await jdFruit();
+            await $.wait(900);
         }
     }
     if ($.isNode() && allMessage && $.ctrTemp) {
@@ -1048,7 +1049,8 @@ async function totalWaterTaskForFarm() {
 //领取首次浇水奖励API
 async function firstWaterTaskForFarm() {
     const functionId = arguments.callee.name.toString();
-    $.firstWaterReward = await request(functionId);
+    let body =  {"version":16,"channel":1,"babelChannel":"45"};
+    $.firstWaterReward = await requestNew(functionId, body);
 }
 //领取给3个好友浇水后的奖励水滴API
 async function waterFriendGotAwardForFarm() {
@@ -1079,7 +1081,8 @@ async function waterGoodForFarm() {
     console.log('等待了2秒');
 
     const functionId = arguments.callee.name.toString();
-    $.waterResult = await request(functionId);
+    let body= {"type":"","version":16,"channel":1,"babelChannel":"45"};
+    $.waterResult = await requestNew(functionId, body);
 }
 // 初始化集卡抽奖活动数据API
 async function initForTurntableFarm() {
@@ -1186,7 +1189,8 @@ async function clockInInitForFarm() {
 // 连续签到API
 async function clockInForFarm() {
     const functionId = arguments.callee.name.toString();
-    $.clockInForFarmRes = await request(functionId, {"type": 1});
+    let body =  {"type":1,"version":16,"channel":1,"babelChannel":0};
+    $.clockInForFarmRes = await requestNew(functionId, body);
 }
 
 //关注，领券等API
@@ -1248,10 +1252,12 @@ async function signForFarm() {
  * 初始化农场, 可获取果树及用户信息API
  */
 async function initForFarm() {
+    //h5st:20220427203539021;4488829356140938;8a2af;tk02wc6ae1c9818nYy8Rtg5aqVmCjDcvMfdU6LE3lVOdnf8Hpx7kySfDTX+yakLg0QEEfZaCllWMgx8dOimcP4LCEbc4;a629486fbab172bd929ac83f19b2e5e7e04a7b21d0049ec09c4b376f837cb69f;3.0;1651062939021
+    $.h5st = '20220429144920279;1551539284091578;8a2af;tk02w9ced1b3e18nuVSoBO7ua2pMB+SpvGYuowHUjOA0WWjwK7576orC6QuhuMKM74HcWRDLQebp0c2lgDfJO+0iX7BP;72162d25be9847a86bc05b4c4beeafbba4b487024f74191bd381bf0722e44c0b;3.0;1651214960279';
     return new Promise(resolve => {
         const option =  {
-            url: `${JD_API_HOST}?functionId=initForFarm`,
-            body: `body=${escape(JSON.stringify({"version":4}))}&appid=wh5&clientVersion=9.1.0`,
+            url: `${JD_API_HOST}?functionId=initForFarm&appid=signed_wh5&osVersion=&screen=&networkType=wifi&timestamp=${Date.now()}&d_brand=&d_model&wqDefault=false&client=&clientVersion=10.5.4&partner=&build=&uuid=9366134603335346-2356564626532336&h5st=${$.h5st}`,
+            body: `body=${encodeURIComponent(JSON.stringify({"ver":"750","babelChannel":"45","collectionId":"519","sid":"17a7eb1013e5e4b56d8a28568562ed1w","un_area":"","version":16,"channel":1}))}&appid=wh5&clientVersion=10.4.0`,
             headers: {
                 "accept": "*/*",
                 "accept-encoding": "gzip, deflate, br",
@@ -1276,6 +1282,7 @@ async function initForFarm() {
                     console.log(JSON.stringify(err));
                     $.logErr(err);
                 } else {
+                    // console.log(data);
                     if (safeGet(data)) {
                         $.farmInfo = JSON.parse(data)
                     }
@@ -1293,11 +1300,14 @@ async function initForFarm() {
 async function taskInitForFarm() {
     console.log('\n初始化任务列表')
     const functionId = arguments.callee.name.toString();
-    $.farmTask = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
+    //taskInitForFarm
+    //h5st:20220427203539037;1126247198056949;fcb5a;tk02wbd5c1bed18nYy8Rtg5aqVmCL1LMDWkm2ulctw4TjrASRZMyiwfgGLmDY1fM02bTmleErNg2Q0ANBGCQ86zCuKCH;7a9177db8d7495d5f058490218800c0705efe589d9d23b78d1fb6ad11ba2534b;3.0;1651062939037
+    let body = {"version":16,"channel":1,"babelChannel":"0"};
+    $.farmTask = await requestNew(functionId, body);   //{"version":14,"channel":1,"babelChannel":"120"});
 }
 //获取好友列表API
 async function friendListInitForFarm() {
-    $.friendList = await request('friendListInitForFarm', {"version": 4, "channel": 1});
+    $.friendList = await request('friendListInitForFarm', {"version":16,"channel":1,"babelChannel":0});
     // console.log('aa', aa);
 }
 // 领取邀请好友的奖励API
@@ -1306,8 +1316,8 @@ async function awardInviteFriendForFarm() {
 }
 //为好友浇水API
 async function waterFriendForFarm(shareCode) {
-    const body = {"shareCode": shareCode, "version": 6, "channel": 1}
-    $.waterFriendForFarmRes = await request('waterFriendForFarm', body);
+    const body = {"shareCode": shareCode, "version":16,"channel":1,"babelChannel":"45"}
+    $.waterFriendForFarmRes = await requestNew('waterFriendForFarm', body);
 }
 async function showMsg() {
     if ($.isNode() && process.env.FRUIT_NOTIFY_CONTROL) {
@@ -1356,9 +1366,35 @@ function request(function_id, body = {}, timeout = 1500){
                     if (err) {
                         console.log('\n东东农场: '+function_id+' API查询请求失败 ‼️‼️')
                         console.log(JSON.stringify(err));
+                        // console.log(`function_id:${function_id}`)
+                        $.logErr(err);
+                    } else {
+                        if (safeGet(data)) {
+                            data = JSON.parse(data);
+                        }
+                    }
+                } catch (e) {
+                    $.logErr(e, resp);
+                } finally {
+                    resolve(data);
+                }
+            })
+        }, timeout)
+    })
+}
+
+async function requestNew(function_id, body = {}, timeout = 5500){
+    return new Promise(resolve => {
+        setTimeout(() => {
+            $.get(taskUrlNew(function_id, body), (err, resp, data) => {
+                try {
+                    if (err) {
+                        console.log('\n东东农场: '+function_id+' API查询请求失败 ‼️‼️')
+                        console.log(JSON.stringify(err));
                         console.log(`function_id:${function_id}`)
                         $.logErr(err);
                     } else {
+                        // console.log(`${function_id}:${data}`);
                         if (safeGet(data)) {
                             data = JSON.parse(data);
                         }
@@ -1394,7 +1430,50 @@ function taskUrl(function_id, body = {}) {
             "Accept-Encoding": "gzip, deflate, br",
             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             "Accept-Language": "zh-CN,zh-Hans;q=0.9",
-            "Referer": "https://carry.m.jd.com/",
+            "Referer": "https://h5.m.jd.com/",
+            "Cookie": cookie
+        },
+        timeout: 10000
+    }
+}
+function taskUrlNew(function_id, body = {}) {
+    let appId = '';
+    switch (function_id) {
+        case 'taskInitForFarm':
+            appId = 'fcb5a';
+            $.h5st = '20220429144920396;1222005473629198;fcb5a;tk02wb6151caf18nuVSoBO7ua2pMN/v7BvqnX5AO4fTdG8edpEZzegvS6wvfa2xN9pK4yDA6XlSRryxwj3BvkjO/Nr/W;c065195414d031db2e0e46c00a42c82324f2c69cfee1da71ce3be53f5edda6c5;3.0;1651214960396';
+            break;
+        case 'waterFriendForFarm':
+            appId = '673a0';
+            $.h5st = '20220429160444801;4369702741174551;673a0;tk02wb9fe1c7718nnUs1Xusy9RMef8irmt0U46IClIcWfu4B2kv01ZQQcGSiFvIi4snpTzYQ7Ss3vwqiUOIWB+CBzfMZ;37ef2c2b45023f40b51a39b52877c907792c7023fa41a078b314e0c0d329880b;3.0;1651219484801';
+            break;
+        case 'firstWaterTaskForFarm':
+            appId = '0cf1e';
+            $.h5st = '20220429144920396;1222005473629198;0cf1e;tk02wb6151caf18nuVSoBO7ua2pMN/v7BvqnX5AO4fTdG8edpEZzegvS6wvfa2xN9pK4yDA6XlSRryxwj3BvkjO/Nr/W;c065195414d031db2e0e46c00a42c82324f2c69cfee1da71ce3be53f5edda6c5;3.0;1651214960396';
+            break;
+        case 'waterGoodForFarm':
+            appId = '0c010';
+            $.h5st = '20220429160611930;9168593970770402;0c010;tk02w99101bd418n3mimIcSJJJ7PhBpApHcnZb/gqUS2lw71QUD4wcCGS+HrDSXwzFT1Nlt4BtIFAmjwrp9pS7aRvCM5;d37fb2789b758b72ba0bb811e0b6da4597487bbc7ddc129e98cbc4f139becfcf;3.0;1651219571930';
+            break;
+        case 'clockInForFarm':
+            appid = '32b94';
+            $.h5st = '20220429144920396;1222005473629198;32b94;tk02wb6151caf18nuVSoBO7ua2pMN/v7BvqnX5AO4fTdG8edpEZzegvS6wvfa2xN9pK4yDA6XlSRryxwj3BvkjO/Nr/W;c065195414d031db2e0e46c00a42c82324f2c69cfee1da71ce3be53f5edda6c5;3.0;1651214960396';
+            break;
+        default :
+            appId = '0c010';
+            $.h5st = '20220429161013926;9168593970770402;0c010;tk02w99101bd418n3mimIcSJJJ7PhBpApHcnZb/gqUS2lw71QUD4wcCGS+HrDSXwzFT1Nlt4BtIFAmjwrp9pS7aRvCM5;3c899a2c5a8389f8da2f082a60e63e23bf6a7e1520da9a21ff67a6a9d6d9476f;3.0;1651219813926';
+            break;
+    }
+    return {
+        url: `${JD_API_HOST}?functionId=${function_id}&body=${encodeURIComponent(JSON.stringify(body))}&appid=signed_wh5&osVersion=&screen=&networkType=&timestamp=${Date.now()}&d_brand=&d_model=&wqDefault=false&client=&clientVersion=10.5.4&partner=&build=&uuid=&h5st=${$.h5st}`,
+        headers: {
+            "Host": "api.m.jd.com",
+            "Accept": "*/*",
+            "Origin": "https://h5.m.jd.com",
+            "Accept-Encoding": "gzip, deflate, br",
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+            "Referer": "https://h5.m.jd.com/",
             "Cookie": cookie
         },
         timeout: 10000
