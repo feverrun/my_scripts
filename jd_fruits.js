@@ -1199,6 +1199,7 @@ async function clockInInitForFarm() {
 async function clockInForFarm() {
     const functionId = arguments.callee.name.toString();
     await requestAlgo('32b94');
+    await $.wait(5500);
     let body =  {"type":1,"version":16,"channel":1,"babelChannel":0};
     $.clockInForFarmRes = await requestNew(functionId, body);
 }
@@ -1263,7 +1264,7 @@ async function signForFarm() {
  */
 async function initForFarm() {
     await requestAlgo('8a2af');
-    await $.wait(1500);
+    await $.wait(5500);
     //h5st:20220427203539021;4488829356140938;8a2af;tk02wc6ae1c9818nYy8Rtg5aqVmCjDcvMfdU6LE3lVOdnf8Hpx7kySfDTX+yakLg0QEEfZaCllWMgx8dOimcP4LCEbc4;a629486fbab172bd929ac83f19b2e5e7e04a7b21d0049ec09c4b376f837cb69f;3.0;1651062939021
     let body = {"ver":"750","babelChannel":"45","collectionId":"519","sid":"17a7eb1013e5e4b56d8a28568562ed1w","un_area":"2_2824_51911_0","version":16,"channel":1};
     $.h5st = geth5st('initForFarm', body, '8a2af');
@@ -1314,7 +1315,7 @@ async function taskInitForFarm() {
     console.log('\n初始化任务列表')
     const functionId = arguments.callee.name.toString();
     await requestAlgo('fcb5a');
-    await $.wait(1500);
+    await $.wait(5500);
     //taskInitForFarm
     //h5st:20220427203539037;1126247198056949;fcb5a;tk02wbd5c1bed18nYy8Rtg5aqVmCL1LMDWkm2ulctw4TjrASRZMyiwfgGLmDY1fM02bTmleErNg2Q0ANBGCQ86zCuKCH;7a9177db8d7495d5f058490218800c0705efe589d9d23b78d1fb6ad11ba2534b;3.0;1651062939037
     let body = {"version":16,"channel":1,"babelChannel":"0"};
