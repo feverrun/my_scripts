@@ -138,8 +138,9 @@ async function getJoyBaseInfo(taskId = '', inviteType = '', inviterPin = '', pri
 }
 
 function getJoyList(printLog = false) {
+  $.h5st = '20220429164535374;5316297164080644;e18ed;tk02wa0dd1ba818nUXrMPvYnCPZV0UJrHja4A30ZOPg/rJpEzCgkcTgPPtZ/RclElb7tZMxGKMLGRp8w18kIL/Dr6Z5r;632d07ca26e40453f23c2e305ff24b48eebf28603c9ec136734a1dca82787bf0;3.0;1651221935374';
   return new Promise(resolve => {
-    $.get(taskGetClientActionUrl(`appid=activities_platform&body={"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}`, `joyList`), async (err, resp, data) => {
+    $.get(taskGetClientActionUrl(`appid=activities_platform&body={"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&t=${Date.now()}&cthr=1&h5st=${$.h5st}`, `joyList`), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -331,8 +332,9 @@ function doJoyMove(joyId, location) {
 
 function doJoyMerge(joyId1, joyId2) {
   //await $.wait(20)
+  $.h5st = '20220429165605093;3946208156885550;b08cf;tk02w72831b8618nbb6rL7Ue49rp8a47QWHNFP5eaFIlZBUgMUox5A6OY4+d5ZuV+Q7iRbOVscq2gpoSPjrSdTDVhSQz;441f8166732806135010fd9c93049ffd8abc9fd43747a7fe9a65b66011b73791;3.0;1651222565093';
   return new Promise(resolve => {
-    $.get(taskGetClientActionUrl(`body={"joyOneId":${joyId1},"joyTwoId":${joyId2},"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&appid=activities_platform`, `joyMergeGet`), async (err, resp, data) => {
+    $.get(taskGetClientActionUrl(`body={"joyOneId":${joyId1},"joyTwoId":${joyId2},"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&appid=activities_platform&cthr=1&h5st=${$.h5st}`, `joyMergeGet`), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)

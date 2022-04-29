@@ -43,11 +43,11 @@ message = ""
             $.log(`${$.name} - ${$.UserName}  助力码: ${$.joyBaseInfo.invitePin}`);
             $.invitePinTaskList.push($.joyBaseInfo.invitePin);
         } else {
-            $.log(`${$.name} - ${$.UserName}  助力码: null`);
-            $.invitePinTaskList.push('');
-            $.isLogin = false
-            $.log("服务端异常，不知道为啥有时候这样，后面再观察一下，手动执行应该又没问题了")
-            continue
+            // $.log(`${$.name} - ${$.UserName}  助力码: null`);
+            // $.invitePinTaskList.push('');
+            // $.isLogin = false
+            // $.log("服务端异常，不知道为啥有时候这样，后面再观察一下，手动执行应该又没问题了")
+            // continue
         }
         await getTaskList();
         await $.wait(3000)
@@ -171,7 +171,7 @@ message = ""
 function getTaskList() {
     //await $.wait(20)
     return new Promise(resolve => {
-        $.post(taskPostClientActionUrl(`body=%7B%22linkId%22%3A%22LsQNxL7iWDlXUs6cFl-AAg%22%7D&appid=activities_platform`, `apTaskList`), async (err, resp, data) => {
+        $.post(taskPostClientActionUrl(`body=%7B%22linkId%22%3A%22LsQNxL7iWDlXUs6cFl-AAg%22%7D&appid=activities_platform&t=${Date.now()}&client=android&clientVersion=3.8.16&cthr=1`, `apTaskList`), async (err, resp, data) => {
             $.log('=== 任务列表 start ===')
             try {
                 if (err) {
@@ -204,7 +204,7 @@ function getTaskList() {
 function getJoyBaseInfo(taskId = '', inviteType = '', inviterPin = '') {
     //await $.wait(20)
     return new Promise(resolve => {
-        $.post(taskPostClientActionUrl(`body={"taskId":"${taskId}","inviteType":"${inviteType}","inviterPin":"${inviterPin}","linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&_t=1625480372020&appid=activities_platform`, `joyBaseInfo`), async (err, resp, data) => {
+        $.post(taskPostClientActionUrl(`body={"taskId":"${taskId}","inviteType":"${inviteType}","inviterPin":"${inviterPin}","linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&_t=1625480372020&appid=activities_platform&t=${Date.now()}&client=android&clientVersion=3.8.16&cthr=1`, `joyBaseInfo`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -227,7 +227,7 @@ function getJoyBaseInfo(taskId = '', inviteType = '', inviterPin = '') {
 function apDoTask(taskId, taskType, itemId = '', appid = 'activities_platform') {
     //await $.wait(20)
     return new Promise(resolve => {
-        $.post(taskPostClientActionUrl(`body={"taskType":"${taskType}","taskId":${taskId},"channel":4,"linkId":"LsQNxL7iWDlXUs6cFl-AAg","itemId":"${itemId}"}&appid=${appid}`, `apDoTask`), async (err, resp, data) => {
+        $.post(taskPostClientActionUrl(`body={"taskType":"${taskType}","taskId":${taskId},"channel":4,"linkId":"LsQNxL7iWDlXUs6cFl-AAg","itemId":"${itemId}"}&appid=${appid}&t=${Date.now()}&client=android&clientVersion=3.8.16&cthr=1`, `apDoTask`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -246,7 +246,7 @@ function apDoTask(taskId, taskType, itemId = '', appid = 'activities_platform') 
 
 function apDoTask2(taskId, taskType, itemId, appid = 'activities_platform') {
     return new Promise(resolve => {
-        $.post(taskPostClientActionUrl(`body={"taskType":"${taskType}","taskId":${taskId},"linkId":"LsQNxL7iWDlXUs6cFl-AAg","itemId":"${itemId}"}&appid=${appid}`, `apDoTask`), async (err, resp, data) => {
+        $.post(taskPostClientActionUrl(`body={"taskType":"${taskType}","taskId":${taskId},"linkId":"LsQNxL7iWDlXUs6cFl-AAg","itemId":"${itemId}"}&appid=${appid}&t=${Date.now()}&client=android&clientVersion=3.8.16&cthr=1`, `apDoTask`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -266,7 +266,7 @@ function apDoTask2(taskId, taskType, itemId, appid = 'activities_platform') {
 function apTaskDetail(taskId, taskType) {
     //await $.wait(20)
     return new Promise(resolve => {
-        $.post(taskPostClientActionUrl(`functionId=apTaskDetail&body={"taskType":"${taskType}","taskId":${taskId},"channel":4,"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&appid=activities_platform`, `apTaskDetail`), async (err, resp, data) => {
+        $.post(taskPostClientActionUrl(`functionId=apTaskDetail&body={"taskType":"${taskType}","taskId":${taskId},"channel":4,"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&appid=activities_platform&t=${Date.now()}&client=android&clientVersion=3.8.16&cthr=1`, `apTaskDetail`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -295,7 +295,7 @@ function apTaskDetail(taskId, taskType) {
 function apTaskDrawAward(taskId, taskType) {
     //await $.wait(20)
     return new Promise(resolve => {
-        $.post(taskPostClientActionUrl(`body={"taskType":"${taskType}","taskId":${taskId},"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&appid=activities_platform`, `apTaskDrawAward`), async (err, resp, data) => {
+        $.post(taskPostClientActionUrl(`body={"taskType":"${taskType}","taskId":${taskId},"linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&appid=activities_platform&t=${Date.now()}&client=android&clientVersion=3.8.16&cthr=1`, `apTaskDrawAward`), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
