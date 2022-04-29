@@ -83,10 +83,6 @@ if ($.isNode()) {
 async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName || $.UserName}`;
     try {
-        await $.wait(1500);
-        await requestAlgo('8a2af');
-        await $.wait(1500);
-
         await initForFarm();
 
         if ($.farmInfo.farmUserPro) {
@@ -152,8 +148,6 @@ async function jdFruit() {
     await showMsg();
 }
 async function doDailyTask() {
-    await requestAlgo('fcb5a');
-    await $.wait(1500);
     await taskInitForFarm();
     console.log(`开始签到`);
     if (!$.farmTask.signInit.todaySigned) {
@@ -256,8 +250,6 @@ async function doDailyTask() {
 async function predictionFruit() {
     console.log('开始预测水果成熟时间\n');
     await initForFarm();
-    await requestAlgo('fcb5a');
-    await $.wait(1500);
     await taskInitForFarm();
     let waterEveryDayT = $.farmTask.totalWaterTaskInit.totalWaterTaskTimes;//今天到到目前为止，浇了多少次水
     message += `【今日共浇水】${waterEveryDayT}次\n`;
@@ -329,8 +321,6 @@ async function doTenWater() {
 }
 //领取首次浇水奖励
 async function getFirstWaterAward() {
-    await requestAlgo('fcb5a');
-    await $.wait(1500);
     await taskInitForFarm();
     //领取首次浇水奖励
     if (!$.farmTask.firstWaterInit.f && $.farmTask.firstWaterInit.totalWaterTimes > 0) {
@@ -797,7 +787,6 @@ async function clockInIn() {
         // 签到得水滴
         if (!$.clockInInit.todaySigned) {
             console.log('开始今日签到');
-            await requestAlgo('32b94');
             await clockInForFarm();
             console.log(`打卡结果${JSON.stringify($.clockInForFarmRes)}`);
             if ($.clockInForFarmRes.code === '0') {
@@ -911,8 +900,6 @@ function farmCount(username) {
 async function doFriendsWater() {
     await friendListInitForFarm();
     console.log('开始给好友浇水...');
-    await requestAlgo('fcb5a');
-    await $.wait(1500);
     await taskInitForFarm();
     const { waterFriendCountKey, waterFriendMax } = $.farmTask.waterFriendTaskInit;
     console.log(`今日已给${waterFriendCountKey}个好友浇水`);
@@ -969,8 +956,6 @@ async function doFriendsWater() {
 }
 //领取给3个好友浇水后的奖励水滴
 async function getWaterFriendGotAward() {
-    await requestAlgo('fcb5a');
-    await $.wait(1500);
     await taskInitForFarm();
     const { waterFriendCountKey, waterFriendMax, waterFriendSendWater, waterFriendGotAward } = $.farmTask.waterFriendTaskInit
     if (waterFriendCountKey >= waterFriendMax) {
@@ -1213,6 +1198,7 @@ async function clockInInitForFarm() {
 // 连续签到API
 async function clockInForFarm() {
     const functionId = arguments.callee.name.toString();
+    await requestAlgo('32b94');
     let body =  {"type":1,"version":16,"channel":1,"babelChannel":0};
     $.clockInForFarmRes = await requestNew(functionId, body);
 }
@@ -1276,12 +1262,14 @@ async function signForFarm() {
  * 初始化农场, 可获取果树及用户信息API
  */
 async function initForFarm() {
+    await requestAlgo('8a2af');
+    await $.wait(1500);
     //h5st:20220427203539021;4488829356140938;8a2af;tk02wc6ae1c9818nYy8Rtg5aqVmCjDcvMfdU6LE3lVOdnf8Hpx7kySfDTX+yakLg0QEEfZaCllWMgx8dOimcP4LCEbc4;a629486fbab172bd929ac83f19b2e5e7e04a7b21d0049ec09c4b376f837cb69f;3.0;1651062939021
     let body = {"ver":"750","babelChannel":"45","collectionId":"519","sid":"17a7eb1013e5e4b56d8a28568562ed1w","un_area":"2_2824_51911_0","version":16,"channel":1};
     $.h5st = geth5st('initForFarm', body, '8a2af');
     return new Promise(resolve => {
         const option =  {
-            url: `${JD_API_HOST}?functionId=initForFarm&appid=signed_wh5&osVersion=&screen=&networkType=wifi&timestamp=${Date.now()}&d_brand=&d_model&wqDefault=false&client=&clientVersion=10.5.4&partner=&build=&uuid=9366134603335346-2356564626532336&h5st=${$.h5st}`,
+            url: `${JD_API_HOST}?functionId=initForFarm&appid=signed_wh5&osVersion=&screen=&networkType=&timestamp=${Date.now()}&d_brand=&d_model&wqDefault=false&client=&clientVersion=10.5.4&partner=&build=&uuid=9366134603335346-2356564626532336&h5st=${$.h5st}`,
             body: `body=${encodeURIComponent(JSON.stringify({"ver":"750","babelChannel":"45","collectionId":"519","sid":"17a7eb1013e5e4b56d8a28568562ed1w","un_area":"2_2824_51911_0","version":16,"channel":1}))}&appid=wh5&clientVersion=10.4.0`,
             headers: {
                 "accept": "*/*",
@@ -1325,6 +1313,8 @@ async function initForFarm() {
 async function taskInitForFarm() {
     console.log('\n初始化任务列表')
     const functionId = arguments.callee.name.toString();
+    await requestAlgo('fcb5a');
+    await $.wait(1500);
     //taskInitForFarm
     //h5st:20220427203539037;1126247198056949;fcb5a;tk02wbd5c1bed18nYy8Rtg5aqVmCL1LMDWkm2ulctw4TjrASRZMyiwfgGLmDY1fM02bTmleErNg2Q0ANBGCQ86zCuKCH;7a9177db8d7495d5f058490218800c0705efe589d9d23b78d1fb6ad11ba2534b;3.0;1651062939037
     let body = {"version":16,"channel":1,"babelChannel":"0"};
