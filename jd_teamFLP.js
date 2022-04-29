@@ -3,7 +3,7 @@
 入口：[组队分豆-飞利浦 (
 https://lzkjdz-isv.isvjcloud.com/pool/captain/2?activityId=52c0712263f342308da1287a66702009
 &signUuid=f4dbc733e0674545aec847ae8bdf5579
-cron "38 8,20 12-30 4 *" script-path=jd_teamFLP.js,tag=组队分豆-飞利浦
+cron "38 2,13 12-30 4 *" script-path=jd_teamFLP.js,tag=组队分豆-飞利浦
 */
 const $ = new Env("组队分豆-飞利浦");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
