@@ -1,5 +1,6 @@
 /*
 五五购物节  礼献母爱
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk97014d5b972ca1a6870b88da
 cron "7 10 * * *" jd_opencard_gwj.js
 */
 const $ = new Env("五五购物节  礼献母爱");
