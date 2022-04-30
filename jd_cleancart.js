@@ -48,24 +48,30 @@ $.keywordsNum = 0;
                 continue
             }
             await requireConfig();
-            do {
-                await getCart();
-                await $.wait(2000);
-                $.keywordsNum = 0
-                if($.beforeRemove !== "0"){
-                    await cartFilter(venderCart);
-                    await $.wait(1500)
-                    if(parseInt($.beforeRemove) !== $.keywordsNum) {
-                        await removeCart();
-                        await $.wait(1500)
+            try {
+                do {
+                    await getCart();
+                    await $.wait(2500);
+                    $.keywordsNum = 0
+                    if ($.beforeRemove !== "0") {
+                        await cartFilter(venderCart);
+                        await $.wait(1500);
+                        if (parseInt($.beforeRemove) !== $.keywordsNum) {
+                            await removeCart();
+                            await $.wait(1500);
+                        } else {
+                            console.log('由于购物车内的商品均包含关键字，本次执行将不删除购物车数据')
+                            break;
+                        }
                     } else {
-                        console.log('由于购物车内的商品均包含关键字，本次执行将不删除购物车数据')
                         break;
                     }
-                } else break;
-            } while(isRemoveAll && $.keywordsNum !== $.beforeRemove)
-
-           await $.wait(3000)
+                } while(isRemoveAll && $.keywordsNum !== $.beforeRemove)
+            }catch (e) {
+                console.log(e);
+                await $.wait(2500);
+            }
+            await $.wait(3000);
         }
     }
 })()
@@ -99,13 +105,14 @@ function getCart(){
         $.get(option, async(err, resp, data) => {
             try{
                 data = getSubstr(data, "window.cartData = ", "window._PFM_TIMING");
+                data = data.replace(' ;', '');
                 data = data.replace(/\s+/g,'');
                 data = JSON.parse(data);
                 $.areaId = data.areaId;   // locationId的传值
                 $.traceId = data.traceId; // traceid的传值
                 venderCart = data.cart.venderCart;
                 postBody = 'pingouchannel=0&commlist=';
-                $.beforeRemove = data.cartJson.num
+                $.beforeRemove = data.cart.currentCount ? data.cart.currentCount : 0;
                 console.log(`获取到购物车数据 ${$.beforeRemove} 条`)
             } catch(e){
                 $.logErr(e, resp);
