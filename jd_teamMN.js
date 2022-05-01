@@ -5,7 +5,7 @@ https://lzkjdz-isv.isvjcloud.com/pool/captain/55667?activityId=4e3b9b6233104c199
 瓜分脚本单独跑
 cron "8 4,15 6-30,1-31 4,5 *" jd_teamMN.js
 */
-const $ = new Env("蒙牛");
+const $ = new Env("组队分豆-蒙牛");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 

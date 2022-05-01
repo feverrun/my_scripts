@@ -1,9 +1,10 @@
 /*
 组队分豆-美泰 [jd_teamMT.js]
 入口：[组队分豆-美泰 (
-https://lzkjdz-isv.isvjcloud.com/pool/captain/725732?activityId=9a1508ec3d2549dfa8187dcbfd590a34&signUuid=e662354f2a894db48d67dfe1bdbd46cd
+https://lzkjdz-isv.isvjcloud.com/pool/captain/725732?activityId=9a1508ec3d2549dfa8187dcbfd590a34
+&signUuid=e662354f2a894db48d67dfe1bdbd46cd
 )]
-cron "2 9,13,17,22 * * *" script-path=jd_teamMT.js,tag=组队分豆-美泰
+cron "17 17 * * *" script-path=jd_teamMT.js,tag=组队分豆-美泰
 */
 const $ = new Env("组队分豆-美泰");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -95,7 +96,7 @@ async function main() {
         await getMyPing();
         await $.wait(1000);
         if ($.secretPin) {
-            console.log('去助力 -> ' + $.authorCode);
+            console.log('加入队伍 -> ' + $.authorCode);
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await $.wait(2000)
             await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`)
