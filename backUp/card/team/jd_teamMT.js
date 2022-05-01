@@ -99,8 +99,6 @@ async function main() {
             await task('common/accessLogWithAD', `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
             await $.wait(2000)
             await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`)
-            await getShopOpenCardInfo({ "venderId": "1000001879", "channel": 401 }, 1000001879)
-            await bindWithVender({ "venderId": "1000001879", "shopId": "1000001879", "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "activityId": 3282318, "channel": 401 }, 100000000000085)
             if ($.activityContent) {
                 console.log($.activityContent.canJoin)
                 if ($.activityContent.canJoin) {
@@ -112,9 +110,9 @@ async function main() {
                         $.log("加入会员")
                         await $.wait(2000)
                         await getShopOpenCardInfo({ "venderId": "1000001879", "channel": 401 }, 1000001879)
+                        await $.wait(2000)
                         await bindWithVender({ "venderId": "1000001879", "shopId": "1000001879", "bindByVerifyCodeFlag": 1, "registerExtend": {}, "writeChildFlag": 0, "activityId": 3282318, "channel": 401 }, 100000000000085)
                     }
-                    await $.wait(2000)
                     await task('activityContent', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&signUuid=${encodeURIComponent($.authorCode)}`, 0, 1)
                     await $.wait(2000)
                     if ($.index === 1) {
