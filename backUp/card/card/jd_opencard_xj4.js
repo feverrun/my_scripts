@@ -1,12 +1,12 @@
 /*
-家装
+入口：[ 4.25-5.1 我的新家 超级配 ]
 cron "6 12 * * *" jd_opencard_xj4.js
 */
 let guaopencard_addSku = "true"
 let guaopencard = "true"
 let guaopenwait = "2"
 
-const $ = new Env('新家4');
+const $ = new Env('4.25-5.1 新家4');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cleanCart = ''

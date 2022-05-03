@@ -11,6 +11,8 @@ const $ = new Env('女装盲盒抽京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '', message;
+let nzmhUrl = '' //'https://anmp.jd.com/babelDiy/Zeus/3qshXVjiSE2M9rfaCpntAXfkg166/index.html';
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -19,6 +21,7 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
@@ -26,7 +29,12 @@ if ($.isNode()) {
   }
   console.log('女装盲盒\n' +
       '活动时间：2022-4-1至2022-4-30\n' +
-      '活动地址：https://anmp.jd.com/babelDiy/Zeus/3qshXVjiSE2M9rfaCpntAXfkg166/index.html');
+      '活动地址：'+nzmhUrl+'');
+
+  if (!nzmhUrl) {
+    console.log('活动地址不存在退出运行!!!');
+    return;
+  }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -40,7 +48,7 @@ if ($.isNode()) {
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
       try {
-        await jdMh('https://anmp.jd.com/babelDiy/Zeus/3qshXVjiSE2M9rfaCpntAXfkg166/index.html')
+        await jdMh(nzmhUrl)
       } catch (e) {
         $.logErr(e)
       }
