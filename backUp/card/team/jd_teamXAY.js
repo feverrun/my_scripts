@@ -1,5 +1,5 @@
 /*
-组队分豆-新安怡 [jd_teamMT.js]
+组队分豆-新安怡 [jd_teamXAY.js]
 入口：[组队分豆-新安怡 (
 https://lzkjdz-isv.isvjcloud.com/pool/captain/725732?activityId=7dee74f982034f5496a469ecdb4b05f2
 &signUuid=3963186f552a45b599ac266d2bfbe114
