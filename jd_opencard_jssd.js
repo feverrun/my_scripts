@@ -1,6 +1,6 @@
 /*
 酒水会员盛典
-cron "6 12 * * *" jd_opencard_jssd.js
+cron "6 22 * * *" jd_opencard_jssd.js
 */
 const $ = new Env("酒水会员盛典");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
