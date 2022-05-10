@@ -147,6 +147,15 @@ async function healthyDay_getHomeData(type = true) {
                         await harmony_collectScore({"appId":appId,"taskToken":followShopVo.taskToken,"taskId":vo.taskId,"actionType":"0"})
                       }
                     }
+                  } else if (vo.taskType === 3) {
+                    for (let key of Object.keys(vo.shoppingActivityVos)) {
+                      let shoppingActivityVos = vo.shoppingActivityVos[key]
+                      if (shoppingActivityVos.status !== 2) {
+                        // console.log(`【${shoppingActivityVos.skuName}】${vo.subTitleName}`)
+                        console.log(`【${vo.subTitleName}】`)
+                        await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                      }
+                    }
                   } else if (vo.taskType === 8) {
                     for (let key of Object.keys(vo.productInfoVos)) {
                       let productInfoVos = vo.productInfoVos[key]
