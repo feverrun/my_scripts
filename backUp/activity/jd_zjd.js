@@ -9,8 +9,9 @@ cron "39 6,8,13,23 * * *" script-path=jd_zjd.js, tag=赚京豆-瓜分京豆
 const $ = new Env('赚京豆-瓜分京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+
 const axios = $.isNode() ? require('axios') : '';
-const CryptoJS = $.isNode() ? require('crypto-js') : '';
+$.CryptoJS = $.isNode() ? require('crypto-js') : '';
 const {format} = $.isNode() ? require("date-fns") : '';
 let jdNotify = true;    //是否关闭通知，false打开通知推送，true关闭通知推送
 let cookiesArr = [], cookie = '', message;
@@ -19,7 +20,6 @@ $.authorTuanList = [];
 inviteCodes=[];
 const JD_API_HOST = 'https://api.m.jd.com/api';
 $.appId = 'd8ac0';
-let tk = '', genKey = null
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -38,6 +38,8 @@ if ($.isNode()) {
     }
     await $.wait(7000);
     console.log("等待7妙开始执行...");
+    await requestAlgo('d8ac0');
+    await $.wait(1500);
     for (let i = 0; i < cookiesArr.slice(0,20).length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -60,6 +62,9 @@ if ($.isNode()) {
         }
     }
 
+    console.log(JSON.stringify($.tuanList));
+    await requestAlgo('d8ac0');
+    return;
     console.log(`\n\n内部互助 【赚京豆-瓜分京豆(微信小程序)-瓜分京豆】活动(内部账号互助(需内部cookie数量大于${$.assistNum || 4}个))\n`)
     console.log(JSON.stringify($.tuanList));
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -146,18 +151,20 @@ async function distributeBeanActivity() {
         $.hasOpen = false;
         $.assistStatus = 0;
         await getUserTuanInfo()
-        if (!$.tuan && ($.assistStatus === 3 || $.assistStatus === 2 || $.assistStatus === 0) && $.canStartNewAssist) {
-            console.log(`准备再次开团`)
-            await openTuan()
-            if ($.hasOpen) await getUserTuanInfo()
-        }
-        if ($.tuan && $.tuan.hasOwnProperty('assistedPinEncrypted') && $.assistStatus !== 3) {
-            // console.log(JSON.stringify($.tuan))
-            $.tuanList.push($.tuan);
-            if ($.UserName === '18862988021_p') {
-                await submitSyj(JSON.stringify($.tuan), $.UserName);
-            }
-        }
+        // if (!$.tuan && ($.assistStatus === 3 || $.assistStatus === 2 || $.assistStatus === 0) && $.canStartNewAssist) {
+        //     console.log(`准备再次开团`)
+        //     await requestAlgo('dde2b');
+        //     await $.wait(1500);
+        //     // await openTuan()
+        //     if ($.hasOpen) await getUserTuanInfo()
+        // }
+        // if ($.tuan && $.tuan.hasOwnProperty('assistedPinEncrypted') && $.assistStatus !== 3) {
+        //     // console.log(JSON.stringify($.tuan))
+        //     $.tuanList.push($.tuan);
+        //     if ($.UserName === '18862988021_p') {
+        //         await submitSyj(JSON.stringify($.tuan), $.UserName);
+        //     }
+        // }
     } catch (e) {
         $.logErr(e);
     }
@@ -257,14 +264,7 @@ async function helpFriendTuan(activityIdEncrypted='',assistStartRecordId='',assi
         // let h5st = '20220416232106280%3B5656264180344527%3Bb9790%3Btk02a91111b6a18pMXgxKzFNVHB59%2B1vWVFLgVvKl1hpZGF1XruoQBZGCLLWpKvzmTIcLhJixVKIA1aB6Pfq3gSj626K%3B6a6b6fbc54ccba3d6d8875c626d60a8ba17433195a568534085d0baf6c348f99%3B3.0%3B1650122466280';
         //let hst = await getH5st('vvipclub_distributeBean_assist', body1, 'b9790');
         let fn = 'vvipclub_distributeBean_assist';
-        let h5st = zjdH5st({
-            'fromType': 'wxapp',
-            'timestamp': Date.now(),
-            'body0': JSON.stringify(body1),
-            'appid': 'swat_miniprogram',
-            'body': CryptoJS.SHA256(JSON.stringify(body)).toString(),
-            'functionId': fn,
-        });
+        h5st = '';
         $.post(taskTuanHelpUrl("vvipclub_distributeBean_assist", body, h5st), async (err, resp, data) => {
             try {
                 if (err) {
@@ -300,8 +300,16 @@ async function helpFriendTuan(activityIdEncrypted='',assistStartRecordId='',assi
 async function getUserTuanInfo() {
     return new Promise(async resolve => {
         let body = {"paramData": {"channel": "FISSION_BEAN"}}
-        let h5st = '20220416203024863%3B5656264180344527%3Bd8ac0%3Btk02aabee1bde18pMSsxeDF4M3gyTpD%2FFx8nPqeAbkhSNxNo7amaG6EVODmotdq4A1ravYKPxICEKO7BeTBVrw2Y2a%2BO%3B52eecd6a3e125c3a02d32d247c05a81d6e47888cf135603d887fae59f202116d%3B3.0%3B1650112224863'
-        $.post(taskTuanUrl("distributeBeanActivityInfo", body,h5st), async (err, resp, data) => {
+        // let h5st = '
+        //20220422165020596;5656264180344527;d8ac0;tk02aabe41c8b18pMngyKzNaTlh2/z0+x6cDhGSBEejmXGhv2EoKy8LgVBo0R5Pe6yxamBzg3gd5UG0UncuqGSQvRPql;dffd3c57f3b20070936a7c78f60a7e0c2e78b586c142cf954e021b714ba34ca2;3.0;1650617420596
+        //20220422165020596%3B5656264180344527%3Bd8ac0%3Btk02aabe41c8b18pMngyKzNaTlh2%2Fz0%2Bx6cDhGSBEejmXGhv2EoKy8LgVBo0R5Pe6yxamBzg3gd5UG0UncuqGSQvRPql%3Bdffd3c57f3b20070936a7c78f60a7e0c2e78b586c142cf954e021b714ba34ca2%3B3.0%3B1650617420596
+        //20220422180025606%3B7905356237591165%3Bd8ac0%3Btk02a77bc1ab318npeXcbBVocGhGk14VKY%2B70r1ZDn5RSrWD4f7I9lukDYVWvB0WHmOWLaK0FYp0d86q8wjd1ArE%2BJZS%3Bb5d5975ccd6b5737644e1fa6d6509310a35db84b893f56e27723b6222f371fe6%3B3.0%3B1650621625606
+        // let h5st = geth5st('distributeBeanActivityInfo', body, 'd8ac0');
+        // let h5st = '20220422165020596%3B5656264180344527%3Bd8ac0%3Btk02aabe41c8b18pMngyKzNaTlh2%2Fz0%2Bx6cDhGSBEejmXGhv2EoKy8LgVBo0R5Pe6yxamBzg3gd5UG0UncuqGSQvRPql%3Bdffd3c57f3b20070936a7c78f60a7e0c2e78b586c142cf954e021b714ba34ca2%3B3.0%3B1650617420596';
+
+        let h5st =  await geth5st('distributeBeanActivityInfo', body, 'd8ac0');
+        console.log(`h5st:${h5st}`);
+        $.post(taskTuanUrl("distributeBeanActivityInfo", body, h5st), async (err, resp, data) => {
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
@@ -350,7 +358,8 @@ async function getUserTuanInfo() {
 async function openTuan() {
     return new Promise(async resolve => {
         let body = {"activityIdEncrypted": $.tuanActId, "channel": "FISSION_BEAN"}
-        let h5st = '20220416210009645%3B5656264180344527%3Bdde2b%3Btk02aa3851b9c18pMysyeDIrMWJUb1gQgwDa2ZGRw7A9VjqXUEkg9IDWCsxjIm89AIM2QWDgbfJA1MZg%2FXUr0g9gNenG%3B579cf5797a63874fb87936bb266a40ed7eaca710902a23115bdd21176fd6093c%3B3.0%3B1650114009645'
+        // let h5st = '20220416210009645%3B5656264180344527%3Bdde2b%3Btk02aa3851b9c18pMysyeDIrMWJUb1gQgwDa2ZGRw7A9VjqXUEkg9IDWCsxjIm89AIM2QWDgbfJA1MZg%2FXUr0g9gNenG%3B579cf5797a63874fb87936bb266a40ed7eaca710902a23115bdd21176fd6093c%3B3.0%3B1650114009645'
+        let h5st = await geth5st();
         $.post(taskTuanUrl("vvipclub_distributeBean_startAssist", body,h5st), async (err, resp, data) => {
             try {
                 if (err) {
@@ -392,24 +401,6 @@ function taskUrl(function_id, body = {}) {
             "Referer": "https://servicewechat.com/wxa5bf5ee667d91626/108/page-frame.html",
             "Cookie": cookie,
             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-        }
-    }
-}
-
-function taskTuanUrl(function_id, body = {},h5st) {
-    return {
-        url: `https://api.m.jd.com/api?functionId=${function_id}&fromType=wxapp&timestamp=${Date.now()}`, //1650122466392 - ${Date.now()}`,
-        body:`body=${encodeURIComponent(JSON.stringify(body))}&appid=swat_miniprogram&h5st=${h5st}&uuid=81890437126031650111868778&client=tjj_m&screen=1920*1080&osVersion=5.0.0&networkType=wifi&sdkName=orderDetail&sdkVersion=1.0.0&clientVersion=3.1.3&area=11`,
-        headers: {
-            "Accept": "*/*",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-cn",
-            "Connection": "keep-alive",
-            "Content-Type": "application/x-www-form-urlencoded; Charset=UTF-8",
-            "Host": "api.m.jd.com",
-            "Referer": "https://servicewechat.com/wxa5bf5ee667d91626/182/page-frame.html",
-            "Cookie": cookie,
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; PCCM00 Build/QKQ1.191021.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.99 XWEB/3211 MMWEBSDK/20220303 Mobile Safari/537.36 MMWEBID/462 MicroMessenger/8.0.21.2120(0x2800153B) Process/appbrand2 WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64 MiniProgramEnv/android',
         }
     }
 }
@@ -562,7 +553,7 @@ function jsonParse(str) {
 }
 
 function getUA(){
-    $.UA = `jdapp;iPhone;10.2.2;14.3;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone12,1;addressid/4199175193;appBuild/167863;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
+    $.UA = `jdapp;iPhone;10.4.0;14.3;${randomString(40)};M/5.0;network/wifi;ADID/;model/iPhone12,1;addressid/4199175193;appBuild/167863;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
 }
 function randomString(e) {
     e = e || 32;
@@ -624,6 +615,97 @@ Date.prototype.Format = function (fmt) {
     return d;
 }
 
+async function requestAlgo(appId) {
+    $.appId = appId ? appId : $.appId;
+    $.fingerprint = await generateFp();
+    const options = {
+        "url": `https://cactus.jd.com/request_standby_algo`,    //https://cactus.jd.com/request_algo?g_ty=ajax
+        "headers": {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+            'host': 'cactus.jd.com',
+            'Referer': 'https://cactus.jd.com',
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; PCCM00 Build/QKQ1.191021.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.99 XWEB/3211 MMWEBSDK/20220303 Mobile Safari/537.36 MMWEBID/462 MicroMessenger/8.0.21.2120(0x2800153B) Process/appbrand1 WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64 MiniProgramEnv/android;'
+        },
+        'body': JSON.stringify({
+            "appId": $.appId.toString(),
+            "expandParams": "",
+            "fp": $.fingerprint,
+            "platform": "applet",
+            "timestamp": Date.now(),
+            "version": "3.0",
+        })
+    }
+    await $.wait(1500);
+    return new Promise(async resolve => {
+        $.post(options, (err, resp, data) => {
+            try {
+                if (err) {
+                    // console.log(`${JSON.stringify(err)}`)
+                    // console.log(`request_algo 签名参数API请求失败，请检查网路重试`)
+                    console.log(`签名参数API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        console.log(data);
+                        data = JSON.parse(data);
+                        if (data['status'] === 200) {
+                            $.token = data.data.result.tk;
+                            //function test(tk,fp,ts,ai,algo){var rd='Pt03xDmlYLxK';var str=`${tk}${fp}${ts}${ai}${rd}`;return algo.SHA256(str)}
+                            // let enCryptMethodJDString = data.data.result.algo;
+                            // if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
+                            // console.log(`获取签名参数成功！`)
+                            // console.log(`fp: ${$.fingerprint}`)
+                            // console.log(`token: ${$.token}`)
+                            // console.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
+                        } else {
+                            // console.log(`fp: ${$.fingerprint}`)
+                            // console.log('request_algo 签名参数API请求失败:')
+                        }
+                    } else {
+                        console.log(`京东服务器返回空数据`)
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+        await $.wait(2500);
+    })
+}
+
+function geth5st(fn, body, appId) {
+    let time = Date.now();
+    const timestamp = new Date(time).Format("yyyyMMddhhmmssSSS");
+    //fn body t appid client clientVersion
+    let st = `functionId=${fn}&body${$.CryptoJS.MD5(JSON.stringify(body).toString())}&t=${timestamp.toString()}&appid=swat_miniprogram&client=tjj_m&clientVersion=3.1.3`;
+
+    $.appId = appId ? appId : $.appId;
+    let hash1 = '';
+    if ($.fingerprint && $.token && $.enCryptMethodJD) {
+        //function test(tk,fp,ts,ai,algo){var rd='Pt03xDmlYLxK';var str=`${tk}${fp}${ts}${ai}${rd}`;return algo.SHA256(str)}
+        hash1 = $.enCryptMethodJD($.token, $.fingerprint.toString(), timestamp.toString(), $.appId.toString(), $.CryptoJS).toString($.CryptoJS.enc.Hex);
+    } else {
+        const random = 'OOo4zNFTTLW7';
+        $.token = `${$.token}`;
+        $.fingerprint = $.fingerprint;
+        const str = `${$.token}${$.fingerprint}${timestamp}${$.appId}${random}`;
+        hash1 = $.CryptoJS.MD5(str).toString($.CryptoJS.enc.Hex);
+        console.log(hash1);
+    }
+    st = st ? st : '';
+    // console.log(`st:${st}`);
+    const hash2 = $.CryptoJS.HmacSHA256(st, hash1.toString()).toString($.CryptoJS.enc.Hex);
+    // console.log(`\nst:${st}`)
+    // console.log(`h5st:${["".concat(timestamp.toString()), "".concat(fingerprint.toString()), "".concat($.appId.toString()), "".concat(token), "".concat(hash2)].join(";")}\n`)
+    // return encodeURIComponent(["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.token), "".concat(hash2)].join(";"))
+    return encodeURIComponent(["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.token), "".concat(hash2), "".concat("3.0"), "".concat(time)].join(";"))
+}
+
+
 /**
  * 模拟生成 fingerprint
  * @returns {string}
@@ -636,234 +718,6 @@ function generateFp() {
         i += e[Math.random() * e.length | 0];
     return (i + Date.now()).slice(0,16)
 }
-
-var _0xodn = 'jsjiami.com.v6', _0xodn_ = ['‮_0xodn'],
-    _0x3b72 = [_0xodn, 'wro/eFkzwpkZ', 'wrUMK8Kj', 'D1jCtlJvwrY=', 'NQpkwoE=', 'wozDssKdajXCocKNwqo6wpbCgcOsZ8KsPHjDuiDCuE83', 'wp/CpMKffzTDqMOLw6o3w5XDmMK6IcOxIjDCsizCvVB4TcO4w44uXgpwwqh4wop7S8KcwrrDmMOcw4jDnBB4XMKxwrokwqkUJMO/eVRsZhfDojIIIQTCiMOyI8OVbBRSLAQD', 'woQZWw==', 'wr91w6IJw7LDnMOpecOqO8KQQsKcKcKqw4gALsOAdjR6ZyTCqMKsXsOdCMKICsO6QsKAZMKa', 'w4U8wp/Cq3jCmn52BnfDv8KJZsKywqUT', 'E1PCrHjChw==', 'TjbCr8K6wp0=', 'DlfCvl7CmWNlEzlxEWnDgE7CpsKzw67DnkZpYsOvDsOGw5ovw7ZfPsKsYsKGS8OzRsOXO1DDr8Kgw5Juwq3DlkHCoFvDnMKSwqnCgMOpw5xRJcKrcMOqwqbCpcKzw49+w5NewpYqwqdWwo4UKsOkwrNiw5XDk2nCpMKxL8KJw6TCu8OVXHHDiUXCoQxCw4XDmsOTd8KcJ8OJTcKQwrbDsjgww5ggwoPDh1LCpSACw7bDssKcW8K9w5jDlMKpwrHCi8ObMsOxwpUPw74hH8OSJMKJAUvCicKfAcO6wqAVAMK4f1BKSHpUeMOkCsOudsOaw54Tw7bDrMKJwpo8HMKoRcK4HcOVdMK8wp07worDrQ7DnzQFWcKXWFHCuWE4esOYwrjCscKVbU/Cun3CucKQwrTCkcKIwp1L', 'IA5mwoA=', 'Xi3DhGA=', 'wr8fZkvDoyM=', 'jUMsUjViEbaMYgminN.HXcoHmh.v6=='];
-if (function (_0x2743f4, _0x3fb1a4, _0x305864) {
-    function _0x262557(_0x12e420, _0x159a53, _0x5a10b1, _0x549630, _0x34e649, _0x48a933) {
-        _0x159a53 = _0x159a53 >> 0x8, _0x34e649 = 'po';
-        var _0x173d72 = 'shift', _0x2b02e9 = 'push', _0x48a933 = '‮';
-        if (_0x159a53 < _0x12e420) {
-            while (--_0x12e420) {
-                _0x549630 = _0x2743f4[_0x173d72]();
-                if (_0x159a53 === _0x12e420 && _0x48a933 === '‮' && _0x48a933['length'] === 0x1) {
-                    _0x159a53 = _0x549630, _0x5a10b1 = _0x2743f4[_0x34e649 + 'p']();
-                } else if (_0x159a53 && _0x5a10b1['replace'](/[UMUVEbMYgnNHXHh=]/g, '') === _0x159a53) {
-                    _0x2743f4[_0x2b02e9](_0x549630);
-                }
-            }
-            _0x2743f4[_0x2b02e9](_0x2743f4[_0x173d72]());
-        }
-        return 0xd646f;
-    };
-    return _0x262557(++_0x3fb1a4, _0x305864) >> _0x3fb1a4 ^ _0x305864;
-}(_0x3b72, 0xf4, 0xf400), _0x3b72) {
-    _0xodn_ = _0x3b72['length'] ^ 0xf4;
-}
-;
-
-function _0x10b2(_0x45658b, _0xa6ed42) {
-    _0x45658b = ~~'0x'['concat'](_0x45658b['slice'](0x1));
-    var _0x1c3a83 = _0x3b72[_0x45658b];
-    if (_0x10b2['LvPUvb'] === undefined) {
-        (function () {
-            var _0x563495 = typeof window !== 'undefined' ? window : typeof process === 'object' && typeof require === 'function' && typeof global === 'object' ? global : this;
-            var _0x37b199 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-            _0x563495['atob'] || (_0x563495['atob'] = function (_0x1eac82) {
-                var _0x16b82d = String(_0x1eac82)['replace'](/=+$/, '');
-                for (var _0xee2dd0 = 0x0, _0x4d50ce, _0x4339f9, _0x17dab4 = 0x0, _0x52b38d = ''; _0x4339f9 = _0x16b82d['charAt'](_0x17dab4++); ~_0x4339f9 && (_0x4d50ce = _0xee2dd0 % 0x4 ? _0x4d50ce * 0x40 + _0x4339f9 : _0x4339f9, _0xee2dd0++ % 0x4) ? _0x52b38d += String['fromCharCode'](0xff & _0x4d50ce >> (-0x2 * _0xee2dd0 & 0x6)) : 0x0) {
-                    _0x4339f9 = _0x37b199['indexOf'](_0x4339f9);
-                }
-                return _0x52b38d;
-            });
-        }());
-
-        function _0x565be9(_0x1ed74f, _0xa6ed42) {
-            var _0xc416e3 = [], _0x536e9b = 0x0, _0x7e5a8a, _0xdf715e = '', _0x3b5e2b = '';
-            _0x1ed74f = atob(_0x1ed74f);
-            for (var _0x25153a = 0x0, _0x28040c = _0x1ed74f['length']; _0x25153a < _0x28040c; _0x25153a++) {
-                _0x3b5e2b += '%' + ('00' + _0x1ed74f['charCodeAt'](_0x25153a)['toString'](0x10))['slice'](-0x2);
-            }
-            _0x1ed74f = decodeURIComponent(_0x3b5e2b);
-            for (var _0x38a058 = 0x0; _0x38a058 < 0x100; _0x38a058++) {
-                _0xc416e3[_0x38a058] = _0x38a058;
-            }
-            for (_0x38a058 = 0x0; _0x38a058 < 0x100; _0x38a058++) {
-                _0x536e9b = (_0x536e9b + _0xc416e3[_0x38a058] + _0xa6ed42['charCodeAt'](_0x38a058 % _0xa6ed42['length'])) % 0x100;
-                _0x7e5a8a = _0xc416e3[_0x38a058];
-                _0xc416e3[_0x38a058] = _0xc416e3[_0x536e9b];
-                _0xc416e3[_0x536e9b] = _0x7e5a8a;
-            }
-            _0x38a058 = 0x0;
-            _0x536e9b = 0x0;
-            for (var _0x399e67 = 0x0; _0x399e67 < _0x1ed74f['length']; _0x399e67++) {
-                _0x38a058 = (_0x38a058 + 0x1) % 0x100;
-                _0x536e9b = (_0x536e9b + _0xc416e3[_0x38a058]) % 0x100;
-                _0x7e5a8a = _0xc416e3[_0x38a058];
-                _0xc416e3[_0x38a058] = _0xc416e3[_0x536e9b];
-                _0xc416e3[_0x536e9b] = _0x7e5a8a;
-                _0xdf715e += String['fromCharCode'](_0x1ed74f['charCodeAt'](_0x399e67) ^ _0xc416e3[(_0xc416e3[_0x38a058] + _0xc416e3[_0x536e9b]) % 0x100]);
-            }
-            return _0xdf715e;
-        }
-
-        _0x10b2['SYVfKK'] = _0x565be9;
-        _0x10b2['DcCxBY'] = {};
-        _0x10b2['LvPUvb'] = !![];
-    }
-    var _0x185efa = _0x10b2['DcCxBY'][_0x45658b];
-    if (_0x185efa === undefined) {
-        if (_0x10b2['XNcqmw'] === undefined) {
-            _0x10b2['XNcqmw'] = !![];
-        }
-        _0x1c3a83 = _0x10b2['SYVfKK'](_0x1c3a83, _0xa6ed42);
-        _0x10b2['DcCxBY'][_0x45658b] = _0x1c3a83;
-    } else {
-        _0x1c3a83 = _0x185efa;
-    }
-    return _0x1c3a83;
-};
-
-function zjdInit() {
-    var _0x5b6562 = {
-        'UHkNG': function (_0x1dee04) {
-            return _0x1dee04();
-        }, 'PkhOr': 'cactus.jd.com', 'vcwqy': _0x10b2('‮0', 'T5oN')
-    };
-    return new Promise(_0x3e8e66 => {
-        axios['post']('https://cactus.jd.com/request_algo?g_ty=ajax', _0x10b2('‫1', 'T5oN') + Date[_0x10b2('‫2', 'Y8g5')]() + _0x10b2('‫3', 'Cs^f'), {
-            'headers': {
-                'Content-Type': _0x10b2('‫4', '41Yi'),
-                'host': _0x5b6562[_0x10b2('‮5', 'otKY')],
-                'Referer': _0x5b6562[_0x10b2('‫6', 'JEgu')],
-                'User-Agent': _0x10b2('‫7', 'otKY')
-            }
-        })[_0x10b2('‫8', ')mWR')](_0x20c5db => {
-            tk = _0x20c5db[_0x10b2('‮9', 'QWq9')]['data'][_0x10b2('‫a', 'brNj')]['tk'];
-            genKey = new Function(_0x10b2('‫b', '[LTK') + _0x20c5db['data'][_0x10b2('‮c', 'net@')][_0x10b2('‫d', 'XS2!')][_0x10b2('‮e', ')mWR')])();
-            _0x5b6562['UHkNG'](_0x3e8e66);
-        });
-    });
-};_0xodn = 'jsjiami.com.v6';
-var _0xod6 = 'jsjiami.com.v6', _0xod6_ = ['‮_0xod6'],
-    _0x27ab = [_0xod6, 'LcOUw6zCtcKB', 'woMBw5w=', 'wr3DlX/CjDI=', 'w4jDtcKnw4JuMcKCwrg=', 'w6nDq8KmwqlF', 'w45sHcK/wqzDpnZI', 'w59tLQ==', 'wpJew68=', 'w6lbR15iQgLDmQTCqw==', 'w4p5wr7ChwVZbMKt', 'bVjDi2LDtsOm', 'wpzCg8OdKGnCr1Qx', 'wo4Bw4UCBS0=', 'w7XDl0TCrcKu', 'JcOUWMO5ZUE=', 'bcOmSjRvw6U=', 'w7dvOsKnwp0=', 'HcOfwpPCq8OoKg==', 'wqd4eRzDvE40w60=', 'N8KtMB4=', 'HMOfwpnCsQ==', 'JMKIAsKoYQ==', 'w7EkAFpBJXR9w6bCq8KYw6w8w65RYA==', 'bsOsaQ==', 'VcONUcOMwrg=', 'b8O5VD5q', 'w7diAMKuwrk=', 'w57DtcKQw48=', 'P2tawoJzw7tTwrRxMg==', 'Jn7DgyLCui/Clg==', 'IPjsjiaKWmFXDUi.cgZSToSRmQ.vG6=='];
-if (function (_0x4e8c73, _0x49b949, _0x2c3ac) {
-    function _0x2d2117(_0x11fa21, _0x2e2494, _0x148ee4, _0x2156e5, _0xc853f9, _0x19be61) {
-        _0x2e2494 = _0x2e2494 >> 0x8, _0xc853f9 = 'po';
-        var _0x368a00 = 'shift', _0x523621 = 'push', _0x19be61 = '‮';
-        if (_0x2e2494 < _0x11fa21) {
-            while (--_0x11fa21) {
-                _0x2156e5 = _0x4e8c73[_0x368a00]();
-                if (_0x2e2494 === _0x11fa21 && _0x19be61 === '‮' && _0x19be61['length'] === 0x1) {
-                    _0x2e2494 = _0x2156e5, _0x148ee4 = _0x4e8c73[_0xc853f9 + 'p']();
-                } else if (_0x2e2494 && _0x148ee4['replace'](/[IPKWFXDUgZSTSRQG=]/g, '') === _0x2e2494) {
-                    _0x4e8c73[_0x523621](_0x2156e5);
-                }
-            }
-            _0x4e8c73[_0x523621](_0x4e8c73[_0x368a00]());
-        }
-        return 0xd6470;
-    };
-    return _0x2d2117(++_0x49b949, _0x2c3ac) >> _0x49b949 ^ _0x2c3ac;
-}(_0x27ab, 0x17c, 0x17c00), _0x27ab) {
-    _0xod6_ = _0x27ab['length'] ^ 0x17c;
-}
-;
-
-function _0x1d9f(_0x379f0e, _0x49209e) {
-    _0x379f0e = ~~'0x'['concat'](_0x379f0e['slice'](0x1));
-    var _0x1bce16 = _0x27ab[_0x379f0e];
-    if (_0x1d9f['XzctjE'] === undefined) {
-        (function () {
-            var _0x8e43ac = typeof window !== 'undefined' ? window : typeof process === 'object' && typeof require === 'function' && typeof global === 'object' ? global : this;
-            var _0x42dbb9 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-            _0x8e43ac['atob'] || (_0x8e43ac['atob'] = function (_0xc1e76a) {
-                var _0x3446db = String(_0xc1e76a)['replace'](/=+$/, '');
-                for (var _0x3ef7da = 0x0, _0x568ff1, _0x2d3643, _0x3b6731 = 0x0, _0x37d9eb = ''; _0x2d3643 = _0x3446db['charAt'](_0x3b6731++); ~_0x2d3643 && (_0x568ff1 = _0x3ef7da % 0x4 ? _0x568ff1 * 0x40 + _0x2d3643 : _0x2d3643, _0x3ef7da++ % 0x4) ? _0x37d9eb += String['fromCharCode'](0xff & _0x568ff1 >> (-0x2 * _0x3ef7da & 0x6)) : 0x0) {
-                    _0x2d3643 = _0x42dbb9['indexOf'](_0x2d3643);
-                }
-                return _0x37d9eb;
-            });
-        }());
-
-        function _0x36dc7f(_0x3b1410, _0x49209e) {
-            var _0x55c058 = [], _0x257b50 = 0x0, _0x5a0d50, _0x26b891 = '', _0x56def6 = '';
-            _0x3b1410 = atob(_0x3b1410);
-            for (var _0x33e9f5 = 0x0, _0x28a526 = _0x3b1410['length']; _0x33e9f5 < _0x28a526; _0x33e9f5++) {
-                _0x56def6 += '%' + ('00' + _0x3b1410['charCodeAt'](_0x33e9f5)['toString'](0x10))['slice'](-0x2);
-            }
-            _0x3b1410 = decodeURIComponent(_0x56def6);
-            for (var _0x229272 = 0x0; _0x229272 < 0x100; _0x229272++) {
-                _0x55c058[_0x229272] = _0x229272;
-            }
-            for (_0x229272 = 0x0; _0x229272 < 0x100; _0x229272++) {
-                _0x257b50 = (_0x257b50 + _0x55c058[_0x229272] + _0x49209e['charCodeAt'](_0x229272 % _0x49209e['length'])) % 0x100;
-                _0x5a0d50 = _0x55c058[_0x229272];
-                _0x55c058[_0x229272] = _0x55c058[_0x257b50];
-                _0x55c058[_0x257b50] = _0x5a0d50;
-            }
-            _0x229272 = 0x0;
-            _0x257b50 = 0x0;
-            for (var _0x107b1d = 0x0; _0x107b1d < _0x3b1410['length']; _0x107b1d++) {
-                _0x229272 = (_0x229272 + 0x1) % 0x100;
-                _0x257b50 = (_0x257b50 + _0x55c058[_0x229272]) % 0x100;
-                _0x5a0d50 = _0x55c058[_0x229272];
-                _0x55c058[_0x229272] = _0x55c058[_0x257b50];
-                _0x55c058[_0x257b50] = _0x5a0d50;
-                _0x26b891 += String['fromCharCode'](_0x3b1410['charCodeAt'](_0x107b1d) ^ _0x55c058[(_0x55c058[_0x229272] + _0x55c058[_0x257b50]) % 0x100]);
-            }
-            return _0x26b891;
-        }
-
-        _0x1d9f['WLbbFD'] = _0x36dc7f;
-        _0x1d9f['ScaaVh'] = {};
-        _0x1d9f['XzctjE'] = !![];
-    }
-    var _0x419794 = _0x1d9f['ScaaVh'][_0x379f0e];
-    if (_0x419794 === undefined) {
-        if (_0x1d9f['qmTRps'] === undefined) {
-            _0x1d9f['qmTRps'] = !![];
-        }
-        _0x1bce16 = _0x1d9f['WLbbFD'](_0x1bce16, _0x49209e);
-        _0x1d9f['ScaaVh'][_0x379f0e] = _0x1bce16;
-    } else {
-        _0x1bce16 = _0x419794;
-    }
-    return _0x1bce16;
-};
-
-function zjdH5st(_0x4be4df) {
-    var _0x4cff43 = {
-        'XOTjk': 'appid',
-        'MaNeg': _0x1d9f('‮0', '4U@&'),
-        'BYwop': function (_0x448c0d, _0x2f169d, _0x20a32e) {
-            return _0x448c0d(_0x2f169d, _0x20a32e);
-        },
-        'uEkhV': 'yyyyMMddhhmmssSSS',
-        'ZFYLd': function (_0x413960, _0x55afdb, _0x10fff9, _0xd657f3, _0x4825ba, _0x18a52d) {
-            return _0x413960(_0x55afdb, _0x10fff9, _0xd657f3, _0x4825ba, _0x18a52d);
-        },
-        'nhcGz': _0x1d9f('‮1', 'THL^'),
-        'BnPMu': _0x1d9f('‮2', 'ea1p'),
-        'MltlC': _0x1d9f('‮3', 'ud6)')
-    };
-    let _0x5b05fe = [{
-        'key': _0x4cff43[_0x1d9f('‮4', 'ws7Y')],
-        'value': _0x4be4df[_0x1d9f('‮5', 'L%hf')]
-    }, {'key': _0x4cff43[_0x1d9f('‫6', 'Jhwj')], 'value': _0x4be4df[_0x1d9f('‫7', '(kW3')]}, {
-        'key': 'functionId',
-        'value': _0x4be4df[_0x1d9f('‫8', '!zoL')]
-    }], _0x593076 = '';
-    _0x5b05fe[_0x1d9f('‫9', 'a@D4')](({key, value}) => {
-        _0x593076 += key + ':' + value + '&';
-    });
-    _0x593076 = _0x593076[_0x1d9f('‫a', 'ZO!Y')](0x0, -0x1);
-    let _0x24a2f4 = Date[_0x1d9f('‫b', '32dU')]();
-    let _0x5c2223 = _0x4cff43['BYwop'](format, _0x24a2f4, _0x4cff43['uEkhV']);
-    let _0x1ea52b = _0x4cff43[_0x1d9f('‫c', 'IG!]')](genKey, tk, '5751706390487846', _0x5c2223[_0x1d9f('‫d', '(kW3')](), _0x4cff43[_0x1d9f('‫e', 'XMEY')], CryptoJS)[_0x1d9f('‮f', 'Jhwj')](CryptoJS[_0x1d9f('‮10', 'Jhwj')][_0x1d9f('‮11', '%epl')]);
-    const _0x55d05d = CryptoJS[_0x1d9f('‫12', 'bhY9')](_0x593076, _0x1ea52b)[_0x1d9f('‮13', '57Uz')]();
-    return [''[_0x1d9f('‮14', '(ag8')](_0x5c2223[_0x1d9f('‮15', 'MW(X')]()), ''[_0x1d9f('‫16', '32dU')](_0x4cff43['BnPMu']), ''['concat'](_0x4cff43[_0x1d9f('‮17', 'eG&t')]), ''[_0x1d9f('‮18', 'THL^')](tk), ''[_0x1d9f('‮19', 'L%hf')](_0x55d05d), _0x4cff43[_0x1d9f('‮1a', 'Jhwj')], ''[_0x1d9f('‮1b', '4U@&')](_0x24a2f4[_0x1d9f('‫1c', '#7Xk')]())][_0x1d9f('‮1d', 'ud6)')](';');
-};_0xod6 = 'jsjiami.com.v6';
 
 // prettier-ignore
 function Env(t,e){"undefined"!=typeof process&&JSON.stringify(process.env).indexOf("GITHUB")>-1&&process.exit(0);class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==typeof t?{url:t}:t;let s=this.get;return"POST"===e&&(s=this.post),new Promise((e,i)=>{s.call(this,t,(t,s,r)=>{t?i(t):e(s)})})}get(t){return this.send.call(this.env,t)}post(t){return this.send.call(this.env,t,"POST")}}return new class{constructor(t,e){this.name=t,this.http=new s(this),this.data=null,this.dataFile="box.dat",this.logs=[],this.isMute=!1,this.isNeedRewrite=!1,this.logSeparator="\n",this.startTime=(new Date).getTime(),Object.assign(this,e),this.log("",`🔔${this.name}, 开始!`)}isNode(){return"undefined"!=typeof module&&!!module.exports}isQuanX(){return"undefined"!=typeof $task}isSurge(){return"undefined"!=typeof $httpClient&&"undefined"==typeof $loon}isLoon(){return"undefined"!=typeof $loon}toObj(t,e=null){try{return JSON.parse(t)}catch{return e}}toStr(t,e=null){try{return JSON.stringify(t)}catch{return e}}getjson(t,e){let s=e;const i=this.getdata(t);if(i)try{s=JSON.parse(this.getdata(t))}catch{}return s}setjson(t,e){try{return this.setdata(JSON.stringify(t),e)}catch{return!1}}getScript(t){return new Promise(e=>{this.get({url:t},(t,s,i)=>e(i))})}runScript(t,e){return new Promise(s=>{let i=this.getdata("@chavy_boxjs_userCfgs.httpapi");i=i?i.replace(/\n/g,"").trim():i;let r=this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");r=r?1*r:20,r=e&&e.timeout?e.timeout:r;const[o,h]=i.split("@"),n={url:`http://${h}/v1/scripting/evaluate`,body:{script_text:t,mock_type:"cron",timeout:r},headers:{"X-Key":o,Accept:"*/*"}};this.post(n,(t,e,i)=>s(i))}).catch(t=>this.logErr(t))}loaddata(){if(!this.isNode())return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e);if(!s&&!i)return{};{const i=s?t:e;try{return JSON.parse(this.fs.readFileSync(i))}catch(t){return{}}}}}writedata(){if(this.isNode()){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e),r=JSON.stringify(this.data);s?this.fs.writeFileSync(t,r):i?this.fs.writeFileSync(e,r):this.fs.writeFileSync(t,r)}}lodash_get(t,e,s){const i=e.replace(/\[(\d+)\]/g,".$1").split(".");let r=t;for(const t of i)if(r=Object(r)[t],void 0===r)return s;return r}lodash_set(t,e,s){return Object(t)!==t?t:(Array.isArray(e)||(e=e.toString().match(/[^.[\]]+/g)||[]),e.slice(0,-1).reduce((t,s,i)=>Object(t[s])===t[s]?t[s]:t[s]=Math.abs(e[i+1])>>0==+e[i+1]?[]:{},t)[e[e.length-1]]=s,t)}getdata(t){let e=this.getval(t);if(/^@/.test(t)){const[,s,i]=/^@(.*?)\.(.*?)$/.exec(t),r=s?this.getval(s):"";if(r)try{const t=JSON.parse(r);e=t?this.lodash_get(t,i,""):e}catch(t){e=""}}return e}setdata(t,e){let s=!1;if(/^@/.test(e)){const[,i,r]=/^@(.*?)\.(.*?)$/.exec(e),o=this.getval(i),h=i?"null"===o?null:o||"{}":"{}";try{const e=JSON.parse(h);this.lodash_set(e,r,t),s=this.setval(JSON.stringify(e),i)}catch(e){const o={};this.lodash_set(o,r,t),s=this.setval(JSON.stringify(o),i)}}else s=this.setval(t,e);return s}getval(t){return this.isSurge()||this.isLoon()?$persistentStore.read(t):this.isQuanX()?$prefs.valueForKey(t):this.isNode()?(this.data=this.loaddata(),this.data[t]):this.data&&this.data[t]||null}setval(t,e){return this.isSurge()||this.isLoon()?$persistentStore.write(t,e):this.isQuanX()?$prefs.setValueForKey(t,e):this.isNode()?(this.data=this.loaddata(),this.data[e]=t,this.writedata(),!0):this.data&&this.data[e]||null}initGotEnv(t){this.got=this.got?this.got:require("got"),this.cktough=this.cktough?this.cktough:require("tough-cookie"),this.ckjar=this.ckjar?this.ckjar:new this.cktough.CookieJar,t&&(t.headers=t.headers?t.headers:{},void 0===t.headers.Cookie&&void 0===t.cookieJar&&(t.cookieJar=this.ckjar))}get(t,e=(()=>{})){t.headers&&(delete t.headers["Content-Type"],delete t.headers["Content-Length"]),this.isSurge()||this.isLoon()?(this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.get(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)})):this.isQuanX()?(this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t))):this.isNode()&&(this.initGotEnv(t),this.got(t).on("redirect",(t,e)=>{try{if(t.headers["set-cookie"]){const s=t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();s&&this.ckjar.setCookieSync(s,null),e.cookieJar=this.ckjar}}catch(t){this.logErr(t)}}).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)}))}post(t,e=(()=>{})){if(t.body&&t.headers&&!t.headers["Content-Type"]&&(t.headers["Content-Type"]="application/x-www-form-urlencoded"),t.headers&&delete t.headers["Content-Length"],this.isSurge()||this.isLoon())this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.post(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)});else if(this.isQuanX())t.method="POST",this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t));else if(this.isNode()){this.initGotEnv(t);const{url:s,...i}=t;this.got.post(s,i).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)})}}time(t,e=null){const s=e?new Date(e):new Date(new Date().getTime()+new Date().getTimezoneOffset()*60*1000+8*60*60*1000);let i={"M+":s.getMonth()+1,"d+":s.getDate(),"H+":s.getHours(),"m+":s.getMinutes(),"s+":s.getSeconds(),"q+":Math.floor((s.getMonth()+3)/3),S:s.getMilliseconds()};/(y+)/.test(t)&&(t=t.replace(RegExp.$1,(s.getFullYear()+"").substr(4-RegExp.$1.length)));for(let e in i)new RegExp("("+e+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?i[e]:("00"+i[e]).substr((""+i[e]).length)));return t}msg(e=t,s="",i="",r){const o=t=>{if(!t)return t;if("string"==typeof t)return this.isLoon()?t:this.isQuanX()?{"open-url":t}:this.isSurge()?{url:t}:void 0;if("object"==typeof t){if(this.isLoon()){let e=t.openUrl||t.url||t["open-url"],s=t.mediaUrl||t["media-url"];return{openUrl:e,mediaUrl:s}}if(this.isQuanX()){let e=t["open-url"]||t.url||t.openUrl,s=t["media-url"]||t.mediaUrl;return{"open-url":e,"media-url":s}}if(this.isSurge()){let e=t.url||t.openUrl||t["open-url"];return{url:e}}}};if(this.isMute||(this.isSurge()||this.isLoon()?$notification.post(e,s,i,o(r)):this.isQuanX()&&$notify(e,s,i,o(r))),!this.isMuteLog){let t=["","==============📣系统通知📣=============="];t.push(e),s&&t.push(s),i&&t.push(i),console.log(t.join("\n")),this.logs=this.logs.concat(t)}}log(...t){t.length>0&&(this.logs=[...this.logs,...t]),console.log(t.join(this.logSeparator))}logErr(t,e){const s=!this.isSurge()&&!this.isQuanX()&&!this.isLoon();s?this.log("",`❗️${this.name}, 错误!`,t.stack):this.log("",`❗️${this.name}, 错误!`,t)}wait(t){return new Promise(e=>setTimeout(e,t))}done(t={}){const e=(new Date).getTime(),s=(e-this.startTime)/1e3;this.log("",`🔔${this.name}, 结束! 🕛 ${s} 秒`),this.log(),(this.isSurge()||this.isQuanX()||this.isLoon())&&$done(t)}}(t,e)}
