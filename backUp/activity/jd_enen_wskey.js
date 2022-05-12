@@ -2,7 +2,7 @@
  * 注销所有 WSKEY
  * 默认不开启，如需启用请添加变量：
  * export JD_WSCK_LOGOUT="pin1&pin2&pin3" 退出指定账户
- * export JD_WSCK_LOGOUT=ALL 退出所有 CK 有效的账户（必须大写）
+ * export JD_WSCK_LOGOUT="ALL" 退出所有 CK 有效的账户（必须大写）
  * cron "1 1 1 1 1" jd_enen_wskey.js
  */
 
