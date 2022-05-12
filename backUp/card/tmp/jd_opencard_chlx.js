@@ -1,6 +1,6 @@
 /*
 吃货来袭 惠聚好食光
-cron "6 10 * * *" jd_opencard_chlx.js
+cron "6 13 12-20 5 *" jd_opencard_chlx.js
 */
 const $ = new Env("吃货来袭 惠聚好食光");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
