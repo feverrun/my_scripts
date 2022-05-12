@@ -148,7 +148,7 @@ async function run() {
                     }
                     await takePostRequest('drawContent');
                     await takePostRequest('checkOpenCard');
-                    await $.wait(parseInt(Math.random() * 3000 + 2000, 10))
+                    await $.wait(2000)
                 }
             }
             await takePostRequest('activityContent');
@@ -160,20 +160,20 @@ async function run() {
             flag = true
             $.followShopValue = 1
             await takePostRequest('followShop');
-            await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
+            await $.wait(2500);
         }
         $.log("加购: " + $.addSku)
         if(!$.addSku && !$.outFlag){
             flag = true
             $.followShopValue = 2
             await takePostRequest('addSku');
-            await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
+            await $.wait(2500)
         }
         $.runFalag = true
         if(flag){
             await takePostRequest('activityContent');
         }
-        await $.wait(parseInt(Math.random() * 1000 + 2000, 10))
+        await $.wait(2000)
         await takePostRequest('getDrawRecordHasCoupon');
         await takePostRequest('getShareRecord');
         if($.outFlag){
