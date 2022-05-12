@@ -1,5 +1,6 @@
 /*
 臻爱陪伴 助力成长
+https://lzdz1-isv.isvjcloud.com/dingzhi/bookBaby/union/activity?activityId=dz6140806143bd8878376d7e98a1e7
 cron "6 10 12-20 5 *" jd_opencard_zapb.js
 */
 const $ = new Env("臻爱陪伴 助力成长");

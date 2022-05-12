@@ -1,5 +1,6 @@
 /*
 吃货来袭 惠聚好食光
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk52175a3ffb9af8cf392981d8
 cron "6 13 12-20 5 *" jd_opencard_chlx.js
 */
 const $ = new Env("吃货来袭 惠聚好食光");

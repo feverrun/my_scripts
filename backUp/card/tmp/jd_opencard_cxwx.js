@@ -1,8 +1,9 @@
 /*
 入会瓜分百万京豆，赢时光好礼
-cron "05 15 * * *" jd_opencard_sghl.js
+https://lzdz1-isv.isvjcloud.com/dingzhi/baby/pairys/activity?activityId=dzf14101834564a0b1358291336646
+cron "5 15 11-18 5 *" jd_opencard_cxwx.js
 */
-const $ = new Env("入会瓜分百万京豆，赢时光好礼");
+const $ = new Env("吃心不妄想 食光嘉年华");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require("./sendNotify") : "";
 let cookiesArr = [], cookie = "", message = "";
