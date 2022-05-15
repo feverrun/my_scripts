@@ -139,7 +139,9 @@ $.appId = "e395f"
 
 async function main() {
   await joinActive();
+  await $.wait(2500);
   await getUserInfo();
+  await $.wait(1500);
 }
 
 //参与活动
@@ -153,6 +155,7 @@ async function joinActive() {
           console.log(`\n${$.name}:  API查询请求失败 ‼️‼️`)
           $.logErr(err);
         } else {
+          //console.log(data);
           data = JSON.parse(data.replace(/\n/g, "").match(new RegExp(/jsonpCBK.?\((.*);*\)/))[1]);
           if (data.iRet === 0) {
             console.log(`活动开启成功\n`);
