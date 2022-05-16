@@ -2,9 +2,9 @@
 5.17~6.1 爱尚夏日 大牌献礼
 新增开卡脚本
 一次性脚本
-借鉴初写开卡
+邀请一人10豆 上限60左右
 https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322051702&shareUuid=8baf6b5c94664741b9918fe535112fa9
-cron "6 4 17-31,1 5,6 *" jd_opencard_dpxl.js, tag=5.17~6.1 爱尚夏日 大牌献礼, enabled=true
+cron "6 8 17-31,1 5,6 *" jd_opencard_asxr.js
 */
 
 let opencard_addSku = "false"
@@ -51,7 +51,9 @@ let activityCookie =''
         return;
     }
     $.activityId = '90322051702'
-    $.shareUuid = '8baf6b5c94664741b9918fe535112fa9'
+
+    codeList = ['8baf6b5c94664741b9918fe535112fa9', '2740ca5fad6b441d8537d71d90869249'];
+    $.shareUuid = authorCodeList[random(0, codeList.length)];
     console.log(`入口:\nhttps://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -86,8 +88,6 @@ let activityCookie =''
 
 async function run() {
     try {
-        // $.hasEnd = true
-        // $.endTime = 0
         lz_jdpin_token_cookie = ''
         $.Token = ''
         $.Pin = ''
@@ -118,13 +118,13 @@ async function run() {
         await takePostRequest('accessLogWithAD');
         await takePostRequest('getUserInfo');
         await takePostRequest('activityContent');
+
         if($.hotFlag) return
         if(!$.actorUuid){
             console.log('获取不到[actorUuid]退出执行，请重新执行')
             return
         }
 
-        //一键关注
         await $.wait(1500);
         await takePostRequest('followshop');
 
@@ -167,8 +167,7 @@ async function run() {
         if($.yaoqing){
             await takePostRequest('助力');
         }
-        // $.log("加购: " + $.addCart)
-        //
+
         if(flag){
             await takePostRequest('activityContent');
         }
@@ -247,8 +246,9 @@ async function takePostRequest(type) {
         default:
             console.log(`错误${type}`);
     }
+    await $.wait(500);
+
     let myRequest = getPostRequest(url, body, method);
-    // console.log(myRequest)
     return new Promise(async resolve => {
         $.post(myRequest, (err, resp, data) => {
             try {
@@ -347,15 +347,10 @@ async function dealReturn(type, data) {
             case 'activityContent':
                 if(typeof res == 'object'){
                     if(res.result && res.result === true){
-                        // $.endTime = res.data.endTime || (res.data.activityVo && res.data.activityVo.endTime) || res.data.activity.endTime || 0
-                        // $.hasEnd = res.data.isEnd || false
-                        // $.drawCount = res.data.actor.drawCount || 0
-                        // $.point = res.data.actor.point || 0
-                        // $.score = res.data.actor.score || 0
                         $.actorUuid = res.data.uid || ''
                         $.followShop = res.data.followstatus || ''
-                        console.log(`actorUuid:${$.actorUuid}`);
-                        console.log(`followShop:${$.followShop}`);
+                        // console.log(`actorUuid:${$.actorUuid}`);
+                        // console.log(`followShop:${$.followShop}`);
                     }else if(res.errorMessage){
                         console.log(`${type} ${res.errorMessage || ''}`)
                     }else{
@@ -513,7 +508,6 @@ async function joinShop() {
         let body = `{"venderId":"${$.joinVenderId}","bindByVerifyCodeFlag":1,"registerExtend":{},"writeChildFlag":0${activityId},"channel":401}`
         let h5st = 'undefined'
         try {
-            // h5st = await h5stSign(body, "bindWithVender") || 'undefined'
             h5st = '20220517012206640%3B3612770357957771%3B8adfb%3Btk02wc3671cce18nWCoUize75ORTLchMXKU3iYibrQwpZvYA%2F3UEUkithDbzKXNP6mHvvypQTfg3TLc%2FNZmQtKV3Je7z%3B23b905094b5ba660fbef10136c25d4ce02d4ba625200db46b9451f64bf92b6d2%3B3.0%3B1652721726640';
         } catch (e) {
             h5st = 'undefined'
@@ -565,9 +559,7 @@ async function getshopactivityId() {
         let body = `{"venderId":"${$.joinVenderId}","channel":401,"payUpShop":true,"queryVersion":"10.5.2"}`
         let h5st = 'undefined'
         try {
-            //h5st = await h5stSign(body, "getShopOpenCardInfo") || 'undefined'
             h5st = '20220517012201499%3B2933435981099268%3Bef79a%3Btk02w92631bfa18nhD4ubf3QfNiU8ED2PI270ygsn%2BvamuBQh0lVE6v7UAwckz3s2OtlFEfth5LbQdWOPNvPEYHuU2Tw%3Bb01c7c4f99a8ffb2b5e69282f45a14e1b87c90a96217006311ae4cfdcbd1a932%3B3.0%3B1652721721499'
-
         } catch (e) {
             h5st = 'undefined'
         }
@@ -585,14 +577,13 @@ async function getshopactivityId() {
         $.get(options, async (err, resp, data) => {
             try {
                 data = data && data.match(/jsonp_.*?\((.*?)\);/) && data.match(/jsonp_.*?\((.*?)\);/)[1] || data
-                console.log(`getShopOpenCardInfo:${data}`)
+                // console.log(`getShopOpenCardInfo:${data}`)
                 let res = $.toObj(data, data);
                 if (res && typeof res == 'object') {
                     if (res && res.success == true) {
                         // console.log($.toStr(res.result))
-                        // console.log(`入会:${res.result.shopMemberCardInfo.venderCardName || ''}`)
+                        console.log(`入会:${res.result[0].shopMemberCardInfo.venderCardName || ''}`)
                         $.shopactivityId = res.result.interestsRuleList && res.result.interestsRuleList[0] && res.result.interestsRuleList[0].interestsInfo && res.result.interestsRuleList[0].interestsInfo.activityId || ''
-                        console.log($.shopactivityId);
                     }
                 } else {
                     console.log(data)
@@ -604,6 +595,10 @@ async function getshopactivityId() {
             }
         })
     })
+}
+
+function random(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 // prettier-ignore
