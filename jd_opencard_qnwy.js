@@ -1,6 +1,6 @@
 /*
 情暖五月 以爱之名
-cron "6 21 * * *" jd_opencard_qn.js
+cron "1 1 1 1 1" jd_opencard_qnwy.js
 */
 const $ = new Env("情暖五月 以爱之名");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
