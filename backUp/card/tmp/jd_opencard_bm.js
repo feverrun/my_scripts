@@ -1,6 +1,7 @@
 /*
 哆啦宝妈 鲜气驾到
-cron "6 13 * * *" jd_opencard_bm.js
+每天上限5个
+cron "1 1 1 1 1" jd_opencard_bm.js
 */
 const $ = new Env("哆啦宝妈 鲜气驾到");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
