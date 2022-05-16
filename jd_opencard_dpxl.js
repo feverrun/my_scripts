@@ -4,7 +4,7 @@
 一次性脚本
 借鉴初写开卡
 https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322051702&shareUuid=8baf6b5c94664741b9918fe535112fa9
-6 4 17-31,1 5,6 * jd_opencard_cxyh.js, tag=5.17~6.1 爱尚夏日 大牌献礼, enabled=true
+cron "6 4 17-31,1 5,6 *" jd_opencard_dpxl.js, tag=5.17~6.1 爱尚夏日 大牌献礼, enabled=true
 */
 
 let opencard_addSku = "false"
