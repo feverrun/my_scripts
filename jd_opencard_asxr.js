@@ -53,7 +53,7 @@ let activityCookie =''
     $.activityId = '90322051702'
 
     codeList = ['8baf6b5c94664741b9918fe535112fa9', '2740ca5fad6b441d8537d71d90869249'];
-    $.shareUuid = authorCodeList[random(0, codeList.length)];
+    $.shareUuid = codeList[random(0, codeList.length)];
     console.log(`入口:\nhttps://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
     for (let i = 0; i < cookiesArr.length; i++) {
