@@ -66,12 +66,14 @@ let activityCookie =''
             $.bean = 0
             $.hotFlag = false
             $.nickName = '';
-            await checkCookie();
-            console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-                continue;
-            }
+            // await checkCookie();
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            // if (!$.isLogin) {
+            //     $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+            //     if ($.isNode()) {
+            //     }
+            //     continue
+            // }
             await getUA()
             await run();
             if(i == 0 && !$.actorUuid) break
@@ -555,7 +557,7 @@ async function joinShop() {
                 let res = $.toObj(data, data);
                 if (res && typeof res == 'object') {
                     if (res && res.success === true) {
-                        console.log(res.message)
+                        // console.log(res.message)
                         $.errorJoinShop = res.message
                         if (res.result && res.result.giftInfo) {
                             for (let i of res.result.giftInfo.giftList) {
@@ -626,21 +628,21 @@ function checkCookie() {
     const options = {
         url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
         headers: {
-            Host: "me-api.jd.com",
-            Accept: "*/*",
-            Connection: "keep-alive",
-            Cookie: cookie,
+            "Host": "me-api.jd.com",
+            "Accept": "*/*",
+            "Connection": "keep-alive",
+            "Cookie": cookie,
             "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1",
             "Accept-Language": "zh-cn",
-            Referer: "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
+            "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
             "Accept-Encoding": "gzip, deflate, br",
-        },
+        }
     };
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         $.get(options, (err, resp, data) => {
             try {
                 if (err) {
-                    $.logErr(err);
+                    $.logErr(err)
                 } else {
                     if (data) {
                         data = JSON.parse(data);
@@ -652,17 +654,18 @@ function checkCookie() {
                             $.nickName = data.data.userInfo.baseInfo.nickname;
                         }
                     } else {
-                        $.log("京东返回了空数据");
+                        $.log('京东返回了空数据');
                     }
                 }
             } catch (e) {
-                $.logErr(e);
+                $.logErr(e)
             } finally {
                 resolve();
             }
-        });
-    });
+        })
+    })
 }
+
 
 function random(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
