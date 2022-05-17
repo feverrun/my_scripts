@@ -1,24 +1,22 @@
 /*
-5.17~6.1 爱尚夏日 大牌献礼
+5.17~6.1 打牌汇聚 年中献礼
 新增开卡脚本
 一次性脚本
 邀请一人10豆 上限60左右
-https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322051702&shareUuid=8baf6b5c94664741b9918fe535112fa9
-cron "6 8 17-31,1 5,6 *" jd_opencard_asxr.js
+https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322051701&shareUuid=8baf6b5c94664741b9918fe535112fa9
+cron "6 8 17-31,1 5,6 *" jd_opencard_oasxr.js
 */
+
+const $ = new Env('5.17~6.1 打牌汇聚 年中献礼')
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
 
 let opencard_addSku = "false"
 let opencard = "true"
 let openwait = "2"
 let opencard_draw = "0"
+let cookiesArr = [], cookie = '';
 
-const $ = new Env('5.17~6.1 爱尚夏日 大牌献礼')
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
-
-//IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [],
-    cookie = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -50,11 +48,10 @@ let activityCookie =''
         });
         return;
     }
-    $.activityId = '90322051702'
+    $.activityId = '90322051701'
 
     let authorCodeList = [
-        '8baf6b5c94664741b9918fe535112fa9',
-        '2740ca5fad6b441d8537d71d90869249'
+        'e2eec4aded144c799129a59fb837f9d5',
     ];
     $.shareUuid = authorCodeList[random(0, authorCodeList.length)];
     console.log(`入口:\nhttps://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
@@ -128,38 +125,45 @@ async function run() {
             return
         }
 
-        await $.wait(1500);
-        await takePostRequest('followshop');
+        await takePostRequest('myinfo');
+
+        //一键关注店铺
+        if ($.followShop !=1) {
+            await $.wait(1500);
+            await takePostRequest('followshop');
+        }
 
         await $.wait(1500);
-        $.openList = [1000014603,1000187767,1000001373,1000008901,1000377971,1000376284,1000398209,1000016584,1000002558,1000104146,1000135329, 1000370807,1000411104];
-        $.allOpenCard = false
+        $.openList = [1000004065,1000003685,1000001195,1000001865,1000003005,1000000866,1000099701,1000086041,1000221587,1000090821,1000410617];
+
+        console.log(`openCardStatus:${$.openCardStatus}`);
+        $.allOpenCard =  ($.openCardStatus == 3 || $.openCardStatus == 0) ? true : false;
 
         if($.allOpenCard == false){
             console.log('开卡任务')
             for(let ii=0; ii< $.openList.length; ii++){
                 $.openCard = false
-                    flag = true
-                    $.shopactivityId = ''
-                    $.joinVenderId = $.openList[ii];
-                    console.log($.joinVenderId);
-                    await getshopactivityId()
-                    for (let i = 0; i < Array(2).length; i++) {
-                        if (i > 0) console.log(`第${i}次 重新开卡`)
-                        await joinShop();
-                        await $.wait(1000);
-                        if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') == -1) {
-                            break
-                        }
+                flag = true
+                $.shopactivityId = ''
+                $.joinVenderId = $.openList[ii];
+                console.log($.joinVenderId);
+                await getshopactivityId()
+                for (let i = 0; i < Array(2).length; i++) {
+                    if (i > 0) console.log(`第${i}次 重新开卡`)
+                    await joinShop();
+                    await $.wait(1000);
+                    if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') == -1) {
+                        break
                     }
-                    if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
-                        console.log("开卡失败❌ ，重新执行脚本")
-                        allMessage += `【账号${$.index}】开卡失败❌ ，重新执行脚本\n`
-                    } else {
-                        $.joinStatus = true
-                    }
-                    await takePostRequest('activityContent');
-                    await $.wait(2500)
+                }
+                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                    console.log("开卡失败❌ ，重新执行脚本")
+                    allMessage += `【账号${$.index}】开卡失败❌ ，重新执行脚本\n`
+                } else {
+                    $.joinStatus = true
+                }
+                await takePostRequest('activityContent');
+                await $.wait(2500)
             }
         }else{
             console.log('已全部开卡')
@@ -234,15 +238,19 @@ async function takePostRequest(type) {
             url = `${domain}/dingzhi/union/cardgame2205/activityContent`;
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&pinImg=${encodeURIComponent($.attrTouXiang)}&nick=${encodeURIComponent($.nickname)}&cjyxPin=&cjhyPin=&shareUuid=${$.shareUuid}`
             break;
+        case 'myinfo':
+            url = `${domain}/dingzhi/union/cardgame2205/myInfo?_=${Date.now()}`;
+            body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&uid=${$.actorUuid}`;
+            break;
         case 'sign':
         case 'followshop':
-            url = `${domain}/dingzhi/union/cardgame2205/doTask?_${Date.now()}`;
+            url = `${domain}/dingzhi/union/cardgame2205/doTask?_=${Date.now()}`;
             body = `taskId=followshop&param=&activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&uid=${$.actorUuid}`
             break;
         case '邀请':
         case '助力':
             if(type == '助力'){
-                url = `${domain}/dingzhi/union/cardgame2205/helpFriend?_${Date.now()}`;
+                url = `${domain}/dingzhi/union/cardgame2205/helpFriend?_=${Date.now()}`;
             }
             body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&shareUuid=${$.shareUuid}&uid=${$.actorUuid}`
             break;
@@ -352,6 +360,9 @@ async function dealReturn(type, data) {
                     if(res.result && res.result === true){
                         $.actorUuid = res.data.uid || ''
                         $.followShop = res.data.followstatus || ''
+                        $.isGameEnd = res.data.isGameEnd || ''
+                        $.newVip = res.data.newVip || ''
+                        $.openCardStatus = res.data.openCardStatus || ''
                         // console.log(`actorUuid:${$.actorUuid}`);
                         // console.log(`followShop:${$.followShop}`);
                     }else if(res.errorMessage){
@@ -363,6 +374,12 @@ async function dealReturn(type, data) {
                     console.log(`${type} ${data}`)
                 }
                 break;
+            case 'myinfo':
+                // console.log(`myinfo:${data}`);
+                break;
+            case 'followshop':
+                console.log(`followshop:${data}`);
+                break;
             case 'startDraw':
             case 'followShop':
             case 'viewVideo':
@@ -373,14 +390,13 @@ async function dealReturn(type, data) {
             case 'addCart':
             case 'browseGoods':
             case '邀请':
-            case 'followshop':
-                console.log(data)
             case '助力':
                 if(typeof res == 'object'){
                     console.log(data)
                 }else{
                     console.log(`${type} ${data}`)
                 }
+                break;
             case 'accessLogWithAD':
             // case 'drawContent':
             //     break;
