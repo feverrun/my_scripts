@@ -138,7 +138,7 @@ async function run() {
         $.openList = [1000014603,1000187767,1000001373,1000008901,1000377971,1000376284,1000398209,1000016584,1000002558,1000104146,1000135329, 1000370807,1000411104];
 
         console.log(`openCardStatus:${$.openCardStatus}`);
-        $.allOpenCard =  ($.openCardStatus == 3) ? true : false;
+        $.allOpenCard =  ($.openCardStatus == 3 || $.openCardStatus == 0) ? true : false;
 
         if($.allOpenCard == false){
             console.log('开卡任务')
