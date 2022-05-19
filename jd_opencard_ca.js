@@ -1,7 +1,7 @@
 /*
 五月宠爱季 和你在一起
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkbd172c997dbf3c4fa4d2cf42
-cron "1 1 1 1 1" jd_opencard_wyca.js
+cron "6 17 1 1 1" jd_opencard_ca.js
 */
 const $ = new Env("五月宠爱季 和你在一起");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
