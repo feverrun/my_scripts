@@ -482,7 +482,7 @@ async function dealReturn(type, data) {
                             if(item.value == '邀请好友') value = item.infoName.replace('京豆','');
                             if(item.value != '邀请好友') console.log(`${item.infoType != 10 && item.value +':' || ''}${item.infoName}`)
                         }
-                        if(num > 0) console.log(`邀请好友(${num}):${num*parseInt(value, 10) || 30}京豆`)
+                        if(num > 0) console.log(`邀请好友(${num}):${num*parseInt(value, 10) || 0}京豆`)
                     }else if(res.errorMessage){
                         console.log(`${type} ${res.errorMessage || ''}`)
                     }else{
