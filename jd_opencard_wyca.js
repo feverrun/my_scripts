@@ -2,7 +2,7 @@
 5.20~5.28 甜蜜派对 五月宠爱季
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk02f74bd4ac17f97a692c0268
 ##cron "1 1 1 1 1" jd_opencard_tcdj.js
-cron "6 2 20-28 5 *" jd_opencard_wycaj.js
+cron "8 7 20-28 5 *" jd_opencard_wyca.js
 */
 const $ = new Env('5.20~5.28 甜蜜派对 五月宠爱季')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
