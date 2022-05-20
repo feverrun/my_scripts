@@ -1,10 +1,10 @@
 /*
-大牌优惠趴 五月爱相伴
+5.20~5.31 大牌优惠趴 五月爱相伴
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk9145b47ab912aa953547c9bf4
-##cron "1 1 1 1 1" jd_opencard_tcdj.js
-cron "8 16 * * *" jd_opencard_axb.js
+##cron "1 1 1 1 1" jd_opencard_xxx.js
+cron "8 18 20-28 5 *" jd_opencard_wyaxb.js
 */
-const $ = new Env('大牌优惠趴 五月爱相伴')
+const $ = new Env('5.20~5.31 大牌优惠趴 五月爱相伴')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '';
