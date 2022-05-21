@@ -1,13 +1,16 @@
 /*
-一见倾芯 天长地久
-cron "5 12 17-31,1-16 5,6 *" jd_opencard_tcdj.js
+五月宠爱季 和你在一起
+https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkbd172c997dbf3c4fa4d2cf42
+##cron "11 4 * * *" jd_opencard_zyq.js
+cron "1 1 1 1 1" jd_opencard_hnzyq.js
 */
-const $ = new Env("一见倾芯 天长地久");
+const $ = new Env("五月宠爱季 和你在一起");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require("./sendNotify") : "";
 let cookiesArr = [], cookie = "", message = "";
 let ownCode = null;
 let authorCodeList = [];
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item]);
@@ -28,7 +31,6 @@ if ($.isNode()) {
         $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/bean/signIndex.action", { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -42,23 +44,20 @@ if ($.isNode()) {
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             if (!$.isLogin) {
                 $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-                // if ($.isNode()) {
-                //     await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                // }
                 continue;
             }
             $.bean = 0;
             $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
             $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
             authorCodeList = [
-                '0c6699b132734e76a4e35d11e6d7fe2b',
+                '8a457fd10a504897ac18ead708fe3e3a',
             ];
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)];
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
             $.authorNum = `${random(1000000, 9999999)}`;
             $.randomCode = random(1000000, 9999999);
-            $.activityId = "dzlhkk0c046a602d347bea3e27b82f5";
-            $.activityShopId = "1000072521";
+            $.activityId = "dzlhkkbd172c997dbf3c4fa4d2cf42";
+            $.activityShopId = "1000003443";
             $.activityUrl = `https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=SD&shareuserid4minipg=${encodeURIComponent($.secretPin)}&shopid=undefined&lng=00.000000&lat=00.000000&sid=&un_area=`;
             await member();
             // await $.wait(1000);
@@ -117,7 +116,7 @@ async function member() {
                     await getToken();
                     if (vo.status == 0) {
                         await getShopOpenCardInfo({ venderId: `${vo.venderId}`, channel: "401" }, vo.venderId);
-                        console.log($.openCardActivityId)
+                        // console.log($.openCardActivityId)
                         await bindWithVender({ venderId: `${vo.venderId}`, bindByVerifyCodeFlag: 1, registerExtend: {}, writeChildFlag: 0, activityId: 2329491, channel: 401 }, vo.venderId);
                         await $.wait(500);
                     } else {
