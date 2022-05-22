@@ -1,12 +1,11 @@
 /*
   入口>京东极速版>首页>签到免单
   京东极速版,先下单,第二天开始签到
-  9 12 * * * jd_speed_signfree.js 签到免单
+  ##cron "9 1 * * *" jd_speed_signfree.js 签到免单
 */
-// 自行确认是否有效
 
 const $ = new Env('极速免费签到');
-const notify = $.isNode() ? require('./sendNotify') : '';
+// const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const UA = $.isNode() ? (process.env.JS_USER_AGENT ? process.env.JS_USER_AGENT : (require('./JS_USER_AGENTS').USER_AGENT)) : ($.getdata('JSUA') ? $.getdata('JSUA') : "'jdltapp;iPad;3.8.10;14.4;network/wifi;Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
 let cookiesArr = [], cookie, msg = []
@@ -31,22 +30,24 @@ const JD_API_HOST = 'https://api.m.jd.com/';
             $.nickName = '';
             message = '';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            msg.push(($.nickName || $.UserName) + ':')
-            first_flag = true
+            // msg.push(($.nickName || $.UserName) + ':')
+            first_flag = true;
+            await TaskInviteService();
             await sign_all()
+            await $.wait(parseInt(Math.random() * 5000 + 500, 10));
         }
     }
-    if (msg.length) {
-        console.log('有消息,推送消息')
-        await notify.sendNotify($.name, msg.join('\n'))
-    } else {
-        console.error('无消息,推送错误')
-        await notify.sendNotify($.name + '错误!!', "无消息可推送!!")
-    }
+    // if (msg.length) {
+    //     console.log('有消息,推送消息')
+    //     await notify.sendNotify($.name, msg.join('\n'))
+    // } else {
+    //     console.error('无消息,推送错误')
+    //     await notify.sendNotify($.name + '错误!!', "无消息可推送!!")
+    // }
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-        notify.sendNotify($.name + '异常!!', msg.join('\n') + '\n' + e)
+        // notify.sendNotify($.name + '异常!!', msg.join('\n') + '\n' + e)
     })
     .finally(() => {
         $.msg($.name, '', `结束`);
@@ -173,7 +174,28 @@ function cash(orderId) {
         })
     })
 }
-
+function TaskInviteService() {
+    let inviterIdArr = ["QeIexkaFC5uOTXe1H68kGw=="]
+    let inviterId = inviterIdArr[Math.floor((Math.random() * inviterIdArr.length))]
+    let options = {
+        url: "https://api.m.jd.com/",
+        body: `functionId=TaskInviteService&body=${JSON.stringify({"method":"participateInviteTask","data":{"channel":"1","encryptionInviterPin":encodeURIComponent(inviterId),"type":1}})}&appid=market-task-h5&uuid=&_t=${Date.now()}`,
+        headers: {
+            "Host": "api.m.jd.com",
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Origin": "https://assignment.jd.com",
+            "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+            "User-Agent": $.isNode() ? (process.env.JS_USER_AGENT ? process.env.JS_USER_AGENT : (require('./JS_USER_AGENTS').USER_AGENT)) : ($.getdata('JSUA') ? $.getdata('JSUA') : "'jdltapp;iPad;3.1.0;14.4;network/wifi;Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            "Referer": "https://assignment.jd.com/",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Cookie": cookie
+        }
+    }
+    $.post(options, (err, resp, data) => {
+        // console.log(data)
+    })
+}
 function taskPostUrl(function_id, body) {
     return {
         url: `${JD_API_HOST}`,
