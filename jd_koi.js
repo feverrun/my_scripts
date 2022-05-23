@@ -6,7 +6,6 @@ modify:5.20
 https://t.me/proenv
 export JD_KOI_CODE="xxxxxxxx"
 填上述变量则助力指定码，不会自动开红包。 默认不用填，会自动开红包。
-##cron "37 1,20 * * *" script-path=jd_koi_help.js, tag=锦鲤红包互助
 */
 const $ = new Env("锦鲤红包互助");
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
