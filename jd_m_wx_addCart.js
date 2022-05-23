@@ -2,8 +2,8 @@
 /**
  cron "1 1 1 1 1" jd_m_wx_addCart.js
  */
-let mode = __dirname.includes('./utils/magic')
-const {Env} = mode ? require('./utils/magic') : require('./magic')
+let mode = __dirname.includes('./magic')
+const {Env} = mode ? require('./magic') : require('./utils/magic')
 const $ = new Env('M加购有礼');
 $.activityUrl = process.env.M_WX_ADD_CART_URL
     ? process.env.M_WX_ADD_CART_URL

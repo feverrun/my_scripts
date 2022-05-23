@@ -360,7 +360,7 @@ if(DisableIndex!=-1){
         await getjdfruit();
         if (llgeterror) {
           console.log(`东东农场API查询失败,等待15秒后再次尝试...`)
-          await $.wait(15 * 1000);
+          await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
           await getjdfruit();
         }
         if (llgeterror) {
@@ -386,7 +386,7 @@ if(DisableIndex!=-1){
         console.log("开始获取月数据，请稍后...");
         await Monthbean();
         console.log("月数据获取完毕，暂停10秒防止IP被黑...");
-        await $.wait(10000);
+        await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
       }
 
       //京喜工厂
@@ -508,7 +508,7 @@ if(DisableIndex!=-1){
       await notify.sendNotify(`${$.name}#2`, `${allMessageGp2}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       }, '\n',TempMessage)
-      await $.wait(10000);
+      await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
     }
     if ($.isNode() && allMessageGp3) {
       var TempMessage=allMessageGp3;
@@ -517,7 +517,7 @@ if(DisableIndex!=-1){
       await notify.sendNotify(`${$.name}#3`, `${allMessageGp3}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       }, '\n',TempMessage)
-      await $.wait(10000);
+      await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
     }
     if ($.isNode() && allMessageGp4) {
       var TempMessage=allMessageGp4;
@@ -526,7 +526,7 @@ if(DisableIndex!=-1){
       await notify.sendNotify(`${$.name}#4`, `${allMessageGp4}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       }, '\n',TempMessage)
-      await $.wait(10000);
+      await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
     }
     if ($.isNode() && allMessage) {
       var TempMessage=allMessage;
@@ -536,32 +536,32 @@ if(DisableIndex!=-1){
       await notify.sendNotify(`${$.name}`, `${allMessage}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       }, '\n',TempMessage)
-      await $.wait(10000);
+      await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
     }
 
     if ($.isNode() && allMessageMonthGp2) {
       await notify.sendNotify(`京东月资产变动#2`, `${allMessageMonthGp2}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       })
-      await $.wait(10000);
+      await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
     }
     if ($.isNode() && allMessageMonthGp3) {
       await notify.sendNotify(`京东月资产变动#3`, `${allMessageMonthGp3}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       })
-      await $.wait(10000);
+      await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
     }
     if ($.isNode() && allMessageMonthGp4) {
       await notify.sendNotify(`京东月资产变动#4`, `${allMessageMonthGp4}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       })
-      await $.wait(10000);
+      await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
     }
     if ($.isNode() && allMessageMonth) {
       await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
         url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
       })
-      await $.wait(10000);
+      await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
     }
   }
 
@@ -570,28 +570,28 @@ if(DisableIndex!=-1){
     await notify.sendNotify("京东提醒榜#2", `${allMessage2Gp2}`, {
       url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
     })
-    await $.wait(10000);
+    await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
   }
   if ($.isNode() && allMessage2Gp3) {
     allMessage2Gp3 += RemainMessage;
     await notify.sendNotify("京东提醒榜#3", `${allMessage2Gp3}`, {
       url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
     })
-    await $.wait(10000);
+    await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
   }
   if ($.isNode() && allMessage2Gp4) {
     allMessage2Gp4 += RemainMessage;
     await notify.sendNotify("京东提醒榜#4", `${allMessage2Gp4}`, {
       url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
     })
-    await $.wait(10000);
+    await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
   }
   if ($.isNode() && allMessage2) {
     allMessage2 += RemainMessage;
     await notify.sendNotify("京东提醒榜", `${allMessage2}`, {
       url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
     })
-    await $.wait(10000);
+    await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
   }
 
 })()
@@ -1024,7 +1024,7 @@ async function bean() {
       todayArr = [];
   do {
     let response = await getJingBeanBalanceDetail(page);
-    await $.wait(2000);
+    await $.wait(parseInt(Math.random() * 5000 + 1000, 10))
     // console.log(`第${page}页: ${JSON.stringify(response)}`);
     if (response && response.code === "0") {
       page++;

@@ -2,8 +2,8 @@
 /**
  cron "1 1 1 1 1" jd_m_wx_luckDraw.js
  */
-let mode = __dirname.includes('./utils/magic')
-const {Env} = mode ? require('./utils/magic') : require('./magic')
+let mode = __dirname.includes('./magic')
+const {Env} = mode ? require('./magic') : require('./utils/magic')
 const $ = new Env('M幸运抽奖');
 $.activityUrl = process.env.M_WX_LUCK_DRAW_URL
     ? process.env.M_WX_LUCK_DRAW_URL
