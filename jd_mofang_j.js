@@ -1,7 +1,7 @@
 /*
 京东集魔方
 #集魔方
-10 6,23 * * * jd_mofang_j.js, tag=集魔方, enabled=true
+10 10 24-26 5 * jd_mofang_j.js, tag=集魔方, enabled=true
  */
 
 const $ = new Env('京东集魔方');
@@ -156,7 +156,7 @@ function queryPanamaFloor() {
                     if (safeGet(data)) {
                         data = JSON.parse(data)
                         for (let skuVo of data.data.advData.list) {
-                            $.sku2 = ["100035127996","100020571745","100036441470","100019125569","100032353530", "100033492870", "100033551096", "100035250900"]
+                            $.sku2 = ["100038312438","100022213851","100038312444","100038962384","100023274622", "100035222536", "10051584954296", "10052442367186"]
                             $.sku2.push(skuVo.advertId)
                         }
                     }
