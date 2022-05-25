@@ -4,7 +4,7 @@
 https://lzdz1-isv.isvjcloud.com/dingzhi/baby/pairysactivity?activityId=dz730c272a4834c1d8fd2e295a008e&shareUuid=691a470130264018a5deb1bb11aa7624
 
 #5.20~6.2 快乐自定义
-8 14 20-31,1-2 5,6 * jd_opencard_kl.js, tag=5.20~6.2 快乐自定义 , enabled=true
+cron "1 1 1 1 1" jd_opencard_kl.js, tag=5.20~6.2 快乐自定义 , enabled=true
 */
 
 const $ = new Env('5.20~6.2 快乐自定义 ');
