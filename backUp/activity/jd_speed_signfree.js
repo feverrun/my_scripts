@@ -32,7 +32,7 @@ const JD_API_HOST = 'https://api.m.jd.com/';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             // msg.push(($.nickName || $.UserName) + ':')
             first_flag = true;
-            await TaskInviteService();
+            // await TaskInviteService();
             await sign_all()
             await $.wait(parseInt(Math.random() * 5000 + 500, 10));
         }
