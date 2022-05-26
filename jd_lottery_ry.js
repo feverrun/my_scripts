@@ -1,11 +1,11 @@
 /*
 #荣耀抽奖机活动
-30 0 * * * jd_618jk.js, tag=荣耀抽奖机活动, enabled=true
+30 0 * * * jd_lottery_ry.js, tag=荣耀抽奖机活动, enabled=true
  */
 const $ = new Env('荣耀抽奖机活动');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
+let jdNotify = true;
 $.configCode = "aa6afd716cda497ab83d3f452443ecf6";
 
 let cookiesArr = [], cookie = '', message;
