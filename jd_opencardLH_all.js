@@ -1,6 +1,6 @@
 /*
 author: 小埋
-actId 活动id
+export DPLHTY="" 活动id
 无内置,助力ck1,默认不跑 (手动运行)
 cron "1 1 1 1 1" jd_opencardLH_all.js
 */
@@ -9,7 +9,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let ownCode = null;
-let actId = process.env.actId ?? '';
+let actId = process.env.DPLHTY ?? '';
 
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -31,7 +31,7 @@ if ($.isNode()) {
         return;
     }
     if (!actId) {
-        console.log(`未设置actId`);
+        console.log(`export DPLHTY="活动id"`);
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
