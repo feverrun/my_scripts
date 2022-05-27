@@ -1,4 +1,5 @@
 /*
+https://github.com/feverrun/my_scripts
 京东极速版红包
 每日3次开红包机会，开到现金才进行提现
 活动入口：京东极速版-领红包

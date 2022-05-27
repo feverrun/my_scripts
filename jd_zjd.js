@@ -1,4 +1,5 @@
 /**
+ * https://github.com/feverrun/my_scripts
  * 赚京豆
  * 默认开团前20， 通过export ZJD_OPEN="10"可自行设置开团数
  cron "41 0,3,6 * * *" jd_zjd.js

@@ -1,4 +1,5 @@
 /*
+https://github.com/feverrun/my_scripts
 活动地址:
 https://lzkjdz-isv.isvjcloud.com/pool/captain/55667?activityId=4e3b9b6233104c199c0c44ff6edbc85d
 &signUuid=f24703dd855b4925b170350b528fb8bd&shareuserid4minipg=null&shopid=1000014803

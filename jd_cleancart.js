@@ -1,4 +1,5 @@
 /*
+https://github.com/feverrun/my_scripts
 cron "49 8,13,17,23 * * *" jd_cleancart.js
 */
 const $ = new Env('清空购物车');

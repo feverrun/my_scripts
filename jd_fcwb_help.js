@@ -2,7 +2,7 @@
 发财挖宝
 更新时间：2021-10-30
 活动入口：极速版-发财挖宝
-author: feverrun
+https://github.com/feverrun/my_scripts
 不配置环境
 仅助力内部第一个号 不做任务  满40个助力自动退出
 配置环境

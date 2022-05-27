@@ -1,6 +1,7 @@
 /*
 入口 极速版 赚金币 推一推
 #推一推
+https://github.com/feverrun/my_scripts
 1.内部默认只助力内部第一个号
 2.环境变量 助力指定的码
 export TYT_PACKETID=''
