@@ -1,7 +1,7 @@
 /*
 5.27~6.1 我的新家 超级配
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkde5c0b4e3c90bdb208688e7c
-cron "8 11 * * *" jd_opencard_xj5.js
+cron "1 1 1 1 1" jd_opencard_wdxj.js
 */
 const $ = new Env('5.27~6.1 我的新家 超级配')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
