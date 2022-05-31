@@ -1,10 +1,9 @@
 /*
-会员联合狂欢618
+5.23~6.20  会员联合狂欢618
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=unionkbblnt20220520dzlhkk
-##cron "1 1 1 1 1" jd_opencard_tcdj.js
-cron "8 0 * * *" jd_opencard_lhkh.js
+cron "11 3 23-31,1-20 5,6 *" jd_opencard_kh.js
 */
-const $ = new Env('会员联合狂欢618')
+const $ = new Env('5.23~6.20 会员联合狂欢618')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '';
