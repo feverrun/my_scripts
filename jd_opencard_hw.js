@@ -1,7 +1,7 @@
 /*
 5.31~6.10 大牌联合 好物焕新季
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk27ee45f9b519cce895c4fcfd
-cron "6 22 31,1-10 5,6 *" jd_opencard_tcdj.js
+cron "1 1 1 1 1" jd_opencard_hw.js
 */
 const $ = new Env('5.31~6.10 大牌联合 好物焕新季')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
