@@ -1,7 +1,7 @@
 /**
  * 微定制瓜分京豆
- * @param jd_wdz_activityId 活动id
- * @param jd_wdz_activityUrl 活动url
+ * @param export jd_wdz_activityId="" 活动id
+ * @param export jd_wdz_activityUrl="https://cjhydz-isv.isvjcloud.com" 活动url
  * @param pin 用户名
  * @param num 跑多少ck
  * @param againUserIndex 需要重新跑的ck
