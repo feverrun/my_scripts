@@ -3,7 +3,7 @@
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk17e740478a2c5580a664c23f
 cron "6 12 1-18 6 *" jd_opencard_fx.js
 */
-const $ = new Env('大牌"粽"情奉献')
+const $ = new Env('大牌粽情奉献')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '';
