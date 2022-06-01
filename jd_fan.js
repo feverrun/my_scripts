@@ -9,9 +9,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 
 const activityList = [
-    {'id':'1c97c7b2dcd440c9addfe6fe1ec444df','endTime':1654012799000},//2022-04-29---2022-05-31 微软京东自营官方旗舰店
-    {'id':'456b02e0ad1442c3bf1cc981d64ca0f8','endTime':1653932176000},//
-    {'id':'7ec61221978146358c0838c38e201d6b','endTime':1653932176000},//
+    {'id':'b4a30e4b5b3c4a07aa879afd8e9de3f0','endTime':1656626274000},//
 ]
 
 if ($.isNode()) {
