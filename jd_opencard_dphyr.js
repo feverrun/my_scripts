@@ -2,7 +2,7 @@
 5.24~6.19 大牌会员日
 https://lzdz1-isv.isvjcloud.com/dingzhi/bigname/memberday/activity?activityId=dzcdee05240f344982abf6fd43ceb0
 ##cron "1 1 1 1 1" jd_opencard_tcdj.js
-cron "7 13 24-31,1-19 5,6 *" jd_opencard_dphyr.js
+cron "1 1 1 1 1" jd_opencard_dphyr.js
 */
 const $ = new Env('5.24-6.19 大牌会员日');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

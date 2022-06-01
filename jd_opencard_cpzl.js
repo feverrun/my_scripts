@@ -4,7 +4,7 @@
 一次性脚本
 邀请一人10豆 上限70左右
 https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322052302&shareUuid=8150d42039874dd783194688e2b7e9e0
-cron "6 23 * * *" jd_opencard_cpzl.js
+cron "1 1 1 1 1" jd_opencard_cpzl.js
 */
 
 const $ = new Env('5.23~6.20 寻找潮配之旅')
