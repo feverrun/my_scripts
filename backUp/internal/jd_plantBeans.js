@@ -96,29 +96,12 @@ if ($.isNode() && process.env.CC_NOHELPAFTER8) {
 async function jdPlantBean() {
     try {
         console.log(`获取任务及基本信息`)
-        await plantBeanIndex();
+        await plantBeanIndex('jdPlantBean');
         if ($.plantBeanIndexResult.errorCode === 'PB101') {
             console.log(`\n活动太火爆了，还是去买买买吧！\n`)
             return
         }
-        if ($.plantBeanIndexResult.errorCode) {
-            console.log(`获取任务及基本信息出错，10秒后重试\n`)
-            await $.wait(10000);
-            await plantBeanIndex();
-            if ($.plantBeanIndexResult.errorCode === 'PB101') {
-                console.log(`\n活动太火爆了，还是去买买买吧！\n`)
-                return
-            }
-        }
-        if ($.plantBeanIndexResult.errorCode) {
-            console.log(`获取任务及基本信息出错，30秒后重试\n`)
-            await $.wait(30000);
-            await plantBeanIndex();
-            if ($.plantBeanIndexResult.errorCode === 'PB101') {
-                console.log(`\n活动太火爆了，还是去买买买吧！\n`)
-                return
-            }
-        }
+
         if ($.plantBeanIndexResult.errorCode) {
             console.log(`获取任务及基本信息失败，活动异常，换个时间再试试吧....`)
             console.log("错误代码;"+$.plantBeanIndexResult.errorCode)
@@ -582,8 +565,14 @@ async function helpShare(plantUuid) {
     console.log(`助力结果的code:${$.helpResult && $.helpResult.code}`);
     await $.wait(1500);
 }
-async function plantBeanIndex() {
-    $.plantBeanIndexResult = await request('plantBeanIndex');//plantBeanIndexBody
+async function plantBeanIndex(type='') {
+    if (type == 'jdPlantBean') {
+        $.plantBeanIndexResult = await request('plantBeanIndex');   //plantBeanIndexBody
+        await $.wait(parseInt(Math.random()*2000+1500,10));
+    }
+
+    await $.wait(parseInt(Math.random()*1000+1500,10));
+    // console.log(`plantBeanIndex:${$.plantBeanIndexResult}`);
 }
 //格式化助力码
 function shareCodesFormat() {

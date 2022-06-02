@@ -77,7 +77,8 @@ if ($.isNode()) {
 async function jdPlantBean() {
     try {
         console.log(`获取任务及基本信息`)
-        await plantBeanIndex();
+        await plantBeanIndex('jdPlantBean');
+        await $.wait(parseInt(Math.random()*2000+1500,10));
         for (let i = 0; i < $.plantBeanIndexResult.data.roundList.length; i++) {
             if ($.plantBeanIndexResult.data.roundList[i].roundState === "2") {
                 num = i
@@ -111,7 +112,7 @@ async function jdPlantBean() {
             await receiveNutrients();//定时领取营养液
             await doHelp();//助力
             await doTask();//做日常任务
-            await doEgg();
+            // await doEgg();
             await stealFriendWater();
             await doCultureBean();
             await doGetReward();
@@ -158,6 +159,7 @@ async function doGetReward() {
 
 async function doCultureBean() {
     await plantBeanIndex();
+
     if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0') {
         const plantBeanRound = $.plantBeanIndexResult.data.roundList[num]
         if (plantBeanRound.roundState === '2') {
@@ -484,7 +486,7 @@ async function collectUserNutr(paradiseUuid) {
         "paradiseUuid": paradiseUuid,
         "roundId": currentRoundId
     }
-    await $.wait(1000);
+    await $.wait(parseInt(Math.random()*1000+1000,10));
     $.stealFriendRes = await request(functionId, body);
 }
 async function receiveNutrients() {
@@ -566,14 +568,20 @@ async function helpShare(plantUuid) {
         "shareUuid": "",
         "followType": "1",
     }
-    await $.wait(1000);
+    await $.wait(parseInt(Math.random()*1000+1000,10));
     $.helpResult = await request(`plantBeanIndex`, body);
-    await $.wait(1000);
+    await $.wait(parseInt(Math.random()*1000+1000,10));
     console.log(`助力结果的code:${$.helpResult && $.helpResult.code}`);
 }
-async function plantBeanIndex() {
-    await $.wait(1500);
-    $.plantBeanIndexResult = await request('plantBeanIndex');//plantBeanIndexBody
+
+async function plantBeanIndex(type='') {
+    if (type == 'jdPlantBean') {
+        $.plantBeanIndexResult = await request('plantBeanIndex');   //plantBeanIndexBody
+        await $.wait(parseInt(Math.random()*2000+1500,10));
+    }
+
+    await $.wait(parseInt(Math.random()*1000+1500,10));
+    // console.log(`plantBeanIndex:${$.plantBeanIndexResult}`);
 }
 
 function readShareCode() {
@@ -668,7 +676,7 @@ function requestGet(function_id, body = {}) {
     body["monitor_source"] = "plant_app_plant_index";
     body["monitor_refer"] = "";
     return new Promise(async resolve => {
-        await $.wait(2500);
+        await $.wait(parseInt(Math.random()*2000+1500,10));
         const option = {
             url: `${JD_API_HOST}?functionId=${function_id}&body=${escape(JSON.stringify(body))}&appid=ld`,
             headers: {
@@ -700,9 +708,10 @@ function requestGet(function_id, body = {}) {
     })
 }
 
-function request(function_id, body = {}){
+async function request(function_id, body = {}){
+    await $.wait(parseInt(Math.random()*1000+1500,10));
     return new Promise(async resolve => {
-        await $.wait(3300);
+        await $.wait(parseInt(Math.random()*1000+1500,10));
         $.post(taskUrl(function_id, body), (err, resp, data) => {
             try {
                 // console.log(data)
