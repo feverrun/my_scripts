@@ -31,10 +31,10 @@ let allMessage = '';
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  if (!jdPandaToken) {
-    console.log('请填写Panda获取的Token,变量是PandaToken');
-    return;
-  }
+  // if (!jdPandaToken) {
+  //   console.log('请填写Panda获取的Token,变量是PandaToken');
+  //   return;
+  // }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -56,8 +56,8 @@ let allMessage = '';
 
       await jdCash()
       if ($.break) {
-        console.log(`获取 PandaToken 找 小熊猫 (https://t.me/pang_da_bot) ，每七天找小熊猫续期一次Token。`);
-        await notify.sendNotify(`${$.name}签名获取失败 - ${$.UserName}`, `获取 PandaToken 找 小熊猫 (https://t.me/pang_da_bot) ，每七天找小熊猫续期一次Token。`);
+      //   console.log(`获取 PandaToken 找 小熊猫 (https://t.me/pang_da_bot) ，每七天找小熊猫续期一次Token。`);
+      //   await notify.sendNotify(`${$.name}签名获取失败 - ${$.UserName}`, `获取 PandaToken 找 小熊猫 (https://t.me/pang_da_bot) ，每七天找小熊猫续期一次Token。`);
         break;
       }
       await $.wait(10000);
@@ -319,14 +319,14 @@ function getSignfromPanda(functionId, body) {
   }
   return new Promise((resolve) => {
     let url = {
-      url: "https://api.jds.codes/jd/sign",
+      url: "https://api.zhezhe.cf/jd/sign",//"https://api.jds.codes/jd/sign",
       body: JSON.stringify(data),
       followRedirect: false,
       headers: {
         'Accept': '*/*',
         "accept-encoding": "gzip, deflate, br",
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + jdPandaToken
+        // 'Authorization': 'Bearer ' + jdPandaToken
       },
       timeout: 30000
     }
@@ -335,7 +335,7 @@ function getSignfromPanda(functionId, body) {
         data = JSON.parse(data);
         if (data && data.code == 200) {
           lnrequesttimes = data.request_times;
-          console.log("连接Panda服务成功，当前Token使用次数为" + lnrequesttimes);
+          console.log("连接Panda服务成功") //，当前Token使用次数为" + lnrequesttimes);
           if (data.data.sign)
             strsign = data.data.sign || '';
           if (strsign != '')
