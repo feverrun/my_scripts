@@ -4,7 +4,7 @@
 一次性脚本
 邀请一人10豆 上限70左右
 https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322060501&shareUuid=76ffc374cc2e49df9df1bd89fe209722
-cron "6 12 1-18 6 *" jd_opencard_hwhj.js
+cron "6 12 1-18 6 *" jd_opencard_hj.js
 */
 
 const $ = new Env('6.6~6.20 好物带回家')
