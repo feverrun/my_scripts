@@ -1,21 +1,17 @@
 /*
 京东通天塔--签到
 脚本更新时间：2021-12-17 14:20
-脚本兼容: Node.js
-===========================
-[task_local]
 #京东通天塔--签到
 21 6,19 * * * jd_m_sign.js, tag=京东通天塔--签到, img-url=jd.png, enabled=true
  */
 
 const $ = new Env('京东通天塔--签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
-//Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
-//IOS等用户直接用NobyDa的jd cookie
+let jdNotify = true;    //是否关闭通知，false打开通知推送，true关闭通知推送
 let cookiesArr = [], cookie = '', message = '';
 $.shareCodes = []
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])

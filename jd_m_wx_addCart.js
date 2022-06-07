@@ -1,5 +1,6 @@
 //问题反馈:https://t.me/Wall_E_Channel
 /**
+ export M_WX_ADD_CART_URL = ""
  cron "1 1 1 1 1" jd_m_wx_addCart.js
  */
 let mode = __dirname.includes('./magic')

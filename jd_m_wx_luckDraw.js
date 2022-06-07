@@ -1,5 +1,7 @@
 //问题反馈:https://t.me/Wall_E_Channel
 /**
+ export M_WX_LUCK_DRAW_URL=""
+ 或export M_WX_NOT_LUCK_DRAW_LIST="xx@xx@xx"
  cron "1 1 1 1 1" jd_m_wx_luckDraw.js
  */
 let mode = __dirname.includes('./magic')

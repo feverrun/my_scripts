@@ -1,5 +1,7 @@
 //问题反馈:https://t.me/Wall_E_Channel
 /**
+ export M_WX_ADD_CART_URL=""
+ export M_WX_COLLECT_CARD_LEADERS=""
  cron "1 1 1 1 1" jd_m_wx_collectCard.js
  */
 let mode = __dirname.includes('./magic')

@@ -1,5 +1,6 @@
 //问题反馈:https://t.me/Wall_E_Channel
 /**
+ export M_FOLLOW_SHOP_ARGV=""
  cron "1 1 1 1 1" jd_m_follow_shop.js
  */
 let mode = __dirname.includes('./magic')
