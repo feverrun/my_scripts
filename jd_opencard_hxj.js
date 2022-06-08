@@ -1,8 +1,8 @@
-    /*
-大牌联合 好物焕新季
-cron "1 1 1 1 1" jd_opencard_xxx.js
+/*
+6.8~6.18 大牌联合 好物焕新季
+cron "5 15 8-18 6 1" jd_opencard_hxj.js
 */
-    const $ = new Env("大牌联合 好物焕新季");
+    const $ = new Env("6.8~6.18 大牌联合 好物焕新季");
     const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
     const notify = $.isNode() ? require("./sendNotify") : "";
     let cookiesArr = [], cookie = "", message = "";
