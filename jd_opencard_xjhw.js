@@ -1,7 +1,7 @@
 /*
 6.10~6.20 心尖好物 618拔草时刻
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkke163a6e9a2514a0ca481942d
-cron "3 1 * * 8" jd_opencard_xjhw.js
+cron "5 1 * * *" jd_opencard_xjhw.js
 */
 const $ = new Env('6.10~6.20 心尖好物 618拔草时刻')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
