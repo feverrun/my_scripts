@@ -1,13 +1,13 @@
 /*
-大牌超值购 狂欢享好礼
+6.9-6.19 大牌超值购 狂欢享好礼
 新增开卡脚本
 一次性脚本
 邀请一人10豆 上限70左右
 https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322060107&shareUuid=20ce5e706e0846328480939d872c615e
-cron "5 18 1-18 6 *" jd_opencard_czg.js
+cron "1 1 1 1 1" jd_opencard_czg.js
 */
 
-const $ = new Env('大牌超值购 狂欢享好礼')
+const $ = new Env('6.9-6.19 大牌超值购 狂欢享好礼')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '';
