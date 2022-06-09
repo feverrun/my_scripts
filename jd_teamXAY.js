@@ -4,7 +4,7 @@
 https://lzkjdz-isv.isvjcloud.com/pool/captain/725732?activityId=7dee74f982034f5496a469ecdb4b05f2
 &signUuid=3963186f552a45b599ac266d2bfbe114
 )]
-cron "12 7,19 1-5 5 *" script-path=jd_teamXAY.js,tag=组队分豆-新安怡
+cron "12 6,19 1-30 6 *" script-path=jd_teamXAY.js,tag=组队分豆-新安怡
 */
 const $ = new Env("组队分豆-新安怡");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

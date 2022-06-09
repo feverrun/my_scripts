@@ -10,6 +10,7 @@ let cookiesArr = [];
 
 const activityList = [
     {'id':'b4a30e4b5b3c4a07aa879afd8e9de3f0','endTime':1656626274000},//
+    {'id':'4f49c21967e24e62aa60efc28b015c82','endTime':1656626274000},//
 ]
 
 if ($.isNode()) {
