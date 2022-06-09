@@ -4,7 +4,7 @@
 一次性脚本
 邀请一人10豆 上限70左右
 https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322060107&shareUuid=20ce5e706e0846328480939d872c615e
-cron "1 1 1 1 1" jd_opencard_czg.js
+cron "1 1 1 1 1" jd_opencard_dpczg.js
 */
 
 const $ = new Env('6.9-6.19 大牌超值购 狂欢享好礼')
