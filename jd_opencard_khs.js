@@ -1,7 +1,7 @@
 /*
 6.9~6.18 618好物狂欢盛典
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkfff68792164c43afad9dc23f
-cron "3 23 * * *" jd_opencard_khsd.js
+cron "1 1 1 1 1" jd_opencard_khs.js
 */
 const $ = new Env('6.9~6.18 618好物狂欢盛典')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
