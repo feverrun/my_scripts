@@ -1,7 +1,7 @@
 /*
 6.1-6.20 酒水会员盛典
 https://lzdz1-isv.isvjcloud.com/dingzhi/drinkcategory/piecetoge1/activity?activityId=dz9466823d5b5e4bc589b07d35e6ac&shareUuid=33d951fde5d64b0a84f1caec1f13b7e0
-cron "8 10 1-20 6 *" jd_opencard_js.js
+cron "1 1 1 1 1" jd_opencard_jssd.js
 */
 const $ = new Env('6.1-6.20 酒水会员盛典');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

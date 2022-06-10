@@ -1,7 +1,7 @@
 /*
 6.2~6.20 大牌狂欢嗨享购
 https://lzdz1-isv.isvjcloud.com/dingzhi/may/brandUnion/activity/657324?activityId=dz96fb80e34caa9b51b95b0836967f
-cron "8 15 2-20 6 *" jd_opencard_dpkh.js
+cron "1 1 1 1 1" jd_opencard_khg.js
 */
 const $ = new Env("6.2~6.20 大牌狂欢嗨享购");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";

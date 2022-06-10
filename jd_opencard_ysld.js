@@ -4,7 +4,7 @@
 https://lzkjdz-isv.isvjcloud.com/esteelauder/inviteNew/activityPage?activityId=2206100037674501&inviterUuid=c5c9dfe38e704e5d9375434df42c741c
 
 #雅诗兰黛奢雅邀请入会有礼
-8 14 1-20 6 * jd_opencard_ysld.js, tag=雅诗兰黛奢雅邀请入会有礼, enabled=true
+cron "1 1 1 1 1" jd_opencard_ysld.js, tag=雅诗兰黛奢雅邀请入会有礼, enabled=true
 */
 let opencard = "true"
 let openwait = "2"

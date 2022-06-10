@@ -3,7 +3,7 @@
 新增开卡脚本
 一次性脚本
 https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90322060501&shareUuid=76ffc374cc2e49df9df1bd89fe209722
-cron "5 17 6-20 6 *" jd_opencard_hwhj.js
+cron "1 1 1 1 1" jd_opencard_hhj.js
 */
 
 const $ = new Env('6.6~6.20 好物带回家')
