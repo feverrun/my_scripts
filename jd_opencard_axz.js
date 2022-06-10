@@ -1,7 +1,7 @@
 /*
 6.10~6.20为爱选择 一起618
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkd1304d0fa8d97c17d8423853
-cron "1 1 1 1 1" jd_opencard_waxz.js
+cron "6 1 * * *" jd_opencard_axz.js
 */
 const $ = new Env('6.10~6.20为爱选择 一起618')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
