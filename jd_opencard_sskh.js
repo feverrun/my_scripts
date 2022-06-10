@@ -1,7 +1,7 @@
 /*
 5.31~6.20 时尚狂欢盛典
 https://lzdz1-isv.isvjcloud.com/dingzhi/may/fashionUnion/activity/657324?activityId=dz61218d9945da9fd2f4164d2aad92
-cron "7 13 * * *" jd_opencard_ssk.js
+cron "7 14 * * *" jd_opencard_sskh.js
 */
 
 const $ = new Env('5.31~6.20 时尚狂欢盛典')
