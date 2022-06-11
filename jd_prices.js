@@ -1,7 +1,6 @@
 /*
 京东保价
-[Script]
-cron "22 22 * * *" script-path=jd_price.js,tag=京东保价
+每天随机运行一次, 无需指定特定时间
  */
 
 const $ = new Env('京东保价');
