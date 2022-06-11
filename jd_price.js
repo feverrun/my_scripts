@@ -25,6 +25,8 @@ const JD_API_HOST = 'https://api.m.jd.com/';
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
+
+    await $.wait(parseInt(Math.random() * 10000 + 500, 10))
     await jstoken();
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -46,12 +48,9 @@ const JD_API_HOST = 'https://api.m.jd.com/';
                 }
                 continue
             }
+
             await price()
-            if (i != cookiesArr.length - 1) {
-                await $.wait(2000)
-                await jstoken();
-            }
-            await $.wait(3000)
+            await $.wait(parseInt(Math.random()*2500+2500,10))
         }
     }
     if (allMessage) {
@@ -168,14 +167,14 @@ async function jstoken() {
 
     const { JSDOM } = jsdom;
     let resourceLoader = new jsdom.ResourceLoader({
-        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+        userAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu"
     });
     let virtualConsole = new jsdom.VirtualConsole();
     let options = {
         url: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
         referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
-        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+        userAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         runScripts: "dangerously",
         resources: resourceLoader,
         includeNodeLocations: true,
@@ -185,17 +184,17 @@ async function jstoken() {
     };
     const dom = new JSDOM(`<body>
   <script src="https:////static.360buyimg.com/siteppStatic/script/mescroll/map.js"></script>
-  <script src="https://storage.360buyimg.com/webcontainer/js_security_v3.js"></script>
+  <script src="https://storage.360buyimg.com/webcontainer/js_security_v3_0.1.0.js"></script>
   <script src="https://static.360buyimg.com/siteppStatic/script/utils.js"></script>
   <script src="https://js-nocaptcha.jd.com/statics/js/main.min.js"></script>
   </body>`, options);
-    await $.wait(5000)
+    await $.wait(parseInt(Math.random()*6000+5000,10))
     try {
         $.jab = new dom.window.JAB({
             bizId: 'jdjiabao',
             initCaptcha: false
         });
-        await $.wait(2500)
+        await $.wait(parseInt(Math.random()*2500+2500,10))
         $.signWaap = dom.window.signWaap;
     } catch (e) {}
 }
