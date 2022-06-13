@@ -1,7 +1,7 @@
 /*
 时尚狂欢盛典
 https://lzdz1-isv.isvjcloud.com/dingzhi/june/fashionUnion/activity/657324?activityId=dz19181d9f4878be1fedb3c54e714b
-cron "5 21 * * *" jd_opencard_kkk.js
+cron "1 1 1 1 1" jd_opencard_kh.js
 */
 const $ = new Env('时尚狂欢盛典')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
