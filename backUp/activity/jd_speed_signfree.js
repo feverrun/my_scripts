@@ -1,7 +1,7 @@
 /*
-  入口>京东极速版>首页>签到免单
-  京东极速版,先下单,第二天开始签到
-  ##cron "9 1 * * *" jd_speed_signfree.js 签到免单
+入口>京东极速版>首页>签到免单
+京东极速版,先下单,第二天开始签到
+每天运行一次
 */
 
 const $ = new Env('极速免费签到');
@@ -32,7 +32,8 @@ const JD_API_HOST = 'https://api.m.jd.com/';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             // msg.push(($.nickName || $.UserName) + ':')
             first_flag = true;
-            // await TaskInviteService();
+            await TaskInviteService();
+            await $.wait(parseInt(Math.random() * 1000 + 500, 10));
             await sign_all()
             await $.wait(parseInt(Math.random() * 5000 + 500, 10));
         }
