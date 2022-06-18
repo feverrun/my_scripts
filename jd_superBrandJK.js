@@ -2,7 +2,7 @@
  特务集卡
  脚本没有自动开卡，会尝试领取开卡奖励
  第一个CK黑号会退出
-35 15,18,20 * * * jd_superBrandJK.js
+5 15,18,20 * * * jd_superBrandJK.js
 */
 
 const $ = new Env('特务集卡');
