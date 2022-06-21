@@ -2,8 +2,8 @@
 特物Z   签到
  */
 const $ = new Env('特物Z_签到');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../../jdCookie.js') : '';
+const notify = $.isNode() ? require('../../sendNotify') : '';
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => { cookiesArr.push(jdCookieNode[item]) })
