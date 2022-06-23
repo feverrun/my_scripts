@@ -192,9 +192,9 @@ function openCardActivity(activityId, activityUrl, pin, num, againUserIndex) {
                                     `${$.name} getSimpleActInfoVo API请求失败，请检查网路重试`
                                 );
                             } else {
-                                if (resp.status == 200) {
-                                    refreshToken(resp);
-                                }
+                                // if (resp.status == 200) {
+                                //   refreshToken(resp);
+                                // }
                             }
                         } catch (e) {
                             $.logErr(e, resp);
@@ -287,6 +287,9 @@ function openCardActivity(activityId, activityUrl, pin, num, againUserIndex) {
                                 console.log("" + JSON.stringify(err));
                                 console.log($.name + " 3 API请求失败，请检查网路重试");
                             } else {
+                                if (resp.status == 200) {
+                                    refreshToken(resp);
+                                }
                                 if (safeGet(data)) {
                                     data = JSON.parse(data);
                                     if (data.result && data.data) {
@@ -690,9 +693,9 @@ function openCardActivity(activityId, activityUrl, pin, num, againUserIndex) {
                             console.log("" + JSON.stringify(err));
                             console.log($.name + "\x20API请求失败，请检查网路重试");
                         } else {
-                            if (resp.status == 200) {
-                                refreshToken(resp);
-                            }
+                            // if (resp.status == 200) {
+                            //   refreshToken(resp);
+                            // }
                         }
                     } catch (e) {
                         $.logErr(e, resp);
@@ -704,7 +707,8 @@ function openCardActivity(activityId, activityUrl, pin, num, againUserIndex) {
         }
 
         function refreshToken(resp) {
-            let cookies = resp.headers["set-cookie"];
+            // let cookies = resp.headers["set-cookie"];
+            let cookies = resp && resp.headers && (resp.headers['set-cookie'] || resp.headers['Set-Cookie'] || '') || '';
             if (cookies) {
                 activityCookie = cookies
                     .map((v) => {
