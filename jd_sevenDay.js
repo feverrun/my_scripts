@@ -1,33 +1,37 @@
 /*
-说明: 超级无线店铺签到
+超级无线店铺签到
 不能并发,超级无线黑号不能跑,建议别跑太多号
 环境变量:
-SEVENDAY_LIST,SEVENDAY_LIST2,SEVENDAY_LIST3
-16 4,16 * * * jd_sevenDay.js
+SEVENDAY_LIST 活动链节 https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=
+SEVENDAY_LIST2 活动链节 https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=
+SEVENDAY_LIST3 活动链节 https://cjhy-isv.isvjcloud.com/sign/signActivity?activityId=
+多id 用 & 分开
+cron "1 1 1 1 1" jd_sevenDay.js
 */
 const $ = new Env('超级无线店铺签到');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
-let lz_cookie = {}
+let maxCkRun = 20;    //最多跑多少个号
 // https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=
 let activityIdList = [
 ]
 // https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=
 let activityIdList2 = [
 ]
-
+// https://cjhy-isv.isvjcloud.com/sign/signActivity?activityId=
 let activityIdList3 = [
 ]
+let lz_cookie = {}
 
 if (process.env.SEVENDAY_LIST && process.env.SEVENDAY_LIST != "") {
-    activityIdList = process.env.SEVENDAY_LIST.split(',');
+    activityIdList = process.env.SEVENDAY_LIST.split('&');
 }
 if (process.env.SEVENDAY_LIST2 && process.env.SEVENDAY_LIST2 != "") {
-    activityIdList2 = process.env.SEVENDAY_LIST.split(',');
+    activityIdList2 = process.env.SEVENDAY_LIST.split('&');
 }
 if (process.env.SEVENDAY_LIST3 && process.env.SEVENDAY_LIST3 != "") {
-    activityIdList3 = process.env.SEVENDAY_LIST.split(',');
+    activityIdList3 = process.env.SEVENDAY_LIST.split('&');
 }
 
 if ($.isNode()) {
@@ -49,7 +53,13 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
     }
-    for (let i = 0; i < cookiesArr.length; i++) {
+    $.actList = activityIdList.length + activityIdList.length + activityIdList.length
+
+    for (let i = 0; i < cookiesArr.slice(0,maxCkRun).length; i++) {
+        if ($.actList === 0) {
+            console.log("请设置无线签到活动id,看脚本说明")
+            break
+        }
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
             originCookie = cookiesArr[i]
@@ -208,11 +218,9 @@ function task(function_id, body, isCommon = 0) {
                                         // console.log(data);
                                         if (data.isOk) {
                                             console.log("签到成功");
-                                            if (data.signResult && data.signResult.gift) {
-                                                console.log(data.signResult.gift.giftName);
-                                            }
+                                            // console.log(data);
                                         } else {
-                                            console.log(data.msg);
+                                            console.log(data);
                                         }
                                     }
                                     break
@@ -221,11 +229,9 @@ function task(function_id, body, isCommon = 0) {
                                         // console.log(data);
                                         if (data.isOk) {
                                             console.log("签到成功");
-                                            if (data.gift.giftName && data.signResult.gift) {
-                                                console.log(data.gift.giftName);
-                                            }
+                                            // console.log(data);
                                         } else {
-                                            console.log(data.msg);
+                                            console.log(data);
                                         }
                                     }
                                     break
