@@ -1,8 +1,9 @@
 /*
 7.1~7.8 爱我中华 礼赞盛世
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkde95c4481a4859f30fa6f5868
-cron "6 1 1-8 7 *" jd_opencard_xxx.js
+cron "6 2 1-8 7 *" jd_opencard_xxx.js
 */
+
 const $ = new Env('7.1~7.8 爱我中华 礼赞盛世')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
