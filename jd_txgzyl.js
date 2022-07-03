@@ -23,7 +23,7 @@ https://git.metauniverse-cn.com/https://raw.githubusercontent.com/curtinlv/gd/ma
 
 [task_local]
 #PKC-特效关注有礼
-1 1 1 1 * jd_txgzyl.js, tag=PKC-特效关注有礼, enabled=true
+1 1 1 1 1 jd_txgzyl.js, tag=PKC-特效关注有礼, enabled=true
 
 
 */
