@@ -38,7 +38,8 @@ if ($.isNode()) {
     return;
   }
 
-  token = await getRemoteData() ? await getRemoteData() : [];
+  token = await getRemoteData();
+  token = token ? token : [];
   await $.wait(parseInt(Math.random(2500) + 250, 10));
 
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -325,7 +326,7 @@ function getRemoteData()
       } catch (e) {
         $.logErr(e, resp);
       } finally {
-        resolve(data);
+        resolve(data || []);
       }
     })
   })
