@@ -13,22 +13,9 @@ const JD_API_HOST = 'https://api.m.jd.com/api?appid=interCenter_shopSign';
 let activityId = ''
 let vender = ''
 let num = 0
+let token = []
 
-const token = [
-  "9C6F1F170565F3FA9253FCC9375248C0",
-  "326158F0F7A6669F0A80A70F67DFCC35",
-  "3F5E5185BCDF88ADEF76867A9CC7AD44",
-  "326158F0F7A6669F0A80A70F67DFCC35",
-  "069C121295427F0A7D8FA85B499F72B3",
-  "C387DE3A3F4381FB3E451F0C40069FE6",
-  "1A67A289BED867F4B3D23F751D929FE0",
-  "1565B6639C0F5315D41C7D07129EBB9C",
-  "3949F55A02AA8A345409AFD9821C861F",
-  "8204254D6C4AF4E224DE25DC6D0258A2",
-  "FCA20BDEA1AE7A2AE5BA6EA88C873906",
-  "B8BA3B69A46D4976D964F28F9ED5B330",
-]
-
+// const token = []
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -50,6 +37,10 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+
+  token = await getRemoteData() ? await getRemoteData() : [];
+  await $.wait(parseInt(Math.random(2500) + 250, 10));
+
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -305,6 +296,39 @@ function jsonParse(str) {
       return [];
     }
   }
+}
+
+function getRemoteData()
+{
+  return new Promise(resolve => {
+    const options = {
+      url: `https://feverrun.coding.net/p/feverrun/d/cdn/git/raw/master/dpqd.json`,
+      headers: {
+        "accept": "application/json",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "zh-CN,zh;q=0.9",
+        "user-agent": `Mozilla/5.0 (Linux; U; Android 10; zh-cn; MI 8 Build/QKQ1.190828.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/79.0.3945.147 Mobile Safari/537.36 XiaoMi/MiuiBrowser/13.5.40`
+      },
+      timeout: 30000,
+    }
+    $.get(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`\n${$.name}: API查询请求失败 ‼️‼️`)
+          $.logErr(err);
+        } else {
+          data = data;
+          if(typeof(data) == 'string') {
+            data = JSON.parse(data)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve(data);
+      }
+    })
+  })
 }
 
 // prettier-ignore
