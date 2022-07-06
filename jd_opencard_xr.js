@@ -1,7 +1,7 @@
 /*
 7.6~7.13 跨牌联合 夏日狂欢
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkcb37e91f440aa2cf5d6fa056
-cron "10 2 * * *" jd_opencard_kh.js
+cron "1 1 1 1 1" jd_opencard_xr.js
 */
 const $ = new Env('7.6~7.13 跨牌联合 夏日狂欢')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
