@@ -1,11 +1,11 @@
 /*
-活动名称：店铺抽奖(刮刮乐)
+活动名称：店铺抽奖-刮刮乐
 活动链接：https://lzkj-isv.isvjd.com/drawCenter/activity/entry.html?activityId=xxx
 export jd_drawCenter_activityId="xxx" // 活动id
 cron "1 1 1 1 1" jd_drawCenter.js
 */
 
-const $=new Env('店铺抽奖(刮刮乐)');
+const $=new Env('店铺抽奖-刮刮乐');
 const jdCookieNode=$.isNode()?require('./jdCookie.js'):'';
 const notify=$.isNode()?require('./sendNotify'):'';
 
