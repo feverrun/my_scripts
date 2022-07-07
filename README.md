@@ -1,25 +1,13 @@
 # 学习使用
-### 全网最稳定助力池
 ### 只支持青龙拉取  (建议服务器通过docker安装青龙)
 #### 青龙环境搭建教程
 https://github.com/feverrun/my_scripts/wiki/%E9%9D%92%E9%BE%99%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B
 
-## 只收不混跑多个集成库的，号越多越好
-**你们青龙所在车头优先，非车头随机**
-
-**拉库后安装好依赖无需做额外配置**
-
-## 加入助力池
-[点此加入](https://t.me/proenv) 联系我加入白名单 
+## 扯淡群
+[扯淡群](https://t.me/proenv) 
 
 ## 定时更新库
-青龙配置GithubProxyUrl选项请设置为
-```
-GithubProxyUrl=""
-或者
-GithubProxyUrl="可用的其他代理默认是https://ghproxy.com/已不可用"
-```
-
+### 互助池版本 (需进群联系作者加入白名单)
 任务名:   myScripts
 
 定时 :    1 * * * *
@@ -29,25 +17,26 @@ GithubProxyUrl="可用的其他代理默认是https://ghproxy.com/已不可用"
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
-### 长久活动(已接入助力池)
+### 内部互助版 (无需加入白名单)
+任务名:   myScripts
+
+定时 :    1 * * * *
+
+任务 :
 ```
-fruit
-bean
-pet
-ddfactory
-dreamFactory
-health
-cfd         internal priofity
-sgmh
-jxmc        internal priofity
+ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJDCookie" "backUp/activity|backUp/card|backUp/py|backUp/utils/|backUp/test|jd_fruits.js|jd_pet.js|jd_factory.js|jd_health.js|jd_sgmh.js|jd_dreamFactory.js|jd_plantBean.js" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
-### 临时活动(已接入助力池)
+以上两种集成命令，根据自身情况，选择一个即可。
+
+### 单拉开卡
+任务名:   myScriptsCard
+
+定时 :    1 * * * *
+
+任务 :
 ```
-jxlhb           internal priofity    end
-koi             internal priofity    end
-city            internal priofity    end
-carnivalcity    internal priofity    end
+ql repo https://github.com/feverrun/my_scripts.git "jd_opencard_|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
 ## nodejs模块安装
