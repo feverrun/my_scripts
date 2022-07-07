@@ -1,9 +1,8 @@
 /*
 购物车锦鲤通用活动
-请求太频繁会被黑ip
-export jd_wxCartKoi_activityId="xxx"  活动ID
 https://lzkjdz-isv.isvjcloud.com/wxCartKoi/cartkoi/activity?activityId=xxx
-cron "1 1 1 1 *" jd_wxCartKoi.js
+export jd_wxCartKoi_activityId="xxx"  活动ID
+cron "1 1 1 1 1" jd_wxCartKoi.js
 */
 const $ = new Env('购物车锦鲤通用活动');
 const jdCookieNode=$.isNode()?require('./jdCookie.js'):'';
