@@ -6,16 +6,16 @@
 const $ = new Env('粉丝互动');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-let cookiesArr = [];
+
 const activityList = [
-    {'id':'ce6abe2a33c74978902cf81e992688f4','endTime':1651248000000},//2022-04-01---2022-04-30 容声冰箱洗衣机自营旗舰店
-    {'id':'28738b8f7bb14496bb210ddb98796180','endTime':1651334399000},//2022-04-01---2022-04-30 卡西欧京东自营店
-    {'id':'ad7344e9be334f0098fb33767397fcab','endTime':1651334399000},//2022-04-01---2022-04-30 MARSHALL影音京东自营旗舰店
-    {'id':'23350576f5b14d26933a838dbc695525','endTime':1649088000000},//2022-04-01---2022-04-05 张裕葡萄酒京东自营旗舰店
-    {'id':'2644b19819bf411d89d359d98f70fdac','endTime':1651248000000},//2022-04-01---2022-04-30 倔强的尾巴京东自营旗舰店
-    {'id':'c75b9bbe3e04465b8dbe45ddc89d01ef','endTime':1651334399000},//2022-04-01---2022-04-30 卡西欧手表官方旗舰店
-    {'id':'53bae4e2d5264cc589bc84aea3535d7d','endTime':1651334399000},//2022-04-01---2022-04-30 微软京东自营官方旗舰店
+    {'id':'e41fd9ad50fa4dd28e0cb1c301eb29ef','endTime':1659196800000},//2022-06-07---2022-07-31 元気森林京东自营旗舰店
 ]
+
+
+let cookiesArr = [];
+let activityCookie = '';
+let lz_jdpin_token_cookie = '';
+let lz_cookie = {};
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -201,7 +201,7 @@ async function doTask(){
                 if ($.oneGoodInfo.finished === false) {
                     console.log(`加购:${$.oneGoodInfo.skuName || ''}`)
                     await takePostRequest('doAddGoodsTask');
-                    await $.wait(2000);
+                    await $.wait(5000);
                     needFinishNumber--;
                 }
             }
@@ -329,7 +329,11 @@ async function takePostRequest(type){
 
 function dealReturn(type, data) {
     try {
-        data = JSON.parse(data);
+        if (safeGet(data)) {
+            data = JSON.parse(data);
+        }else {
+            data = '';
+        }
     }catch (e) {
         console.log(`执行任务异常`);
         console.log(data);
@@ -411,6 +415,11 @@ function getPostRequest(url,body) {
         'content-type': 'application/x-www-form-urlencoded',
         'Cookie': $.cookie,
     }
+    if(url.indexOf('https://lzkjdz-isv.isvjcloud.com')>-1){
+        headers.Origin='https://lzkjdz-isv.isvjcloud.com';
+        headers.Referer='https://lzkjdz-isv.isvjcloud.com/wxFansInterActionActivity/activity/' + $.activityID + '?activityId=' + $.activityID + '&shareuserid4minipg=jd_4806fb66e0f3e&shopid=undefined';
+        headers.Cookie=headers.Cookie=''+((lz_jdpin_token_cookie&&lz_jdpin_token_cookie)||'')+($.Pin&&('AUTH_C_USER='+$.Pin+';')||'')+activityCookie;
+    }
     return  {url: url, method: `POST`, headers: headers, body: body};
 }
 function accessLogWithAD() {
@@ -434,15 +443,15 @@ function accessLogWithAD() {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    $.cookie =  $.oldcookie;
-                    if ($.isNode())
-                        for (let ck of resp['headers']['set-cookie']) {
-                            $.cookie = `${$.cookie}${ck.split(";")[0]};`
+                    if(resp.headers['set-cookie']){
+                        $.cookie=$.oldcookie+';';
+                        for(let sk of resp.headers['set-cookie']){
+                            lz_cookie[sk.split(';')[0].substr(0,sk.split(';')[0].indexOf('='))]=sk.split(';')[0].substr(sk.split(';')[0].indexOf('=')+1);
                         }
-                    else {
-                        for (let ck of resp['headers']['Set-Cookie'].split(',')) {
-                            $.cookie = `${$.cookie}${ck.split(";")[0]};`
+                        for(const ck of Object.keys(lz_cookie)){
+                            $.cookie+=(ck+'='+lz_cookie[ck]+';');
                         }
+                        activityCookie=$.cookie;
                     }
                 }
             } catch (e) {
@@ -472,15 +481,15 @@ function getActCk() {
                 if (err) {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
-                    $.cookie =  $.oldcookie;
-                    if ($.isNode())
-                        for (let ck of resp['headers']['set-cookie']) {
-                            $.cookie = `${$.cookie}${ck.split(";")[0]};`
+                    if(resp.headers['set-cookie']){
+                        $.cookie=$.oldcookie+';';
+                        for(let sk of resp.headers['set-cookie']){
+                            lz_cookie[sk.split(';')[0].substr(0,sk.split(';')[0].indexOf('='))]=sk.split(';')[0].substr(sk.split(';')[0].indexOf('=')+1);
                         }
-                    else {
-                        for (let ck of resp['headers']['Set-Cookie'].split(',')) {
-                            $.cookie = `${$.cookie}${ck.split(";")[0]};`
+                        for(const ck of Object.keys(lz_cookie)){
+                            $.cookie+=(ck+'='+lz_cookie[ck]+';');
                         }
+                        activityCookie=$.cookie;
                     }
                 }
             } catch (e) {
@@ -521,6 +530,18 @@ function getToken() {
             }
         })
     })
+}
+
+function safeGet(data) {
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch (e) {
+        console.log(e);
+        console.log(`服务器访问数据为空，请检查自身设备网络情况`);
+        return false;
+    }
 }
 
 async function getUA(){
