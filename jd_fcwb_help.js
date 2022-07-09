@@ -7,7 +7,7 @@ export FCWB_INVITER=""
 export FCWB_INVITER_CODE=""
 跑之前最好去手动挖宝
 先自己点两下活动 》 再运行助力  》 最后手动开格子
-cron "23 8 * * *" jd_fcwb.js
+cron "13 5,8,13 * * *" jd_fcwb_help.js
  */
 const $ = new Env('发财挖宝');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
