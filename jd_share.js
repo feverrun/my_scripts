@@ -44,7 +44,7 @@ if ($.isNode()) {
         return;
     }
     if (!activityId) {
-        console.log('设置了有效的SHARE_ACTIVITY_ID再来跑！！！');
+        console.log('export jd_fxyl_activityId="xxx" 未设置 退出！！！');
         return;
     }
     isGetAuthorCodeList = true;
