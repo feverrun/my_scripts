@@ -1,8 +1,8 @@
 /*
 https://t.me/okyydsnb
-注意控制ck数量
-OWN_COOKIE_NUM 需要助力数量
-SHARE_ACTIVITY_ID 活动id
+活动可能只限制，店铺会员参与， 不会自动入会。
+export jd_fxyl_activityId="xxx" 活动id
+export OWN_COOKIE_NUM="4" 需要助力数量  非必须
 cron "1 1 1 1 1" jd_share.js
 */
 
@@ -19,8 +19,8 @@ let activityShopId = ''
 if (process.env.OWN_COOKIE_NUM && process.env.OWN_COOKIE_NUM != 4) {
     ownCookieNum = process.env.OWN_COOKIE_NUM;
 }
-if (process.env.SHARE_ACTIVITY_ID) {
-    activityId = process.env.SHARE_ACTIVITY_ID;
+if (process.env.jd_fxyl_activityId) {
+    activityId = process.env.jd_fxyl_activityId;
 }
 
 if ($.isNode()) {
