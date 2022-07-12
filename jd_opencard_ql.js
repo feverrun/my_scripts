@@ -1,7 +1,7 @@
 /*
 7.12~7.20 Love Summer  FUN肆去浪
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkkd82f12a97f5c446ba1adc2a1
-cron "8 1 * * *" jd_opencard_qll.js
+cron "11 2 * * *" jd_opencard_ql.js
 */
 const $ = new Env('7.12~7.20 Love Summer  FUN肆去浪')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
