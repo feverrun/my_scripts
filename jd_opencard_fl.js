@@ -1,5 +1,5 @@
 /*
-京东粉丝联盟福利社
+7.13-7.20 京东粉丝联盟福利社
 新增开卡脚本，一次性脚本
 
 第一个账号助力作者 其他依次助力CK1
@@ -13,7 +13,7 @@ https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=dza044fb
 cron "1 1 1 1 1" jd_opencard_fl.js, tag=11.11 京东粉丝联盟福利社 入会赢专享好礼
 
 */
-const $ = new Env('京东粉丝联盟福利社');
+const $ = new Env('7.13-7.20 京东粉丝联盟福利社');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '';
 
