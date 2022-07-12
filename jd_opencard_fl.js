@@ -10,7 +10,7 @@
 https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=dza044fb424c3fa1bd9e4415e0shop
 
 #京东粉丝联盟福利社
-cron "8 19 * * *" jd_opencard_fls.js, tag=11.11 京东粉丝联盟福利社 入会赢专享好礼
+cron "1 1 1 1 1" jd_opencard_fl.js, tag=11.11 京东粉丝联盟福利社 入会赢专享好礼
 
 */
 const $ = new Env('京东粉丝联盟福利社');
