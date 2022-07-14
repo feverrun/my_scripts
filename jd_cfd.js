@@ -75,27 +75,28 @@ if ($.isNode()) {
         }
     }
 
-    await shareCodesFormat()
+    // await shareCodesFormat()
     //强制优先内部互助
-    for (let i = 0; i < cookiesArr.length; i++) {
-        cookie = cookiesArr[i];
-        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-        $.canHelp = true
-        UA = UAInfo[$.UserName]
-        if ($.newShareCodes && $.newShareCodes.length) {
-            for (let j = 0; j < $.newShareCodes.length && $.canHelp; j++) {
-                console.log(`账号${$.UserName} 去助力 ${$.newShareCodes[j]}`)
-                $.delcode = false
-                await helpByStage($.newShareCodes[j])
-                await $.wait(3000)
-                if ($.delcode) {
-                    $.newShareCodes.splice(j, 1)
-                    j--
-                    continue
-                }
-            }
-        }
-    }
+    console.log(`助力正在升级中，敬请期待~`);
+    // for (let i = 0; i < cookiesArr.length; i++) {
+    //     cookie = cookiesArr[i];
+    //     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    //     $.canHelp = true
+    //     UA = UAInfo[$.UserName]
+    //     if ($.newShareCodes && $.newShareCodes.length) {
+    //         for (let j = 0; j < $.newShareCodes.length && $.canHelp; j++) {
+    //             console.log(`账号${$.UserName} 去助力 ${$.newShareCodes[j]}`)
+    //             $.delcode = false
+    //             await helpByStage($.newShareCodes[j])
+    //             await $.wait(3000)
+    //             if ($.delcode) {
+    //                 $.newShareCodes.splice(j, 1)
+    //                 j--
+    //                 continue
+    //             }
+    //         }
+    //     }
+    // }
     await showMsg();
 })()
     .catch((e) => $.logErr(e))
