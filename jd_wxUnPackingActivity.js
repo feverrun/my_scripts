@@ -3,6 +3,8 @@
 地址: https://lzkjdz-isv.isvjcloud.com/wxUnPackingActivity/activity/activity?activityId="xxx"
 不自动入会。
 export jd_wxUnPackingActivity_activityId="" // 活动id
+
+cron "1 1 1 1 1" jd_wxUnPackingActivity.js
 */
 const $ = new Env('让福袋飞');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
