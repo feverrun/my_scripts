@@ -1,32 +1,24 @@
 /**
- 特务之明星送好礼
- 一次性脚本。运行之后请禁用！
- cron 8 18 * * * jd_superBrandStar.js
+ 特务Z，默认选择左边战队
+ 脚本没有自动开卡，会尝试领取开卡奖励
+ cron 5 16 * * * jd_superBrandStar.js
  */
-const $ = new Env('特务之明星送好礼');
-const notify = $.isNode() ? require('../../sendNotify') : '';
-const jdCookieNode = $.isNode() ? require('../../jdCookie.js') : '';
-let cookiesArr = [];
-let UA = ``;
+const $ = new Env('特务Z');
+const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+
+let cookiesArr = [];let UA = ``;
 $.allInvite = [];
 let useInfo = {};
-let actUrl = 'https://prodev.m.jd.com/mall/active/31GFSKyRbD3ehsHih2rQKArxfb8c/index.html';
-
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => { cookiesArr.push(jdCookieNode[item]) });
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
 } else {
     cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
-
 !(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-        return;
-    }
-
-    if (!actUrl) {
-        console.log('活动结束了!');
         return;
     }
     for (let i = 0; i < cookiesArr.length; i++) {
@@ -67,12 +59,13 @@ async function main() {
     useInfo[$.UserName] = $.encryptProjectId;
     $.taskList = [];
     await takeRequest('superBrandTaskList', { "source": "star_gift", "activityId": $.activityId });
-    await $.wait(1500);
+    await $.wait(1000);
     await doTask();
-    await $.wait(900)
+    await $.wait(500)
     await await takeRequest('superBrandTaskLottery')
 
 }
+
 
 async function doTask() {
     for (let i = 0; i < $.taskList.length; i++) {
@@ -92,12 +85,11 @@ async function doTask() {
                     console.log(`任务：${$.runInfo.title || $.runInfo.shopName || $.runInfo.itemId},去执行`);
                     if ($.oneTask.assignmentName == '浏览会场') {
                         await takeRequest('superBrandDoTask', { "source": "star_gift", "activityId": $.activityId, "encryptProjectId": $.encryptProjectId, "encryptAssignmentId": $.oneTask.encryptAssignmentId, "assignmentType": $.oneTask.assignmentType, "itemId": $.runInfo.itemId, "actionType": 1 });
-                        await $.wait($.oneTask.ext.waitDuration * 1000);
-                        await $.wait(700);
+                        await $.wait($.oneTask.ext.waitDuration * 1000)
                         await takeRequest('superBrandDoTask', { "source": "star_gift", "activityId": $.activityId, "encryptProjectId": $.encryptProjectId, "encryptAssignmentId": $.oneTask.encryptAssignmentId, "assignmentType": $.oneTask.assignmentType, "itemId": $.runInfo.itemId, "actionType": 0 });
                     } else {
                         await takeRequest('superBrandDoTask', { "source": "star_gift", "activityId": $.activityId, "encryptProjectId": $.encryptProjectId, "encryptAssignmentId": $.oneTask.encryptAssignmentId, "assignmentType": $.oneTask.assignmentType, "itemId": $.runInfo.itemId, "actionType": 0 });
-                        await $.wait(1000);
+                        await $.wait(200);
                     }
 
                 }
@@ -113,7 +105,6 @@ async function doTask() {
                     }
                     console.log(`任务：${$.runInfo.title || $.runInfo.shopName || $.runInfo.itemId},去执行`);
                     await takeRequest('superBrandDoTask', { "source": "star_gift", "activityId": $.activityId, "encryptProjectId": $.encryptProjectId, "encryptAssignmentId": $.oneTask.encryptAssignmentId, "assignmentType": $.oneTask.assignmentType, "itemId": $.runInfo.itemId, "actionType": 0 });
-                    await $.wait(700);
                 }
             }
 
@@ -140,8 +131,8 @@ async function takeRequest(type, bodyInfo = '') {
                 console.log(`错误${type}`);
         }
     }
+
     myRequest = getRequest(url);
-    await $.wait(600);
     return new Promise(async resolve => {
         $.post(myRequest, (err, resp, data) => {
             try {
@@ -208,7 +199,7 @@ function getRequest(url) {
         'Cookie': $.cookie,
         'Connection': `keep-alive`,
         'Accept': `application/json, text/plain, */*`,
-        'Referer': actUrl,
+        'Referer': `https://prodev.m.jd.com/mall/active/31GFSKyRbD3ehsHih2rQKArxfb8c/index.html`,
         'Host': `api.m.jd.com`,
         'User-Agent': UA,
         'Accept-Language': `zh-cn`,
@@ -245,7 +236,7 @@ function TotalBean() {
                 "Connection": "keep-alive",
                 "Cookie": $.cookie,
                 "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
             }
         }
         $.post(options, (err, resp, data) => {
