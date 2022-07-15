@@ -2,8 +2,8 @@
 幸运抽大奖通用活动
 不自动入会，不自动入会，不自动入会
 有特殊需求可以向我反应 https://t.me/proenv
-地址：
-https://lzkj-isv.isvjcloud.com/lzclient/1657861259101/cjwx/wxTurnTable/0144.html?activityId=123b62d2de1540e6860364d61e26fb53
+活动地址：
+https://lzkj-isv.isvjcloud.com/lzclient/1657861259101/cjwx/common/entry.html?activityId=123b62d2de1540e6860364d61e26fb53&gameType=wxTurnTable&shareuserid4minipg=JL8jw890qeRlcja2MnjUKWwklxRrP5C78lmKjh9Mn4avAmNuF4i+OHS9NlRdtagP&shopid=1000102993
 export jd_wxDrawActivity_Url = "xxx" 活动地址
 
 cron "1 1 1 1 1" jd_wxDrawActivity.js
