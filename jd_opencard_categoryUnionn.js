@@ -1,6 +1,6 @@
 /*
 7.14-7.17 品类联合
-cron "1 1 1 1 1" jd_opencard_categoryUnion.js
+cron "4 1 * * *" jd_opencard_categoryUnion.js
 */
 const $ = new Env('7.14-7.17 品类联合 ');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
