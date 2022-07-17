@@ -1,9 +1,9 @@
 /*
-酷玩一夏 冰爽放价
+7.18~7.25 酷玩一夏 冰爽放价
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk4158ec94b101401c86b9a1d7
-cron "1 1 1 1 1" jd_opencard_fj.js
+cron "8 3 * * *" jd_opencard_yx.js
 */
-const $ = new Env('酷玩一夏 冰爽放价')
+const $ = new Env('7.18~7.25 酷玩一夏 冰爽放价')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
