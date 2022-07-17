@@ -1,7 +1,7 @@
 /**
  特务Z，默认选择左边战队
  脚本没有自动开卡，会尝试领取开卡奖励
- cron "27 2,6,21 * * *" jd_superBrandZ.js
+ cron "7 2,10,18,20 * * *" jd_superBrandZ.js
  一天要跑2次
  */
 const $ = new Env('特务Z');
