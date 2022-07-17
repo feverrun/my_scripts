@@ -1,6 +1,8 @@
 /*
 京东金榜 蚊子肉
+author：
 https://t.me/proenv
+https://github.com/feverrun/my_scripts
  */
 const $ = new Env('京东金榜');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

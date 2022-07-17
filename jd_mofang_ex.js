@@ -1,5 +1,8 @@
 /*
 京东小魔方--兑换
+author：
+https://t.me/proenv
+https://github.com/feverrun/my_scripts
 6 || 3 || 1
  */
 const $ = new Env('京东小魔方--兑换');

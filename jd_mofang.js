@@ -1,5 +1,8 @@
 /*
 京东小魔方
+author：
+https://t.me/proenv
+https://github.com/feverrun/my_scripts
 活动入口：京东 首页新品 魔方
 export MOFANG_JI=1 积攒的碎片不自动兑换成魔方
 不指定执行时间， 随机执行
