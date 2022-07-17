@@ -1,7 +1,7 @@
 /*
  特务集卡
  脚本没有自动开卡，会尝试领取开卡奖励
-cron "5 10,18,20 * * *" jd_superBrandJK.js
+cron "15 10,18,20 * * *" jd_superBrandJK.js
 */
 
 const $ = new Env('特务集卡');

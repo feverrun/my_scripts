@@ -1,10 +1,10 @@
 /**
  特务Z
  脚本没有自动开卡，会尝试领取开卡奖励
- cron 33 0,9 * * * jd_superBrand.js
+ cron "33 10,18,20 * * *" jd_superBrand.js
  一天要跑2次
  */
-const $ = new Env('特务Z');
+const $ = new Env('特务');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [];
