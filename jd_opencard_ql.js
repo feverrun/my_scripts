@@ -2,7 +2,7 @@
 7.18-7.31 萌宠清凉囤货新势界
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk5eec5e7da9c549b09e91e356
 export OPENCARD_NUM="XXX"  默认抽奖多少次
-cron "8 15 * * *" jd_opencard_th.js
+cron "1 1 1 1 1" jd_opencard_ql.js
 */
 const $ = new Env('7.18-7.31 萌宠清凉囤货新势界')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
