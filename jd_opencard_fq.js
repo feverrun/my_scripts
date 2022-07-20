@@ -1,6 +1,6 @@
 /*
 燃动盛夏 伏气满满
-cron "6 1 * * 8" jd_opencard_fq.js
+cron "6 1 * * *" jd_opencard_fq.js
 */
 const $ = new Env("燃动盛夏 伏气满满");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
