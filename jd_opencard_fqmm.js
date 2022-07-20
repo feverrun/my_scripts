@@ -1,6 +1,6 @@
 /*
 燃动盛夏 伏气满满
-cron "6 1 * * *" jd_opencard_fq.js
+cron "6 1 * * *" jd_opencard_fqmm.js
 */
 const $ = new Env("燃动盛夏 伏气满满");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
@@ -56,7 +56,7 @@ if ($.isNode()) {
             $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
             $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
             authorCodeList = [
-                '9dac54821bbc469ca3a1d259cd96b966',
+                '120af9c1b174403aac5311d4d548e05f',
             ];
             // $.authorCode = authorCodeList[random(0, authorCodeList.length)];
             $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
