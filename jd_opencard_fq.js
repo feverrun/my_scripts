@@ -2,7 +2,7 @@
 7.21~8.1 燃动盛夏 伏气满满
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=ac7124baef6b48398f75a932a23d0408
 export OPENCARD_DRAW_NUM="10"  是否抽奖 抽奖次数 不推荐填写。
-cron "5 4 * * *" jd_opencard_fqmm.js
+cron "10 7 21 7 *" jd_opencard_fq.js
 */
 const $ = new Env('7.21~8.1 燃动盛夏 伏气满满 ')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
