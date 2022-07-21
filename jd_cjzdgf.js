@@ -548,17 +548,17 @@ function saveTeam(_0xd519d7 = 0) {
                             if (_0x1070a3.errorMessage.indexOf('不是店铺会员') > -1 && _0xd519d7 != 3) {
                                 $.errorJoinShop = '';
                                 await joinShop();
-                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1 || $.errorJoinShop.indexOf('加入店铺会员失败') > -1) {
                                     console.log('第1次 重新开卡');
                                     await $.wait(1000);
                                     await joinShop();
                                 }
-                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1 || $.errorJoinShop.indexOf('加入店铺会员失败') > -1) {
                                     console.log('第2次 重新开卡');
                                     await $.wait(1000);
                                     await joinShop();
                                 }
-                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1 || $.errorJoinShop.indexOf('加入店铺会员失败') > -1) {
                                     console.log('第3次 重新开卡');
                                     await $.wait(1000);
                                     await joinShop();
@@ -601,17 +601,17 @@ function joinTeam(_0x5a3500 = 0) {
                             if (_0x19a125.errorMessage.indexOf('不是店铺会员') > -1 && _0x5a3500 != 3) {
                                 $.errorJoinShop = '';
                                 await joinShop();
-                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1 || $.errorJoinShop.indexOf('加入店铺会员失败') > -1) {
                                     console.log('第1次 重新开卡');
                                     await $.wait(1000);
                                     await joinShop();
                                 }
-                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1 || $.errorJoinShop.indexOf('加入店铺会员失败') > -1) {
                                     console.log('第2次 重新开卡');
                                     await $.wait(1000);
                                     await joinShop();
                                 }
-                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                                if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1 || $.errorJoinShop.indexOf('加入店铺会员失败') > -1) {
                                     console.log('第3次 重新开卡');
                                     await $.wait(1000);
                                     await joinShop();

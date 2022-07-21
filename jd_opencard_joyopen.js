@@ -101,12 +101,12 @@ async function run() {
 
                         if ($.oneTask.result == 0) await statistic(`{"activityType":"module_task","groupType":7,"configCode":"${item.configCode}","itemId":${$.oneTask.cardId}}`)
                         if ($.oneTask.result == 0) await join($.oneTask.venderId)
-                        if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                        if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1 || $.errorJoinShop.indexOf('加入店铺会员失败') > -1) {
                             console.log('第1次 重新开卡')
                             await $.wait(parseInt(Math.random() * 2000 + 3000, 10))
                             await join($.oneTask.venderId)
                         }
-                        if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1) {
+                        if ($.errorJoinShop.indexOf('活动太火爆，请稍后再试') > -1 || $.errorJoinShop.indexOf('加入店铺会员失败') > -1) {
                             console.log('第2次 重新开卡')
                             await $.wait(parseInt(Math.random() * 2000 + 4000, 10))
                             await join($.oneTask.venderId)
