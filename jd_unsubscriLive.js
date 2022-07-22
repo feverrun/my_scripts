@@ -2,8 +2,6 @@
 脚本：取关主播
 更新时间：2021-07-27
 默认：每运行一次脚本取关所有主播
-
-cron "25 7 * * *" script-path=jd_unsubscriLive.js,tag=取关所有主播
  */
 const $ = new Env('取关所有主播');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
