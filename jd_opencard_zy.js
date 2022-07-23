@@ -1,7 +1,7 @@
 /*
 甜蜜七夕 跨越时空中意你
 https://lzdz1-isv.isvjcloud.com/dingzhi/jul/qixiFirst/activity/657324?activityId=dz3bb5f3ac4d64b3dad317e42bccb4
-cron "6 1 * * *" jd_opencard_zy.js
+cron "3 1 * * *" jd_opencard_zy.js
 */
 const $ = new Env('甜蜜七夕 跨越时空中意你')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
