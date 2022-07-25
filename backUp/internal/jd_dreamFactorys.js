@@ -362,7 +362,7 @@ function getUserElectricity() {
                 } else {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
-                        if (data['ret'] === 0) {
+                        if (data['ret'] === 0 && data.data) {
                             console.log(`发电机：当前 ${data.data.currentElectricityQuantity} 电力，最大值 ${data.data.maxElectricityQuantity} 电力`)
                             if (data.data.currentElectricityQuantity < data.data.maxElectricityQuantity) {
                                 $.log(`\n本次发电机电力集满分享后${data.data.nextCollectDoubleFlag === 1 ? '可' : '不可'}获得双倍电力，${data.data.nextCollectDoubleFlag === 1 ? '故目前不收取电力' : '故现在收取电力'}\n`)
@@ -379,6 +379,8 @@ function getUserElectricity() {
                                 //再收取双倍电力达到上限时，直接收取，不再等到满级
                                 await collectElectricity()
                             }
+                        }else {
+                            console.log(`QueryCurrentElectricityQuantity异常:${JSON.stringify(data)}`);
                         }
                     }
                 }
@@ -533,7 +535,7 @@ function QueryFriendList() {
                 } else {
                     if (safeGet(data)) {
                         data = JSON.parse(data);
-                        if (data['ret'] === 0) {
+                        if (data['ret'] === 0 && data.data) {
                             data = data['data'];
                             const { assistListToday = [], assistNumMax, hireListToday = [], hireNumMax } = data;
                             console.log(`\n\n你今日还能帮好友打工（${assistNumMax - assistListToday.length || 0}/${assistNumMax}）次\n\n`);
