@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 """
-# 来自 柒月
-# 通过监控Github仓库来查看是否有新的开卡脚本
-# 如果新的开卡脚本则自动拉库并运行相关开卡任务
-# 如果发现已有多个相关开卡任务时，并且其中一个开卡任务已经运行过了或者正在运行，之后更新的开卡任务将不会再运行
+# 注意！不支持青龙2.10.3以下版本
 # 此脚本需要安装第三方依赖：deepdiff
+# 青龙里面要有监控的Github仓库的拉库命令，通过监控Github仓库来查看是否有新的开卡脚本
+# 如果发现新的开卡脚本则自动拉库并运行开卡脚本，如果发现已有多个相同开卡脚本时
+# 且其中一个开卡脚本已经运行过了或者正在运行，之后更新的开卡脚本将不会再运行
 
 # 填写要监控的GitHub仓库的 用户名/仓库名/分支/脚本关键词
 # 监控多个仓库请用 & 隔开
 export GitRepoHost="feverrun/my_scripts/main/jd_opencard"
-# 运行开卡脚本前禁用开卡脚本定时任务，不填则不禁用
+# 运行开卡脚本前禁用开卡脚本定时任务，不填则不禁用，保留原有定时
 export opencardDisable="true"
 
 cron: */5 0-3 * * *
@@ -37,17 +37,18 @@ def qlcron(name):
         List.append(f'请求青龙失败：{url}')
         return False,False
 
-def qlrun(scripts_name):
+def qltoken():
     # 读取青龙登录token
-    with open("/ql/config/auth.json", 'rb') as json_file:
+    with open(f"{path}/config/auth.json", 'rb') as json_file:
         authjson = json.load(json_file)
     if "token" in authjson:
         token = authjson["token"]
+        return token
     else:
         List.append("青龙Token获取失败")
         return
-    # 向请求头添加青龙登录Token
-    headers['Authorization']='Bearer '+token
+
+def qlrun(scripts_name):
     url = host+"/crons/run"
     # 获取仓库任务信息
     RepoName,RepoID = qlcron(GitRepo)
@@ -55,7 +56,10 @@ def qlrun(scripts_name):
         List.append(f"获取仓库任务信息失败：{GitRepo}")
         return
     # 运行拉取仓库任务
-    File = os.path.exists("/ql/scripts/"+GitRepoHost[0]+"_"+GitRepoHost[1]+"/"+scripts_name)
+    scriptspath = path+"/scripts/"+GitRepoHost[0]+"_"+GitRepoHost[1]
+    if not os.path.exists(scriptspath):
+        scriptspath = path+"/scripts/"+GitRepoHost[0]+"_"+GitRepoHost[1]+"_"+GitRepoHost[2]
+    File = os.path.exists(scriptspath)
     while not File:
         List.append("没有找到脚本："+GitRepoHost[0]+"_"+GitRepoHost[1]+"/"+scripts_name)
         rsp = session.put(url=url,headers=headers,data=json.dumps(RepoID))
@@ -66,7 +70,7 @@ def qlrun(scripts_name):
             List.append("错误信息："+rsp.json()["message"])
             return
         sleep(10)
-        File = os.path.exists("/ql/scripts/"+GitRepoHost[0]+"_"+GitRepoHost[1]+"/"+scripts_name)
+        File = os.path.exists(scriptspath)
     else:
         List.append("找到开卡脚本："+GitRepoHost[0]+"_"+GitRepoHost[1]+"/"+scripts_name)
     # 获取开卡任务信息
@@ -117,7 +121,7 @@ def qlrun(scripts_name):
 def main():
     state = True
     # 请求Github仓库获取目录树
-    rsp = session.get(url=api,headers=headers)
+    rsp = session.get(url=api,headers={"Content-Type":"application/json"})
     if rsp.status_code != 200:
         List.append(f'请求GitHub失败：{api}')
         return state
@@ -127,12 +131,12 @@ def main():
         if GitRepoHost[3] in x["path"]:
             tree.append(x["path"])
     # 查看是否有tree.json文件
-    if not os.path.exists(f"/ql/scripts/{GitRepoHost[0]}_{GitRepoHost[1]}/tree.json"):
-        with open(f"/ql/scripts/{GitRepoHost[0]}_{GitRepoHost[1]}/tree.json","w") as f:
+    if not os.path.exists(f"{path}/scripts/tree_{GitRepoHost[0]}.json"):
+        with open(f"{path}/scripts/tree_{GitRepoHost[0]}.json","w") as f:
             json.dump(tree,f)
-        List.append(f"没有找到{GitRepoHost[0]}_{GitRepoHost[1]}/tree.json文件！将自动生成")
+        List.append(f"没有找到tree_{GitRepoHost[0]}.json文件！将自动生成")
     # 读取上一次保存的tree.json并与当前tree进行对比
-    with open(f"/ql/scripts/{GitRepoHost[0]}_{GitRepoHost[1]}/tree.json", 'rb') as json_file:
+    with open(f"{path}/scripts/tree_{GitRepoHost[0]}.json", 'rb') as json_file:
         tree_json = json.load(json_file)
     diff = deepdiff.DeepDiff(tree_json, tree)
     # 判断是否有新增开卡脚本
@@ -153,8 +157,8 @@ def main():
     else:
         List.append("没有新增开卡脚本")
         state=False
-    with open(f"/ql/scripts/{GitRepoHost[0]}_{GitRepoHost[1]}/tree.json","w") as f:
-        List.append(f"保存数据到{GitRepoHost[0]}_{GitRepoHost[1]}/tree.json文件")
+    with open(f"{path}/scripts/tree_{GitRepoHost[0]}.json","w") as f:
+        List.append(f"保存数据到tree_{GitRepoHost[0]}.json文件")
         json.dump(tree,f)
     return state
 
@@ -162,9 +166,21 @@ if 'GitRepoHost' in os.environ:
     session = requests.session()
     host = 'http://127.0.0.1:5700/api'
     RepoHost = os.environ['GitRepoHost'].split("&")
+    datapath = os.path.exists("/ql/data")
+    print("注意！不支持青龙2.10.3以下版本")
+    if datapath:
+        print("当前青龙版本高于2.12.0")
+        path = "/ql/data"
+    else:
+        print("当前青龙版本低于2.12.0")
+        path = "/ql"
+    token = qltoken()
+    headers = {
+        "Content-Type":"application/json;charset=UTF-8",
+        "Authorization":"Bearer "+token
+    }
     for RepoX in RepoHost:
         List = []
-        headers = {"Content-Type": "application/json;charset=UTF-8"}
         GitRepoHost = RepoX.split("/")
         GitRepo = GitRepoHost[0]+"/"+GitRepoHost[1]
         GitBranch = GitRepoHost[2]
@@ -177,4 +193,3 @@ if 'GitRepoHost' in os.environ:
             send('开卡更新检测', tt)
 else:
     print("请查看脚本注释后设置相关变量")
-
