@@ -3,6 +3,8 @@
 """
 # 注意！不支持青龙2.10.3以下版本
 # 此脚本需要安装第三方依赖：deepdiff
+# 脚本来自 柒月
+# 如果请求api.github.com失败请自行想办法，用拉库用的Github加速代理是没用的
 # 青龙里面要有监控的Github仓库的拉库命令，通过监控Github仓库来查看是否有新的开卡脚本
 # 如果发现新的开卡脚本则自动拉库并运行开卡脚本，如果发现已有多个相同开卡脚本时
 # 且其中一个开卡脚本已经运行过了或者正在运行，之后更新的开卡脚本将不会再运行
@@ -10,6 +12,8 @@
 # 填写要监控的GitHub仓库的 用户名/仓库名/分支/脚本关键词
 # 监控多个仓库请用 & 隔开
 export GitRepoHost="feverrun/my_scripts/main/jd_opencard"
+# http代理，访问不了github的可以填上，无账号密码的直接填“http://ip:端口”
+export GitProxy="http://账号:密码@127.0.0.1:8080"
 # 运行开卡脚本前禁用开卡脚本定时任务，不填则不禁用，保留原有定时
 export opencardDisable="true"
 
@@ -35,6 +39,8 @@ def qlcron(name):
             return False,False
     else:
         List.append(f'请求青龙失败：{url}')
+        if "message" in jsons:
+            List.append(f'错误信息：{jsons["message"]}')
         return False,False
 
 def qltoken():
@@ -59,7 +65,7 @@ def qlrun(scripts_name):
     scriptspath = path+"/scripts/"+GitRepoHost[0]+"_"+GitRepoHost[1]
     if not os.path.exists(scriptspath):
         scriptspath = path+"/scripts/"+GitRepoHost[0]+"_"+GitRepoHost[1]+"_"+GitRepoHost[2]
-    File = os.path.exists(scriptspath)
+    File = os.path.exists(scriptspath+"/"+scripts_name)
     while not File:
         List.append("没有找到脚本："+GitRepoHost[0]+"_"+GitRepoHost[1]+"/"+scripts_name)
         rsp = session.put(url=url,headers=headers,data=json.dumps(RepoID))
@@ -67,10 +73,11 @@ def qlrun(scripts_name):
             List.append(f"运行拉库任务：{RepoName}")
         else:
             List.append(f'请求青龙失败：{url}')
-            List.append("错误信息："+rsp.json()["message"])
+            if "message" in rsp.json():
+                List.append(f'错误信息：{rsp.json()["message"]}')
             return
         sleep(10)
-        File = os.path.exists(scriptspath)
+        File = os.path.exists(scriptspath+"/"+scripts_name)
     else:
         List.append("找到开卡脚本："+GitRepoHost[0]+"_"+GitRepoHost[1]+"/"+scripts_name)
     # 获取开卡任务信息
@@ -88,7 +95,8 @@ def qlrun(scripts_name):
                 List.append(f"禁用开卡任务：{TaskName}")
             else:
                 List.append(f'请求青龙失败：{url}')
-                List.append("错误信息："+rsp.json()["message"])
+                if "message" in rsp.json():
+                    List.append(f'错误信息：{rsp.json()["message"]}')
                 return
     # 查找当前是否有多个同名开卡任务
     namename = TaskName.split(" ")
@@ -116,14 +124,17 @@ def qlrun(scripts_name):
         List.append(f"运行开卡任务：{TaskName}")
     else:
         List.append(f'请求青龙失败：{url}')
-        List.append("错误信息："+rsp.json()["message"])
+        if "message" in rsp.json():
+            List.append(f'错误信息：{rsp.json()["message"]}')
 
 def main():
     state = True
     # 请求Github仓库获取目录树
-    rsp = session.get(url=api,headers={"Content-Type":"application/json"})
+    rsp = session.get(url=api,headers={"Content-Type":"application/json"},proxies=proxies)
     if rsp.status_code != 200:
         List.append(f'请求GitHub失败：{api}')
+        if "message" in rsp.json():
+            List.append(f'错误信息：{rsp.json()["message"]}')
         return state
     # 只保存目录树中的开卡脚本的文件名信息
     tree = []
@@ -164,6 +175,9 @@ def main():
 
 if 'GitRepoHost' in os.environ:
     session = requests.session()
+    proxies = {}
+    if 'GitProxy' in os.environ:
+        proxies['https'] = os.environ['GitProxy']
     host = 'http://127.0.0.1:5700/api'
     RepoHost = os.environ['GitRepoHost'].split("&")
     datapath = os.path.exists("/ql/data")
