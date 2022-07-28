@@ -1,6 +1,6 @@
 /*
 盛夏派对 为爱而惠
-cron "1 1 1 1 1" jd_opencard_pd.js
+cron "6 12 * * *" jd_opencard_pdd.js
 */
 const $ = new Env('盛夏派对 为爱而惠')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
