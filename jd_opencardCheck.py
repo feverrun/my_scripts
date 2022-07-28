@@ -3,7 +3,6 @@
 """
 # 注意！不支持青龙2.10.3以下版本
 # 来自柒月
-# 此脚本需要安装第三方依赖：deepdiff
 # 如果请求api.github.com失败请自行想办法，用拉库用的Github加速代理是没用的
 # 青龙里面要有监控的Github仓库的拉库命令，通过监控Github仓库来查看是否有新的开卡脚本
 # 如果发现新的开卡脚本则自动拉库并运行开卡脚本，如果发现已有多个相同开卡脚本时
@@ -12,18 +11,19 @@
 # 填写要监控的GitHub仓库的 用户名/仓库名/分支/脚本关键词
 # 监控多个仓库请用 & 隔开
 export GitRepoHost="feverrun/my_scripts/main/jd_opencard"
-# http代理，访问不了github的可以填上，无账号密码的直接填“http://ip:端口”
-export GitProxy="http://账号:密码@127.0.0.1:8080"
+# http代理，访问不了github的可以填上
+export GitProxy="http://127.0.0.1:8080"
 # 运行开卡脚本前禁用开卡脚本定时任务，不填则不禁用，保留原有定时
 export opencardDisable="true"
 
+version: 7.26.1
 cron: */5 0-3 * * *
 new Env('开卡更新检测')
 """
 
 from time import sleep
 from notify import send
-import requests,deepdiff,json,os
+import requests,json,os
 
 # 显示日志
 List=[]
@@ -122,22 +122,25 @@ def qlrepo(scriptsName):
         log(f"获取仓库任务信息失败：{GitRepo}")
         return
     # 检查仓库文件夹中是否有开卡脚本，没有就运行拉库命令
-    scriptsFile = os.path.exists(path+"/scripts/"+repopath+"/"+scriptsName)
-    while not scriptsFile:
-        log("没有找到脚本："+repopath+"/"+scriptsName)
-        rsp = session.put(url=url,headers=headers,data=json.dumps(RepoID))
-        if rsp.status_code == 200:
-            log(f"运行拉库任务：{RepoName}")
+    rsp = session.put(url=url,headers=headers,data=json.dumps(RepoID))
+    if rsp.status_code == 200:
+        log(f"运行拉库任务：{RepoName}")
+        ii=0
+        scriptsFile = path+"/scripts/"+repopath+"/"+scriptsName
+        while not os.path.exists(scriptsFile):
+            if ii>=20:
+                return
+            sleep(1)
+            ii+=1
         else:
-            log(f'请求青龙失败：{url}')
-            if "message" in rsp.json():
-                log(f'错误信息：{rsp.json()["message"]}')
-            return
-        sleep(10)
-        scriptsFile = os.path.exists(path+"/scripts/"+repopath+"/"+scriptsName)
+            sleep(5)
+            return True
     else:
-        log("找到开卡脚本："+repopath+"/"+scriptsName)
-        return True
+        log(f'请求青龙失败：{url}')
+        if "message" in rsp.json():
+            log(f'错误信息：{rsp.json()["message"]}')
+        return
+
 
 # 运行开卡任务
 def qltask(scriptsName):
@@ -194,23 +197,20 @@ def qltask(scriptsName):
 
 # 请求Github仓库获取目录树
 def github():
-    proxies = {}
-    if 'GitProxy' in os.environ:
-        log("已设置HTTP代理，将通过代理访问api.github.com")
-        proxies['https'] = os.environ['GitProxy']
-    log(f"监控仓库：https://github.com/{GitRepo}")
+    log(f"\n监控仓库：https://github.com/{GitRepo}")
     gitapi = f'https://api.github.com/repos/{GitRepo}/git/trees/{GitBranch}'
     rsp = session.get(url=gitapi,headers={"Content-Type":"application/json"},proxies=proxies)
     if rsp.status_code != 200:
         log(f'请求GitHub失败：{gitapi}')
         if "message" in rsp.json():
             log(f'错误信息：{rsp.json()["message"]}')
-    # 只保存目录树中的开卡脚本的文件名信息
-    tree = []
-    for x in rsp.json()["tree"]:
-        if Repo[3] in x["path"]:
-            tree.append(x["path"])
-    return tree
+    else:
+        # 只保存目录树中的开卡脚本的文件名信息
+        tree = []
+        for x in rsp.json()["tree"]:
+            if Repo[3] in x["path"]:
+                tree.append(x["path"])
+        return tree
 
 def check():
     state = False
@@ -222,20 +222,11 @@ def check():
     # 读取上一次保存的tree.json并与当前tree进行对比
     with open(f"{path}/scripts/tree_{Repo[0]}.json", 'rb') as json_file:
         tree_json = json.load(json_file)
-    diff = deepdiff.DeepDiff(tree_json, tree)
-    # 判断是否有新增开卡脚本
-    if "values_changed" in diff:
-        for x in diff["values_changed"]:
-            scriptsName = diff["values_changed"][x]["new_value"]
-            log(f"新增开卡脚本：{scriptsName}")
-            repoPull = qlrepo(scriptsName) # 运行拉库任务
-            if repoPull: # 运行脚本任务
-                qltask(scriptsName)
-            state = True
-            break
-    elif "iterable_item_added" in diff:
-        for x in diff["iterable_item_added"]:
-            scriptsName = diff["iterable_item_added"][x]
+    with open(f"{path}/scripts/tree_{Repo[0]}.json","w") as f:
+        log(f"保存数据到tree_{Repo[0]}.json文件")
+        json.dump(tree,f)
+    for scriptsName in tree:
+        if scriptsName not in tree_json:
             log(f"新增开卡脚本：{scriptsName}")
             repoPull = qlrepo(scriptsName) # 运行拉库任务
             if repoPull: # 运行脚本任务
@@ -244,13 +235,14 @@ def check():
             break
     else:
         log("没有新增开卡脚本")
-    with open(f"{path}/scripts/tree_{Repo[0]}.json","w") as f:
-        log(f"保存数据到tree_{Repo[0]}.json文件")
-        json.dump(tree,f)
     return state
 
 if 'GitRepoHost' in os.environ:
     RepoHost = os.environ['GitRepoHost'].split("&")
+    proxies = {}
+    if 'GitProxy' in os.environ:
+        log("已设置HTTP代理，将通过代理访问api.github.com")
+        proxies['https'] = os.environ['GitProxy']
     session = requests.session()
     qlhost = 'http://127.0.0.1:5700/api'
     token = qltoken()
