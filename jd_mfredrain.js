@@ -1,6 +1,6 @@
 /*
 魔方红包雨 空气、6豆、10豆、20豆
-8 12 * * * jd_mfredrain.js, tag=魔方红包雨, enabled=true
+8 12 29 7 * jd_mfredrain.js, tag=魔方红包雨, enabled=true
  */
 
 const $ = new Env('魔方红包雨');
