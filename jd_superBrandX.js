@@ -44,7 +44,11 @@ if ($.isNode()) {
             }
             continue
         }
-        await main();
+        try {
+            await main();
+        }catch (e) {
+            console.log(`活动太火爆，快去买买买！`);
+        }
         await $.wait(2000);
         if ($.flag) return;
     }
