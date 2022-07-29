@@ -2,7 +2,7 @@
 7.28~8.4 七待已久 夕望你来
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=e6fc50c7dcc34c99bf5cca76c8c6468e
 export OPENCARD_DRAW_NUM="10"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 13 * * *" jd_opencard_qdd.js
+cron "1 1 1 1 1" jd_opencard_qd.js
 */
 const $ = new Env('7.28~8.4七待已久 夕望你来')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
