@@ -10,7 +10,7 @@
 https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=4a4b4c2e46dd80c1d89bd445shop
 
 #京东超店会员福利社
-cron "8 1 * * *" jd_opencard_fl.js, tag=11.11 京东超店会员福利社 入会赢专享好礼
+cron "1 1 1 1 1" jd_opencard_fl.js, tag=11.11 京东超店会员福利社 入会赢专享好礼
 
 */
 const $ = new Env('京东超店会员福利社');
