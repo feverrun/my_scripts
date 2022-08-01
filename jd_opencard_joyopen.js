@@ -158,6 +158,8 @@ function getActivity(code, name, flag) {
                 "Connection": "keep-alive",
                 'Cookie': cookie,
                 'User-Agent': $.UA,
+                "x-requested-with":"com.jingdong.app.mall",
+                "referer":"https://prodev.m.jd.com/",
             }
         }, async (err, resp, data) => {
             try {
@@ -390,7 +392,7 @@ function getEid(arr) {
 
 async function getUA() {
     $.UA = `jdapp;iPhone;10.0.10;14.3;${randomString(40)};network/wifi;model/iPhone12,1;addressid/4199175193;appBuild/167741;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`
-    let arr = await Faker.getBody($.UA, 'https://prodev.m.jd.com/mall/active/3q7yrbh3qCJvHsu3LhojdgxNuWQT/index.html')
+    let arr = await Faker.getBody($.UA, 'https://prodev.m.jd.com/mall/active/2VCLBmUS6qEooaDyhfbUw45H227i/index.html')
     $.fp = arr.fp
     await getEid(arr)
 }
