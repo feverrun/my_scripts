@@ -1,12 +1,12 @@
 /*
-组队瓜分京豆
+CJ组队瓜分京豆
 https://cjhydz-isv.isvjcloud.com/wxTeam/activity?activityId=xxx
 活动ID 必需
 export jd_cjhy_activityId="xxx"
 #CJ组队瓜分京豆
 cron "1 1 1 1 1" jd_cjzdgf.js
 */
-const $ = new Env('组队瓜分京豆')
+const $ = new Env('CJ组队瓜分京豆')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
