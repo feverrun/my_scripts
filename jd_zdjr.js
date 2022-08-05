@@ -1,4 +1,5 @@
 /*
+LZ组队瓜分京豆
 一共有2个变量
 export jd_zdjr_activityId="xxx"  活动ID 必需
 export jd_zdjr_activityUrl="" 活动地址 非必须
@@ -6,7 +7,7 @@ export jd_zdjr_activityUrl="" 活动地址 非必须
 cron "1 1 1 1 1" jd_zdjr.js
 */
 
-const $=new Env('组队瓜分京豆');
+const $=new Env('LZ组队瓜分京豆');
 const notify=$.isNode()?require('./sendNotify'):'';
 const jdCookieNode=$.isNode()?require('./jdCookie.js'):'';
 
