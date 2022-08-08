@@ -1,7 +1,7 @@
 /*
 https://lzkj-isv.isvjcloud.com/wxCollectionActivity/activity2/8530275?activityId=xxx
 不能并发
-export jd_wxCollectionActivityId="xxx&xxx&xxx..."  活动Id
+export jd_lzkj_wxCollectionActivityId="xxx"  活动Id
 export pinBlackLists="xxx" 黑名单,pin不跑的ck & 分开
 export noWaterMaxNum="10" 跑多少个号没水自动退出。
 cron "1 1 1 1 1" jd_lzkj_wxCollectionActivity.js
