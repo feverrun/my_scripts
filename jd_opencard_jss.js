@@ -1,7 +1,7 @@
 /*
 酒水
 https://lzdz1-isv.isvjcloud.com/dingzhi/drinkcategory/piecetoge1/activity?activityId=dz5049da83678c4aa0b2cb5ff01dc5&shareUuid=4e80ab0b8cf24bfe9859086d5b518499
-cron "6 20 * * *" jd_opencard_js.js
+cron "1 1 1 1 1" jd_opencard_jss.js
 */
 const $ = new Env('酒水');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
