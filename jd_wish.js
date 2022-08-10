@@ -10,8 +10,8 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let message = '', allMessage = '';
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1FFVQyqw','1EFRWxKuG', '1E1xZy6s'];
-let appNameArr = ['1111点心动','许愿抽好礼', 'PLUS生活特权'];
+let appIdArr = ['1EFRWxKuG'];
+let appNameArr = ['许愿抽好礼'];
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {
