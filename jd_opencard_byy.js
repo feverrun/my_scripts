@@ -2,7 +2,7 @@
 8月你好 暑期嘉年华
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=d2779119add144b7b5b026468fa14a7a
 export OPENCARD_DRAW_NUM="10"  是否抽奖 抽奖次数 不推荐填写。
-cron "5 18 * * *" jd_opencard_by.js
+cron "8 1 * * *" jd_opencard_byy.js
 */
 const $ = new Env('8月你好 暑期嘉年华')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
