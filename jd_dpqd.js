@@ -38,8 +38,30 @@ if ($.isNode()) {
     return;
   }
 
-  token = await getRemoteData();
-  token = token ? token : [];
+  // token = await getRemoteData();
+  // token = token ? token : [];
+  token = [
+    "7B5E686A0CAF1C144620A3FFE04AFF1E",
+    "D6DE2273ED07EED57D079E51DE5598C6",
+    "A1577946DE409D3AC4B4FDCFF4681625",
+    "E0087463F85940305DCA705308208EBB",
+    "773D63918C47D32F33DDB2FB78C5820A",
+    "35161A49032726A1A48E435DD2874114",
+    "F33A1D9D66CD2D5DDD1C4FDE085C4EC8",
+    "DA71409388CE531378225A6BBF96CDFE",
+    "1D859C8496A1C222746B1474B34D7426",
+    "89EC96E44D386352EC5EC9F84B21CAAA",
+    "3ACBEC88453BD0AEC2B61FC7C59E5128",
+    "A6D7A29DB6C46B7D3F7CD6EC3AE110C6",
+    "F9E7DBB640BB2094C6A7755066DCE5CA",
+    "30D17316E31067004ED239DE9F121B0D",
+    "A07B0E92FA199CB1EF432D315FFC5F62",
+    "D35923E942C11178C38BD29E783695B8",
+    "8C7A8DEAB8A6C8AC98EEE364EBB10F7A",
+    "8CC487234D54778E2F1C738C79B397BA",
+    "500B9537712BD828EFC8C4D036B9752A",
+    "D082916926793D99220819F05914C94F"
+  ];
   await $.wait(parseInt(Math.random(2500) + 250, 10));
 
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -313,6 +335,7 @@ function getRemoteData()
       timeout: 30000,
     }
     $.get(options, (err, resp, data) => {
+      console.log(`data:${data}`);
       try {
         if (err) {
           console.log(`\n${$.name}: API查询请求失败 ‼️‼️`)
