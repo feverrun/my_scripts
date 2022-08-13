@@ -2,13 +2,16 @@
 美丽研究院
 修复+尽量优化为同步执行,减少并发,说不定就减小黑号概率了呢?
 更新时间:2021-12-03
+来源 Dylan
+定时自定义，集中访问可能炸
 活动入口：京东app首页-美妆馆-底部中间按钮
-1 9,11,16 * * * jd_beauty.js, tag=美丽研究院, img-url=jd.png, enabled=true
+#随机定时运行一次
  */
 const $ = new Env('美丽研究院');
 const notify = $.isNode() ? require('./sendNotify') : '';
-console.log('能不能用随缘!!!')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+
+
 const WebSocket = require('ws');
 const UA = process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
@@ -87,7 +90,7 @@ async function accountCheck() {
   await $.wait(10000)
   await getIsvToken2()
   await $.wait(10000)
-  await getToken()
+  await getAuth()
   await $.wait(10000)
   if (!$.token) {
     console.log(`\n\n提示：请尝试换服务器ip或者设置"xinruimz-isv.isvjcloud.com"域名直连，或者自定义UA再次尝试(环境变量JD_USER_AGENT)\n\n`)
@@ -573,10 +576,10 @@ function getIsvToken() {
   })
 }
 
-function getIsvToken2() {
+async function getIsvToken2() {
   let config = {
     url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
-    body: 'body=%7B%22url%22%3A%22https%3A%5C/%5C/xinruimz-isv.isvjcloud.com%22%2C%22id%22%3A%22%22%7D&build=167490&client=apple&clientVersion=9.3.2&openudid=53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2&osVersion=14.2&partner=apple&rfs=0000&scope=01&sign=6eb3237cff376c07a11c1e185761d073&st=1610161927336&sv=102&uuid=hjudwgohxzVu96krv/T6Hg%3D%3D',
+    body: await getSignfromDY('isvObfuscator',{"id":"","url":"https://xinruimz-isv.isvjcloud.com"}),
     headers: {
       'Host': 'api.m.jd.com',
       'accept': '*/*',
@@ -607,8 +610,45 @@ function getIsvToken2() {
     })
   })
 }
-
-function getToken() {
+function getSignfromDY(functionId, body) {
+  var strsign = '';
+  let data = `functionId=${functionId}&body=${encodeURIComponent(JSON.stringify(body))}`
+  return new Promise((resolve) => {
+    let opt = {
+      url: "https://jd.nbplay.xyz/dylan/getsign",
+      body: data,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
+      ,timeout: 30000
+    }
+    $.post(opt, async(err, resp, data) => {
+      try {
+        if (data){
+          data = JSON.parse(data);
+          if (data && data.code == 0) {
+            console.log("连接DY服务成功" );
+            if (data.data){
+              strsign = data.data || '';
+            }
+            if (strsign != ''){
+              resolve(strsign);
+            }
+            else
+              console.log("签名获取失败,换个时间再试.");
+          } else {
+            console.log(data.msg);
+          }
+        }else{console.log('连接连接DY服务失败，重试。。。')}
+      }catch (e) {
+        $.logErr(e, resp);
+      }finally {
+        resolve(strsign);
+      }
+    })
+  })
+}
+function getAuth() {
   let config = {
     url: 'https://xinruimz-isv.isvjcloud.com/api/auth',
     body: JSON.stringify({"token":$.token2,"source":"01"}),
