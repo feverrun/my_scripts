@@ -2,7 +2,7 @@
 玩转818超值购物攻略
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=91eb99e21c92403c8b8b29f3604bd765
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 0 * * *" jd_opencard_ry.js
+cron "1 1 1 1 1" jd_opencard_wz.js
 */
 const $ = new Env('玩转818超值购物攻略')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
