@@ -5,7 +5,7 @@
 默认助力内部第一个号！！！
 如果想卖助力，则看看下面这两个变量
 此h5来自nolan 的公益h5
-export fcwb_nolan_token="https://t.me/NolanNarkbot" 中获取的token
+export fcwb_nolan_token="https://t.me/NolanNarkbot" 中获取的token 必须
 export fcwb_helpnum="111"  //自己设置多少个助力后停止
 export fcwb_help_wait="0.5" //助力延迟, 不写则默认1秒
 
@@ -15,7 +15,7 @@ export FCWB_INVITER_CODE=""
 跑之前一定要去手动挖宝，先开两个格子, 开到优惠券就是活动黑了
 cron "1 1 1 1 1" jd_fcwb_nolan.js
  */
-const $ = new Env('发财挖宝');
+const $ = new Env('发财挖宝-nolan版');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
