@@ -1,10 +1,10 @@
 /*
-解锁好物 宠粉时刻
+8.18~8.26 解锁好物 宠粉时刻
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=f60e257cf36f4f5b9a41126cc10f1d60
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 1 * * *" jd_opencard_hw.js
+cron "1 1 1 1 1" jd_opencard_cf.js
 */
-const $ = new Env('解锁好物 宠粉时刻')
+const $ = new Env('8.18~8.26 解锁好物 宠粉时刻')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
