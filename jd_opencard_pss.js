@@ -1,7 +1,7 @@
 /*
 能量派送 幻新出发
 https://lzdz1-isv.isvjcloud.com/dingzhi/senior/opencard/activity/657324?activityId=dz73eb30a238804603b949661e2f2b
-cron "7 19 * * *" jd_opencard_ps.js
+cron "6 20 * * *" jd_opencard_pss.js
 */
 const $ = new Env('能量派送 幻新出发')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
