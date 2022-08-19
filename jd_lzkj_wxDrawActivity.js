@@ -5,7 +5,7 @@ lzkj幸运抽大奖通用活动
 https://lzkj-isv.isvjcloud.com/lzclient/1659769535632/cjwx/common/entry.html?activityId=8223ecdc28dd44719c2fd25a0a2fd2d4&gameType=wxTurnTable&shopid=1000014286
 export jd_lzkj_wxDrawActivity_Id="活动Id"
 export jd_lzkj_wxDrawActivity_num="10"   执行前多少个号  不设置则默认执行前10个
-export jd_wxDrawActivity_openCard="1"    设置为1则默认不入会 不设置或者设置为0则自动入会
+export jd_wxDrawActivity_openCard="1"    设置为1则自动入会 不设置或者设置为0则不会自动入会
 
 cron "1 1 1 1 1" jd_lzkj_wxDrawActivity.js
 */

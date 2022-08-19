@@ -5,7 +5,7 @@ https://cjhy-isv.isvjcloud.com/wxDrawActivity/activity/273856?activityId=e4b1c6e
 
 export jd_cjhy_wxDrawActivity_Id = "xxx" 活动Id
 export jd_cjhy_wxDrawActivity_num="10"   执行前多少个号  不设置则默认执行前10个
-export jd_wxDrawActivity_openCard="1"    设置为1则默认不入会 不设置或者设置为0则自动入会
+export jd_wxDrawActivity_openCard="1"    设置为1则自动入会 不设置或者设置为0则不会自动入会
 
 cron "1 1 1 1 1" jd_cjhy_wxDrawActivity.js
 */
