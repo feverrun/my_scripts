@@ -1,7 +1,7 @@
 /*
 时尚箱包品类日
 https://lzdz1-isv.isvjcloud.com/dingzhi/aug/bags/activity?activityId=dzd7e43c8a48508801afb3f142843c&shareUuid=dab818afdc6e40e4b986d5df536acc84
-cron "30 11 * * *" jd_opencard_bag.js
+cron "1 1 1 1 1" jd_opencard_xb.js
 */
 const $ = new Env('时尚箱包品类日');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
