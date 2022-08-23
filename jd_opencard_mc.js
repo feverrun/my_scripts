@@ -2,7 +2,7 @@
 家有萌宠 为爱而生
 https://lzdz1-isv.isvjcloud.com/dingzhi/petkk/active/activity?activityId=dze115fd25c54e28a185e305a8fc5126
 &shareUuid=a42c7b7fac5049cf89adf21958e59931
-cron "6 1 * * *" jd_opencard_a.js
+cron "1 1 1 1 1" jd_opencard_mc.js
 */
 
 const $ = new Env('家有萌宠 为爱而生');
