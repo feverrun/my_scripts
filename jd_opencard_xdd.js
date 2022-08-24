@@ -2,7 +2,7 @@
 相约秋日 怦然“新”动。
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=29de51cff4674aecaab45550281d9da1
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 17 * * *" jd_opencard_xdd.js
+cron "6 19 * * *" jd_opencard_xdd.js
 */
 const $ = new Env('相约秋日 怦然“新”动。')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
