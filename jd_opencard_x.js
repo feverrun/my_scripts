@@ -2,7 +2,7 @@
 新家
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk98c1e145dcb0a157c56c6005
 export OPENCARD_DRAW_NUM="10"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 16 * * *" jd_opencard_xj.js
+cron "1 1 1 1 1" jd_opencard_x.js
 */
 const $ = new Env('新家')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
