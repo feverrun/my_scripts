@@ -2,7 +2,7 @@
 来电绿色生活
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=97a956ca45e5423c9e3e8df1a7ae61f2
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 1 * * *" jd_opencard_ls.js
+cron "1 1 1 1 1" jd_opencard_sh.js
 */
 const $ = new Env('来电绿色生活')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
