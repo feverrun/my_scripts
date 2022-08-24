@@ -1,7 +1,7 @@
 /*
 千礼共明月 月满惠佳节
 https://lzdz1-isv.isvjcloud.com/m/1000004719/745351/dzafd47bd34bec92cf909834d21df0/?shareUuid=0f1b807997204ce6b83a47b1c8565c47
-cron "1 1 1 1 1" jd_opencard_xb.js
+cron "6 10 * * *" jd_opencard_jj.js
 */
 const $ = new Env('千礼共明月 月满惠佳节');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
