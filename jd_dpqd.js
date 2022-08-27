@@ -1,5 +1,8 @@
 /*
 https://github.com/feverrun/my_scripts
+如果想自己设置token,则设置以下的变量
+export dpqd_token="token1&token2&token3..."
+
 店铺签到，各类店铺签到，有新的店铺直接添加token即可
 店铺签到的定时可采取随机定时,每天运行一次即可
 cron "15 0,4 * * *" script-path=jd_dpqd.js,tag=店铺签到
@@ -14,14 +17,19 @@ let activityId = ''
 let vender = ''
 let num = 0
 let token = []
+let tokens = [];
+let dpqd_token = ''
 
 // const token = []
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-  };
+  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+  dpqd_token = process.env.dpqd_token ? process.env.dpqd_token : '';
+  if (dpqd_token != '') {
+    tokens = dpqd_token.split('&');
+  }
 } else {
   let cookiesData = $.getdata('CookiesJD') || "[]";
   cookiesData = jsonParse(cookiesData);
@@ -62,6 +70,9 @@ if ($.isNode()) {
     "D173595F46DFDD996EC3504FDE60F7EB",
     "07676202D4FAEBE3B5191071420ACCB4"
   ];
+
+  token = dpqd_token ? tokens : token;
+
   await $.wait(parseInt(Math.random(2500) + 250, 10));
 
   for (let i = 0; i < cookiesArr.length; i++) {
