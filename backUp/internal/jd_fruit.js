@@ -5,7 +5,7 @@
 东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
 一天只能帮助3个人。多出的助力码无效
 cron "5 5,12,17 * * *" script-path=jd_fruit.js,tag=东东农场
-export DO_TEN_WATER_AGAIN="" 默认再次浇水
+export DO_TEN_WATER_AGAIN="1"  攒水滴
 */
 const $ = new Env('东东农场互助版');
 let cookiesArr = [], cookie = '', isBox = false, notify,allMessage = '';
@@ -197,7 +197,12 @@ async function jdFruit() {
             await getTenWaterAward();//领取10浇水奖励
             await getWaterFriendGotAward();//领取为2好友浇水奖励
             await duck();
-            await doTenWaterAgain();//再次浇水
+            if(!process.env.DO_TEN_WATER_AGAIN){
+                console.log('执行再次浇水')
+                await doTenWaterAgain();//再次浇水
+            } else {
+                console.log('不执行再次浇水，攒水滴')
+            }
             await predictionFruit();//预测水果成熟时间
         } else {
             console.log(`初始化农场数据异常, 请登录京东 app查看农场功能是否正常`);

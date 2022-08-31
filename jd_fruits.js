@@ -5,7 +5,7 @@
 东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
 一天只能帮助3个人。多出的助力码无效
 cron "5 4,7,14,20 * * *" script-path=jd_fruits.js,tag=东东农场
-export DO_TEN_WATER_AGAIN="" 默认再次浇水
+export DO_TEN_WATER_AGAIN="1" 攒水滴
 */
 
 const $ = new Env('东东农场');
