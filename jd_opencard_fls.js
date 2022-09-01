@@ -5,7 +5,7 @@
 入口：瓜分千万京豆 免费抽大奖
 https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=dzd16c3e4a819a0e14026da9shop
 
-cron "6 1 * * *" jd_opencard_fl.js
+cron "1 1 1 1 1" jd_opencard_fls.js
 */
 const $ = new Env('京东超店会员福利社');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
