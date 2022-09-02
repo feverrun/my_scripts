@@ -3,7 +3,7 @@
 1.邀请满3人30豆，邀请5人50，邀请15人 有机会获得盲盒
 2.开1张卡
 3.已开卡的不算有效人数
-cron "13 13 * * *" jd_opencard_qbyq.js, tag=9.1~9.30 倩碧邀请礼, enabled=true
+cron "1 1 1 1 1" jd_inviteQB.js, tag=9.1~9.30 倩碧邀请礼, enabled=true
 */
 
 const $ = new Env('9.1~9.30 倩碧邀请礼');

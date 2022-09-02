@@ -224,6 +224,7 @@ async def main():
         print(f'==================共{len(cks)}个京东账号Cookie==================')
         print(f'==================脚本执行- 北京时间(UTC+8)：{get_time()}=====================\n')
         print(f'您好！{invitePin}，正在获取您的活动信息',)
+        print(f'活动地址: {activityUrl}')
         ua = randomuserAgent()  # 获取ua
         result = await check(ua, inveteck) # 检测ck
         if result['code'] == 200:
