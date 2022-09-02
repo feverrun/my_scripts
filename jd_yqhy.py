@@ -21,9 +21,15 @@ from functools import partial
 print = partial(print, flush=True)
 
 activatyname = '邀请赢大礼'
-activityId = os.environ["yhyactivityId"] if os.environ["yhyactivityId"] else ''   # 活动类型
-authorCode = os.environ["yhyauthorCode"] if os.environ["yhyauthorCode"] else 'dVF7gQUVKyUcuSsVhuya5d2XD4F' # 活动id
-invitePin = os.environ["yhypin"] if os.environ["yhypin"] else ''  # pin 填写cookie后面的pin
+activityId = os.environ["yhyactivityId"]   # 活动类型
+if !activityId:
+    activityId = 'dVF7gQUVKyUcuSsVhuya5d2XD4F'
+authorCode = os.environ["yhyauthorCode"]
+if !authorCode:
+    authorCode = ''
+invitePin = os.environ["yhypin"]  # pin 填写cookie后面的pin
+if !invitePin:
+    invitePin = ''
 activityUrl = f'https://prodev.m.jd.com/mall/active/{activityId}/index.html?code={authorCode}&invitePin={invitePin}'
 
 # 随机ua
