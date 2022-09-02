@@ -3,7 +3,7 @@
 https://lzkjdz-isv.isvjcloud.com/esteelauder/inviteNew/activityPage?activityId=2209100037674501&inviterUuid=45a50cad2ac943cb8affcc3969e35cc7
 /*
 雅诗兰黛奢雅邀请入会有礼
-8 8,20 1-30 9 * jd_inviteYSLD.js, tag=雅诗兰黛奢雅邀请入会有礼, enabled=true
+cron "1 1 1 1 1" jd_inviteYSLD.js, tag=雅诗兰黛奢雅邀请入会有礼, enabled=true
 */
 const $ = new Env('雅诗兰黛奢雅邀请入会有礼');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
