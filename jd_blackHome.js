@@ -23,6 +23,7 @@ if ($.isNode()) {
         return;
     }
 
+    console.log(`仅供参考，不要较真！`);
     for (let i = 0; i < cookiesArr.length; i++) {
         getUA();
         cookie = cookiesArr[i];
