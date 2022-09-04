@@ -74,7 +74,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       $.assigFirends = $.assigFirends.concat({
         "encryptAssignmentId": $.assigFirends[0] && $.assigFirends[0]['encryptAssignmentId'],
         "assignmentType": 2,
-        "itemId": "SZm_olqSxIOtH97BATGmKoWraLaw",
+        "itemId": "Sv_V7RhwQ_VzXIhub1A",
       })
       for (let item of $.assigFirends || []) {
         if (item['encryptAssignmentId'] && item['assignmentType'] && item['itemId']) {
@@ -959,6 +959,7 @@ function qryCompositeMaterials(type = "productGroup", id = $.cmsTaskGroupId, map
     }
     const options = taskPostUrl('qryCompositeMaterials', body)
     $.post(options, async (err, resp, data) => {
+      // console.log(data)
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -1252,6 +1253,7 @@ function jsonParse(str) {
   }
 }
 function taskUrl(function_id, body = {}, appId = 'vip_h5') {
+  // console.log(`${JD_API_HOST}?functionId=${function_id}&appid=${appId}&body=${escape(JSON.stringify(body))}&_=${Date.now()}`);
   return {
     url: `${JD_API_HOST}?functionId=${function_id}&appid=${appId}&body=${escape(JSON.stringify(body))}&_=${Date.now()}`,
     headers: {
