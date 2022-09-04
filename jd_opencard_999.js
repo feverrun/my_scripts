@@ -2,7 +2,7 @@
 99欢聚大牌盛典
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=0c34272756d145e782fd2a8db342a4a5
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 1 * * *" jd_opencard_99.js
+cron "1 1 1 1 1" jd_opencard_999.js
 */
 const $ = new Env('99欢聚大牌盛典')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
