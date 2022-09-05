@@ -2,7 +2,7 @@
 中秋佳节 情满钜惠
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity/9042600?activityId=341bbed01dc6446bb74ec72bb9cd7a22
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 11 * * *" jd_opencard_hj.js
+cron "1 1 1 1 1" jd_opencard_hjj.js
 */
 const $ = new Env('中秋佳节 情满钜惠')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
