@@ -1,9 +1,9 @@
 /*
 月满中秋  有礼相伴
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 11 * * *" jd_opencard_xx.js
+cron "6 1 * * *" jd_opencard_ym.js
 */
-const $ = new Env('月满中秋  有礼相伴')
+const $ = new Env('月满中秋 有礼相伴')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
