@@ -3,7 +3,7 @@
 新增开卡脚本，一次性脚本
 
 #9.1-9.30 京东健康一键开卡
-1 1 1 1 * jd_opencardL239.js, tag=9.1-9.30 京东健康一键开卡, enabled=true
+1 1 1 1 1 jd_opencard_unn.js, tag=9.1-9.30 京东健康一键开卡, enabled=true
 */
 let opencard_toShop = "false"
 const $ = new Env("9.1-9.30 京东健康一键开卡");
