@@ -1,8 +1,8 @@
 /*
-99聚划算  Carry全场
+9.5-5.20 99聚划算  Carry全场
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=517ad0d39e8a4e10b44591449ed3d3f6
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 1 * * *" jd_opencard_ca.js
+cron "1 1 1 1 1" jd_opencard_jhs.js
 */
 const $ = new Env('99聚划算  Carry全场')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
