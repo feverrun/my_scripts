@@ -2,7 +2,7 @@
 好酒不见 食分想念
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=deefa14efb734e2fb4a4d35d48061521
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 20 * * *" jd_opencard_xxx.js
+cron "1 1 1 1 1" jd_opencard_xn.js
 */
 const $ = new Env('好酒不见 食分想念')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
