@@ -2,7 +2,7 @@
 福满中秋  聚惠相随
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=5d6b66ed10a8456fa4e161af5d55e1b9
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_bb.js
+cron "1 1 1 1 1" jd_opencard_hj.js
 */
 const $ = new Env('福满中秋  聚惠相随')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
