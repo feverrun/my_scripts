@@ -55,6 +55,7 @@ if ($.isNode()) {
                 console.log(`准备开始: ${$.configCode}`);
                 await getUA()
                 await jdmodule();
+                await $.wait(parseInt(Math.random()*500+200,2));
             }
         }
     }
