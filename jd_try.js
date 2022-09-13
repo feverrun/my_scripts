@@ -729,7 +729,8 @@ function geth5st(body) {
         }),
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        timeout: 30000,
     },str='';
     return new Promise((resolve) => {
         $.post(opt, (err, resp, data) => {
