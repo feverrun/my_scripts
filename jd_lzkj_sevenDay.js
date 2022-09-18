@@ -4,7 +4,7 @@ lzkj七日签到
 地址：
 export jd_lzkj_sevenDay_ids = "id1&id2&id3"     活动Id   必须
 export jd_lzkj_sevenDay_num="10"                执行前多少个号  不设置则默认执行前10个
-export jd_lzkj_sevenDay_openCard="1"            设置为1则默认不入会 不设置或者设置为0则自动入会
+export jd_lzkj_sevenDay_openCard="1"            设置为1则自动入会 不设置或者设置为0则不自动入会
 
 cron "1 1 1 1 1" jd_lzkj_sevenDay.js
 */
