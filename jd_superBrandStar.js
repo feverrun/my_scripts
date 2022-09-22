@@ -37,6 +37,8 @@ if ($.isNode()) {
         }catch (e) {
             console.log(JSON.stringify(e));
         }
+
+        await $.wait(parseInt(Math.random()*2000+2500,10))
     }
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();})
 
@@ -53,7 +55,7 @@ async function main() {
         return ;
     }
     let activityInfo = await taskPost('superBrandTaskList',`{"source":"star_gift","activityId":${activityId}}`);
-    await $.wait(1000);
+    await $.wait(parseInt(Math.random()*1000+1000,10));
     let taskList =  activityInfo.data.result.taskList
     for (let i = taskList.length-1; i >=0; i--) {
         let oneTask = taskList[i];
@@ -66,7 +68,7 @@ async function main() {
             console.log(`任务：${oneTask.assignmentName},去执行`);
             for (let j = 0; j < infoList.length; j++) {
                 await taskPost('superBrandDoTask',`{"source":"star_gift","activityId":${activityId},"encryptProjectId":"${encryptProjectId}","encryptAssignmentId":"${oneTask.encryptAssignmentId}","assignmentType":${oneTask.assignmentType},"itemId":"${infoList[j].itemId}","actionType":0}`)
-                await $.wait(1000);
+                await $.wait(parseInt(Math.random()*1000+1000,10));
             }
         }
         if(Number(oneTask.assignmentType) === 1){
@@ -82,9 +84,18 @@ async function main() {
                     await $.wait(waitDuration * 1000);
                 }
                 await taskPost('superBrandDoTask',`{"source":"star_gift","activityId":${activityId},"encryptProjectId":"${encryptProjectId}","encryptAssignmentId":"${oneTask.encryptAssignmentId}","assignmentType":${oneTask.assignmentType},"itemId":"${infoList[j].itemId}","actionType":0}`)
-                await $.wait(2000)
+                await $.wait(parseInt(Math.random()*1500+1000,10))
+
             }
         }
+        //品牌入会
+        if(Number(oneTask.assignmentType) === 7){
+            let infoList = oneTask.ext.brandMemberList || oneTask.ext.brandMemberList || [];
+            await taskPost('superBrandDoTask',`{"source":"star_gift","activityId":${activityId},"encryptProjectId":"${encryptProjectId}","encryptAssignmentId":"${oneTask.encryptAssignmentId}","assignmentType":${oneTask.assignmentType},"itemId":"${infoList[0].itemId}","actionType":0}`)
+            await $.wait(parseInt(Math.random()*1000+1000,10))
+        }
+
+        await $.wait(parseInt(Math.random() * 500 + 500, 10));
         if(Number(oneTask.assignmentType) === 30){
             console.log(`\n进行抽奖`);
             let giftInfo = await taskPost('superBrandTaskLottery',`{"source":"star_gift","activityId":${activityId},"encryptProjectId":"${encryptProjectId}"}`)
@@ -101,7 +112,7 @@ async function main() {
             }else{
                 console.log(JSON.stringify(giftInfo))
             }
-            await $.wait(1000)
+            await $.wait(parseInt(Math.random()*1000+1000,10))
         }
     }
 }
