@@ -2,7 +2,7 @@
 金秋钜惠 国庆狂欢季
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=50eee572444e4f0b81c3f57a344070fe
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_gq.js
+cron "8 1 23 9 *" jd_opencard_jq.js
 */
 const $ = new Env('金秋钜惠 国庆狂欢季')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
