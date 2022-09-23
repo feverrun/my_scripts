@@ -2,7 +2,7 @@
 金秋出游 好物随行
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=c567f5c0706c4cbc80a74eb19ddffc63
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "7 3 22 9 *" jd_opencard_sx.js
+cron "1 1 1 1 1" jd_opencard_sx.js
 */
 const $ = new Env('金秋出游 好物随行')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
