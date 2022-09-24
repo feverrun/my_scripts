@@ -1,5 +1,5 @@
 /*
-关注店铺有礼
+cjhy关注店铺有礼
 地址：
 https://cjhy-isv.isvjcloud.com/wxShopFollowActivity/activity/59ed1fc90038495b84bdc016fbc0e259?activityId=59ed1fc90038495b84bdc016fbc0e259
 export jd_cjhy_wxShopFollowActivity_activityId="Id"   活动Id   必须
