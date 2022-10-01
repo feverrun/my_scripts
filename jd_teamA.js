@@ -2,7 +2,7 @@
 入口：组队分豆-安佳
 https://lzkjdz-isv.isvjcloud.com/pool/captain/3282322?activityId=797021bf3c8e40b3ae50f55ece484ec4
 组过的没法组队
-cron "17 0 * * *" jd_teamAJ.js
+cron "1 1 1 1 1" jd_teamA.js
 */
 const $ = new Env("组队分豆-安佳");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
