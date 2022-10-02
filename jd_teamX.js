@@ -2,7 +2,7 @@
 组队分豆-新安怡
 https://lzkjdz-isv.isvjcloud.com/pool/captain/725732?activityId=92300eb2aa1d4acdaedfc1071fff8b60
 活动期间只有两次机会，不要组的太多了
-cron "8 8 * * *" script-path=jd_teamFLP_XAY.js,tag=组队分豆-新安怡
+cron "1 1 1 1 1" script-path=jd_teamFLP_X.js,tag=组队分豆-新安怡
 */
 const $ = new Env("组队分豆-新安怡");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

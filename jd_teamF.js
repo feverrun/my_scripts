@@ -1,7 +1,7 @@
 /*
 组队分豆-飞利浦
 https://lzkjdz-isv.isvjcloud.com/pool/captain/2?activityId=7e63c25a1ec34a899b11fb31caea2002
-cron "8 23 * * *" script-path=jd_teamFLP.js,tag=组队分豆-飞利浦
+cron "1 1 1 1 1" script-path=jd_teamF.js,tag=组队分豆-飞利浦
 */
 const $ = new Env("组队分豆-飞利浦");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
