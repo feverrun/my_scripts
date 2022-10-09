@@ -2,7 +2,7 @@
 大牌联合 好物抢先GO
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=d22eadf8daee4147ade3e73728256a18
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "38 0 * * *" jd_opencard_go.js
+cron "6 1 10 10 *" jd_opencard_go.js
 */
 const $ = new Env('大牌联合 好物抢先GO')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
