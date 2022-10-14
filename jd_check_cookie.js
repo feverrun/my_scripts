@@ -40,7 +40,7 @@ if ($.isNode()) {
         $.nickName = '';
         message = '';
         await UserInfo();
-        await $.wait(1000);
+        await $.wait(parseInt(Math.random() * 1500 + 500, 10));
 
         console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
         if (!$.isLogin) {
@@ -54,6 +54,7 @@ if ($.isNode()) {
             $.log($.UserName + "  ✅Cookie有效中\n")
         }
 
+        await $.wait(parseInt(Math.random() * 2500 + 2500, 10));
     }
     if (allMessage) {
         if ($.isNode() && (process.env.CASH_NOTIFY_CONTROL ? process.env.CASH_NOTIFY_CONTROL === 'false' : !!1)) await notify.sendNotify($.name, allMessage);
@@ -119,9 +120,9 @@ function UserInfo() {
             "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
         },
         method: 'get',
-        timeout: 5000,
+        timeout: 60000,
     }).catch(function (err) {
-        console.log(err)
+        // console.log(err)
     }).then(function (res) {
         if (res.status == 200 && res.data) {
             let data = getObject(res.data);
@@ -137,7 +138,7 @@ function UserInfo() {
             // }
         }
     }).catch(function (err) {
-        console.log(err)
+        // console.log(err)
     })
 }
 

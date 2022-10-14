@@ -189,7 +189,11 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 ReturnMessageTitle = `【账号${IndexAll}🆔】${$.UserName2}`;
             }
 
-            await TotalBean();
+            try {
+                await TotalBean();
+            }catch (e) {
+
+            }
             if ($.NoReturn) {
                 console.log(`接口1检测失败，尝试使用接口2....\n`);
                 await isLoginByX1a0He();
