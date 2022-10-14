@@ -501,7 +501,7 @@ function TotalBean() {
         $.get(options, (err, resp, data) => {
             try {
                 if (err) {
-                    $.logErr(err)
+                    // $.logErr(err)
                     $.nickName = decodeURIComponent($.UserName);
                     $.NoReturn = `${$.nickName} :` + `${JSON.stringify(err)}\n`;
                 } else {
@@ -527,7 +527,7 @@ function TotalBean() {
                 }
             } catch (e) {
                 $.nickName = decodeURIComponent($.UserName);
-                $.logErr(e)
+                // $.logErr(e)
                 $.NoReturn = `${$.nickName} : 检测出错，不做变动\n`;
             }
             finally {
