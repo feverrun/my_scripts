@@ -62,7 +62,7 @@ $.userScore = 0;
 
         } else {
             if (!isLoginInfo[$.UserName]) {
-                await TotalBean();
+                //await TotalBean();
                 isLoginInfo[$.UserName] = $.isLogin
             }
         }

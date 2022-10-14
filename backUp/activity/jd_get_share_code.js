@@ -34,7 +34,7 @@ if ($.isNode()) {
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      await TotalBean();
+      //await TotalBean();
       if (!$.isLogin) {
         continue
       }

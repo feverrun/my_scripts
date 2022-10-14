@@ -2,7 +2,7 @@
  * 简化版京东日资产变动通知
  * 支持环境变量控制每次发送的账号个数，默认为6
  * 环境变量一次发送几个：JD_BEAN_CHANGE_SENDNUM
- * cron "46 10 * * *" jd_bean_change.js
+ * cron "1 1 1 1 1" jd_bean_change.js
  * */
 const $ = new Env("京东日资产变动");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
@@ -48,7 +48,7 @@ if($.isNode()){
         $.jdzzNum = 0;
         console.log(`[京东账号${$.index} ${$.UserName}]`)
         await bean();
-        await totalBean();
+        await TotalBean();
         message += `账号${$.index}🆔：${$.jdName}\n`
         console.log(`账号${$.index}🆔：${$.jdName}`)
         message += `今日收支：${$.todayIncome}京豆 | ${$.todayExpenditure}京豆\n`
