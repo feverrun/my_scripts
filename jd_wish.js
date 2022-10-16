@@ -1,7 +1,7 @@
 /*
 众筹许愿池
 活动入口：京东-京东众筹-众筹许愿池
-cron "12 0,15 * * *" script-path=jd_wish.js,tag=众筹许愿池
+cron "1 1 1 1 1" jd_wish.js
  */
 
 const $ = new Env('众筹许愿池');
@@ -10,8 +10,8 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let message = '', allMessage = '';
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1EFRWxKuG'];
-let appNameArr = ['许愿抽好礼'];
+let appIdArr = [];
+let appNameArr = [];
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {
