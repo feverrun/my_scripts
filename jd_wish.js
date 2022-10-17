@@ -7,6 +7,8 @@ cron "1 1 1 1 1" jd_wish.js
 const $ = new Env('众筹许愿池');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+
+
 let message = '', allMessage = '';
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
@@ -14,6 +16,7 @@ let appIdArr = [];
 let appNameArr = [];
 let appId, appName;
 $.shareCode = [];
+$.outFlag = false;
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -22,11 +25,13 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -38,14 +43,23 @@ if ($.isNode()) {
 
       console.log(`\n*******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
-      for (let j = 0; j < appIdArr.length; j++) {
-        appId = appIdArr[j]
-        appName = appNameArr[j]
-        console.log(`\n开始第${j + 1}个活动：${appName}\n`)
-        await jd_wish();
+      if (appIdArr.length >= 1) {
+        for (let j = 0; j < appIdArr.length; j++) {
+          appId = appIdArr[j]
+          appName = appNameArr[j]
+          console.log(`\n开始第${j + 1}个活动：${appName}\n`)
+          await jd_wish();
+        }
+      }else {
+        $.outFlag = true;
+        console.log(`暂无活动！\n`);
+        break;
       }
+
     }
   }
+
+  if ($.outFlag  == true) return;
   let res = [];
   $.shareCode = [...$.shareCode, ...(res || [])]
   for (let i = 0; i < cookiesArr.length; i++) {
