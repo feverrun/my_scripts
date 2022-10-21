@@ -56,7 +56,7 @@ if ($.isNode()) {
             await showMsg();
         }
 
-        await $.wait(parseInt(Math.random() * 30000 + 25000, 10));
+        await $.wait(parseInt(Math.random() * 60000 + 25000, 10));
     }
     allMessage += `\n今日全部账号收入：${allBean}个京豆 🐶\n`
     if ($.isNode() && allMessage) {

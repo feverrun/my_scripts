@@ -78,6 +78,8 @@ if($.isNode()){
             }
         }
 
+        await $.wait(parseInt(Math.random() * 60000 + 25000, 10));
+
     }
     //删除多余的通知
     if($.isNode()){

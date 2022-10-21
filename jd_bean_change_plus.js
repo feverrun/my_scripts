@@ -386,7 +386,7 @@ if(DisableIndex!=-1){
         console.log("开始获取月数据，请稍后...");
         await Monthbean();
         console.log("月数据获取完毕，暂停10秒防止IP被黑...");
-        await $.wait(parseInt(Math.random() * 10000 + 7000, 10))
+        await $.wait(parseInt(Math.random() * 60000 + 10000, 10))
       }
 
       //京喜工厂
@@ -411,6 +411,7 @@ if(DisableIndex!=-1){
       // if(EnablePigPet)
       //   await GetPigPetInfo();
 
+      await $.wait(parseInt(Math.random() * 60000 + 10000, 10))
       await showMsg();
       if (intPerSent > 0) {
         if ((i + 1) % intPerSent == 0) {
