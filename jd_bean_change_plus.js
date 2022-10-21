@@ -411,7 +411,7 @@ if(DisableIndex!=-1){
       // if(EnablePigPet)
       //   await GetPigPetInfo();
 
-      await $.wait(parseInt(Math.random() * 60000 + 10000, 10))
+      await $.wait(parseInt(Math.random() * 15000 + 60000, 10))
       await showMsg();
       if (intPerSent > 0) {
         if ((i + 1) % intPerSent == 0) {
