@@ -33,5 +33,5 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJ
 
 任务 :
 ```
-ql repo https://github.com/feverrun/my_scripts.git "jd_opencard_|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
+ql repo https://github.com/feverrun/my_scripts.git "jd_opencard|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
