@@ -1,12 +1,16 @@
 /*
-特物Z   签到
+特物Z_签到抽奖
+APP首页下拉
+cron "55 7,15 * * *" jd_superBrandSign.js
  */
-const $ = new Env('特物Z_签到');
-const jdCookieNode = $.isNode() ? require('../../jdCookie.js') : '';
-const notify = $.isNode() ? require('../../sendNotify') : '';
+const $ = new Env('特物Z_签到抽奖');
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
+
+
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
-    Object.keys(jdCookieNode).forEach((item) => { cookiesArr.push(jdCookieNode[item]) })
+    Object.keys(jdCookieNode).forEach((item) => { cookiesArr.push(jdCookieNode[item])})
     if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
@@ -48,7 +52,7 @@ if ($.isNode()) {
                     console.log(`任务：${$.activitySign1Info.assignmentName},去执行,请稍稍`);
                     let itemId = $.activitySign1Info.ext.sign1.itemId;
                     await doTask("sign", $.encryptProjectId, $.activitySign1Info.encryptAssignmentId, itemId, 5)
-                    await $.wait(200);
+                    await $.wait(500);
                 } else {
                     console.log("今日已签到");
                 }
@@ -57,6 +61,8 @@ if ($.isNode()) {
             if ($.callNumber >= 300) {
                 await superBrandTaskLottery("sign", $.encryptProjectId, 'D2bsHLsAAPxoUhfKtHU3TvMpWrw')
             }
+
+            await $.wait(3500);
         }
     }
 })()
