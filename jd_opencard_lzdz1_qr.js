@@ -2,7 +2,7 @@
 秋日限定 高端暖场
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=2e27c9a0e2bc401f884f311be5381c4b
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_qr.js
+cron "7 21 29 10 *" jd_opencard_lzdz1_qr.js
 */
 const $ = new Env('秋日限定 高端暖场')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
