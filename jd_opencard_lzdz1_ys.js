@@ -2,7 +2,7 @@
 11.11预售来袭 狂欢开抢
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=79be7a7fd4834488b1125018f99771ae
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_ys.js
+cron "8 16 29 10 *" jd_opencard_lzdz1_ys.js
 */
 const $ = new Env('11.11预售来袭 狂欢开抢')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
