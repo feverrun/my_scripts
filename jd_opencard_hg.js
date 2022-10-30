@@ -2,7 +2,7 @@
 11.11引爆狂欢，跨店嗨购
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=c86847480940497881e7a00f66144724
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "8 22 27 10 *" jd_opencard_lzdz1_hg.js
+cron "7 16 30 10 *" jd_opencard_hg.js
 */
 const $ = new Env('11.11引爆狂欢，跨店嗨购')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
