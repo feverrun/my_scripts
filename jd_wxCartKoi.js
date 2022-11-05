@@ -2,7 +2,7 @@
 购物车锦鲤通用活动
 https://lzkjdz-isv.isvjcloud.com/wxCartKoi/cartkoi/activity?activityId=xxx
 export jd_wxCartKoi_activityId="xxx"  活动ID
-cron "1 1 1 1 1" jd_wxCartKoi.js
+cron "2 2 29 2 *" jd_wxCartKoi.js
 */
 const $ = new Env('购物车锦鲤通用活动');
 const jdCookieNode=$.isNode()?require('./jdCookie.js'):'';

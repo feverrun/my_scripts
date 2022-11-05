@@ -7,7 +7,7 @@ https://txzj-isv.isvjcloud.com/collect_item/home?a=bHBvODJLZG1RRHdiS1RFS0Nn&un_a
 export jd_txzj_collect_item_id="id"                    活动Id   必须
 export jd_txzj_collect_item_num="15"                   执行前多少个号  不设置则默认执行前15个
 
-cron "1 1 1 1 1" jd_txzj_collect_item.js
+cron "2 2 29 2 *" jd_txzj_collect_item.js
 */
 
 const $ = new Env('txzj 关注有礼')

@@ -7,7 +7,7 @@ https://txzj-isv.isvjcloud.com/sign_in/home?a=WDJ3QW9NVkZRM2owLzFpNlR3&un_area=&
 export jd_txzj_sign_in_id="id"                      活动Id   必须
 export jd_txzj_sign_in_num="15"                     执行前多少个号  不设置则默认执行前15个
 
-cron "1 1 1 1 1" jd_txzj_sign_in.js
+cron "2 2 29 2 *" jd_txzj_sign_in.js
 */
 
 const $ = new Env('txzj 签到')

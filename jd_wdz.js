@@ -4,7 +4,7 @@ https://t.me/proenvc
 https://cjhydz-isv.isvjcloud.com/microDz/invite/activity/wx/view/index?activityId=xxx
 export jd_wdz_activityId="id1&id2&id3.."      活动id
 export jd_wdz_maxNum="7"                      不设置默认最多跑7个号
-cron "1 1 1 1 1" jd_wdz.js
+cron "2 2 29 2 *" jd_wdz.js
  */
 const $ = new Env('微定制');
 const notify = $.isNode() ? require('./sendNotify') : '';

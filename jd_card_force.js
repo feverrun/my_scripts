@@ -6,7 +6,7 @@
 export VENDER_ID="xxx"          入会店铺id
 export OPENCARD_BEAN="xxx"      最低多少豆入会
 
-cron "1 1 1 1 1" jd_card_force.js, tag=入会开卡领取礼包(通用), enabled=true
+cron "2 2 29 2 *" jd_card_force.js, tag=入会开卡领取礼包(通用), enabled=true
 */
 
 const $ = new Env('入会开卡领取礼包通用');

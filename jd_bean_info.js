@@ -1,6 +1,6 @@
 /**
  京豆详情统计
- cron "1 1 1 1 1" jd_bean_info.js
+ cron "2 2 29 2 *" jd_bean_info.js
  */
 
 const $ = new Env('京豆详情统计');

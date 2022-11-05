@@ -3,7 +3,7 @@ https://lzkj-isv.isvjcloud.com/wxgame/activity/8530275?activityId=ed06dac72bf045
 游戏活动
 活动ID环境变量 WXGAME_ACT_ID
 export WXGAME_ACT_ID="ed06dac72bf045118a0b2714429d2c1f"
-cron "1 1 1 1 1" script-path=jd_wxgame.js,tag=通用游戏任务
+cron "2 2 29 2 *" script-path=jd_wxgame.js,tag=通用游戏任务
 */
 const $ = new Env('LZ店铺通用游戏任务');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

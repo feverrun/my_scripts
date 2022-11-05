@@ -1,7 +1,7 @@
 /*
 #joy抽奖机通用
 export JD_Lottery="id" 多个使用  @  连接
-cron "1 1 1 1 1" jd_lotterys.js, tag=joy抽奖机通用, enabled=true
+cron "2 2 29 2 *" jd_lotterys.js, tag=joy抽奖机通用, enabled=true
 */
 const $ = new Env('joy抽奖机通用');
 const notify = $.isNode() ? require('./sendNotify') : '';

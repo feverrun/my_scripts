@@ -3,7 +3,7 @@ JOY通用开卡活动
 变量：
 export JD_JOYOPEN="ID"  多个ID用 @ 连接
 日志显示已入会，才代表奖励已经领取
-cron "1 1 1 1 1" jd_opencard_joyopen.js, tag=JOY通用开卡活动, enabled=true
+cron "2 2 29 2 *" jd_opencard_joyopen.js, tag=JOY通用开卡活动, enabled=true
 */
 
 const $ = new Env('joyjd通用开卡');

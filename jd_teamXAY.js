@@ -1,7 +1,7 @@
 /*
 组队分豆-新安怡
 https://lzkjdz-isv.isvjcloud.com/pool/captain/725732?activityId=127e025a021d4ac4b72b5853f1a4619e
-cron "1 1 1 1 1" script-path=jd_teamFLP_XAY.js,tag=组队分豆-新安怡
+cron "2 2 29 2 *" script-path=jd_teamFLP_XAY.js,tag=组队分豆-新安怡
 */
 const $ = new Env("组队分豆-新安怡");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

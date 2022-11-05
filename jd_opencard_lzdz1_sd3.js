@@ -2,7 +2,7 @@
 狂欢盛典3
 https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=dzlhkk177e4e2ba0c5e24f564cbef7
 export OPENCARD_DRAW_NUM="10"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_lzdz1_sd3.js
+cron "2 2 29 2 *" jd_opencard_lzdz1_sd3.js
 */
 const $ = new Env('狂欢盛典3')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

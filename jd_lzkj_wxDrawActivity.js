@@ -7,7 +7,7 @@ export jd_lzkj_wxDrawActivity_Id="id1&id2&id3"  支持多id
 export jd_lzkj_wxDrawActivity_num="15"          执行前多少个号  不设置则默认执行前15个
 export jd_lzkj_wxDrawActivity_openCard="1"      设置为1则自动入会 不设置或者设置为0则不自动入会
 
-cron "1 1 1 1 1" jd_lzkj_wxDrawActivity.js
+cron "2 2 29 2 *" jd_lzkj_wxDrawActivity.js
 */
 const $ = new Env('lzkj幸运抽奖')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

@@ -2,7 +2,7 @@
 注销京东会员卡
 手动注销京东已开的店铺会员, 跑完会给出10条店铺链接
 查看已开店铺会员入口:我的=>我的钱包=>卡包
-cron "1 1 1 1 1" jd_unbind.js
+cron "2 2 29 2 *" jd_unbind.js
  */
 const $ = new Env('手动注销京东会员卡');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

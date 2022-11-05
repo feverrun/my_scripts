@@ -2,7 +2,7 @@
  不是日常活动，不要设置定时
  明星送好礼
  有豆时手动执行
- cron "1 1 1 1 1" jd_superBrandStar.js
+ cron "2 2 29 2 *" jd_superBrandStar.js
  */
 const $ = new Env(' 特务Z-明星送好礼');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

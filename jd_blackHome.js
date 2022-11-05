@@ -1,6 +1,6 @@
 /**
  * 黑号检测
- *cron "1 1 1 1 1" jd_blackHome.js
+ *cron "2 2 29 2 *" jd_blackHome.js
  */
 const $ = new Env('黑号检测');
 const notify = $.isNode() ? require('./sendNotify') : '';

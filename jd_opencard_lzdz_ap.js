@@ -4,7 +4,7 @@
 一次性脚本
 邀请一人10豆 上限70左右
 https://lzdz-isv.isvjcloud.com/dingzhi/bd/common/activity?activityId=90522102701&shareUuid=
-cron "1 1 1 1 1" jd_opencard_lzdz_ap.js
+cron "2 2 29 2 *" jd_opencard_lzdz_ap.js
 */
 
 const $ = new Env('爱拼才会赢')

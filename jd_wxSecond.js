@@ -3,7 +3,7 @@
  https://github.com/feverrun/my_scripts
 
  export jd_wxSecond_activityId="xxx"
- cron "1 1 1 1 1" jd_wxSecond.js
+ cron "2 2 29 2 *" jd_wxSecond.js
  */
 const $ = new Env('读秒拼手速')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

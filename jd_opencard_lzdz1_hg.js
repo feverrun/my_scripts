@@ -2,7 +2,7 @@
 11.11大牌联合 狂欢嗨购
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=08200f8adc5948feb06c560f88e85c4c
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_lzdz1_hg.js
+cron "2 2 29 2 *" jd_opencard_lzdz1_hg.js
 */
 const $ = new Env('11.11大牌联合 狂欢嗨购')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

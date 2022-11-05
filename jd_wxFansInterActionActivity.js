@@ -9,7 +9,7 @@ export jd_wxFansInterActionActivity_activityId="id1&id2&id3..."
 export jd_wxFansInterActionActivity_num="10"                        //如果不设置 默认跑前10个号的粉丝互动
 
 不会自动入会
-cron "1 1 1 1 1" jd_wxFansInterActionActivity.js, tag=粉丝互动通用活动, enabled=true
+cron "2 2 29 2 *" jd_wxFansInterActionActivity.js, tag=粉丝互动通用活动, enabled=true
 */
 const $ = new Env('粉丝互动通用活动');
 const jdCookieNode=$.isNode()?require('./jdCookie.js'):'';

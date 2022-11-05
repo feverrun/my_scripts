@@ -6,7 +6,7 @@ https://txzj-isv.isvjcloud.com/lottery/home?a=WDJ3QW9NVkZRM2owLzFpNlR
 export jd_txzj_lottery_id="id"                 活动Id   必须
 export jd_txzj_lottery_num="15"                执行前多少个号  不设置则默认执行前15个
 
-cron "1 1 1 1 1" jd_txzj_lottery.js
+cron "2 2 29 2 *" jd_txzj_lottery.js
 */
 
 const $ = new Env('txzj抽奖')

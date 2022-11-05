@@ -2,7 +2,7 @@
  更新时间：2021-06-31
  已支持IOS双京东账号,Node.js支持N个京东账号
  enen会让ck失效, 清楚后再运行
- cron "1 1 1 1 1" jd_enen.js
+ cron "2 2 29 2 *" jd_enen.js
  */
 const $ = new Env('嗯嗯');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

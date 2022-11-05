@@ -1,7 +1,7 @@
 /*
 众筹许愿池
 活动入口：京东-京东众筹-众筹许愿池
-cron "1 1 1 1 1" jd_wish.js
+cron "2 2 29 2 *" jd_wish.js
  */
 
 const $ = new Env('众筹许愿池');

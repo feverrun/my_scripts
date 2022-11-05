@@ -33,7 +33,7 @@ pin3@&@不清空👉该pin不清空
 
 [task_local]
 #清空购物车-Sign版
-cron "1 1 1 1 1" jd_cleancart_nolan.js, tag=清空购物车-Sign版, enabled=true
+cron "2 2 29 2 *" jd_cleancart_nolan.js, tag=清空购物车-Sign版, enabled=true
 */
 let jdSignUrl = 'https://api.nolanstore.top/sign'
 let cleancartRun = 'true'

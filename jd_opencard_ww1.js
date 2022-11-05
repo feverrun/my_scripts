@@ -2,7 +2,7 @@
 潮流新贵 萌生万物
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=18694f039ada4302866546c2ad996561
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_ww1.js
+cron "2 2 29 2 *" jd_opencard_ww1.js
 */
 const $ = new Env('潮流新贵 萌生万物')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

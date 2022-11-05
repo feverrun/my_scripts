@@ -3,7 +3,7 @@
 https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20220302/unitedCardNew20220302?actId=fe595e5ceec04518a151_220302
 export DPLHTY="活动Id"           活动id必须
 export DPLHTY_DRAWNUM="3"       抽奖次数不写则默认为3
-cron "1 1 1 1 1" jd_opencardLH.js
+cron "2 2 29 2 *" jd_opencardLH.js
 */
 
 const $ = new Env('通用大牌联合开卡');

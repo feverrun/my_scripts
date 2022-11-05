@@ -5,7 +5,7 @@
 京东超店会员福利社
 https://lzdz1-isv.isvjcloud.com/dingzhi/shop/league/activity?activityId=dz38624f02475b8fea41a59f20shop
 
-cron "1 1 1 1 1" jd_opencard_lzdz1_fl.js
+cron "2 2 29 2 *" jd_opencard_lzdz1_fl.js
 */
 const $ = new Env('11.1~11.11 京东超店会员福利社');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

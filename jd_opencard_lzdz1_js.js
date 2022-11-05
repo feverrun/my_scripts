@@ -2,7 +2,7 @@
 酒水会员盛典
 https://lzdz1-isv.isvjcloud.com/dingzhi/drinkcategory/piecetoge1/activity?activityId=dz6a87077a42654965afc5a062b0ae
 https://lzdz1-isv.isvjcloud.com/m/1000013169/dz6a87077a42654965afc5a062b0ae/?sid=7f66070a1f7bca83429dadb60c33f7fw
-cron "1 1 1 1 1" jd_opencard_lzdz1_js.js
+cron "2 2 29 2 *" jd_opencard_lzdz1_js.js
 */
 const $ = new Env('酒水');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

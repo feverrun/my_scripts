@@ -3,7 +3,7 @@
 https://lzkjdz-isv.isvjcloud.com/esteelauder/inviteNew/activityPage?activityId=2211100037674501
 /*
 雅诗兰黛奢雅邀请入会有礼
-cron "1 1 1 1 1" jd_invite_ysld.js
+cron "2 2 29 2 *" jd_invite_ysld.js
 */
 const $ = new Env('雅诗兰黛奢雅邀请入会有礼');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

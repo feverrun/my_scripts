@@ -4,7 +4,7 @@ https://t.me/proenvc
 https://lzkjdz-isv.isvjcloud.com/wxShareActivity/activity/2129197?activityId=36d0f59aaae342388261d7b3128e6872&friendUuid=b032a960-3e19-4ef8-938f-7f524fc1d282&sid=&un_area=
 export jd_wxShareActivity_activityId="xxx"          活动ID 必需
 export jd_wxShareActivity_num="15"                  助力多少个号, 不设置则默认助力15个号
-cron "1 1 1 1 1" jd_wxShareActivity.js
+cron "2 2 29 2 *" jd_wxShareActivity.js
 */
 const $ = new Env('分享有礼')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

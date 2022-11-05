@@ -10,7 +10,7 @@ export yhypin="需要助力的pin值"
 export yhyactivityId="活动类型ID"
 export yhyauthorCode="活动ID"
 
-cron: 1 1 1 1 1
+cron: 2 2 29 2 *
 new Env('邀请赢大礼');
 """
 

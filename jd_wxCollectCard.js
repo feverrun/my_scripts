@@ -5,7 +5,7 @@ https://lzkjdz-isv.isvjcloud.com/wxCollectCard/activity/activity?activityId=xxx
 export jd_wxCollectCard_activityId="xxx"        //活动ID
 export jd_wxCollectCard_num="100"               //集卡最多跑多少个号, 不设置默认最多跑30个号
 export jd_wxCollectCard_openCard="1"            //设置为1 则会在自动入会， 不设置不会自动入会
-cron "1 1 1 1 1" jd_wxCollectCard.js
+cron "2 2 29 2 *" jd_wxCollectCard.js
 */
 const $ = new Env('集卡抽奖通用活动');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

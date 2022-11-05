@@ -2,7 +2,7 @@
 大牌联合 赢千元好礼
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=3c851f48d1bb4bcba4a6fb3413d9b77b
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_lzdz1_lh.js
+cron "2 2 29 2 *" jd_opencard_lzdz1_lh.js
 */
 const $ = new Env('大牌联合 赢千元好礼')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

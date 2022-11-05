@@ -3,7 +3,7 @@
 https://t.me/proenvc
 https://lzkjdz-isv.isvjcloud.com/wxTeam/activity?activityId=xxx
 export jd_zdjr_activityId="xxx"     活动ID 必需
-cron "1 1 1 1 1" jd_zdjr.js
+cron "2 2 29 2 *" jd_zdjr.js
 */
 const $ = new Env('LZ组队瓜分')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

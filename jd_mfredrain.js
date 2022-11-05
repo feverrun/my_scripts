@@ -1,7 +1,7 @@
 /*
 空气、18豆、36豆、72豆
 自行替换
-cron "1 1 1 1 1" jd_mfredrain.js
+cron "2 2 29 2 *" jd_mfredrain.js
 默认不执行
  */
 

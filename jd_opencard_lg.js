@@ -2,7 +2,7 @@
 流光溢彩 造趣时光
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=68b1b6447f494e46ba886db8dfa92986
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_lg.js
+cron "2 2 29 2 *" jd_opencard_lg.js
 */
 const $ = new Env('流光溢彩 造趣时光')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

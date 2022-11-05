@@ -1,7 +1,7 @@
 /*
 微定制-开福袋
 export jd_wdz_openLuckBag_activityId=""     活动id
- cron "1 1 1 1 1" jd_wdz_openLuckBag.js
+ cron "2 2 29 2 *" jd_wdz_openLuckBag.js
  */
 const $ = new Env('微定制-开福袋');
 const notify = $.isNode() ? require('./sendNotify') : '';

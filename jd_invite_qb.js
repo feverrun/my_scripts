@@ -4,7 +4,7 @@ https://lzkjdz-isv.isvjcloud.com/m/1000376431/99/2201100037643113/?activityId=22
 1.邀请满3人30豆，邀请5人50，邀请15人 有机会获得盲盒
 2.开1张卡
 3.已开卡的不算有效人数
-cron "1 1 1 1 1" jd_invite_qb.js, tag=倩碧邀请礼, enabled=true
+cron "2 2 29 2 *" jd_invite_qb.js, tag=倩碧邀请礼, enabled=true
 */
 
 const $ = new Env('倩碧邀请礼');

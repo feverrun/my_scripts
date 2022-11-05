@@ -5,7 +5,7 @@ export dpqd_token="token1&token2&token3..."
 
 店铺签到，各类店铺签到，有新的店铺直接添加token即可
 店铺签到的定时可采取随机定时,每天运行一次即可
-cron "1 1 1 1 1" script-path=jd_dpqd.js,tag=店铺签到
+cron "2 2 29 2 *" script-path=jd_dpqd.js,tag=店铺签到
 */
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';

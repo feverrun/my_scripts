@@ -4,7 +4,7 @@
  * 如需跳过某个账户，请添加变量：JD_PAY_CONTRACT_IGNORE=pin
  * 多个账户需要跳过检查可多次添加 JD_PAY_CONTRACT_IGNORE
 #检查并停用免密支付
-cron "1 1 1 1 1" jd_pay_contract.js, tag=检查并停用免密支付, img-url=jd.png, enabled=true
+cron "2 2 29 2 *" jd_pay_contract.js, tag=检查并停用免密支付, img-url=jd.png, enabled=true
  */
 
 const $ = new Env("检查并停用免密支付")

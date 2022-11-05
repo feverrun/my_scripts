@@ -2,7 +2,7 @@
 专属幸福 温暖绽放
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=ede9adf9fd02493fbe3c6cf5e10830dd
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_xf.js
+cron "2 2 29 2 *" jd_opencard_xf.js
 */
 const $ = new Env('专属幸福 温暖绽放')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

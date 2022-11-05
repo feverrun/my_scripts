@@ -1,7 +1,7 @@
 /*
 京洞察问卷通知
 想运行的时候，手动运行即可。或者自定义运行时间。
-cron "1 1 1 1 1" jd_insight.js
+cron "2 2 29 2 *" jd_insight.js
  */
 
 const $ = new Env('京洞察问卷通知');

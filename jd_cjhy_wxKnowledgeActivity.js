@@ -8,7 +8,7 @@ export jd_cjhy_wxKnowledgeActivity_activityId="Id"   活动Id   必须
 export jd_cjhy_wxKnowledgeActivity_num="10"          执行前多少个号  不设置则默认执行前10个
 export jd_cjhy_wxKnowledgeActivity_openCard="1"      设置为1则自动入会   不设置或者设置为0则不自动入会
 
-cron "1 1 1 1 1" jd_cjhy_wxKnowledgeActivity.js
+cron "2 2 29 2 *" jd_cjhy_wxKnowledgeActivity.js
 */
 
 const $ = new Env('cjhy知识超人')

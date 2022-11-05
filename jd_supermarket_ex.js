@@ -1,7 +1,7 @@
 /*
 京东超市-星币兑换
 只给第一个号兑换
-cron "1 1 1 1 1" jd_supermarket_ex.js
+cron "2 2 29 2 *" jd_supermarket_ex.js
  */
 const $ = new Env('京东超市-星币兑换');
 const notify = $.isNode() ? require('./sendNotify') : '';

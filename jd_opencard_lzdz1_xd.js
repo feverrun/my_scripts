@@ -2,7 +2,7 @@
 狂欢抢先限购下单入会
 https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity?activityId=496dfe9f21e64465a99041927b5a841a
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "1 1 1 1 1" jd_opencard_lzdz1_xd.js
+cron "2 2 29 2 *" jd_opencard_lzdz1_xd.js
 */
 const $ = new Env('狂欢抢先限购下单入会 - 垃圾卡(开卡有豆的时候再跑邀请是无豆的)')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
