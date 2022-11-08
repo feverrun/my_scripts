@@ -57,6 +57,7 @@ if ($.isNode()) {
         appName = appNameArr[j]
         console.log(`\n开始第${j + 1}个活动：${appName}\n`)
         await jd_wish();
+        await $.wait(2000)
       }
     }
   }
@@ -123,11 +124,11 @@ async function jd_wish() {
     $.canLottery = true
     for (let j = 0; j < forNum && $.canLottery; j++) {
       await interact_template_getLotteryResult()
-      await $.wait(1500)
-      if (j >= 9 && $.canLottery) {
+      if (j == 9 && $.canLottery) {
         console.log('抽太多次了，下次再继续吧！');
         break
       }
+      await $.wait(2000)
     }
 
   } catch (e) {
@@ -155,6 +156,7 @@ async function healthyDay_getHomeData(type = true) {
                     if (vo.taskType === 13 || vo.taskType === 12) {
                       console.log(`点击热区`)
                       await harmony_collectScore({ "appId": appId, "taskToken": vo.simpleRecordInfoVo.taskToken, "taskId": vo.taskId, "actionType": "0" }, vo.taskType)
+                      await $.wait(1000)
                     } else {
                       console.log(`【${vo.taskName}】已完成\n`)
                     }
@@ -166,12 +168,14 @@ async function healthyDay_getHomeData(type = true) {
                     if (vo.taskType === 13 || vo.taskType === 12) {
                       console.log(`签到`)
                       await harmony_collectScore({ "appId": appId, "taskToken": vo.simpleRecordInfoVo.taskToken, "taskId": vo.taskId, "actionType": "0" }, vo.taskType)
+                      await $.wait(1000)
                     } else if (vo.taskType === 1) {
                       for (let key of Object.keys(vo.followShopVo)) {
                         let followShopVo = vo.followShopVo[key]
                         if (followShopVo.status !== 2) {
                           console.log(`【${followShopVo.shopName}】${vo.subTitleName}`)
                           await harmony_collectScore({ "appId": appId, "taskToken": followShopVo.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
                         }
                       }
                     } else if (vo.taskType === 5) {
@@ -180,6 +184,7 @@ async function healthyDay_getHomeData(type = true) {
                         if (browseShopVo.status !== 2) {
                           console.log(`【${browseShopVo.skuName}】${vo.subTitleName}`)
                           await harmony_collectScore({ "appId": appId, "taskToken": browseShopVo.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
                         }
                       }
                     } else if (vo.taskType === 15) {
@@ -188,6 +193,7 @@ async function healthyDay_getHomeData(type = true) {
                         if (productInfoVos.status !== 2) {
                           console.log(`【${productInfoVos.skuName}】${vo.subTitleName}`)
                           await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
                         }
                       }
                     } else if (vo.taskType === 3) {
@@ -196,6 +202,7 @@ async function healthyDay_getHomeData(type = true) {
                         if (shoppingActivityVos.status !== 2) {
                           console.log(`【${vo.subTitleName}】`)
                           await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
                         }
                       }
                     } else if (vo.taskType === 8) {
@@ -206,6 +213,7 @@ async function healthyDay_getHomeData(type = true) {
                           await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "1" })
                           await $.wait(vo.waitDuration * 1000)
                           await harmony_collectScore({ "appId": appId, "taskToken": productInfoVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
                         }
                       }
                     } else if (vo.taskType === 27 && vo.taskId === 18) {
@@ -221,6 +229,7 @@ async function healthyDay_getHomeData(type = true) {
                             await $.wait(vo.waitDuration * 1000)
                           }
                           await harmony_collectScore({ "appId": appId, "taskToken": shoppingActivityVos.taskToken, "taskId": vo.taskId, "actionType": "0" })
+                          await $.wait(1000)
                         }
                       }
                     } else if (vo.taskType === 14) {
