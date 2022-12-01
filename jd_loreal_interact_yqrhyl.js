@@ -5,7 +5,7 @@ https://lorealjdcampaign-rc.isvjcloud.com/interact/index?activityType=10006&temp
 如果在参加活动前已经入会了， 是不算邀请个数的 !!!
 export jd_loreal_interact_yqrhyl_activityId="活动id"            必须
 
-cron "2 2 29 2 *" jd_loreal_interact.js
+cron "2 2 29 2 *" jd_loreal_interact_yqrhyl.js
 */
 const $ = new Env('loreal邀请入会有礼')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
