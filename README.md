@@ -1,10 +1,10 @@
 # 学习使用
 
 ## 扯淡群
-[扯淡群](https://t.me/proenv) 
+###[点我不失联](https://t.me/proenv) 
 
 ## 定时更新库
-### 互助池版本 (需进群联系作者加入白名单)
+### 互助池版本 
 任务名:   myScripts
 
 定时 :    1 * * * *
@@ -25,13 +25,3 @@ ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJ
 ```
 
 以上两种集成命令，根据自身情况，选择一个即可。
-
-### 单拉开卡
-任务名:   myScriptsCard
-
-定时 :    1 * * * *
-
-任务 :
-```
-ql repo https://github.com/feverrun/my_scripts.git "jd_opencard|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
-```
