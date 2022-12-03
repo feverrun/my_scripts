@@ -14,7 +14,7 @@
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
 ```
 
-### 内部互助版 (无需加入白名单)
+### 内部互助版 
 任务名:   myScripts
 
 定时 :    1 * * * *
