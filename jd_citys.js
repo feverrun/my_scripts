@@ -1,7 +1,7 @@
 /*
 城城领现金
 #城城领现金
-cron "0 0,3,14 9-21 1 *" jd_city.js, tag=城城领现金, img-url=jd.png, enabled=true
+cron "0 0,18 9-12 12 *" jd_citys.js
  */
 const $ = new Env('城城领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -401,7 +401,9 @@ function shareCodesFormat() {
             let authorCode = ['oeDzX64FbmxDYROrCpeJ99JYfH1h'];
             $.newShareCodes = [...new Set(...[authorCode], ...$.inviteIdCodesArr)];
         }else {
-            $.newShareCodes = $.inviteIdCodesArr;
+            let authorCode = ['oeDzX64FbmxDYROrCpeJ99JYfH1h'];
+            $.newShareCodes = [...new Set(...[authorCode], ...$.inviteIdCodesArr)];
+            // $.newShareCodes = $.inviteIdCodesArr;
         }
         // try {
         //     let readShareCodeRes = await readShareCode();
