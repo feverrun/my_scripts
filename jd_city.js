@@ -401,7 +401,7 @@ function shareCodesFormat() {
             let authorCode = ['oeDzX64FbmxDYROrCpeJ99JYfH1h'];
             $.newShareCodes = [...new Set(...[authorCode], ...$.inviteIdCodesArr)];
         }else {
-            $.newShareCodes = [...new Set( ...$.inviteIdCodesArr)];
+            $.newShareCodes = $.inviteIdCodesArr;
         }
         // try {
         //     let readShareCodeRes = await readShareCode();
