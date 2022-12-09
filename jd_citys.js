@@ -27,7 +27,7 @@ $.shareCodesArr = [];
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    console.log('2022年1月9日优先内部助力, 1月9日后优先助力池 \n')
+
     if (exchangeFlag+"" == "true") {
         console.log(`脚本自动抽奖`)
     } else {
@@ -45,8 +45,7 @@ $.shareCodesArr = [];
             }else {
                 break;
             }
-
-            await $.wait(500)
+            await $.wait(parseInt(Math.random() * 500+300, 10))
         }
     }
 
@@ -99,7 +98,7 @@ $.shareCodesArr = [];
                 const res = await city_lotteryAward();//抽奖
                 if (res && res > 0) {
                     for (let i = 0; i < new Array(res).fill('').length; i++) {
-                        await $.wait(1000)
+                        await $.wait(parseInt(Math.random() * 500 + 1000, 10))
                         await city_lotteryAward();//抽奖
                     }
                 }
@@ -109,13 +108,13 @@ $.shareCodesArr = [];
                     const res = await city_lotteryAward();//抽奖
                     if (res && res > 0) {
                         for (let i = 0; i < new Array(res).fill('').length; i++) {
-                            await $.wait(1000)
+                            await $.wait(parseInt(Math.random() * 500 + 1000, 10))
                             await city_lotteryAward();//抽奖
                         }
                     }
                 }
             }
-            await $.wait(1000)
+            await $.wait(parseInt(Math.random() * 500 + 1000, 10))
         }
     }
 })()
@@ -401,9 +400,7 @@ function shareCodesFormat() {
             let authorCode = ['oeDzX64FbmxDYROrCpeJ99JYfH1h'];
             $.newShareCodes = [...new Set(...[authorCode], ...$.inviteIdCodesArr)];
         }else {
-            let authorCode = ['oeDzX64FbmxDYROrCpeJ99JYfH1h'];
-            $.newShareCodes = [...new Set(...[authorCode], ...$.inviteIdCodesArr)];
-            // $.newShareCodes = $.inviteIdCodesArr;
+            $.newShareCodes = $.inviteIdCodesArr;
         }
         // try {
         //     let readShareCodeRes = await readShareCode();
