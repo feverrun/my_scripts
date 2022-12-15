@@ -2,6 +2,7 @@
 京东超市-星币
 增加每天做签到任务
 只做任务， 赚取游戏机会， 手动做任务
+cron "2 2 29 2 *" jd_supermarket.js
  */
 const $ = new Env('京东超市-星币');
 const notify = $.isNode() ? require('./sendNotify') : '';

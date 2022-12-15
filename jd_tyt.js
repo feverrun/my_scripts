@@ -6,6 +6,7 @@ https://github.com/feverrun/my_scripts
 2.环境变量 助力指定的码
 export TYT_PACKETID=''
 不需要指定定时
+cron "2 2 29 2 *" jd_tyt.js
 */
 
 const $ = new Env('推一推');
