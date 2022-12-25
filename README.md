@@ -1,7 +1,7 @@
 # 学习使用
 
-## 扯淡群
-### [联系我](https://t.me/proenv) 
+## 频道通知
+### https://t.me/proenvc
 
 ## 琵琶行
 ```angular2html
