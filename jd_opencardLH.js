@@ -2,7 +2,7 @@
 联合开卡
 export DPLHTY="活动Id"                          活动id必须
 export DPLHTY_DRAWNUM="3"                      抽奖次数不写则默认为3, 设置微0则不进行抽奖
-export DPLHTY_YOURCODE="你自己的邀请码"           如果设置了全部助力你设置的指定邀请码
+export DPLHTY_YOURCODE="你自己的邀请码"           如果设置了全部助力你设置的指定邀请码,不推荐填写
 cron "2 2 29 2 *" jd_opencardLH.js
 */
 
