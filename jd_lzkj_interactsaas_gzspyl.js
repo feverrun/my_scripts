@@ -1,4 +1,5 @@
 /*
+https://lzkj-isv.isvjcloud.com/prod/cc/interactsaas/index?activityType=10053
 lzkj_interactsaas关注商品有礼
 export jd_lzkj_interactsaas_gzspyl_activityId="活动id"            必须
 export jd_lzkj_interactsaas_gzspyl_num="15"                      不填则默认最多跑15个号
