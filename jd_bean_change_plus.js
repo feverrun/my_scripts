@@ -502,7 +502,7 @@ if(DisableIndex!=-1){
         cash(), //极速金币
         jdJxMCinfo(), //京喜牧场
         bean(), //京豆查询
-        getJxFactory(), //京喜工厂
+        // getJxFactory(), //京喜工厂
         getDdFactoryInfo(), // 京东工厂
         jdCash(), //领现金
         GetJxBeaninfo(), //喜豆查询

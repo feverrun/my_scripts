@@ -1,5 +1,5 @@
 /*
-品牌会员年度盛典
+品牌会员年度盛典  12.28-1.28
 cron "2 2 29 2 *" jd_opencard_years.js
 */
 const $ = new Env('品牌会员年度盛典')
