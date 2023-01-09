@@ -1,8 +1,8 @@
 /**
- * 投票送京豆
- *cron "2 2 29 2 *" jd_tpsjd.js
+ * 我最期待的年货
+ *cron "2 2 29 2 *" jd_wzqddnh.js
  */
-const $ = new Env('投票送京豆');
+const $ = new Env('我最期待的年货');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
