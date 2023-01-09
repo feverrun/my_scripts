@@ -1,8 +1,9 @@
 /**
- * 我最期待的年货
- *cron "2 2 29 2 *" jd_wzqddnh.js
+电脑数码年货节投票送京豆
+ 默认运行一次
+ cron "33 20 9 1 *" jd_computerSJD.js
  */
-const $ = new Env('我最期待的年货');
+const $ = new Env('电脑数码年货节投票送京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
