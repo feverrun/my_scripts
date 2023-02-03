@@ -2,7 +2,7 @@
 https://lzkj-isv.isvjcloud.com/prod/cc/interactsaas/index?activityType=10070&templateId=xxx&activityId=xxx&nodeId=101001&prd=cjwx
 邀好友入会
 export jd_lzkj_interactsaas_yqhyrh_activityId="活动id"            必须
-cron "2 2 29 2 *" jd_lzkj_interact_yqrhyl.js
+cron "2 2 29 2 *" jd_lzkj_interactsaas_yqhyrh.js
 */
 const $ = new Env('lzkj_interactsaas邀请好友入会')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
