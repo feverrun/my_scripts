@@ -1,7 +1,7 @@
 /*
 品类联合1
 export jd_opencard_categoryUnion_draw="1" 不自动抽奖
-cron "2 2 29 2 *" jd_opencard_pl1.js
+cron "2 2 29 2 *" jd_pl1.js
 */
 const $ = new Env('品类联合1');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
