@@ -1,7 +1,8 @@
 /*
 春日焕新 礼遇美好
 只加购不开卡
-cron "2 2 29 2 *" jd_opencard_mh.js
+给平时不关注的默认跑一次加购
+cron "16 22 23 2 *" jd_opencard_hx.js
 */
 const $ = new Env('春日焕新 礼遇美好')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
