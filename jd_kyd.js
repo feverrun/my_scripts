@@ -1,6 +1,6 @@
 /*
 砍一刀
-cron "2 2 29 2 *" jd_lottery_ggl.js
+cron "2 2 29 2 *" jd_kyd.js
 */
 const $ = new Env('砍一刀');
 const notify = $.isNode() ? require('./sendNotify') : '';
