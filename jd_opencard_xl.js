@@ -1,7 +1,7 @@
 /*
 春风徐来
 export OPENCARD_DRAW_NUM="10"  是否抽奖 抽奖次数 不推荐填写。
-cron "2 2 29 2 *" jd_opencard_lzdz1_xl.js
+cron "2 2 29 2 *" jd_opencard_xl.js
 */
 const $ = new Env('春风徐来')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
