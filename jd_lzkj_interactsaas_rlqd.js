@@ -1,8 +1,9 @@
 /*
 https://lzkj-isv.isvjcloud.com/prod/cc/interactsaas/index?activityType=10023
 lzkj_interactsaas日历签到
-export jd_lzkj_interactsaas_rlqd_Ids="活动id1&活动id2&活动id3..."             必须
-export jd_lzkj_interactsaas_rlqd_num="15"                                   不填则默认最多跑15个号
+export jd_lzkj_interactsaas_rlqd_Ids="活动id1&活动id2&活动id3..."            必须
+export jd_lzkj_interactsaas_rlqd_num="15"                                 不填则默认最多跑15个号
+export jd_lzkj_interactsaas_rlqd_openCard="1"                             设置为1则自动入会   不设置或者设置为0则不自动入会
 cron "2 2 29 2 *" jd_lzkj_interactsaas_rlqd.js
 */
 const $ = new Env('lzkj_interactsaas日历签到')
