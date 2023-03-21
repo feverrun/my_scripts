@@ -1,6 +1,6 @@
 /*
 联合开卡
-cron "2 2 29 2 *" jd_opencardLH_322.js
+cron "16 2 22 3 *" jd_opencardLH_0322.js
 */
 const $ = new Env('大牌-322');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
