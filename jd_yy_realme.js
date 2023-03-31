@@ -1,5 +1,5 @@
 /*
-cron "11 16 31,1 3,4 *" jd_realme_yy.js
+cron "11 16 31,1 3,4 *" jd_yy_realme.js
 */
 
 const $ = new Env('3.24-4.20真我预约抽奖');
