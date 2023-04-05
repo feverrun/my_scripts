@@ -55,7 +55,7 @@ let lnrun = 0;
             message = '';
             subTitle = '';
             option = {};
-            $.UA = require('./USER_AGENTS').UARAM();
+            $.UA = require('./USER_AGENTS').USER_AGENT;
             $.retry = 0;
             lnrun++;
             await jdFruit();
