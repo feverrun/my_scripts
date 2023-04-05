@@ -1,6 +1,6 @@
 /*
 东东农场日常任务
-cron "15 2,7,14 * * *" jd_fruits_task.js
+cron "15 2,7,14 * * *" jd_fruitTask.js
 export DO_TEN_WATER_AGAIN="" 默认再次浇水
 */
 const $ = new Env('东东农场日常任务');
