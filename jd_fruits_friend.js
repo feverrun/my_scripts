@@ -1,6 +1,6 @@
 /*
 东东农场-删减好友
-cron "35 5,6,13,17 * * *" jd_fruits_friend.js
+cron "35 5,13,19 * * *" jd_fruits_friend.js
 */
 
 const $ = new Env('东东农场-删减好友');
