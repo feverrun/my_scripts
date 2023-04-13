@@ -1,5 +1,5 @@
 /*
-cron "7 1 10 4 *" jd_opencard_hl.js
+cron "7 2 14 4 *" jd_opencard_hl.js
 */
 const $ = new Env('春游踏青赢好礼')
 let opencard = 1            //1-执行开卡  0-不执行开卡
