@@ -1,6 +1,6 @@
 /**
  *
- *cron "37 0,7,16,21 * * *" jd_check_cookie.js
+ *cron "2 2 29 2 *" jd_check_cookie.js
  */
 
 const $ = new Env('检测cookie有效性');
