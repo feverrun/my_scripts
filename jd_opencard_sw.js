@@ -1,6 +1,6 @@
 /*
 export OPENCARD_DRAW_NUM="5"  是否抽奖 抽奖次数 不推荐填写。
-cron "6 1 21,22,23 4 *" jd_opencard_sw.js
+cron "2 2 29 2 *" jd_opencard_sw.js
 */
 const $ = new Env('赏味春光 拾趣美好')
 let opencard = 1            //1-执行开卡  0-不执行开卡
