@@ -2,7 +2,7 @@
 美的京东超级品牌日
 https://lzdz1-isv.isvjcloud.com/m/1000282702/9013856/dza7e4d0cb861648dc913088ba7e83
 4.29-5.10
-cron "2 2 29 2 *" jd_pp.js
+cron "2 2 29 2 *" jd_opencard_pp.js
 */
 const $ = new Env('美的京东超级品牌日')
 
