@@ -1,6 +1,6 @@
 /*
 8-15
-cron "6 1 8-15 5 *" jd_opencard_hl.js
+cron "6 1 8-15 5 *" jd_opencard_ma.js
 */
 const $ = new Env('母亲节 为爱献礼')
 let opencard = 1            //1-执行开卡  0-不执行开卡
