@@ -1,5 +1,9 @@
 /*
 #常规金币卡通用
+支持类型：
+https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=(活动id)&venderId=xxx&adSource=
+https://lzdz1-isv.isvjcloud.com/dingzhi/joinCommon/activity/activity?activityId=(活动id)
+
 export jd_lzdz1_joinCommon_Id="活动id"       #金币卡活动id
 export jd_lzdz1_openCard="0"                #金币卡是否开卡 0-不开卡  1-开卡  默认执行开卡
 
