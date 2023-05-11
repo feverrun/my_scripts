@@ -58,14 +58,14 @@ if($.isNode()){
         message += `当前京豆：${$.beanCount}京豆\n`
         console.log(`当前京豆：${$.beanCount}京豆`)
         //speed jd
-        await getJdzz();
-        typeof $.jdzzNum !== "undefined" ? message += `京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元\n` : ''
-        typeof $.jdzzNum !== "undefined" ? console.log(`京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元`) : ''
+        // await getJdzz();
+        // typeof $.jdzzNum !== "undefined" ? message += `京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元\n` : ''
+        // typeof $.jdzzNum !== "undefined" ? console.log(`京东赚赚：${$.jdzzNum}金币 ≈ ${($.jdzzNum / 10000).toFixed(2)}元`) : ''
         $.JdMsScore = 0;
-        await getMs();
-        $.JdMsScore !== 0 ? message += `京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元\n` : ''
-        $.JdMsScore !== 0 ? console.log(`京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元`) : ''
-        await redPacket();
+        // await getMs();
+        // $.JdMsScore !== 0 ? message += `京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元\n` : ''
+        // $.JdMsScore !== 0 ? console.log(`京东秒杀：${$.JdMsScore}秒币 ≈ ${($.JdMsScore / 1000).toFixed(2)}元`) : ''
+        // await redPacket();
 
         message += `\n`
         console.log(`[京东账号${$.index} ${$.UserName}] 结束\n`)
