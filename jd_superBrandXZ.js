@@ -2,7 +2,7 @@
  入口：首页下拉
  特务集勋章
  不开卡但尝试领取开卡任务奖励，集齐勋章晚上8点后瓜分，需要开卡才能集齐
- 2 10,18,20 * * * jd_superBrandXZ.js
+cron "2 2 29 2 *" jd_superBrandXZ.js
  */
 const $ = new Env('特务集勋章');
 const notify = $.isNode() ? require('./sendNotify') : '';
