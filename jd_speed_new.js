@@ -1,5 +1,5 @@
 /*
-cron "59 4 * * *" jd_speed_new.js
+cron "59 4,14 * * *" jd_speed_new.js
 */
 //详细说明参考 https://github.com/ccwav/QLScript2.
 
@@ -49,7 +49,7 @@ if (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() == date.getDa
             if (i == (cookiesArr.length - 1) || TaskList.length == maxThread) {
                 await Promise.all(TaskList);
                 if (!llAPIError){
-                    if (TaskList.length != maxThread){
+                    if (i != (cookiesArr.length - 1)){
                         console.log(`当前批量完成，等待30秒`);
                         await $.wait(30 * 1000);
                     }
