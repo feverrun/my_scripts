@@ -7,7 +7,18 @@ let CookieJDs = []
 // modified by proenv
 if (process.env.JD_COOKIE) {
     let jd_cookies = process.env.JD_COOKIE;
+    let jdStr = '';
+    jd_cookies = jd_cookies.replace(/\r\n/g, "");
+    jd_cookies = jd_cookies.replace(/\n/g, "");
     jd_cookies = jd_cookies.replace(/\s+/g, "");
+    pkes = jd_cookies.match(/pt_key=(.*?);/g);
+    ppins = jd_cookies.match(/pt_pin=(.*?);/g);
+    if (pkes.length >= 1) {
+        for (let i = 0; i < pkes.length; i++) {
+            jdStr += pkes[i] + ppins[i] + '&';
+        }
+    }
+    jd_cookies = jdStr.substr(0, jdStr.length - 1);
     if (jd_cookies.indexOf('&') > -1) {
         CookieJDs = jd_cookies.split('&');
     } else if (jd_cookies.indexOf('\n') > -1) {
