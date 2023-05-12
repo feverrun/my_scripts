@@ -17,8 +17,10 @@ if (process.env.JD_COOKIE) {
         for (let i = 0; i < pkes.length; i++) {
             jdStr += pkes[i] + ppins[i] + '&';
         }
+        jd_cookies = jdStr.substr(0, jdStr.length - 1);
+    }else {
+        jd_cookies = jd_cookies;
     }
-    jd_cookies = jdStr.substr(0, jdStr.length - 1);
     if (jd_cookies.indexOf('&') > -1) {
         CookieJDs = jd_cookies.split('&');
     } else if (jd_cookies.indexOf('\n') > -1) {
