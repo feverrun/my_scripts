@@ -1,7 +1,7 @@
 /*
 爱让好物 成为礼物1
 https://lzdz1-isv.isvjcloud.com/m/1000398209/dz9e26da6a428ebb410738cbdb32f7/
-cron "2 2 29 2 *" jd_opencard_love11.js
+cron "2 2 29 2 *" jd_opencard_love1.js
 */
 const $ = new Env('爱让好物 成为礼物1')
 
