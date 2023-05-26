@@ -716,7 +716,7 @@ function totalBean() {
 }
 function geth5st(body) {
     let opt = {
-        url: `https://api.nolanstore.top/h5st`,
+        url: `https://api.nolanstore.cc/h5st`,
         body: JSON.stringify({
             "appId": "a8ade",
             "functionId": "try_apply",
