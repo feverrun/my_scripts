@@ -1,11 +1,11 @@
 /*
-年货节
+618红包
 返利变量：CODE618
 export CODE618="xxxxxxx"
-cron "0 10,20 29-31,1-15 5,6 *" jd_jf.js
+cron "5 0,10,20 29-31,1-15 5,6 *" jd_jfs.js
 */
 
-const $ = new Env('年货节');
+const $ = new Env('618红包');
 let waitTime = '0.5'  //非1-6点 号之间延迟
 
 
