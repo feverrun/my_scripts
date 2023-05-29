@@ -2,7 +2,7 @@
 年货节
 返利变量：CODE618
 export CODE618="xxxxxxx"
-cron "6 6 0,10,20 29-31,1-15 5,6" jd_jf.js
+cron "0 10,20 29-31,1-15 5,6 *" jd_jf.js
 */
 
 const $ = new Env('年货节');
