@@ -1,5 +1,5 @@
 /*
-cron "16 0 16 6 *" jd_bwjd.js
+cron "59 59 23 12-22 6 *" jd_bwjd.js
 */
 const $ = new Env('百万京豆等你拿')
 let openCard = 1;   //1-开卡 0-不开卡
