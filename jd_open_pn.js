@@ -2,7 +2,7 @@
 地址：
 https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=755aea1a02ec41c8a93165f0a3d18261&venderId=1000002467&adSource=OLB
 
-cron "2 2 29 2 *" jd_opencard_pn.js
+cron "6 10 16 6 *" jd_open_pn.js
 */
 const $ = new Env('嗨购618 陪你疯一夏')
 let opencard = 1;    //0-不做开卡

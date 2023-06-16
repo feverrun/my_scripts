@@ -1,6 +1,6 @@
 /*
 https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=08ca3a09b06a4cfe825e6361ae5b0c5e&venderId=1000015827&adSource=a2zhichu
-cron "2 2 29 2 *" jd_opencard_yb.js
+cron "10 10 16 6 *" jd_open_yb.js
 */
 const $ = new Env('618任性嗨购  引爆狂欢盛宴')
 let opencard = 1;    //0-不做开卡
