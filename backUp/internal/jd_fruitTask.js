@@ -3,6 +3,14 @@
 cron "15 2,7,14 * * *" jd_fruitTask.js
 export DO_TEN_WATER_AGAIN="" 默认再次浇水
 */
+let global_agent_http_proxy_isopen = false;
+if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){
+    global_agent_http_proxy_isopen = true;
+    require("global-agent/bootstrap");
+    global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
+}
+
+
 const $ = new Env('东东农场日常任务');
 let cookiesArr = [],
     cookie = '',
@@ -61,10 +69,15 @@ let lnrun = 0;
             await jdFruit();
             if (lnrun == 3) {
                 console.log(`\n【访问接口次数达到3次，休息一分钟.....】\n`);
-                await $.wait(60 * 1000);
+                await $.wait(Math.random() * 5500 + 60000, 10);
                 lnrun = 0;
             }
-            await $.wait(30 * 1000);
+
+            if (global_agent_http_proxy_isopen == false) {
+                await $.wait(Math.random() * 5500 + 90000, 10);
+            }
+
+            await $.wait(Math.random() * 5500 + 5500, 10);
         }
     }
     if ($.isNode() && allMessage && $.ctrTemp) {

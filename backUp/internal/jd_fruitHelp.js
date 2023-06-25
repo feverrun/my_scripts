@@ -3,6 +3,14 @@
 cron "5 5,9,16 * * *" jd_fruitHelp.js
 export DO_TEN_WATER_AGAIN="" 默认再次浇水
 */
+let global_agent_http_proxy_isopen = false;
+if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){
+    global_agent_http_proxy_isopen = true;
+    require("global-agent/bootstrap");
+    global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
+}
+
+
 const $ = new Env('东东农场内部水滴互助');
 let cookiesArr = [],
     cookie = '',
@@ -79,7 +87,7 @@ let NoNeedCodes = [];
                 llgetshare = false;
                 await GetCollect();
                 if(llgetshare){
-                    await $.wait(5000);
+                    await $.wait(Math.random() * 5500 + 3500, 10);
                     lnrun++;
                 }
                 if(lnrun == 10){
@@ -87,6 +95,10 @@ let NoNeedCodes = [];
                     await $.wait(60*1000);
                     lnrun = 0;
                 }
+            }
+
+            if (global_agent_http_proxy_isopen == false) {
+                await $.wait(Math.random() * 5500 + 90000, 10);
             }
         }
         if (boolneedUpdate) {

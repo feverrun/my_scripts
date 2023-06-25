@@ -2,6 +2,12 @@
 东东农场-助力
 cron "5 4,7,14,20 * * *" jd_fruits_help.js
 */
+let global_agent_http_proxy_isopen = false;
+if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){
+    global_agent_http_proxy_isopen = true;
+    require("global-agent/bootstrap");
+    global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
+}
 
 const $ = new Env('东东农场-助力');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -59,6 +65,10 @@ if ($.isNode()) {
             await shareCodesFormat();
             await jdFruit();
             await $.wait(Math.random()*5500+3500, 10)
+
+            if (global_agent_http_proxy_isopen == false) {
+                await $.wait(Math.random() * 5500 + 90000, 10);
+            }
         }
     }
     if ($.isNode() && allMessage && $.ctrTemp) {

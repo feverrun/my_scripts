@@ -9,6 +9,14 @@
 
 cron "1 6,13,18 * * *" script-path=jd_plantBeans.js,tag=京东种豆得豆
 */
+let global_agent_http_proxy_isopen = false;
+if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){
+    global_agent_http_proxy_isopen = true;
+    require("global-agent/bootstrap");
+    global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
+}
+
+
 const $ = new Env('种豆得豆互助版');
 //Node.js用户请在jdCookie.js处填写京东ck;
 //ios等软件用户直接用NobyDa的jd cookie
@@ -72,6 +80,9 @@ if ($.isNode() && process.env.CC_NOHELPAFTER8) {
             await jdPlantBean();
             await showMsg();
 
+            if (global_agent_http_proxy_isopen == false) {
+                await $.wait(Math.random() * 5500 + 90000, 10);
+            }
             await $.wait(parseInt(Math.random()*5500 + 15000, 10))
         }
     }

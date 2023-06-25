@@ -2,6 +2,12 @@
 东东农场-删减好友
 cron "35 5,13,19 * * *" jd_fruits_friend.js
 */
+let global_agent_http_proxy_isopen = false;
+if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){
+    global_agent_http_proxy_isopen = true;
+    require("global-agent/bootstrap");
+    global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
+}
 
 const $ = new Env('东东农场-删减好友');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -55,6 +61,9 @@ if ($.isNode()) {
 
             await jdFruit();
             await $.wait(Math.random()*3500+2500, 10);
+            if (global_agent_http_proxy_isopen == false) {
+                await $.wait(Math.random() * 5500 + 90000, 10);
+            }
         }
     }
     if ($.isNode() && allMessage && $.ctrTemp) {
