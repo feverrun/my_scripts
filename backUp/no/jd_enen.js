@@ -1,56 +1,126 @@
-/*
-京东到家水果任务脚本
-cron "6 0,9 * * *" script-path=jddj_bean.js,tag=京东到家种水果
-*/
+/**
+ 更新时间：2021-06-31
+ 已支持IOS双京东账号,Node.js支持N个京东账号
+ enen会让ck失效, 清楚后再运行
+ cron "2 2 29 2 *" jd_enen.js
+ */
+const $ = new Env('嗯嗯');
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+let cookiesArr = [], cookie = '', message;
 
-const $ = new Env("测试");
-
-!(async () => {
-    console.log('让我们开始吧!');
-    // await test2();
-    console.log('hello');
-    await test3();
-    console.log('wolrd');
-})().catch((e) => {
-    console.log('', `❌失败! 原因: ${e}!`, '');
-}).finally(() => {
-    $.done();
-})
-
-async function test1(){
-    $.wait(10000);
+if ($.isNode()) {
+    Object.keys(jdCookieNode).forEach((item) => {
+        cookiesArr.push(jdCookieNode[item])
+    })
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
+    };
+    if (JSON.stringify(process.env).indexOf('GITHUB') > -1) process.exit(0);
+} else {
+    cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-async function test2(){
-    $.wait(2000);
-    console.log('你好test2');
+!(async () => {
+    if (!cookiesArr[0]) {
+        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+        return;
+    }
+
+    console.log(`运行enen会让ck失效,准备好了吗? 等待10秒后开始...`);
+    await $.wait(10000);
+    for (let i = 0; i < cookiesArr.length; i++) {
+        if (cookiesArr[i]) {
+            cookie = cookiesArr[i];
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.index = i + 1;
+            $.isLogin = true;
+            $.nickName = '';
+            message = '';
+            await TotalBean();
+            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+            if (!$.isLogin) {
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+                continue
+            } else {
+                let body = {
+                    url: `https://plogin.m.jd.com/cgi-bin/ml/mlogout?appid=300&returnurl=https%3A%2F%2Fm.jd.com%2F`,
+                    headers: {
+                        'authority': 'plogin.m.jd.com',
+                        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                        'cookie': cookie
+                    }
+                }
+                $.get(body, async (err, resp, data) => {
+                    try {
+                        if (err) {
+                            console.log(`${$.name} ${url} API请求失败，请检查网路重试`)
+                        } else {
+                            console.log(data);
+                            // data = JSON.parse(data);
+                        }
+                    } catch (e) {
+                        $.logErr(e, resp)
+                    } finally {
+
+                    }
+                })
+            }
+        }
+        await $.wait(900);
+    }
+})()
+
+function TotalBean() {
     return new Promise(async resolve => {
-        await $.wait(2500);
-        console.log('你好test22');
-        // $.post(url, body), (err, resp, data) => {
-        //     try {
-        //         // console.log(data)
-        //         if (err) {
-        //             console.log('\n: API查询请求失败 ‼️‼️')
-        //             console.log(`function_id:${function_id}`)
-        //             $.logErr(err);
-        //         } else {
-        //             data = JSON.parse(data);
-        //         }
-        //     } catch (e) {
-        //         $.logErr(e, resp);
-        //     } finally {
-        //         resolve(data);
-        //     }
-        // })
+        const options = {
+            url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
+            headers: {
+                Host: "me-api.jd.com",
+                Accept: "*/*",
+                Connection: "keep-alive",
+                Cookie: cookie,
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "Accept-Language": "zh-cn",
+                "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
+                "Accept-Encoding": "gzip, deflate, br"
+            }
+        }
+        $.get(options, (err, resp, data) => {
+            try {
+                if (err) {
+                    $.logErr(err)
+                } else {
+                    if (data) {
+                        data = JSON.parse(data);
+                        if (data['retcode'] === "1001") {
+                            $.isLogin = false; //cookie过期
+                            return;
+                        }
+                        if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
+                            $.nickName = data.data.userInfo.baseInfo.nickname;
+                        }
+                    } else {
+                        $.log('京东服务器返回空数据');
+                    }
+                }
+            } catch (e) {
+                $.logErr(e)
+            } finally {
+                resolve();
+            }
+        })
     })
 }
 
-async function test3(){
-    console.log('开始');
-    await $.wait(10000);
-    console.log('1111');
-    console.log('22222');
+function jsonParse(str) {
+    if (typeof str == "string") {
+        try {
+            return JSON.parse(str);
+        } catch (e) {
+            console.log(e);
+            $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
+            return [];
+        }
+    }
 }
 
 // prettier-ignore
