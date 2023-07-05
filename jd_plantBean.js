@@ -20,7 +20,7 @@ const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let jdNotify = true;//是否开启静默运行。默认true开启
 let cookiesArr = [], cookie = '', jdPlantBeanShareArr = [], isBox = false, notify, newShareCodes = [], option, message,subTitle;
-
+let window = null
 //助力好友分享码(最多3个,否则后面的助力失败)
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
@@ -296,7 +296,7 @@ async function doTask() {
                         "shopId": shopId,
                         "shopTaskId": shopTaskId
                     }
-                    const shopRes = await requestGet('shopNutrientsTask', body);
+                    const shopRes = await request('shopNutrientsTask', body);
                     console.log(`shopRes结果:${JSON.stringify(shopRes)}`);
                     if (shopRes && shopRes.code === '0') {
                         if (shopRes.data && shopRes.data.nutrState && shopRes.data.nutrState === '1') {
@@ -338,7 +338,7 @@ async function doTask() {
                         "productTaskId": productTaskId,
                         "skuId": skuId
                     }
-                    const productRes = await requestGet('productNutrientsTask', body);
+                    const productRes = await request('productNutrientsTask', body);
                     if (productRes && productRes.code === '0') {
                         // console.log('nutrState', productRes)
                         //这里添加多重判断,有时候会出现活动太火爆的问题,导致nutrState没有
@@ -382,7 +382,7 @@ async function doTask() {
                         "channelId": channelId,
                         "channelTaskId": channelTaskId
                     }
-                    const channelRes = await requestGet('plantChannelNutrientsTask', body);
+                    const channelRes = await request('plantChannelNutrientsTask', body);
                     console.log(`channelRes结果:${JSON.stringify(channelRes)}`);
                     if (channelRes && channelRes.code === '0') {
                         if (channelRes.data && channelRes.data.nutrState && channelRes.data.nutrState === '1') {
@@ -504,24 +504,24 @@ async function receiveNutrients() {
     // console.log(`定时领取营养液结果:${JSON.stringify($.receiveNutrientsRes)}`)
 }
 async function plantEggDoLottery() {
-    $.plantEggDoLotteryResult = await requestGet('plantEggDoLottery');
+    $.plantEggDoLotteryResult = await request('plantEggDoLottery');
 }
 //查询天天扭蛋的机会
 async function egg() {
-    $.plantEggLotteryRes = await requestGet('plantEggLotteryIndex');
+    $.plantEggLotteryRes = await request('plantEggLotteryIndex');
 }
 async function productTaskList() {
     let functionId = arguments.callee.name.toString();
-    $.productTaskList = await requestGet(functionId, {"monitor_refer": "plant_productTaskList"});
+    $.productTaskList = await request(functionId, {"monitor_refer": "plant_productTaskList"});
 }
 async function plantChannelTaskList() {
     let functionId = arguments.callee.name.toString();
-    $.plantChannelTaskList = await requestGet(functionId);
+    $.plantChannelTaskList = await request(functionId);
     // console.log('$.plantChannelTaskList', $.plantChannelTaskList)
 }
 async function shopTaskList() {
     let functionId = arguments.callee.name.toString();
-    $.shopTaskListRes = await requestGet(functionId, {"monitor_refer": "plant_receiveNutrients"});
+    $.shopTaskListRes = await request(functionId, {"monitor_refer": "plant_receiveNutrients"});
     // console.log('$.shopTaskListRes', $.shopTaskListRes)
 }
 async function receiveNutrientsTask(awardType) {
@@ -530,10 +530,10 @@ async function receiveNutrientsTask(awardType) {
         "monitor_refer": "receiveNutrientsTask",
         "awardType": `${awardType}`,
     }
-    $.receiveNutrientsTaskRes = await requestGet(functionId, body);
+    $.receiveNutrientsTaskRes = await request(functionId, body);
 }
 async function plantShareSupportList() {
-    $.shareSupportList = await requestGet('plantShareSupportList', {"roundId": ""});
+    $.shareSupportList = await request('plantShareSupportList', {"roundId": ""});
     if ($.shareSupportList && $.shareSupportList.code === '0') {
         const { data } = $.shareSupportList;
         //当日北京时间0点时间戳
@@ -679,89 +679,7 @@ function shareCodesFormat() {
         resolve();
     })
 }
-function requestGet(function_id, body = {}) {
-    if (!body.version) {
-        body["version"] = "9.0.0.1";
-    }
-    body["monitor_source"] = "plant_app_plant_index";
-    body["monitor_refer"] = "";
-    return new Promise(async resolve => {
-        await $.wait(parseInt(Math.random()*2000+1500,10));
-        const option = {
-            url: `${JD_API_HOST}?functionId=${function_id}&body=${escape(JSON.stringify(body))}&appid=ld`,
-            headers: {
-                'Cookie': cookie,
-                'Host': 'api.m.jd.com',
-                'Accept': '*/*',
-                'Connection': 'keep-alive',
-                'User-Agent': 'JD4iPhone/167283 (iPhone;iOS 13.6.1;Scale/3.00)',
-                'Accept-Language': 'zh-Hans-CN;q=1,en-CN;q=0.9',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Content-Type': "application/x-www-form-urlencoded"
-            },
-            timeout: 10000,
-        };
-        $.get(option, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log('\n种豆得豆: API查询请求失败 ‼️‼️')
-                    $.logErr(err);
-                } else {
-                    data = JSON.parse(data);
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
-
-async function request(function_id, body = {}){
-    await $.wait(parseInt(Math.random()*1000+1500,10));
-    return new Promise(async resolve => {
-        await $.wait(parseInt(Math.random()*1000+1500,10));
-        $.post(taskUrl(function_id, body), (err, resp, data) => {
-            try {
-                // console.log(data)
-                if (err) {
-                    console.log('\n种豆得豆: API查询请求失败 ‼️‼️')
-                    console.log(`function_id:${function_id}`)
-                    $.logErr(err);
-                } else {
-                    data = JSON.parse(data);
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
-
-function taskUrl(function_id, body) {
-    body["version"] = "9.2.4.0";
-    body["monitor_source"] = "plant_app_plant_index";
-    body["monitor_refer"] = "";
-    return {
-        url: JD_API_HOST,
-        body: `functionId=${function_id}&body=${escape(JSON.stringify(body))}&appid=ld&client=apple&area=19_1601_50258_51885&build=167490&clientVersion=9.3.2`,
-        headers: {
-            "Cookie": cookie,
-            "Host": "api.m.jd.com",
-            "Accept": "*/*",
-            "Connection": "keep-alive",
-            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-            "Accept-Language": "zh-Hans-CN;q=1,en-CN;q=0.9",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        timeout: 10000,
-    }
-}
-
+var __encode ='jsjiami.com',_a={}, _0xb483=["\x5F\x64\x65\x63\x6F\x64\x65","\x68\x74\x74\x70\x3A\x2F\x2F\x77\x77\x77\x2E\x73\x6F\x6A\x73\x6F\x6E\x2E\x63\x6F\x6D\x2F\x6A\x61\x76\x61\x73\x63\x72\x69\x70\x74\x6F\x62\x66\x75\x73\x63\x61\x74\x6F\x72\x2E\x68\x74\x6D\x6C"];(function(_0xd642x1){_0xd642x1[_0xb483[0]]= _0xb483[1]})(_a);var __Ox101154=["\x76\x65\x72\x73\x69\x6F\x6E","\x39\x2E\x30\x2E\x30\x2E\x31","\x6D\x6F\x6E\x69\x74\x6F\x72\x5F\x73\x6F\x75\x72\x63\x65","\x70\x6C\x61\x6E\x74\x5F\x61\x70\x70\x5F\x70\x6C\x61\x6E\x74\x5F\x69\x6E\x64\x65\x78","\x6D\x6F\x6E\x69\x74\x6F\x72\x5F\x72\x65\x66\x65\x72","","\x72\x61\x6E\x64\x6F\x6D","\x77\x61\x69\x74","\x3F\x66\x75\x6E\x63\x74\x69\x6F\x6E\x49\x64\x3D","\x26\x62\x6F\x64\x79\x3D","\x73\x74\x72\x69\x6E\x67\x69\x66\x79","\x26\x61\x70\x70\x69\x64\x3D\x6C\x64","\x61\x70\x69\x2E\x6D\x2E\x6A\x64\x2E\x63\x6F\x6D","\x2A\x2F\x2A","\x6B\x65\x65\x70\x2D\x61\x6C\x69\x76\x65","\x4A\x44\x34\x69\x50\x68\x6F\x6E\x65\x2F\x31\x36\x37\x32\x38\x33\x20\x28\x69\x50\x68\x6F\x6E\x65\x3B\x69\x4F\x53\x20\x31\x33\x2E\x36\x2E\x31\x3B\x53\x63\x61\x6C\x65\x2F\x33\x2E\x30\x30\x29","\x7A\x68\x2D\x48\x61\x6E\x73\x2D\x43\x4E\x3B\x71\x3D\x31\x2C\x65\x6E\x2D\x43\x4E\x3B\x71\x3D\x30\x2E\x39","\x67\x7A\x69\x70\x2C\x20\x64\x65\x66\x6C\x61\x74\x65\x2C\x20\x62\x72","\x61\x70\x70\x6C\x69\x63\x61\x74\x69\x6F\x6E\x2F\x78\x2D\x77\x77\x77\x2D\x66\x6F\x72\x6D\x2D\x75\x72\x6C\x65\x6E\x63\x6F\x64\x65\x64","\x0A\u79CD\u8C46\u5F97\u8C46\x3A\x20\x41\x50\x49\u67E5\u8BE2\u8BF7\u6C42\u5931\u8D25\x20\u203C\uFE0F\u203C\uFE0F","\x6C\x6F\x67","\x6C\x6F\x67\x45\x72\x72","\x70\x61\x72\x73\x65","\x67\x65\x74","\x66\x75\x6E\x63\x74\x69\x6F\x6E\x5F\x69\x64\x3A","\x39\x2E\x32\x2E\x34\x2E\x33","\x70\x6C\x61\x6E\x74\x5F\x6D\x5F\x70\x6C\x61\x6E\x74\x5F\x69\x6E\x64\x65\x78","\x73\x69\x67\x6E\x65\x64\x5F\x77\x68\x35","\x31\x32\x2E\x30\x2E\x34","\x61\x6E\x64\x72\x6F\x69\x64","\x64\x32\x34\x36\x61","\x70\x6C\x61\x6E\x74\x42\x65\x61\x6E\x49\x6E\x64\x65\x78","\x62\x35\x36\x62\x38","\x72\x65\x63\x65\x69\x76\x65\x4E\x75\x74\x72\x69\x65\x6E\x74\x73","\x64\x32\x32\x61\x63","\x72\x65\x63\x65\x69\x76\x65\x4E\x75\x74\x72\x69\x65\x6E\x74\x73\x54\x61\x73\x6B","\x36\x61\x32\x31\x36","\x63\x75\x6C\x74\x75\x72\x65\x42\x65\x61\x6E","\x37\x33\x35\x31\x62","\x70\x72\x6F\x64\x75\x63\x74\x54\x61\x73\x6B\x4C\x69\x73\x74","\x31\x39\x63\x38\x38","\x73\x68\x6F\x70\x4E\x75\x74\x72\x69\x65\x6E\x74\x73\x54\x61\x73\x6B","\x61\x34\x65\x32\x64","\x70\x72\x6F\x64\x75\x63\x74\x4E\x75\x74\x72\x69\x65\x6E\x74\x73\x54\x61\x73\x6B","\x31\x34\x33\x35\x37","\x63\x6F\x6C\x6C\x65\x63\x74\x55\x73\x65\x72\x4E\x75\x74\x72","\x66\x75\x6E\x63\x74\x69\x6F\x6E\x49\x64\x3D","\x26\x61\x70\x70\x69\x64\x3D\x73\x69\x67\x6E\x65\x64\x5F\x77\x68\x35\x26\x63\x6C\x69\x65\x6E\x74\x3D\x61\x6E\x64\x72\x6F\x69\x64\x26\x63\x6C\x69\x65\x6E\x74\x56\x65\x72\x73\x69\x6F\x6E\x3D\x31\x32\x2E\x30\x2E\x34","\x26\x61\x70\x70\x69\x64\x3D\x73\x69\x67\x6E\x65\x64\x5F\x77\x68\x35\x26\x63\x6C\x69\x65\x6E\x74\x3D\x61\x6E\x64\x72\x6F\x69\x64\x26\x63\x6C\x69\x65\x6E\x74\x56\x65\x72\x73\x69\x6F\x6E\x3D\x31\x32\x2E\x30\x2E\x34\x26\x68\x35\x73\x74\x3D","\x3F","\x68\x74\x74\x70\x73\x3A\x2F\x2F\x70\x6C\x61\x6E\x74\x65\x61\x72\x74\x68\x2E\x6D\x2E\x6A\x64\x2E\x63\x6F\x6D","\x63\x6F\x6D\x2E\x6A\x69\x6E\x67\x64\x6F\x6E\x67\x2E\x61\x70\x70\x2E\x6D\x61\x6C\x6C","\x69\x73\x4E\x6F\x64\x65","\x4A\x44\x5F\x55\x53\x45\x52\x5F\x41\x47\x45\x4E\x54","\x65\x6E\x76","\x55\x53\x45\x52\x5F\x41\x47\x45\x4E\x54","\x2E\x2F\x55\x53\x45\x52\x5F\x41\x47\x45\x4E\x54\x53","\x4A\x44\x55\x41","\x67\x65\x74\x64\x61\x74\x61","\x6A\x64\x61\x70\x70\x3B\x69\x50\x68\x6F\x6E\x65\x3B\x39\x2E\x34\x2E\x34\x3B\x31\x34\x2E\x33\x3B\x6E\x65\x74\x77\x6F\x72\x6B\x2F\x34\x67\x3B\x4D\x6F\x7A\x69\x6C\x6C\x61\x2F\x35\x2E\x30\x20\x28\x69\x50\x68\x6F\x6E\x65\x3B\x20\x43\x50\x55\x20\x69\x50\x68\x6F\x6E\x65\x20\x4F\x53\x20\x31\x34\x5F\x33\x20\x6C\x69\x6B\x65\x20\x4D\x61\x63\x20\x4F\x53\x20\x58\x29\x20\x41\x70\x70\x6C\x65\x57\x65\x62\x4B\x69\x74\x2F\x36\x30\x35\x2E\x31\x2E\x31\x35\x20\x28\x4B\x48\x54\x4D\x4C\x2C\x20\x6C\x69\x6B\x65\x20\x47\x65\x63\x6B\x6F\x29\x20\x4D\x6F\x62\x69\x6C\x65\x2F\x31\x35\x45\x31\x34\x38\x3B\x73\x75\x70\x70\x6F\x72\x74\x4A\x44\x53\x48\x57\x4B\x2F\x31","\x6A\x73\x64\x6F\x6D","\x4D\x6F\x7A\x69\x6C\x6C\x61\x2F\x35\x2E\x30\x20\x28\x4D\x61\x63\x69\x6E\x74\x6F\x73\x68\x3B\x20\x49\x6E\x74\x65\x6C\x20\x4D\x61\x63\x20\x4F\x53\x20\x58\x20\x31\x30\x2E\x31\x35\x3B\x20\x72\x76\x3A\x39\x31\x2E\x30\x29\x20\x47\x65\x63\x6B\x6F\x2F\x32\x30\x31\x30\x30\x31\x30\x31\x20\x46\x69\x72\x65\x66\x6F\x78\x2F\x39\x31\x2E\x30","\x68\x74\x74\x70\x73\x3A\x2F\x2F\x6D\x73\x69\x74\x65\x70\x70\x2D\x66\x6D\x2E\x6A\x64\x2E\x63\x6F\x6D\x2F\x72\x65\x73\x74\x2F\x70\x72\x69\x63\x65\x70\x72\x6F\x70\x68\x6F\x6E\x65\x2F\x70\x72\x69\x63\x65\x50\x72\x6F\x50\x68\x6F\x6E\x65\x4D\x65\x6E\x75","\x56\x69\x72\x74\x75\x61\x6C\x43\x6F\x6E\x73\x6F\x6C\x65","\x64\x61\x6E\x67\x65\x72\x6F\x75\x73\x6C\x79","\x3C\x62\x6F\x64\x79\x3E\x0A\x20\x20\x20\x20\x3C\x73\x63\x72\x69\x70\x74\x20\x73\x72\x63\x3D\x22\x68\x74\x74\x70\x73\x3A\x2F\x2F\x73\x74\x61\x74\x69\x63\x2E\x33\x36\x30\x62\x75\x79\x69\x6D\x67\x2E\x63\x6F\x6D\x2F\x73\x69\x74\x65\x70\x70\x53\x74\x61\x74\x69\x63\x2F\x73\x63\x72\x69\x70\x74\x2F\x6D\x65\x73\x63\x72\x6F\x6C\x6C\x2F\x6D\x61\x70\x2E\x6A\x73\x22\x3E\x3C\x2F\x73\x63\x72\x69\x70\x74\x3E\x0A\x20\x20\x20\x20\x3C\x73\x63\x72\x69\x70\x74\x20\x73\x72\x63\x3D\x22\x68\x74\x74\x70\x73\x3A\x2F\x2F\x73\x74\x6F\x72\x61\x67\x65\x2E\x33\x36\x30\x62\x75\x79\x69\x6D\x67\x2E\x63\x6F\x6D\x2F\x77\x65\x62\x63\x6F\x6E\x74\x61\x69\x6E\x65\x72\x2F\x6A\x73\x5F\x73\x65\x63\x75\x72\x69\x74\x79\x5F\x76\x33\x2E\x6A\x73\x22\x3E\x3C\x2F\x73\x63\x72\x69\x70\x74\x3E\x0A\x20\x20\x20\x20\x3C\x73\x63\x72\x69\x70\x74\x20\x73\x72\x63\x3D\x22\x68\x74\x74\x70\x73\x3A\x2F\x2F\x73\x74\x61\x74\x69\x63\x2E\x33\x36\x30\x62\x75\x79\x69\x6D\x67\x2E\x63\x6F\x6D\x2F\x73\x69\x74\x65\x70\x70\x53\x74\x61\x74\x69\x63\x2F\x73\x63\x72\x69\x70\x74\x2F\x75\x74\x69\x6C\x73\x2E\x6A\x73\x22\x3E\x3C\x2F\x73\x63\x72\x69\x70\x74\x3E\x0A\x20\x20\x20\x20\x3C\x2F\x62\x6F\x64\x79\x3E","\x77\x69\x6E\x64\x6F\x77","\x73\x69\x67\x6E\x57\x61\x61\x70","\x66\x75\x6E\x63\x74\x69\x6F\x6E","\x75\x6E\x64\x65\x66\x69\x6E\x65\x64","\u5220\u9664","\u7248\u672C\u53F7\uFF0C\x6A\x73\u4F1A\u5B9A","\u671F\u5F39\u7A97\uFF0C","\u8FD8\u8BF7\u652F\u6301\u6211\u4EEC\u7684\u5DE5\u4F5C","\x6A\x73\x6A\x69\x61","\x6D\x69\x2E\x63\x6F\x6D"];function requestGet(_0xac78x2,_0xac78x3= {}){if(!_0xac78x3[__Ox101154[0x0]]){_0xac78x3[__Ox101154[0x0]]= __Ox101154[0x1]};_0xac78x3[__Ox101154[0x2]]= __Ox101154[0x3];_0xac78x3[__Ox101154[0x4]]= __Ox101154[0x5];return  new Promise(async (_0xac78x4)=>{ await $[__Ox101154[0x7]](parseInt(Math[__Ox101154[0x6]]()* 2000+ 1500,10));const _0xac78x5={url:`${__Ox101154[0x5]}${JD_API_HOST}${__Ox101154[0x8]}${_0xac78x2}${__Ox101154[0x9]}${escape(JSON[__Ox101154[0xa]](_0xac78x3))}${__Ox101154[0xb]}`,headers:{'\x43\x6F\x6F\x6B\x69\x65':cookie,'\x48\x6F\x73\x74':__Ox101154[0xc],'\x41\x63\x63\x65\x70\x74':__Ox101154[0xd],'\x43\x6F\x6E\x6E\x65\x63\x74\x69\x6F\x6E':__Ox101154[0xe],'\x55\x73\x65\x72\x2D\x41\x67\x65\x6E\x74':__Ox101154[0xf],'\x41\x63\x63\x65\x70\x74\x2D\x4C\x61\x6E\x67\x75\x61\x67\x65':__Ox101154[0x10],'\x41\x63\x63\x65\x70\x74\x2D\x45\x6E\x63\x6F\x64\x69\x6E\x67':__Ox101154[0x11],'\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65':__Ox101154[0x12]},timeout:10000};$[__Ox101154[0x17]](_0xac78x5,(_0xac78x6,_0xac78x7,_0xac78x8)=>{try{if(_0xac78x6){console[__Ox101154[0x14]](__Ox101154[0x13]);$[__Ox101154[0x15]](_0xac78x6)}else {_0xac78x8= JSON[__Ox101154[0x16]](_0xac78x8)}}catch(e){$[__Ox101154[0x15]](e,_0xac78x7)}finally{_0xac78x4(_0xac78x8)}})})}async function request(_0xac78x2,_0xac78x3= {}){ await $[__Ox101154[0x7]](parseInt(Math[__Ox101154[0x6]]()* 1000+ 1500,10));return  new Promise(async (_0xac78x4)=>{ await $[__Ox101154[0x7]](parseInt(Math[__Ox101154[0x6]]()* 1000+ 1500,10));$[__Ox101154[0x17]]( await taskUrl(_0xac78x2,_0xac78x3),(_0xac78x6,_0xac78x7,_0xac78x8)=>{try{if(_0xac78x6){console[__Ox101154[0x14]](__Ox101154[0x13]);console[__Ox101154[0x14]](`${__Ox101154[0x18]}${_0xac78x2}${__Ox101154[0x5]}`);$[__Ox101154[0x15]](_0xac78x6)}else {_0xac78x8= JSON[__Ox101154[0x16]](_0xac78x8)}}catch(e){$[__Ox101154[0x15]](e,_0xac78x7)}finally{_0xac78x4(_0xac78x8)}})})}function taskUrl(_0xac78x2,_0xac78x3){return  new Promise(async (_0xac78x4)=>{_0xac78x3[__Ox101154[0x0]]= __Ox101154[0x19];_0xac78x3[__Ox101154[0x2]]= __Ox101154[0x1a];_0xac78x3[__Ox101154[0x4]]= __Ox101154[0x5];h5st= __Ox101154[0x5];bb= {"\x61\x70\x70\x69\x64":__Ox101154[0x1b],"\x66\x75\x6E\x63\x74\x69\x6F\x6E\x49\x64":_0xac78x2,"\x63\x6C\x69\x65\x6E\x74\x56\x65\x72\x73\x69\x6F\x6E":__Ox101154[0x1c],"\x63\x6C\x69\x65\x6E\x74":__Ox101154[0x1d],"\x62\x6F\x64\x79":_0xac78x3};switch(_0xac78x2){case __Ox101154[0x1f]:h5st=  await getH5st(__Ox101154[0x1e],bb);break;case __Ox101154[0x21]:h5st=  await getH5st(__Ox101154[0x20],bb);break;case __Ox101154[0x23]:h5st=  await getH5st(__Ox101154[0x22],bb);break;case __Ox101154[0x25]:h5st=  await getH5st(__Ox101154[0x24],bb);break;case __Ox101154[0x27]:h5st=  await getH5st(__Ox101154[0x26],bb);break;case __Ox101154[0x29]:h5st=  await getH5st(__Ox101154[0x28],bb);break;case __Ox101154[0x2b]:h5st=  await getH5st(__Ox101154[0x2a],bb);break;case __Ox101154[0x2d]:h5st=  await getH5st(__Ox101154[0x2c],bb);break;default:h5st= __Ox101154[0x5];break};if(h5st== __Ox101154[0x5]){ub= `${__Ox101154[0x2e]}${_0xac78x2}${__Ox101154[0x9]}${escape(JSON[__Ox101154[0xa]](_0xac78x3))}${__Ox101154[0x2f]}`}else {ub= `${__Ox101154[0x2e]}${_0xac78x2}${__Ox101154[0x9]}${escape(JSON[__Ox101154[0xa]](_0xac78x3))}${__Ox101154[0x30]}${encodeURIComponent(h5st)}${__Ox101154[0x5]}`};let _0xac78x8={url:JD_API_HOST+ __Ox101154[0x31]+ ub,headers:{"\x6F\x72\x69\x67\x69\x6E":__Ox101154[0x32],"\x78\x2D\x72\x65\x71\x75\x65\x73\x74\x65\x64\x2D\x77\x69\x74\x68":__Ox101154[0x33],"\x43\x6F\x6F\x6B\x69\x65":cookie,"\x48\x6F\x73\x74":__Ox101154[0xc],"\x41\x63\x63\x65\x70\x74":__Ox101154[0xd],"\x43\x6F\x6E\x6E\x65\x63\x74\x69\x6F\x6E":__Ox101154[0xe],"\x55\x73\x65\x72\x2D\x41\x67\x65\x6E\x74":$[__Ox101154[0x34]]()?(process[__Ox101154[0x36]][__Ox101154[0x35]]?process[__Ox101154[0x36]][__Ox101154[0x35]]:(require(__Ox101154[0x38])[__Ox101154[0x37]])):($[__Ox101154[0x3a]](__Ox101154[0x39])?$[__Ox101154[0x3a]](__Ox101154[0x39]):__Ox101154[0x3b]),"\x41\x63\x63\x65\x70\x74\x2D\x4C\x61\x6E\x67\x75\x61\x67\x65":__Ox101154[0x10],"\x41\x63\x63\x65\x70\x74\x2D\x45\x6E\x63\x6F\x64\x69\x6E\x67":__Ox101154[0x11],"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":__Ox101154[0x12]},timeout:10000};_0xac78x4(_0xac78x8)})}const jsdom=require(__Ox101154[0x3c]);let domWindow=null;async function sleep(_0xac78xe){return  new Promise((_0xac78x4,_0xac78xf)=>{setTimeout(()=>{_0xac78x4(_0xac78xe)},_0xac78xe)})}async function loadH5Sdk(){const {JSDOM}=jsdom;let _0xac78x11= new jsdom.ResourceLoader({'\x75\x73\x65\x72\x41\x67\x65\x6E\x74':__Ox101154[0x3d],'\x72\x65\x66\x65\x72\x72\x65\x72':__Ox101154[0x3e]});let _0xac78x12= new jsdom[(__Ox101154[0x3f])]();let _0xac78x13={'\x75\x72\x6C':__Ox101154[0x3e],'\x72\x65\x66\x65\x72\x72\x65\x72':__Ox101154[0x3e],'\x75\x73\x65\x72\x41\x67\x65\x6E\x74':__Ox101154[0x3d],'\x72\x75\x6E\x53\x63\x72\x69\x70\x74\x73':__Ox101154[0x40],'\x72\x65\x73\x6F\x75\x72\x63\x65\x73':_0xac78x11,'\x69\x6E\x63\x6C\x75\x64\x65\x4E\x6F\x64\x65\x4C\x6F\x63\x61\x74\x69\x6F\x6E\x73':true,'\x73\x74\x6F\x72\x61\x67\x65\x51\x75\x6F\x74\x61':10000000,'\x70\x72\x65\x74\x65\x6E\x64\x54\x6F\x42\x65\x56\x69\x73\x75\x61\x6C':true,'\x76\x69\x72\x74\x75\x61\x6C\x43\x6F\x6E\x73\x6F\x6C\x65':_0xac78x12};const _0xac78x14= new JSDOM(__Ox101154[0x41],_0xac78x13); await sleep(500);domWindow= _0xac78x14[__Ox101154[0x42]]}async function getH5st(_0xac78x16,_0xac78x17){let _0xac78x18=null;if(!domWindow){ await loadH5Sdk()};return  new Promise(async (_0xac78x4)=>{if( typeof domWindow[__Ox101154[0x43]]=== __Ox101154[0x44]){const _0xac78x19= await domWindow[__Ox101154[0x43]](_0xac78x16,_0xac78x17);_0xac78x4(_0xac78x19)}else {_0xac78x18= setInterval(async ()=>{if( typeof domWindow[__Ox101154[0x43]]=== __Ox101154[0x44]){clearInterval(_0xac78x18);_0xac78x18= null;const _0xac78x19= await domWindow[__Ox101154[0x43]](_0xac78x16,_0xac78x17);_0xac78x4(_0xac78x19)}},100)}})}(function(_0xac78x1a,_0xac78x1b,_0xac78x1c,_0xac78x1d,_0xac78x1e,_0xac78x1f){_0xac78x1f= __Ox101154[0x45];_0xac78x1d= function(_0xac78x20){if( typeof alert!== _0xac78x1f){alert(_0xac78x20)};if( typeof console!== _0xac78x1f){console[__Ox101154[0x14]](_0xac78x20)}};_0xac78x1c= function(_0xac78x21,_0xac78x1a){return _0xac78x21+ _0xac78x1a};_0xac78x1e= _0xac78x1c(__Ox101154[0x46],_0xac78x1c(_0xac78x1c(__Ox101154[0x47],__Ox101154[0x48]),__Ox101154[0x49]));try{_0xac78x1a= __encode;if(!( typeof _0xac78x1a!== _0xac78x1f&& _0xac78x1a=== _0xac78x1c(__Ox101154[0x4a],__Ox101154[0x4b]))){_0xac78x1d(_0xac78x1e)}}catch(e){_0xac78x1d(_0xac78x1e)}})({})
 function getParam(url, name) {
     const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
     const r = url.match(reg)
