@@ -1,6 +1,7 @@
 /*
 种豆得豆
-更新时间：2021-08-19
+更新时间：2023-07-05 by 环境
+https://t.me/proenvc
 活动入口：京东APP我的-更多工具-种豆得豆
 已支持IOS京东多账号,云端多京东账号
 注：会自动关注任务中的店铺跟商品，介意者勿使用。
@@ -20,7 +21,6 @@ const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let jdNotify = true;//是否开启静默运行。默认true开启
 let cookiesArr = [], cookie = '', jdPlantBeanShareArr = [], isBox = false, notify, newShareCodes = [], option, message,subTitle;
-let window = null
 //助力好友分享码(最多3个,否则后面的助力失败)
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
