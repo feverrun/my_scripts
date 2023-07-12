@@ -3,7 +3,7 @@
 记得每期开始，先手动进活动开一下
 地址：
 https://pro.m.jd.com/mall/active/3BwUqhLsJYrHP4qgAgDDJGrSVngK/index.html
-cron "2 2 29 2 *" jd_yqlxj.js
+cron "2 2 29 2 *" jd_yqlhb.js
 */
 const $ = new Env('邀请赚红包-助力');
 
