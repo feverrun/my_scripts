@@ -1,6 +1,6 @@
 /*
 超店
-cron "2 2 29 2 *" jd_card_cd.js
+cron "2 2 29 2 *" jd_opencard_cd.js
 */
 const $ = new Env('超店');
 
