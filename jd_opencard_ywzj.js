@@ -1,7 +1,7 @@
 /*
 7.14-7.21
 https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=6ec36e7d11c9477a9439e8bd23f60bde&venderId=1000104146&adSource=a2zhichu
-cron "5 0 15,17,19 7 *" jd_opencard_zj.js
+cron "5 7 21 7 *" jd_opencard_ywzj.js
 */
 const $ = new Env('追求极致 永无止境')
 let opencard = 1;    //0-不做开卡
