@@ -1,5 +1,6 @@
 /*
-cron "2 2 29 2 *" jd_opencard_lm.js
+https://lzdz1-isv.isvjd.com/m/unite/dzlh0001/?activityId=b4064c195a934d1f865590056f2df7df&venderId=1000001419&adSource=
+cron "5 12 21-27 7 *" jd_opencard_lm.js
 */
 const $ = new Env('清凉盛夏 好物联盟')
 let opencard = 1;    //0-不做开卡
