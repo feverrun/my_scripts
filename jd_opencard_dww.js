@@ -1,6 +1,6 @@
 /*
 https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=a0e872a18faa42e5b9baec8cb4f1ca84&venderId=1000014286&adSource=
-cron "5 0 18,20,22 7 *" jd_opencard_dw.js
+cron "5 13 24 7 *" jd_opencard_dww.js
 */
 const $ = new Env('家庭囤货 一站到位')
 let opencard = 1;    //0-不做开卡
