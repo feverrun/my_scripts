@@ -1,6 +1,6 @@
 /*
 https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=051634080e3a46eb8c3c0b3400ee6836&venderId=1000090821&adSource=
-cron "2 2 29 2 *" jd_opencard_jkk.js
+cron "5 2 4-10 8 *" jd_opencard_jkk.js
 */
 const $ = new Env('清凉一夏 健康生活')
 let opencard = 1;    //0-不做开卡
