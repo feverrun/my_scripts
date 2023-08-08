@@ -1,6 +1,6 @@
 /*
 https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=ed46e04f960647a8a631201ddbcfa8c5&venderId=1000003179&adSource=
-cron "2 2 29 2 *" jd_opencard_bb.js
+cron "5 1 4-10 8 *" jd_opencard_bbb.js
 */
 const $ = new Env('宝贝乐享 因爱而惠')
 let opencard = 1;    //0-不做开卡
