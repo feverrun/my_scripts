@@ -1,5 +1,5 @@
 /*
-cron "2 2 29 2 *" jd_opencard_ml.js
+cron "5 1 14-22 8 *" jd_opencard_ml.js
 */
 const $ = new Env('浪漫七夕 锁定美丽')
 let opencard = 1;    //0-不做开卡
