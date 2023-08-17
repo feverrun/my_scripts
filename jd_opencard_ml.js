@@ -1,4 +1,5 @@
 /*
+https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=d96624413f9f489ebe9d21e9e831b57d&venderId=1000090821&adSource=
 cron "5 1 14-22 8 *" jd_opencard_ml.js
 */
 const $ = new Env('浪漫七夕 锁定美丽')
