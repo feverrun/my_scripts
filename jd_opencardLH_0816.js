@@ -1,5 +1,5 @@
 /*
-cron "2 2 29 2 *" jd_dplh_0816.js
+cron "2 2 29 2 *" jd_opencardLH_0816.js
 */
 const $ = new Env('大牌0816');
 
