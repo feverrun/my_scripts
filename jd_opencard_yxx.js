@@ -1,6 +1,6 @@
 /*
 https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=ec461baa774141a0a2fcc5734cce0241&venderId=1000001132&adSource=
-cron "2 2 29 2 *" jd_opencard_yxx.js
+cron "4 10 21 8 *" jd_opencard_yxx.js
 */
 const $ = new Env('降暑囤货 嗨购一夏')
 let opencard = 1;    //0-不做开卡
