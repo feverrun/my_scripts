@@ -2,7 +2,7 @@
 更新by:环境 23.08.24
 频道: https://t.me/proenvc
 东东农场-任务
-cron "25 3,8,15,21 * * *" jd_fruits_task.js
+cron "15 2,7,14 * * *" jd_fruitTask.js
 export DO_TEN_WATER_AGAIN="1" 攒水滴
 */
 let global_agent_http_proxy_isopen = false;
