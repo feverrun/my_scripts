@@ -1,5 +1,5 @@
 /*
-cron "5 0 8 8 *" jd_opencard_qrr.js
+cron "5 0 8 9 *" jd_opencard_qrr.js
 */
 const $ = new Env('秋日限定 萌宝专场')
 let opencard = 1;    //0-不做开卡
