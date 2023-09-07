@@ -1,5 +1,5 @@
 /*
-cron "5 0 4 9 *" jd_opencard_hj.js
+cron "5 15 7 9 *" jd_opencard_hjj.js
 */
 const $ = new Env('感恩有你 99聚惠')
 let opencard = 1;    //0-不做开卡
