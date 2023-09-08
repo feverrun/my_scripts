@@ -1,5 +1,6 @@
 /*
-cron "5 15 7 9 *" jd_opencard_hjj.js
+https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=00de8798c16d46bca107fe4115b8d2ed&venderId=1000003829&adSource=
+cron "2 0 8-11 9 *" jd_opencard_hj.js
 */
 const $ = new Env('感恩有你 99聚惠')
 let opencard = 1;    //0-不做开卡
