@@ -1,5 +1,6 @@
 /*
-cron "2 2 29 2 *" jd_school_lottery.js
+每天抽奖一次
+cron "5 11 9-20 9 *" jd_school.js
 */
 const $ = new Env('宿舍大作战')
 
