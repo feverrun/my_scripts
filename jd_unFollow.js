@@ -1,3 +1,6 @@
+/**
+ cron "38 6 * * *" jd_unFollow.js
+ */
 const $ = new Env('取关店铺');
 
 

@@ -1,3 +1,6 @@
+/**
+ cron "5 9 * * *" jd_prices.js
+ */
 const $ = new Env('京东保价');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

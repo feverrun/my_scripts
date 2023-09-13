@@ -1,3 +1,7 @@
+/**
+ cron "38 5 * * *" jd_bean_sign.js
+ */
+
 const $ = new Env('多合一签到');
 
 

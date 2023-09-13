@@ -1,3 +1,6 @@
+/**
+ cron "38 16 * * *" jd_joy_withdraw.js
+ */
 const $ = new Env('汪汪乐园提现');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
