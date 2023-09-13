@@ -1,8 +1,3 @@
-/*
-京东保价
-每天随机运行一次, 无需指定特定时间
- */
-
 const $ = new Env('京东保价');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

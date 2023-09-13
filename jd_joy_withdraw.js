@@ -1,9 +1,3 @@
-/*
-汪汪乐园提现
-活动地址: 京东极速版-汪汪乐园
-活动时间：
-更新时间：2021-11-30
- */
 const $ = new Env('汪汪乐园提现');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
