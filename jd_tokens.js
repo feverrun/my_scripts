@@ -8,7 +8,7 @@ export API_PROXY_URL=""
 如果没有任何代理,可设置下面的延迟大一些， 如果未设置默认随机延迟30秒到60秒
 如果啥代理都没有，可设置下面的延迟默认单位是秒
 export jd_token_waitTime="60"
-cron "40 * * * *" jd_token_global.js
+cron "40 * * * *" jd_tokens.js
 */
 const $ = new Env('缓存token')
 
