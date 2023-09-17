@@ -11,7 +11,7 @@ cron "2 2 29 2 *" jd_lzkj_wxGameActivity.js
 
 const $ = new Env('lzkj游戏活动')
 let global_agent_http_proxy_isopen = false;
-if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){
+if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
     global_agent_http_proxy_isopen = true;
     require("global-agent/bootstrap");
     global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';

@@ -6,7 +6,7 @@ cron "25 3,8,15,21 * * *" jd_fruits_task.js
 export DO_TEN_WATER_AGAIN="1" 攒水滴
 */
 let global_agent_http_proxy_isopen = false;
-if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){
+if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
     global_agent_http_proxy_isopen = true;
     require("global-agent/bootstrap");
     global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';

@@ -7,7 +7,7 @@
  */
 const $ = new Env('读秒拼手速')
 let global_agent_http_proxy_isopen = false;
-if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){
+if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
     global_agent_http_proxy_isopen = true;
     require("global-agent/bootstrap");
     global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
