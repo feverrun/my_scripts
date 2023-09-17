@@ -1,9 +1,9 @@
 /*
-东东农场-浇水
-会一直浇水直到成熟， 有加水卡， 则加水卡优先使用
+东东农场-兑换
+会一直兑换直到成熟， 有加水卡， 则加水卡优先使用
 cron "2 2 29 2 *" jd_fruits_watering.js
 */
-const $ = new Env('东东农场-浇水');
+const $ = new Env('东东农场-兑换');
 let global_agent_http_proxy_isopen = false;
 if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
     global_agent_http_proxy_isopen = true;
