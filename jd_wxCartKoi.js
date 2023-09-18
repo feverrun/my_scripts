@@ -5,11 +5,7 @@ export jd_wxCartKoi_activityId="xxx"  活动ID
 cron "2 2 29 2 *" jd_wxCartKoi.js
 */
 const $ = new Env('购物车锦鲤通用活动');
-if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
-    global_agent_http_proxy_isopen = true;
-    require("global-agent/bootstrap");
-    global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
-}
+
 
 
 

@@ -5,12 +5,7 @@ export jd_lzkj_interactsaas_fxyl_activityId="活动id"            必须
 cron "2 2 29 2 *" jd_lzkj_interactsaas_fxyl.js
 */
 const $ = new Env('lzkj_interactsaas分享有礼')
-let global_agent_http_proxy_isopen = false;
-if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
-    global_agent_http_proxy_isopen = true;
-    require("global-agent/bootstrap");
-    global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
-}
+
 
 
 

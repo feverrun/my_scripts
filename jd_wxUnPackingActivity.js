@@ -7,11 +7,7 @@ export jd_wxUnPackingActivity_activityId="" // 活动id
 cron "2 2 29 2 *" jd_wxUnPackingActivity.js
 */
 const $ = new Env('让福袋飞');
-if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
-    global_agent_http_proxy_isopen = true;
-    require("global-agent/bootstrap");
-    global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
-}
+
 
 
 
