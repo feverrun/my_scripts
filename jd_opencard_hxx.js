@@ -1,8 +1,8 @@
 /*
 https://lzdz1-isv.isvjcloud.com/m/61055/dz9f1130630baa40dba5d55231c537/
-cron "2 2 29 2 *" jd_opencard_hx.js
+cron "5 11 19 9 *" jd_opencard_hxx.js
 */
-const $ = new Env('换新')
+const $ = new Env('领潮初秋 品质焕新')
 
 
 
