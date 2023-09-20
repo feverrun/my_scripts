@@ -1,12 +1,12 @@
 /*
-邀请领现金-助力
+京喜邀请领现金-助力
 记得每次运行前，先手动进活动玩一下
 车头账号失效自动退出
 地址：
 https://prodev.m.jd.com/jdlite/active/23CeE8ZXA4uFS9M9mTjtta9T4S5x/index.html
 cron "0 6,14 * * *" jd_yqlxj.js
 */
-const $ = new Env('邀请领现金-助力');
+const $ = new Env('京喜邀请领现金-助力');
 
 
 
