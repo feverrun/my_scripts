@@ -3,7 +3,6 @@
 ## 加入频道
 ### https://t.me/proenvc
 
-## 命令
 助力池版
 ```
 ql repo https://github.com/feverrun/my_scripts.git "jd_|jx_|jddj_|getCookie|getJDCookie" "backUp" "^(jd|JD|JS)[^_]|USER|sendNotify|utils"
