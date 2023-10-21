@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
 
+from curses.ascii import FS
 import sys
 import os, re
 import requests
@@ -20,19 +21,20 @@ sys.path.append(root_path)
 # 通知服务
 BARK = ''                   # bark服务,自行搜索; secrets可填;
 BARK_PUSH=''                # bark自建服务器，要填完整链接，结尾的/不要
-SCKEY = ''                  # Server酱的SCKEY; secrets可填
+PUSH_KEY = ''                  # Server酱的PUSH_KEY; secrets可填
 TG_BOT_TOKEN = ''           # tg机器人的TG_BOT_TOKEN; secrets可填1407203283:AAG9rt-6RDaaX0HBLZQq0laNOh898iFYaRQ
 TG_USER_ID = ''             # tg机器人的TG_USER_ID; secrets可填 1434078534
 TG_API_HOST=''              # tg 代理api
 TG_PROXY_IP = ''            # tg机器人的TG_PROXY_IP; secrets可填
 TG_PROXY_PORT = ''          # tg机器人的TG_PROXY_PORT; secrets可填
-DD_BOT_ACCESS_TOKEN = ''    # 钉钉机器人的DD_BOT_ACCESS_TOKEN; secrets可填
+DD_BOT_TOKEN = ''           # 钉钉机器人的DD_BOT_TOKEN; secrets可填
 DD_BOT_SECRET = ''          # 钉钉机器人的DD_BOT_SECRET; secrets可填
 QQ_SKEY = ''                # qq机器人的QQ_SKEY; secrets可填
 QQ_MODE = ''                # qq机器人的QQ_MODE; secrets可填
 QYWX_AM = ''                # 企业微信
 QYWX_KEY = ''                # 企业微信BOT
 PUSH_PLUS_TOKEN = ''        # 微信推送Plus+
+FS_KEY = ''                 #飞书群BOT
 
 notify_mode = []
 
@@ -43,15 +45,15 @@ if "BARK" in os.environ and os.environ["BARK"]:
     BARK = os.environ["BARK"]
 if "BARK_PUSH" in os.environ and os.environ["BARK_PUSH"]:
     BARK_PUSH = os.environ["BARK_PUSH"]
-if "SCKEY" in os.environ and os.environ["SCKEY"]:
-    SCKEY = os.environ["SCKEY"]
+if "PUSH_KEY" in os.environ and os.environ["PUSH_KEY"]:
+    PUSH_KEY = os.environ["PUSH_KEY"]
 if "TG_BOT_TOKEN" in os.environ and os.environ["TG_BOT_TOKEN"] and "TG_USER_ID" in os.environ and os.environ["TG_USER_ID"]:
     TG_BOT_TOKEN = os.environ["TG_BOT_TOKEN"]
     TG_USER_ID = os.environ["TG_USER_ID"]
 if "TG_API_HOST" in os.environ and os.environ["TG_API_HOST"]:
     TG_API_HOST = os.environ["TG_API_HOST"]
-if "DD_BOT_ACCESS_TOKEN" in os.environ and os.environ["DD_BOT_ACCESS_TOKEN"] and "DD_BOT_SECRET" in os.environ and os.environ["DD_BOT_SECRET"]:
-    DD_BOT_ACCESS_TOKEN = os.environ["DD_BOT_ACCESS_TOKEN"]
+if "DD_BOT_TOKEN" in os.environ and os.environ["DD_BOT_TOKEN"] and "DD_BOT_SECRET" in os.environ and os.environ["DD_BOT_SECRET"]:
+    DD_BOT_TOKEN = os.environ["DD_BOT_TOKEN"]
     DD_BOT_SECRET = os.environ["DD_BOT_SECRET"]
 if "QQ_SKEY" in os.environ and os.environ["QQ_SKEY"] and "QQ_MODE" in os.environ and os.environ["QQ_MODE"]:
     QQ_SKEY = os.environ["QQ_SKEY"]
@@ -72,19 +74,25 @@ if "QYWX_KEY" in os.environ:
         QYWX_KEY = os.environ["QYWX_KEY"]
         # print("已获取并使用Env环境 QYWX_AM")
 
+#接入飞书webhook推送
+if "FS_KEY" in os.environ:
+    if len(os.environ["FS_KEY"]) > 1:
+        FS_KEY = os.environ["FS_KEY"]
+
+
 if BARK:
     notify_mode.append('bark')
     # print("BARK 推送打开")
 if BARK_PUSH:
     notify_mode.append('bark')
     # print("BARK 推送打开")
-if SCKEY:
+if PUSH_KEY:
     notify_mode.append('sc_key')
     # print("Server酱 推送打开")
 if TG_BOT_TOKEN and TG_USER_ID:
     notify_mode.append('telegram_bot')
     # print("Telegram 推送打开")
-if DD_BOT_ACCESS_TOKEN and DD_BOT_SECRET:
+if DD_BOT_TOKEN and DD_BOT_SECRET:
     notify_mode.append('dingding_bot')
     # print("钉钉机器人 推送打开")
 if QQ_SKEY and QQ_MODE:
@@ -102,6 +110,9 @@ if QYWX_KEY:
     notify_mode.append('wecom_key')
     # print("企业微信机器人 推送打开")
 
+if FS_KEY:
+    notify_mode.append('fs_key')
+    # print("飞书机器人 推送打开")
 
 def message(str_msg):
     global message_info
@@ -138,15 +149,15 @@ def bark(title, content):
 
 def serverJ(title, content):
     print("\n")
-    if not SCKEY:
-        print("server酱服务的SCKEY未设置!!\n取消推送")
+    if not PUSH_KEY:
+        print("server酱服务的PUSH_KEY未设置!!\n取消推送")
         return
     print("serverJ服务启动")
     data = {
         "text": title,
         "desp": content.replace("\n", "\n\n")
     }
-    response = requests.post(f"https://sc.ftqq.com/{SCKEY}.send", data=data).json()
+    response = requests.post(f"https://sc.ftqq.com/{PUSH_KEY}.send", data=data).json()
     if response['errno'] == 0:
         print('推送成功！')
     else:
@@ -195,7 +206,7 @@ def dingding_bot(title, content):
     hmac_code = hmac.new(secret_enc, string_to_sign_enc, digestmod=hashlib.sha256).digest()
     sign = urllib.parse.quote_plus(base64.b64encode(hmac_code))  # 签名
     print('开始使用 钉钉机器人 推送消息...', end='')
-    url = f'https://oapi.dingtalk.com/robot/send?access_token={DD_BOT_ACCESS_TOKEN}&timestamp={timestamp}&sign={sign}'
+    url = f'https://oapi.dingtalk.com/robot/send?access_token={DD_BOT_TOKEN}&timestamp={timestamp}&sign={sign}'
     headers = {'Content-Type': 'application/json;charset=utf-8'}
     data = {
         'msgtype': 'text',
@@ -245,8 +256,6 @@ def pushplus_bot(title, content):
         print(e)
 
 
-
-print("xxxxxxxxxxxx")
 def wecom_key(title, content):
     print("\n")
     if not QYWX_KEY:
@@ -264,6 +273,26 @@ def wecom_key(title, content):
 
     print(f"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={QYWX_KEY}")
     response = requests.post(f"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={QYWX_KEY}", json=data,headers=headers).json()
+    print(response)
+
+# 飞书机器人推送
+def fs_key(title, content):
+    print("\n")
+    if not FS_KEY:
+        print("FS_KEY未设置!!\n取消推送")
+        return
+    print("FS_KEY服务启动")
+    print("content"+content)
+    headers = {'Content-Type': 'application/json'}
+    data = {
+        "msg_type":"text",
+        "content":{
+            "text":title+"\n"+content.replace("\n", "\n\n")
+         }
+    }
+
+    print(f"https://open.feishu.cn/open-apis/bot/v2/hook/{FS_KEY}")
+    response = requests.post(f"https://open.feishu.cn/open-apis/bot/v2/hook/{FS_KEY}", json=data,headers=headers).json()
     print(response)
 
 
@@ -356,7 +385,7 @@ class WeCom:
 
 def send(title, content):
     """
-    使用 bark, telegram bot, dingding bot, serverJ 发送手机推送
+    使用 bark, telegram bot, dingding bot, server, feishuJ 发送手机推送
     :param title:
     :param content:
     :return:
@@ -370,13 +399,13 @@ def send(title, content):
                 print('未启用 bark')
             continue
         if i == 'sc_key':
-            if SCKEY:
+            if PUSH_KEY:
                 serverJ(title=title, content=content)
             else:
                 print('未启用 Server酱')
             continue
         elif i == 'dingding_bot':
-            if DD_BOT_ACCESS_TOKEN and DD_BOT_SECRET:
+            if DD_BOT_TOKEN and DD_BOT_SECRET:
                 dingding_bot(title=title, content=content)
             else:
                 print('未启用 钉钉机器人')
@@ -410,10 +439,14 @@ def send(title, content):
 
                 for i in range(int(len(content)/2000)+1):
                     wecom_key(title=title, content=content[i*2000:(i+1)*2000])
-
-
             else:
                 print('未启用企业微信应用消息推送')
+            continue
+        elif i == 'fs_key':
+            if FS_KEY:
+                fs_key(title=title, content=content)
+            else:
+                print('未启用飞书机器人消息推送')
             continue
         else:
             print('此类推送方式不存在')
