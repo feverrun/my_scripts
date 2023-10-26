@@ -9,7 +9,9 @@ export API_PROXY_URL=""
 如果啥代理都没有，可设置下面的延迟默认单位是秒
 export jd_token_waitTime="60"
 export PRO_REDIS_URL="redis://:Redis密码@127.0.0.1:6379/0"    #新增本地缓存,非必须
-cron "40 * * * *" jd_token_global.js
+如果有代理的，定时可以灵活设置或者禁用需要的时候再用
+export PRO_REDIS_URL="redis://:Redis密码@127.0.0.1:6379/0"    #新增本地缓存,非必须
+cron "30,59 * * * *" jd_tokens.js
 */
 const $ = new Env('缓存token')
 
