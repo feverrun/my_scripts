@@ -1,5 +1,5 @@
 /*
-cron "21 1 31 10 *" jd_opencard_hx.js
+cron "5 1 31 10 *" jd_opencard_jh2.js
 */
 const $ = new Env('11.11时尚大牌云集 黑马新品聚惠2')
 
