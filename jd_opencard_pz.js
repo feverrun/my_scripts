@@ -1,6 +1,7 @@
 /*
+https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=0ad5de226321440186d2d3a1bd2b87e6&venderId=1000395688&adSource=SFGRZYQJD
 export jd_card_waitTime="60"                #表示账号之间延迟, 填60表示账号之间延迟60秒
-cron "15 0 30-31,1-11 10,11 *" jd_opencard_pz.js
+cron "15 0 30-31,1-5 10,11 *" jd_opencard_pz.js
 */
 const $ = new Env('品质生活 美力全开')
 let opencard = 1;    //0-不做开卡
