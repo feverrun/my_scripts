@@ -3,7 +3,7 @@ https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=e18ab86ba99046eb8a92
 export jd_card_waitTime="60"                #表示账号之间延迟, 填60表示账号之间延迟60秒
 export jd_lzdz1_openCard="1"                #卡是否开卡 0-不开卡  1-开卡  默认执行开卡
 export jd_lzdz1_drawNum="1"                 #设置为空或者设置为0， 不抽奖
-cron "15 2 1-11 11 *" jd_opencard_c.js
+cron "5 1 1-11 11 *" jd_opencard_c.js
 */
 const $ = new Env('精致专场 与你相惠')
 let opencard = 1;    //0-不做开卡
