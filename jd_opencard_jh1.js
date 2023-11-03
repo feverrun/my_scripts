@@ -2,7 +2,7 @@
 https://lzdz1-isv.isvjcloud.com/m/1000005242/dze96e64174352bf2c96013ebf0d8d/
 export jd_lzdz1_openCard="1"                #卡是否开卡 0-不开卡  1-开卡  默认执行开卡
 export jd_lzdz1_drawNum="0"                 #设置为空或者设置为0， 不抽奖
-cron "15 0 31 10 *" jd_opencard_jh.js
+cron "3 21 3 11 *" jd_opencard_jh1.js
 */
 const $ = new Env('11.11时尚大牌云集 黑马新品聚惠1')
 
