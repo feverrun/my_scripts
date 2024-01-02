@@ -42,6 +42,13 @@ const $ = new Env('清空购物车-nolan版');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
+let global_agent_http_proxy_isopen = false;
+if (process.env.OPENCARD_GLOBAL_AGENT_HTTP_PROXY_URL){
+    global_agent_http_proxy_isopen = true;
+    require("global-agent/bootstrap");
+    global.GLOBAL_AGENT.HTTP_PROXY = process.env.OPENCARD_GLOBAL_AGENT_HTTP_PROXY_URL || '';
+}
+
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
