@@ -8,7 +8,7 @@ export jd_yqzhb_num=""                  #助力成功的次数, 比如200
 api代理 > 全局代理
 export JD_YQ_GLOBAL_AGENT_HTTP_PROXY_URL=""     #全局代理
 export JD_YQ_API_PROXY_URL=""                   #api代理
-cron "0 5,15 * * *" jd_yqzhb_help.js
+cron "1 0,15 * * *" jd_zzhb_help.js
 */
 const $ = new Env('京东转赚红包-助力');
 
