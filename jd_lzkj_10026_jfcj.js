@@ -1,5 +1,5 @@
 /*
-https://lzkj-isv.isvjcloud.com/prod/cc/interactsaas/index?activityType=10021
+https://lzkj-isv.isvjcloud.com/prod/cc/interactsaas/index?activityType=10026
 lzkj_10026积分抽奖
 export jd_lzkj_10026_jfcj_Ids="活动id1&活动id2&活动id3..."            #必须
 export jd_lzkj_10026_jfcj_num="15"                                  #不填则默认最多跑15个号
