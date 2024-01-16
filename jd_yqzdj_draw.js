@@ -1,8 +1,8 @@
 /*
-邀好友得红包-抽奖
+炸年兽红包-抽奖
 cron "2 2 29 2 *" jd_yqzdj_draw.js
 */
-const $ = new Env('邀好友得红包-抽奖提现');
+const $ = new Env('炸年兽红包-抽奖提现');
 
 
 
