@@ -2,7 +2,7 @@
 集龙运抽好礼 每天一次即可
 地址：https://pro.m.jd.com/mall/active/3GWgWt9FDVPxeYYEbiiZfP9cJfVr/index.html
 https://t.me/proenv
-cron "11 1 24-30 1 *" jd_superLeague.js
+cron "11 1 24-30 1 *" jd_jlychl.js
 */
 const $ = new Env('集龙运抽好礼');
 
