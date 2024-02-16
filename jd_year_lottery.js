@@ -2,7 +2,7 @@
 新春红包
 地址：https://pro.m.jd.com/mall/active/4TeSpXMCG6Kwy63rTeRDUp6wfL4n/index.html
 https://t.me/proenv
-cron "4 0,9 4-28 2 *" jd_year_lottery1.js
+cron "3 0,9,19 4-28 2 *" jd_year_lottery.js
 */
 const $ = new Env('新春红包-抽奖');
 
