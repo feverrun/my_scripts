@@ -2,7 +2,7 @@
 https://lzkj-isv.isvjcloud.com/prod/cc/interaction/v2/10023/1001/?activityId=xxx&shopId=xxx  #日历签到
 https://lzkj-isv.isvjcloud.com/prod/cc/interaction/v2/10001/1002/?activityId=xxx&shopId=xxx  #累计签到
 支持以上几种链接形式
-export jd_lzkj_v2_sign_urls="活动url1@活动url2@活动url3..."        #必须，多个链接@隔开;或者换行隔开
+export jd_lzkj_v2_sign_urls="活动url1@活动url2@活动url3..."        #必须，多个链接@隔开, 或者换行隔开
 export jd_lzkj_v2_sign_num="15"                                  #不填则默认最多跑15个号
 export jd_lzkj_v2_openCard="0"                                   #不设置默认会自动入会， 设置为0则不入会
 cron "2 2 29 2 *" jd_lzkj_v2_sign.js
