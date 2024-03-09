@@ -7,7 +7,7 @@ https://lzkj-isv.isvjcloud.com/prod/cc/interaction/v2/30003/1003/?activityId=xxx
 export jd_lzkj_v2_draw_urls="活动url1@活动url2@活动url3..."        #必须@或者换行隔开
 export jd_lzkj_v2_draw_num="15"                                  #不填则默认最多跑15个号
 export jd_lzkj_v2_openCard="0"                                   #不设置默认会自动入会， 设置为0则不入会
-cron "2 2 29 2 *" jd_lzkj_10023_v2_rlqd.js
+cron "2 2 29 2 *" jd_lzkj_v2_draw.js
 */
 const $ = new Env('lzkj v2 抽奖')
 
