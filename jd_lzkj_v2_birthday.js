@@ -3,7 +3,7 @@ https://lzkj-isv.isvjcloud.com/prod/cc/interaction/v2/20002/1001/?shopId=xxx&act
 export jd_lzkj_v2_birthday_urls="活动url1@活动url2@活动url3..."        #必须，多个链接@隔开, 或者换行隔开
 export jd_lzkj_v2_birthday_num="15"                                  #不填则默认最多跑15个号
 export jd_lzkj_v2_openCard="0"                                       #不设置默认会自动入会， 设置为0则不入会
-cron "2 2 29 2 *" jd_lzkj_v2_sign.js
+cron "2 2 29 2 *" jd_lzkj_v2_birthday.js
 */
 const $ = new Env('lzkj v2 生日礼包')
 
