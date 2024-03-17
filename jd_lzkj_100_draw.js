@@ -5,7 +5,7 @@ https://lzkj-isv.isvjcloud.com/prod/cc/interactsaas/index?activityType=xxx&activ
 10042刮刮乐       10046老虎机    10054上上签     10062砸金蛋       10063翻翻乐
 10073转盘积分     10080刮刮乐积分
 
-export jd_lzkj_100_draw_urls="活动id1&活动id2&活动id3..."           #活动链接，多个活动链接@隔开, 或者换行隔开
+export jd_lzkj_100_draw_urls="活动id1@活动id2@活动id3..."           #活动链接，多个活动链接@隔开, 或者换行隔开
 export jd_lzkj_100_draw_num="15"                                  #不填则默认最多跑15个号
 export jd_lzkj_100_draw_openCard="0"                              #不设置默认会自动入会， 设置为0则不入会
 cron "2 2 29 2 *" jd_lzkj_100_draw.js
