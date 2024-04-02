@@ -1,8 +1,9 @@
 /*
 #踏青焕新  大牌集聚
+https://lzdz1-isv.isvjcloud.com/m/unite/dzlh0001?activityId=274d67417c884f9cb50ef8d572fde7f8&venderId=1000001933&adSource=WYYXJDZYQJD
 export jd_lzdz1_openCard="0"                #卡是否开卡 0-不开卡  1-开卡  默认执行开卡
 export jd_card_waitTime="60"                #表示账号之间延迟, 填60表示账号之间延迟60秒
-cron "5 1 1-7 4 *" jd_opencard_tq.js
+cron "5 0 1-7 4 *" jd_opencard_tq.js
 */
 const $ = new Env('踏青焕新 大牌集聚 4.1-4.7')
 
