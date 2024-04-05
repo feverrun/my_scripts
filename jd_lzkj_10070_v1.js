@@ -1,5 +1,5 @@
 /*
-https://lzkj-isv.isvjcloud.com/prod/cc/interaction/v1/api/index?activityType=10070&templateId=xxx&activityId=xxx&nodeId=101001&prd=cjwx
+https://lzkj-isv.isvjcloud.com/prod/cc/interaction/v1/index?activityType=10070&templateId=xxx&activityId=xxx&nodeId=101001&prd=cjwx
 邀好友入会
 export jd_lzkj_10070_v1_ids="活动id"            #必须
 cron "2 2 29 2 *" jd_lzkj_10070_v1.js
