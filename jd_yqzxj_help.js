@@ -1,11 +1,11 @@
 /*
 京喜特价邀好友抽现金-助力
-车头账号失效自动退出
+车头账号失效自动退出 #0 6,14 * * *
 地址:
 https://pro.m.jd.com/mall/active/23CeE8ZXA4uFS9M9mTjtta9T4S5x/index.html
 export jd_yqzxj_code=""                 #帮助的助力码，所有账号将会助力这个码
 export jd_yqzxj_num=""                  #助力成功的次数, 比如200
-cron "0 6,14 * * *" jd_yqzxj_help.js
+cron "2 2 29 2 *" jd_yqzxj_help.js
 */
 const $ = new Env('京喜特价邀好友抽现金-助力');
 

@@ -2,7 +2,7 @@
 京东转赚红包-抽奖
 export jd_yqzhb_page="1"            #不设置, 默认列出1项提现页
 export jd_yqzhb_txwait="60"         #提现延迟， 不写默认30， 单位秒
-cron "0 0,10 * * *" jd_zzhb_draw.js
+cron "0 0,10 * * *" jd_yqzhb_draw.js
 */
 const $ = new Env('京东转赚红包-抽奖提现');
 
