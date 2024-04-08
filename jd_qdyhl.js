@@ -1,6 +1,6 @@
 /*
 每天一次即可
-cron "25 4 8-14 * *" jd_qdyhl.js
+cron "25 4 8-14 4 *" jd_qdyhl.js
 */
 const $ = new Env('签到赢好礼 周一10倍奖励 4.8-4.14')
 
