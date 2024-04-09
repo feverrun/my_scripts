@@ -2,7 +2,7 @@
 #踏青拾趣 礼遇春日
 export jd_lzdz1_openCard="0"                #卡是否开卡 0-不开卡  1-开卡  默认执行开卡
 export jd_card_waitTime="60"                #表示账号之间延迟, 填60表示账号之间延迟60秒
-cron "5 0,11 9-15 4 *" jd_opencard_jbk.js
+cron "5 0 9-15 4 *" jd_opencard_jbk.js
 */
 const $ = new Env('踏青拾趣 礼遇春日')
 
