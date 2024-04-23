@@ -1,7 +1,7 @@
 /*
 摇钱树
 4.1-12.1
-cron "15 5,15 * * *" jd_yqs.js
+cron "15 5,15 * * *" jd_richTree.js
 */
 const $ = new Env('特价版-摇钱树')
 
