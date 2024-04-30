@@ -2,7 +2,7 @@
 export jd_card_waitTime="60"                #表示账号之间延迟, 填60表示账号之间延迟60秒
 export jd_lzdz1_openCard="1"                #卡是否开卡 0-不开卡  1-开卡  默认执行开卡
 export jd_lzdz1_drawNum="1"                 #设置为空或者设置为0， 不抽奖
-cron "5 0 28-30,1-4 4,5 *" jd_opencard_wy.js
+cron "5 0 28-30,1-4 4,5 *" jd_opencard_wyy.js
 */
 const $ = new Env('4.28-5.4 五一放大假 大牌狂欢')
 
