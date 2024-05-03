@@ -1,6 +1,6 @@
 /*
 店铺签到
-export dpqd_token="token1&token2&token3..."    #多个token&隔开
+export dpqd_token="token1&token2&token3..."    #多个token&隔开,或换行隔开
 cron "2 2 29 2 *"jd_dpqd.js
 */
 const $ = new Env('店铺签到');
