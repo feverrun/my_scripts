@@ -1,6 +1,6 @@
 /*
 #赚吃货币
-cron "16 7 8-9 5 *" jd_foodie.js
+cron "16 7 8-31 5 *" jd_foodies.js
 */
 const $ = new Env('赚吃货币 5.8-5.31')
 let isDraw = false      //是否抽奖默认为false， 如需抽奖可自行改成true
