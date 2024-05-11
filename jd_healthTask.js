@@ -1,7 +1,7 @@
 /*
 京东健康任务
 随机定时， 每天一次即可
-cron "19 1 * * *" jd_healthTask.js
+cron "28 0 * * *" jd_healthTask.js
 */
 const $ = new Env('京东健康任务')
 
