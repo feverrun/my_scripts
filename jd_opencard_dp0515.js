@@ -4,7 +4,7 @@ export DPLHTY_ADDCART="1"           #是否做一键加购任务, 1做，0不做
 export DPLHTY_COLLECTSHOP="1"       #是否做一键关注任务, 1做，0不做，默认为1
 export DPLHTY_VIEWSHOP="1"          #是否做浏览任务, 1做，0不做， 默认为1
 export DPLHTY_CODE=""               #全部助力给这个邀请码
-cron "6 10 15 5 *" jd_opencard_dp0515.js
+cron "2 2 29 2 *" jd_opencard_dp0515.js
 */
 const $ = new Env('大牌0515 5.15-5.21');
 
