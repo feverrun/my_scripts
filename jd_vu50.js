@@ -1,6 +1,6 @@
 /*
 v你50元超市卡
-cron "8 8 * * 4" jd_csk.js
+cron "15 8 15-18,1-18 5,6 *" jd_vu50.js
 */
 const $ = new Env('v你50元超市卡');
 
