@@ -7,7 +7,7 @@ export jd_lzkj_100_jgyl_num="100";                    #不填则默认最多跑1
 export jd_lzkj_100_jgyl_openCard="0"                  #不设置默认会自动入会， 设置为0则不入会
 cron "2 2 29 2 *" jd_lzkj_100_jgyl.js
 */
-const $ = new Env('lzkj_10024加购有礼')
+const $ = new Env('lzkj 100 加购有礼')
 
 
 
