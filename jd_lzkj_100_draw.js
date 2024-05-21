@@ -8,7 +8,7 @@ https://lzkj-isv.isvjcloud.com/prod/cc/interaction/v1/index?activityType=xxx&act
 10073转盘积分     10080刮刮乐积分
 
 export jd_lzkj_100_draw_urls="链接1@链接2@链接3..."                 #活动链接，多个活动链接@隔开, 或者换行隔开
-export jd_lzkj_100_draw_num="15"                                  #不填则默认最多跑15个号
+export jd_lzkj_100_draw_num="100"                                 #不填则默认最多跑100个号
 export jd_lzkj_100_draw_openCard="0"                              #不设置默认会自动入会， 设置为0则不入会
 cron "2 2 29 2 *" jd_lzkj_100_draw.js
 */
