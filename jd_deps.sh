@@ -35,7 +35,7 @@ pnpm install -g cheerio
 pnpm install -g dotenv
 pnpm install -g got@11.8.6
 pnpm install -g tough-cookie
-pnpm install -g https-proxy-agent@7.0.2
+pnpm install -g https-proxy-agent@7.0.4
 pnpm install -g console-table-printer@2.12.0
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple/ jieba
 pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple/ requests
