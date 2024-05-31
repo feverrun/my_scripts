@@ -1,6 +1,5 @@
 /**
- * 删除优惠券
- * 一次只删除20个券， 随机定时
+ cron "2 2 29 2 *" jd_delCoupon.js
  */
 const $ = new Env('删除优惠券');
 
