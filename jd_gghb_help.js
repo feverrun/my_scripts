@@ -1,10 +1,9 @@
 /*
 618刮刮红包-助力
-618刮刮红包
 地址：https://pro.m.jd.com/mall/active/3uT8xr7BvwiWmif5m2h9j1zeKgBG/index.html
 export jd_party_code=""                 #帮助的助力码，所有账号将会助力这个码
 export jd_party_num=""                  #助力成功的次数, 比如120
-cron "0 1,6,14,18 28-31,1-20 5,6 *" jd_gghb_help.js
+cron "2 2 29 2 *" jd_gghb_help.js
 */
 const $ = new Env('618刮刮红包-助力');
 
