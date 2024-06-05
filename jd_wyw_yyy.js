@@ -1,7 +1,7 @@
 /*
-cron "30 19 30 5 *" jd_wyw_red.js
+cron "30 19 * * *" jd_wyw_yyy.js
 */
-const $ = new Env('玩一玩-红包');
+const $ = new Env('玩一玩-摇一摇');
 
 
 
