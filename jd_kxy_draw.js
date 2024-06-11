@@ -1,9 +1,7 @@
 /*
 618开心夜-抽奖
 https://pro.m.jd.com/mall/active/45gd9ajkPoJcJw25PW3jBngaZnW4/index.html
-export jd_yqzhb_page="1"            #不设置, 默认列出1项提现页
-export jd_yqzhb_txwait="60"         #提现延迟， 不写默认30， 单位秒
-cron "0 0,14 20-21 5 *" jd_yqzhb3_draw.js
+cron "0 0,14 20-21 5 *" jd_kxy_draw.js
 */
 const $ = new Env('618开心夜-抽奖提现');
 
