@@ -1,7 +1,7 @@
 /*
 #开卡+任务
 export jd_joyopen_dailyTask="0"          #是否做关注浏览店铺和加购等日常任务，默认为0不做
-cron "11 4 16 6 *" jd_opencard_sh.js
+cron "11 4 17 6 *" jd_opencard_sh.js
 */
 const $ = new Env('生活拥抱新的 5.24-6.19');
 
