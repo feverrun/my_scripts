@@ -9,7 +9,7 @@ export jd_kxy_num=""                  #助力成功的次数, 比如200
 export JD_YQ_GLOBAL_AGENT_HTTP_PROXY_URL=""
 如果有api代理配置如下，api代理配置优先级高于全局代理配置
 export JD_YQ_API_PROXY_URL=""
-cron "1 0,13 * * *" jd_kxy_help.js
+cron "1 0,11 11-20 6 *" jd_kxy_help.js
 */
 const $ = new Env('618开心夜-助力');
 
