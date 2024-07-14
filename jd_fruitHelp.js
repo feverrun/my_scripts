@@ -2,7 +2,7 @@
 更新by:环境 23.08.24
 频道: https://t.me/proenvc
 东东农场内部互助
-cron "5 5,9,16 * * *" jd_fruitHelp.js
+cron "15 14 * * *" jd_fruitHelp.js
 export jd_fruitHelp_ownCodes="code1&code2&code3"    #优先助力指定的助力码，&隔开
 export jd_fruitHelp_shuffle="1"                     #打乱账号的排序，防止有的账号一个助力没有
 */

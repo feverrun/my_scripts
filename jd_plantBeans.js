@@ -9,7 +9,7 @@ https://t.me/proenvc
 互助码shareCode请先手动运行脚本查看打印可看到
 每个京东账号每天只能帮助3个人。多出的助力码将会助力失败。
 
-cron "1 6,13,18 * * *" script-path=jd_plantBeans.js,tag=京东种豆得豆
+cron "12 12 * * *" script-path=jd_plantBeans.js,tag=京东种豆得豆
 */
 let global_agent_http_proxy_isopen = false;
 if (process.env.GLOBAL_AGENT_HTTP_PROXY_OPEN == "true"){

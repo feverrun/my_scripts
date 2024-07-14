@@ -3,7 +3,7 @@
 更新by:环境 23.08.24
 频道: https://t.me/proenvc
 东东农场-删减好友
-cron "10 3,15,18 * * *" jd_fruitFriend.js
+cron "13 13 * * *" jd_fruitFriend.js
 */
 let global_agent_http_proxy_isopen = false;
 if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
