@@ -13,7 +13,7 @@ if (process.env.GLOBAL_AGENT_HTTP_PROXY_URL){
     global.GLOBAL_AGENT.HTTP_PROXY = process.env.GLOBAL_AGENT_HTTP_PROXY_URL || '';
 }
 
-const $ = new Env('东东农场-助力');
+const $ = new Env('东东农场-内部助力');
 /**
  * let ownCodes = [
  * "code1", "code2", "code3","..."
