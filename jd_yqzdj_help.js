@@ -11,7 +11,7 @@ export JD_YQ_GLOBAL_AGENT_HTTP_PROXY_URL=""
 export JD_YQ_API_PROXY_URL=""
 cron "0 0,10,13 26-31,1-13 7,8 *" jd_yqzdj_help.js
 */
-const $ = new Env('夺金刮刮乐-助力 5.16-5.19');
+const $ = new Env('夺金刮刮乐-助力 7.26-8.13');
 
 
 
