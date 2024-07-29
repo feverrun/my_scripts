@@ -11,7 +11,7 @@ export fcwb_helpnum="117"                            #自己设置多少个助�
 跑之前最好先去手动挖宝，先开两个格子,看看是不是券，如果是券基本就是暂时黑了
 cron "2 2 29 2 *" jd_fcwb_help2.js
  */
-const $ = new Env('发财挖宝-助力2');
+const $ = new Env('发财挖宝-助力');
 
 
 
