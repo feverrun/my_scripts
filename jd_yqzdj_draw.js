@@ -3,7 +3,7 @@
 https://pro.m.jd.com/mall/active/3pdfN7oPzb6if7pB8N8dMr4dV2ys/index.html
 export jd_yqzdj_page="1"                #不设置, 默认列出1项提现页
 export jd_yqzdj_dotask="1"                #是否做任务,1做 0不做，默认为1
-cron "3 12,17 26-31,1-13 7,8 *" jd_yqzdj_draw.js
+cron "2 2 29 2 *" jd_yqzdj_draw.js
 */
 const $ = new Env('夺金刮刮乐-抽奖提现 7.26-8.13');
 

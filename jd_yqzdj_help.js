@@ -10,7 +10,7 @@ export jd_yqzdj_waitTime=""             #每个助力间隔多少秒,非必须�
 export JD_YQ_GLOBAL_AGENT_HTTP_PROXY_URL=""
 如果有api代理配置如下，api代理配置优先级高于全局代理配置
 export JD_YQ_API_PROXY_URL=""
-cron "0 0,10,13 26-31,1-13 7,8 *" jd_yqzdj_help.js
+cron "2 2 29 2 *" jd_yqzdj_help.js
 */
 const $ = new Env('夺金刮刮乐-助力 7.26-8.13');
 
