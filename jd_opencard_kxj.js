@@ -1,6 +1,6 @@
 /*
 #京东母婴开学季
-cron "16 22 24 8 *" jd_kxj.js
+cron "16 22 24 8 *" jd_opencard_kxj.js
 */
 const $ = new Env('京东母婴开学季 8.20-9.15')
 
