@@ -1,7 +1,7 @@
 /*
 https://lzkj-isv.isvjcloud.com/prod/cc/interactsaas/index?activityType=10058
 lzkj_10058店铺礼包
-export jd_lzkj_10058_dplb_urls="活动id@活动2@活动3"             #多个链接@或者换行隔开必须
+export jd_lzkj_10058_dplb_urls="活动链接@活动2@活动3"             #多个链接@或者换行隔开必须
 export jd_lzkj_10058_dplb_num="100";                            #不填则默认最多跑100个号
 cron "2 2 29 2 *" jd_lzkj_10058_dplb.js
 */
