@@ -1,9 +1,9 @@
 /*
 export jd_wyw_openturn="1"          #1为开启翻倍，0为不开启翻倍， 默认为1
 export jd_wyw_turnNum="30"          #投入的奖票数量, 1-100之间， 不填默认投入30
-export jd_wyw_turn="3"              #翻倍几次， 不写默认为2
+export jd_wyw_turn="1"              #翻倍几次， 不写默认为2
 export jd_wyw_white_pin="pin1@pin2" #白pin, 多个@隔开，未设置跑全部，设置了则跑设置的一些pin
-cron "35 0,4,7,9,13,16,18,21 * 5-8 *" jd_wyw_ffl.js
+cron "36 0,4,7,9,13,16,18,21 * 5-12 *" jd_wyw_ff.js
 */
 const $ = new Env('玩一玩-翻翻乐');
 
