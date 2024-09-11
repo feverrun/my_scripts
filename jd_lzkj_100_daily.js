@@ -2,7 +2,7 @@
 https://lzkj-isv.isvjcloud.com/prod/cc/interactsaas/index?activityType=<活动类型>&activityId=<活动id>&templateId=<活动模版>&nodeId=xxx&prd=cjwx&adsource=tg_storePage
 https://lzkj-isv.isvjcloud.com/prod/cc/interaction/v1/index?activityType=<活动类型>&activityId=<活动id>&templateId=<活动模版>&nodeId=101001&prd=crm
 支持的活动类型: 10022
-export jd_lzkj_100_daily_urls="活动id"                #必须
+export jd_lzkj_100_daily_urls="活动链接"              #活动链接必须
 export jd_lzkj_100_daily_num="100";                  #不填则默认最多跑100个号
 export jd_lzkj_100_daily_openCard="0"                #不设置默认会自动入会， 设置为0则不入会
 cron "2 2 29 2 *" jd_lzkj_100_daily.js
