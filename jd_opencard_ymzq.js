@@ -1,7 +1,7 @@
 /*
 export jd_lzdz1_openCard="0"                #卡是否开卡 0-不开卡  1-开卡  默认执行开卡
 export jd_card_waitTime="60"                #表示账号之间延迟, 填60表示账号之间延迟60秒
-cron "2 2 29 2 *" jd_opencard_ym.js
+cron "6 11 12 9 *" jd_opencard_ymzq.js
 */
 const $ = new Env('9.9-9.16 月满中秋 大牌相惠')
 
