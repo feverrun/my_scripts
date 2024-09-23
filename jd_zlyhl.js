@@ -9,7 +9,7 @@ export JD_YQ_GLOBAL_AGENT_HTTP_PROXY_URL=""
 export JD_YQ_API_PROXY_URL=""
 cron "2 2 29 2 *" jd_zlyhl.js
 */
-const $ = new Env('助力赢好礼-300豆');
+const $ = new Env('助力赢好礼 瓜分一亿京豆-300豆');
 
 
 
