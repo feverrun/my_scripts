@@ -1,6 +1,6 @@
 /*
 #轻松育儿集礼卡
-cron "16 7 12-31  *" jd_mybbp2.js
+cron "2 2 29 2 *" jd_mybbp.js
 */
 const $ = new Env('给敏感肌宝宝更多爱 10.5-11.30')
 let isDraw = false      //是否抽奖默认为false， 如需抽奖可自行改成true

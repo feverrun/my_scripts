@@ -3,7 +3,7 @@
 提示:
 每日每个号仅可接受一张卡
 export jd_mybbp_cardUuid=''         #另一个任务本有打印的
-cron "2 2 29 2 *" jd_mybbp_sk2.js
+cron "2 2 29 2 *" jd_mybbp_sk.js
 */
 const $ = new Env('给敏感肌宝宝更多爱-收卡 10.5-11.30')
 
