@@ -10,7 +10,7 @@ export jd_xdly_waitTime=""             #每个助力间隔多少秒,非必须默
 export JD_YQ_GLOBAL_AGENT_HTTP_PROXY_URL=""
 如果有api代理配置如下，api代理配置优先级高于全局代理配置
 export JD_YQ_API_PROXY_URL=""
-cron "0 0,10 16-31,1-13 10,11 *" jd_xdly_help.js
+cron "30 13 16-31,1-13 10,11 *" jd_xdly_help.js
 */
 const $ = new Env('东东心动乐园-助力');
 
