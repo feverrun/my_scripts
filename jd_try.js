@@ -1,30 +1,22 @@
 /**
- *
- ============依赖=================
- adler-32
- axios
- crc
- crypto-js
- http-cookie-agent
- jsdom
- qs
- tough-cookie
- ============依赖=================
- *
- 京东试用， 只是一个DEMO
- cron "2 2 29 2 *" jd_try.js
+ * 京东试用， 只是一个DEMO
+ * cron "2 2 29 2 *" jd_try.js
  */
-const $ = new Env("京东试用");
-
+const fs = require('fs').promises;
+const path = require('path');
 const qs = require('qs');
-const axios = require("axios");
-const {SmashUtils} = require("./utils/smashUtils");
-const {setBaseCookie} = require("./utils/baseCookie");
+const axios = require('axios');
+const { SmashUtils } = require('./utils/smashUtils');
+const { setBaseCookie } = require('./utils/baseCookie');
+// const { getJsToken } = require('./utils/jsToken.js');
 
-const URL = "https://api.m.jd.com/client.action";
+const cacheFilePath = path.join(__dirname, 'tokenCache.json');
+
+const $ = new Env('京东试用');
+const URL = 'https://api.m.jd.com/client.action';
 let trialActivityIdList = [];
 let trialActivityTitleList = [];
-let notifyMsg = "";
+let notifyMsg = '';
 let size = 1;
 $.isPush = true;
 $.isLimit = false;
@@ -38,7 +30,57 @@ $.try = true;
 $.sentNum = 0;
 $.cookiesArr = [];
 //默认的过滤关键词
-$.innerKeyWords = ["幼儿园", "教程", "英语", "辅导", "培训", "孩子", "小学", "成人用品", "套套", "情趣", "自慰", "阳具", "飞机杯", "男士用品", "女士用品", "内衣", "高潮", "避孕", "乳腺", "肛塞", "肛门", "宝宝", "芭比", "娃娃", "男用", "女用", "神油", "足力健", "老年", "老人", "宠物", "饲料", "丝袜", "黑丝", "磨脚", "脚皮", "除臭", "性感", "内裤", "跳蛋", "安全套", "龟头", "阴道", "阴部", "手机卡", "电话卡", "流量卡", "习题", "试卷",];
+$.innerKeyWords = [
+ '幼儿园',
+ '教程',
+ '英语',
+ '辅导',
+ '培训',
+ '孩子',
+ '小学',
+ '成人用品',
+ '套套',
+ '情趣',
+ '自慰',
+ '阳具',
+ '飞机杯',
+ '男士用品',
+ '女士用品',
+ '内衣',
+ '高潮',
+ '避孕',
+ '乳腺',
+ '肛塞',
+ '肛门',
+ '宝宝',
+ '芭比',
+ '娃娃',
+ '男用',
+ '女用',
+ '神油',
+ '足力健',
+ '老年',
+ '老人',
+ '宠物',
+ '饲料',
+ '丝袜',
+ '黑丝',
+ '磨脚',
+ '脚皮',
+ '除臭',
+ '性感',
+ '内裤',
+ '跳蛋',
+ '安全套',
+ '龟头',
+ '阴道',
+ '阴部',
+ '手机卡',
+ '电话卡',
+ '流量卡',
+ '习题',
+ '试卷',
+];
 //下面很重要，遇到问题请把下面注释看一遍再来问
 let args_xh = {
  h5st_server: process.env.H5ST_SERVER || 'https://jd1.zhx47.xyz',
@@ -50,14 +92,14 @@ let args_xh = {
   * 控制是否输出当前环境变量设置，默认为false
   * 环境变量名称：XH_TRY_ENV
   */
- env: process.env.XH_TRY_ENV === "true" || false,
+ env: process.env.XH_TRY_ENV === 'true' || false,
  /*
   * 跳过某个指定账号，默认为全部账号清空
   * 填写规则：例如当前Cookie1为pt_key=key; pt_pin=pin1;则环境变量填写pin1即可，此时pin1的购物车将不会被清空
   * 若有更多，则按照pin1@pin2@pin3进行填写
   * 环境变量名称：XH_TRY_EXCEPT
   */
- except: (process.env.XH_TRY_EXCEPT && process.env.XH_TRY_EXCEPT.split("@")) || [],
+ except: (process.env.XH_TRY_EXCEPT && process.env.XH_TRY_EXCEPT.split('@')) || [],
  /*
   * 由于每个账号每次获取的试用产品都不一样，所以为了保证每个账号都能试用到不同的商品，之前的脚本都不支持采用统一试用组的
   * 以下环境变量是用于指定是否采用统一试用组的
@@ -68,7 +110,7 @@ let args_xh = {
   * 提示：想每个账号独立不同的试用产品的，请设置为false，想减少脚本运行时间的，请设置为true
   * 默认为false
   */
- unified: process.env.JD_TRY_UNIFIED === "true" || false,
+ unified: process.env.JD_TRY_UNIFIED === 'true' || false,
  /*
   * 商品原价，低于这个价格都不会试用，意思是
   * A商品原价49元，试用价1元，如果下面设置为50，那么A商品不会被加入到待提交的试用组
@@ -82,7 +124,7 @@ let args_xh = {
   * 可设置环境变量：JD_TRY_TABID，用@进行分隔
   * tabId不定期会变,获取不到商品，自行获取并修改tabId
   * */
- tabId: (process.env.JD_TRY_TABID && process.env.JD_TRY_TABID.split("@").map(Number)) || [212, 221, 222, 223, 229, 225, 224, 226, 234, 227, 228],
+ tabId: (process.env.JD_TRY_TABID && process.env.JD_TRY_TABID.split('@').map(Number)) || [212, 221, 222, 223, 229, 225, 224, 226, 234, 227, 228],
  /*
   * 试用商品标题过滤，黑名单，当标题存在关键词时，则不加入试用组
   * 当白名单和黑名单共存时，黑名单会自动失效，优先匹配白名单，匹配完白名单后不会再匹配黑名单，望周知
@@ -91,7 +133,7 @@ let args_xh = {
   * 已内置对应的 成人类 幼儿类 宠物 老年人类关键词，请勿重复添加
   * 可设置环境变量：JD_TRY_TITLEFILTERS，关键词与关键词之间用@分隔
   * */
- titleFilters: (process.env.JD_TRY_TITLEFILTERS && process.env.JD_TRY_TITLEFILTERS.split("@")) || [],
+ titleFilters: (process.env.JD_TRY_TITLEFILTERS && process.env.JD_TRY_TITLEFILTERS.split('@')) || [],
  /*
   * 试用价格(中了要花多少钱)，高于这个价格都不会试用，小于等于才会试用，意思就是
   * A商品原价49元，现在试用价1元，如果下面设置为10，那A商品将会被添加到待提交试用组，因为1 < 10
@@ -125,7 +167,7 @@ let args_xh = {
   * 例如B商品是种草官专属试用商品，下面设置为true，即使你是种草官账号，A商品也不会被添加到待提交试用组
   * 可设置环境变量：JD_TRY_PASSZC，默认为true
   * */
- passZhongCao: process.env.JD_TRY_PASSZC !== "false",
+ passZhongCao: process.env.JD_TRY_PASSZC !== 'false',
  /*
   * 是否打印输出到日志，考虑到如果试用组长度过大，例如100以上，如果每个商品检测都打印一遍，日志长度会非常长
   * 打印的优点：清晰知道每个商品为什么会被过滤，哪个商品被添加到了待提交试用组
@@ -135,20 +177,20 @@ let args_xh = {
   * 不打印的缺点：无法清晰知道每个商品为什么会被过滤，哪个商品被添加到了待提交试用组
   * 可设置环境变量：JD_TRY_PLOG，默认为true
   * */
- printLog: process.env.JD_TRY_PLOG !== "false",
+ printLog: process.env.JD_TRY_PLOG !== 'false',
  /*
   * 白名单，是否打开，如果下面为true，那么黑名单会自动失效
   * 白名单和黑名单无法共存，白名单永远优先于黑名单
   * 可通过环境变量控制：JD_TRY_WHITELIST，默认为false
   * */
- whiteList: process.env.JD_TRY_WHITELIST === "true" || false,
+ whiteList: process.env.JD_TRY_WHITELIST === 'true' || false,
  /*
   * 白名单关键词，当标题存在关键词时，加入到试用组
   * 例如A商品的名字为『旺仔牛奶48瓶特价』，白名单其中一个关键词是『牛奶』，那么A将会直接被添加到待提交试用组，不再进行另外判断
   * 就算设置了黑名单也不会判断，希望这种写得那么清楚的脑瘫问题就别提issues了
   * 可通过环境变量控制：JD_TRY_WHITELIST，用@分隔
   * */
- whiteListKeywords: (process.env.JD_TRY_WHITELISTKEYWORDS && process.env.JD_TRY_WHITELISTKEYWORDS.split("@")) || [],
+ whiteListKeywords: (process.env.JD_TRY_WHITELISTKEYWORDS && process.env.JD_TRY_WHITELISTKEYWORDS.split('@')) || [],
  /*
   * 每多少个账号发送一次通知，默认为4
   * 可通过环境变量控制 JD_TRY_SENDNUM
@@ -161,9 +203,10 @@ let args_xh = {
  $.log("\n遇到问题请先看脚本内注释");
  await requireConfig();
  if (!$.cookiesArr[0]) {
-  console.log($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/");
+  console.log($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/');
   return;
  }
+ $.cache = await readCache();
  args_xh.tabId = args_xh.tabId.sort(() => 0.5 - Math.random());
  for (let i = 0; i < args_xh.try_num; i++) {
   if ($.cookiesArr[i]) {
@@ -171,12 +214,13 @@ let args_xh = {
    $.UserName = decodeURIComponent($.cookie.match(/pt_pin=(.+?);/) && $.cookie.match(/pt_pin=(.+?);/)[1]);
    $.index = i + 1;
    $.isLogin = true;
-   $.userAgent = process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : require("./USER_AGENTS").USER_AGENT;
+   $.userAgent = process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : require('./USER_AGENTS').USER_AGENT;
 
    console.log(`\n开始【京东账号${$.index}】${$.UserName}\n`);
    await try_rafflecount();
    $.except = false;
    if (args_xh.except.includes($.UserName)) {
+    // await try_MyTrials(1, 2); //申请成功的商品
     console.log(`跳过账号：${$.UserName}`);
     $.except = true;
     continue;
@@ -188,6 +232,7 @@ let args_xh = {
    }
 
    await initSmashUtils();
+   await initJsToken();
 
    $.totalTry = 0;
    $.totalSuccess = 0;
@@ -221,18 +266,18 @@ let args_xh = {
     await $.wait(5000);
     for (let i = 0; i < trialActivityIdList.length && $.isLimit === false; i++) {
      if ($.isLimit) {
-      console.log("试用上限");
+      console.log('试用上限');
       break;
      }
      if ($.isForbidden) {
-      console.log("403了，跳出");
+      console.log('403了，跳出');
       break;
      }
      await try_apply(trialActivityTitleList[i], trialActivityIdList[i]);
      console.log(`间隔等待中，请等待15秒 \n`);
      await $.wait(15000);
     }
-    console.log("试用申请执行完毕...");
+    console.log('试用申请执行完毕...');
     $.giveupNum = 0;
     $.successNum = 0;
     $.getNum = 0;
@@ -242,18 +287,18 @@ let args_xh = {
    }
   }
   if ($.index % args_xh.sendNum === 0) {
-   // $.sentNum++;
-   // console.log(`正在进行第 ${$.sentNum} 次发送通知，发送数量：${args_xh.sendNum}`);
-   // await $.notify.sendNotify(`${$.name}`, `${notifyMsg}`);
-   // notifyMsg = "";
+   $.sentNum++;
+   console.log(`正在进行第 ${$.sentNum} 次发送通知，发送数量：${args_xh.sendNum}`);
+   await $.notify.sendNotify(`${$.name}`, `${notifyMsg}`);
+   notifyMsg = '';
   }
  }
  if ($.except === false) {
-  // if ($.cookiesArr.length - $.sentNum * args_xh.sendNum < args_xh.sendNum && notifyMsg.length != 0) {
-  //     console.log(`正在进行最后一次发送通知，发送数量：${$.cookiesArr.length - $.sentNum * args_xh.sendNum}`);
-  //     await $.notify.sendNotify(`${$.name}`, `${notifyMsg}`);
-  //     notifyMsg = "";
-  // }
+  if ($.cookiesArr.length - $.sentNum * args_xh.sendNum < args_xh.sendNum && notifyMsg.length != 0) {
+   console.log(`正在进行最后一次发送通知，发送数量：${$.cookiesArr.length - $.sentNum * args_xh.sendNum}`);
+   await $.notify.sendNotify(`${$.name}`, `${notifyMsg}`);
+   notifyMsg = '';
+  }
  }
 })()
     .catch((e) => {
@@ -263,21 +308,20 @@ let args_xh = {
 
 function requireConfig() {
  return new Promise((resolve) => {
-  $.notify = require("./sendNotify");
+  $.notify = require('./sendNotify');
   //获取 Cookies
   $.cookiesArr = [];
   //Node.js用户请在jdCookie.js处填写京东ck;
-  const jdCookieNode = require("./jdCookie.js");
+  const jdCookieNode = require('./jdCookie.js');
   Object.keys(jdCookieNode).forEach((item) => {
    if (jdCookieNode[item]) $.cookiesArr.push(jdCookieNode[item]);
   });
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false") console.log = () => {
-  };
+  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 
   for (let keyWord of $.innerKeyWords) args_xh.titleFilters.push(keyWord);
   console.log(`共${$.cookiesArr.length}个京东账号\n`);
   if (args_xh.env) {
-   console.log("=========环境变量配置如下=========");
+   console.log('=========环境变量配置如下=========');
    console.log(`env: ${typeof args_xh.env}, ${args_xh.env}`);
    console.log(`try_num: ${typeof args_xh.try_num}, ${args_xh.try_num}`);
    console.log(`except: ${typeof args_xh.except}, ${args_xh.except}`);
@@ -293,70 +337,76 @@ function requireConfig() {
    console.log(`printLog: ${typeof args_xh.printLog}, ${args_xh.printLog}`);
    console.log(`whiteList: ${typeof args_xh.whiteList}, ${args_xh.whiteList}`);
    console.log(`whiteListKeywords: ${typeof args_xh.whiteListKeywords}, ${args_xh.whiteListKeywords}`);
-   console.log("===============================");
+   console.log('===============================');
   }
   resolve();
  });
 }
 
-
 async function try_apply(title, activityId) {
  console.log(`申请试用商品提交中...`);
- args_xh.printLog ? console.log(`商品：${title}`) : "";
- args_xh.printLog ? console.log(`id为：${activityId}`) : "";
+ args_xh.printLog ? console.log(`商品：${title}`) : '';
+ args_xh.printLog ? console.log(`id为：${activityId}`) : '';
 
- const sign = await h5stSign({
-  functionId: "try_apply",
-  appid: "newtry",
-  body: {
-   "activityId": Number(activityId),
-  }
- }, '20240830232408557;5mztiyg695z5tnm6;35fa0;tk03w9b6e1c4318nMQIE17rhyLkcTB-PhrO8maY4_RSFx_6guFXoBgeXI5Q-pgu5iYVqY7DEIqs3bafgK11fvFYpImgx;cf229d6282c8034badeed93959755103;4.7;1725031448557;UO2O1eGHgZxHt05fbSMrWvUOu1PbhSTSZXp1azqJ7fMHhEK13A77ZoJ724J8DSzpZ9uzLpnSVPxqwCJFi_q-ZwH6yKHQBoB9MYxqe7f3r0o8VsqWKarWlBbrnRW-D7AxITRFcUYuG1-4CsL0Gv8R4NY7sRBegv_2GGO5XGqFAtxWe6vfNHZwnpdmCGAhMTxShK03QzvlawNfPeWXjEuEGSOoqDg8-o9lV8b64XK1YS2ATcbPlAXI8aKiOBFJam3P-jckGZ07hQDJgDXut8xEuFLOuBuLaKBUA4wgE0SFuGW_BcTdXJ5eLa5q_4KSBlqg7qv-fxuo63VFJWVMwnXf7W-0OgheXs4j9DQNh27xJR2bNu-pLfvjbNpzfP8IA_rvoMuy-jzbU65EWLHBTDwFyKjKwRf8UpVqDlbAn9w0P6u9q6qLhyM7an-PhlwdrLeHyCtqGGrxPldbz2Ljo4j6iBSYEKV_kjHxZ6Ae0pfqutW7Aq0UPOuc5bhxfQ3EgG7unVUiRJVoUHW0b5Eg-tiymJxRPe7ZKTkRBMp99Ke-YgzrnelJvloLcMBx_SFuiGwdcHL8fY_p5xIpUsrVxOLCu7nZggE7nDk8PeheJO0dl8zjLad9Prk3hGJ0DQIeqffFGvzEemLTD52YgeDqWQHLXbk3;b49e1f80adb86f588174db9e7128196b')
+ const sign = await h5stSign(
+     {
+      functionId: 'try_apply',
+      appid: 'newtry',
+      body: {
+       activityId: Number(activityId),
+      },
+      'x-api-eid-token': $.jsToken,
+     },
+     '20241020185421353;1o2o2rcsbkd2oob3;35fa0;tk03wa89a1cc518n9ZP1SOIb8Pc1YYoGhRS77lgzvyvQJ2UgI7sI61yIMnWsVSbzlrknsxqwCUFtLWlyUGX9IwK4uCHZ;fbadddbc42bb81b641a319315b6e78dd;4.8;1729421661353;TKmWZt2OjOg7nNT9rNg6zNvKnNj7lOUOcOU6wNUO2uWLkSTOcO07zJwO2W0UqO0JhOg_0JgJxNjKjOwKx5T9zNQKjKjJxJT9kCjJiSjJyNUOcOU6Qlg90Bg50WUOMm0Oh2TJ0FD9zJQKdOA9z1jKwBA_kGTJyJDIdSwJdWjJ0BzO2uzOjRw5oRg_0WUOMm0OkeUIoGz53BQ7t9g-h2wO2uzOgNUO2uWL0Cf9MxDE09TIDRgF0W0I0ig7ydA_kNUO2uWL0OjKoxgB0W0I0_Q60WUOMmE32W0UmW0I02D50NUO2WUOMm0O0W0I06D50NUO2WUOMmEJkW0I0_D50NUO2WUOMmUK2uzOhCv_0WUO2W0UqWTOcOUJhNwO2WUO2uWLm6TOcOkKhNwO2WUO2uWLliUOcO0KhNwO2WUO2uWL0CzLleUK3BQ5tlwO2uzOlCv_0WUO2W0UqWTOcOk8fNUO2WUOMmEJ2uzOjlwO2WUO2uWLmW0I0mwO2WUO2uWLmW0I0Gg50WUO2W0UbV0I0Gw7xFP4xNUO2uWLZVUOMO09hGAKeOzJhCg_eKjJ3Fw80W0I0ST60WUO2W0UbV0I0WP60WUOMm0Oi_T42qTJgeA8-VkImeUKlWUBIVk6fZQ9oxgB0W0I0SA5jNUO2um4;8ca0bcf93cae914dfdd88b7cc3a6f4e4',
+ );
 
  setBaseCookie();
- const joylog = await $.smashUtils.sign({
-  ...sign.body
- }, true);
+ const joylog = await $.smashUtils.sign(
+     {
+      ...sign.body,
+     },
+     true,
+ );
 
  try {
-  const {data} = await api({
-   method: "POST",
+  const { data } = await api({
+   method: 'POST',
    url: `https://api.m.jd.com/client.action`,
    headers: {
-    "content-type": "application/x-www-form-urlencoded",
-    origin: "https://pro.m.jd.com",
-    Referer: "https://pro.m.jd.com/mall/active/3mpGVQDhvLsMvKfZZumWPQyWt83L/index.html",
-    "User-Agent": $.userAgent,
-    "x-referer-page": "https://pro.m.jd.com/mall/active/3mpGVQDhvLsMvKfZZumWPQyWt83L/index.html"
+    'content-type': 'application/x-www-form-urlencoded',
+    origin: 'https://pro.m.jd.com',
+    Referer: 'https://pro.m.jd.com/mall/active/3mpGVQDhvLsMvKfZZumWPQyWt83L/index.html',
+    'User-Agent': $.userAgent,
+    'x-referer-page': 'https://pro.m.jd.com/mall/active/3mpGVQDhvLsMvKfZZumWPQyWt83L/index.html',
    },
-   data: qs.stringify(joylog)
+   data: qs.stringify(joylog),
   });
 
   $.totalTry++;
-  if (data.success && data.code === "1") {
+  if (data.success && data.code === '1') {
    // 申请成功
-   console.log("申请提交成功");
+   console.log('申请提交成功');
    $.totalSuccess++;
-  } else if (data.code === "-106") {
+  } else if (data.code === '-106') {
    console.log(data.message); // 未在申请时间内！
-  } else if (data.code === "-110") {
+  } else if (data.code === '-110') {
    console.log(data.message); // 您的申请已成功提交，请勿重复申请…
-  } else if (data.code === "-120") {
+  } else if (data.code === '-120') {
    console.log(data.message); // 您还不是会员，本品只限会员申请试用，请注册会员后申请！
-  } else if (data.code === "-167") {
+  } else if (data.code === '-167') {
    console.log(data.message); // 抱歉，此试用需为种草官才能申请。查看下方详情了解更多。
-  } else if (data.code === "-131") {
+  } else if (data.code === '-131') {
    console.log(data.message); // 申请次数上限。
    $.isLimit = true;
-  } else if (data.code === "-113") {
+  } else if (data.code === '-113') {
    console.log(data.message); // 操作不要太快哦！
   } else {
-   console.log("申请失败", data);
+   console.log('申请失败', data);
   }
  } catch (e) {
   if (e.message === `Request failed with status code 403`) {
    $.isForbidden = true;
-   console.log("账号被京东服务器风控，不再请求该帐号");
+   console.log('账号被京东服务器风控，不再请求该帐号');
   } else {
    console.log(e.message);
    console.log(`${$.name} API请求失败，请检查网路重试`);
@@ -364,62 +414,65 @@ async function try_apply(title, activityId) {
  }
 }
 
-function try_MyTrials(page, selected) {
- return new Promise((resolve, reject) => {
-  switch (selected) {
-   case 1:
-    console.log("正在获取已申请的商品...");
-    break;
-   case 2:
-    console.log("正在获取申请成功的商品...");
-    break;
-   case 3:
-    console.log("正在获取申请失败的商品...");
-    break;
-   default:
-    console.log("selected错误");
-  }
-  let options = {
-   url: URL,
-   data: `appid=newtry&functionId=try_MyTrials&clientVersion=10.3.4&client=wh5&body=%7B%22page%22%3A${page}%2C%22selected%22%3A${selected}%2C%22previewTime%22%3A%22%22%7D`,
-   headers: {
-    origin: "https://prodev.m.jd.com",
-    "User-Agent": $.userAgent,
-    referer: "https://prodev.m.jd.com/",
-    cookie: $.cookie,
-   },
-  };
-  $.restApi(options, (err, resp, data) => {
-   try {
-    if (err) {
-     console.log(`🚫 ${arguments.callee.name.toString()} API请求失败，请检查网路\n${JSON.stringify(err)}`);
-    } else {
-     if (data.success) {
-      //temp adjustment
-      if (selected === 2) {
-       if (data.success && data.data) {
-        for (let item of data.data.list) {
-         item.status === 4 || item.text.text.includes("试用资格已过期") ? ($.giveupNum += 1) : "";
-         item.status === 2 && item.text.text.includes("试用资格将保留") ? ($.successNum += 1) : "";
-         item.status === 2 && item.text.text.includes("请收货后尽快提交报告") ? ($.getNum += 1) : "";
-         item.status === 2 && item.text.text.includes("试用已完成") ? ($.completeNum += 1) : "";
-        }
-        console.log(`待领取 | 已领取 | 已完成 | 已放弃：${$.successNum} | ${$.getNum} | ${$.completeNum} | ${$.giveupNum}`);
-       } else {
-        console.log(`获得成功列表失败: ${data.message}`);
-       }
-      }
-     } else {
-      console.error(`ERROR:try_MyTrials`);
-     }
+async function try_MyTrials(page, selected) {
+ switch (selected) {
+  case 1:
+   console.log('正在获取已申请的商品...');
+   break;
+  case 2:
+   console.log('正在获取申请成功的商品...');
+   break;
+  case 3:
+   console.log('正在获取申请失败的商品...');
+   break;
+  default:
+   console.log('selected错误');
+ }
+
+ const sign = await h5stSign(
+     {
+      functionId: 'try_MyTrials',
+      appid: 'newtry',
+      clientVersion: '13.6.1',
+      client: 'wh5',
+      body: { page: page, selected: selected, previewTime: '' },
+     },
+     '20241020190915983;agi39zmtagmaaap8;6d63a;tk02wc1d11c3f41lMisxeDIrM3F5zw3TlpVl9lTWqno08Vqtiq4GkXuDVANat5P5-_e_KEjjFRW7OrmT7wCN7nkBO0Eh;c86014a641551242004b4f25c80b56b3efd4405d6bf9899da355593a8710e73e;4.2;1729422555983;e9f6ec1bab0ebf8ad0759c5c9ae319e1e6e561685fd3cb857e7337eff91b61f556bf8a7d02fa529215a3be23a58fcfe0128cabd647573f2a59044ccdd081cca3b1b9334614e6d42db8e32b5c2a8dfe46c4fea05d438740136f73aba5a8b1673c119835af2c1f0459d5b259773ab0312e6aa38abdbe32772a6256aaa4674f4e2beee112716c526703a1e93306c7771b610617a98f88165f08f00444938cd695d29a2df1ac2ffa476c9505cd78864ba430ce5081edadba67198b13ca3fafc9739c053460325939c1342afae5b7963d4005dcc643d32e8f36bb97585d5a6e3210fbbb86eb075b3f9493926e7cefd59d542e06b0bbfbeb78d764025f6a2c1d51dc7cdc806118aa9ef83ee8a5992ba4945c0b6a541385d17bd302ea99572bd1999f7f8ec143e2f59287e8aa14b362eb36ef8a',
+     '4.2.0',
+ );
+
+ const options = {
+  method: 'POST',
+  url: 'https://api.m.jd.com/client.action',
+  headers: {
+   'Content-Type': 'application/x-www-form-urlencoded',
+   Cookie: $.cookie,
+   Origin: 'https://prodev.m.jd.com',
+   Referer: 'https://prodev.m.jd.com/mall/active/3C751WNneAUaZ8Lw8xYN7cbSE8gm/index.html',
+   'User-Agent': $.userAgent,
+  },
+  data: sign.qs,
+ };
+
+ const { data } = await axios.request(options);
+ console.log(data);
+ if (data.success) {
+  if (selected === 2) {
+   if (data.data) {
+    for (let item of data.data.list) {
+     item.status === 4 || item.text.text.includes('试用资格已过期') ? ($.giveupNum += 1) : '';
+     item.status === 2 && item.text.text.includes('试用资格将保留') ? ($.successNum += 1) : '';
+     item.status === 2 && item.text.text.includes('请收货后尽快提交报告') ? ($.getNum += 1) : '';
+     item.status === 2 && item.text.text.includes('试用已完成') ? ($.completeNum += 1) : '';
     }
-   } catch (e) {
-    reject(`⚠️ ${arguments.callee.name.toString()} API返回结果解析出错\n${e}\n${JSON.stringify(data)}`);
-   } finally {
-    resolve();
+    console.log(`待领取 | 已领取 | 已完成 | 已放弃：${$.successNum} | ${$.getNum} | ${$.completeNum} | ${$.giveupNum}`);
+   } else {
+    console.log(`获得成功列表失败: ${data.message}`);
    }
-  });
- });
+  }
+ } else {
+  console.error(`ERROR:try_MyTrials`);
+ }
 }
 
 async function showMsg() {
@@ -438,7 +491,7 @@ async function showMsg() {
   message += `🎉 ${$.completeNum}个商品已完成\n`;
   message += `🗑 ${$.giveupNum}个商品已放弃\n\n`;
  }
- if (!args_xh.jdNotify || args_xh.jdNotify === "false") {
+ if (!args_xh.jdNotify || args_xh.jdNotify === 'false') {
   console.log($.name, message);
   notifyMsg += `${message}`;
  } else {
@@ -454,73 +507,93 @@ async function try_rafflecount() {
   method: 'POST',
   url: 'https://api.m.jd.com/client.action',
   headers: {
-   "Content-Type": "application/x-www-form-urlencoded",
+   'Content-Type': 'application/x-www-form-urlencoded',
    Cookie: $.cookie,
    Origin: 'https://prodev.m.jd.com',
-   Referer: "https://prodev.m.jd.com/mall/active/3C751WNneAUaZ8Lw8xYN7cbSE8gm/index.html",
-   "User-Agent": $.userAgent,
+   Referer: 'https://prodev.m.jd.com/mall/active/3C751WNneAUaZ8Lw8xYN7cbSE8gm/index.html',
+   'User-Agent': $.userAgent,
   },
   data: qs.stringify({
    appid: 'ysas-new',
    functionId: 'try_rafflecount',
-   body: JSON.stringify({"previewTime": ""})
-  })
+   body: JSON.stringify({ previewTime: '' }),
+  }),
  };
 
  try {
-  const {data} = await axios.request(options);
+  const { data } = await axios.request(options);
 
   if (data.code !== '0') {
    $.isLogin = false;
    console.log(`${data.message}`);
    return;
   }
-  console.log(`${data.data.promptDesc}${data.data.remainingNum}`)
+  console.log(`${data.data.promptDesc}${data.data.remainingNum}`);
   if (data.data.remainingNum === 0) {
    args_xh.except.push($.UserName);
   }
  } catch (e) {
-  console.log(e)
+  console.log(e);
  }
 }
 
 async function initSmashUtils() {
  try {
-  $.smashUtils = new SmashUtils(
-      'https://prodev.m.jd.com/mall/active/3mpGVQDhvLsMvKfZZumWPQyWt83L/index.html?activityId=501742184&sku=10097544183544',
-      $.cookie,
-      $.userAgent
-  );
-  $.smashUtils["getLocalData"]();
-  $.smashUtils["getAppOs"]();
+  $.smashUtils = new SmashUtils('https://prodev.m.jd.com/mall/active/3mpGVQDhvLsMvKfZZumWPQyWt83L/index.html?activityId=501742184&sku=10097544183544', $.cookie, $.userAgent);
+  $.smashUtils['getLocalData']();
+  $.smashUtils['getAppOs']();
   $.smashUtils.getBlog();
-  $.smashUtils["getFpv"]();
+  $.smashUtils['getFpv']();
   await $.smashUtils.getInfo();
-  $.smashUtils.setjoyyaCookie("init");
+  $.smashUtils.setjoyyaCookie('init');
   $.smashUtils.getJrInfo();
  } catch (e) {
   $.smashUtils.getInterfaceData({
-   funcName: "other",
-   real_msg: "initial",
-   error_msg: e && e.message
-  })
+   funcName: 'other',
+   real_msg: 'initial',
+   error_msg: e && e.message,
+  });
  }
  await $.smashUtils.initial({
-  appId: "50170_", debug: !1, preRequest: !0, onSign: function (e) {
-   e.code, e.message, e.data
-  }, onRequestTokenRemotely: function (e) {
-   e.code, e.message
-  }, onRequestToken: function (e) {
-   e.code, e.message
-  }
- })
+  appId: '50170_',
+  debug: !1,
+  preRequest: !0,
+  onSign: function (e) {
+   e.code, e.message, e.data;
+  },
+  onRequestTokenRemotely: function (e) {
+   e.code, e.message;
+  },
+  onRequestToken: function (e) {
+   e.code, e.message;
+  },
+ });
+}
+
+async function initJsToken() {
+ const currentTime = Date.now();
+
+ if ($.cache[$.UserName] && $.cache[$.UserName].expiry > currentTime) {
+  $.jsToken = $.cache[$.UserName].jsToken;
+ } else {
+  // const jsTokenData = await getJsToken();
+  $.jsToken = '' //jsTokenData.token;
+
+  // 更新缓存
+  $.cache[$.UserName] = {
+   jsToken: '', //jsTokenData.token,
+   expiry: currentTime + 604800000,
+  };
+  await writeCache();
+ }
 }
 
 /**
  * 获取商品列表并且过滤
  */
 async function try_feedsList(tabId, page) {
- const sign = await h5stSign({
+ const sign = await h5stSign(
+     {
       functionId: 'try_SpecFeedList',
       appid: 'newtry',
       body: {
@@ -530,23 +603,24 @@ async function try_feedsList(tabId, page) {
        source: 'default',
        client: 'outer',
       },
+      'x-api-eid-token': $.jsToken,
      },
-     '20240830232343586;tiz96gyymmmynn59;35fa0;tk03w74b71aa618n1t11vUdyHIggnHwEcPN9aklEa14dNUDG8_8G3G34c5d7s7mGwUJ2aADGh7Umx71p0_RW-DKW3kvy;9a6a37681b62443c25d331b98417422c;4.7;1725031423586;UOGBLFzTfNK9tsvi--7prGlZZovw_k_cuzzLZOX_1lNL2GXWq-BLKv79W5y_og7inaFiDDK3Ae6_yrIkNpgJDMfKGugQSF3ESrMz3pC-ykNOfoPVeBqaXc-5fy2PKHjCXsCQw7_9DHj2gyZac3nDQ_PHDPUC4w4R4VC0xw6qrsNoWgqVJnCSgi0bbY0Na0iXiIp-vEX_0jTQqomWsAj7w-lg2k23OvwymIfEyuhK2Iz68gXWZtrbMwW1s8bz2wV7F0KUgPZcEB1n85XGzhlRqTcv0N59rnqv7h_9kP3AAg5qR0yf4TIXlat5jjKAy_7oXS24_sb-UDolpGmS45s_pHfFbhaonAd2ZDhqrIZClpfaURLGsL4lbsJahK7fms-cuU0FRkGLeQ8kbqREPJQ0BkUJwRf8UpVqDlbAn9w0P6u9q6qLhyM7an-PhlwdrLeHyCtqGGrxPldbz2Ljo4j6iBSYEKV_kjHxZ6Ae0pfqutW7Aq0UPOuc5bhxfQ3EgG7unVUiRJVoUHW0b5Eg-tiymJxRPe7ZKTkRBMp99Ke-YgzrnelJvloLcMBx_SFuiGwdcHL8fY_p5xIpUsrVxOLCu7nZggE7nDk8PeheJO0dl8zjLad9Prk3hGJ0DQIeqffFGvzEemLTD52YgeDqWQHLXbk3;3c8d81286085ce3732829ecfcfa55587'
- )
+     '20241020185331946;rdbso1cxc2kckcx8;35fa0;tk03w88961b8118nluC1DXb3DJMhGhAmD6LtSaZ85XeFEwgip5Y5pfJHB9iGxLTBVGXsi3oh9EbyayfKW5iC09GkS4Ty;4fd2fc17a1ef09a6bb36b9716c77b1ee;4.8;1729421611946;TKmWZt2Oe2f_rJg8kKQ4zRj7jNQ9kNUOcOU6wNUO2uWLkSTOcO07zJwO2W0UqO0JhOg_0JgJxNjKjOwKx5T9zNQKjKjJxJT9kCjJiSjJyNUOcOU6Qlg90Bg50WUOMm0Oh2TJ0FD9zJQKdOA9z1jKwBA_kGTJyJDIdSwJdWjJ0BzO2uzOjRw5oRg_0WUOMm0OkeUIoGz53BQ7t9g-h2wO2uzOgNUO2uWL0CQBlayDq1SImFgC0W0I0ig7ydA_kNUO2uWL0OjKoxgB0W0I0_Q60WUOMmE32W0UmW0I02D50NUO2WUOMm0O0W0I06D50NUO2WUOMmkJlW0I0_D50NUO2WUOMmUK2uzOhCv_0WUO2W0UqWTOcOUJhNwO2WUO2uWLf_TOcOkKhNwO2WUO2uWLliUOcO0KhNwO2WUO2uWL0CzLleUK3BQ5tlwO2uzOlCv_0WUO2W0UqWTOcOk8fNUO2WUOMmEJ2uzOjlwO2WUO2uWLmW0I0mwO2WUO2uWLmW0I0Gg50WUO2W0UbV0I0Gw7xFP4xNUO2uWLZVUOMO09hGAKeOzJhCg_eKjJ3Fw80W0I0ST60WUO2W0UbV0I0WP60WUOMm0Oi_T42qTJgeA8-VkImeUKlWUBIVk6fZQ9oxgB0W0I0SA5jNUO2um4;cd3b5aecc1a5b56a0af543c68634c201',
+ );
 
  try {
-  const {data} = await api({
-   method: "POST",
+  const { data } = await api({
+   method: 'POST',
    url: `https://api.m.jd.com/client.action`,
    headers: {
-    "content-type": "application/x-www-form-urlencoded",
-    origin: "https://prodev.m.jd.com",
-    Referer: "https://prodev.m.jd.com/mall/active/3C751WNneAUaZ8Lw8xYN7cbSE8gm/index.html",
-    "User-Agent": $.userAgent,
-    "x-referer-page": "https://prodev.m.jd.com/mall/active/3C751WNneAUaZ8Lw8xYN7cbSE8gm/index.html",
-    'x-rp-client': 'h5_1.0.0'
+    'content-type': 'application/x-www-form-urlencoded',
+    origin: 'https://prodev.m.jd.com',
+    Referer: 'https://prodev.m.jd.com/mall/active/3C751WNneAUaZ8Lw8xYN7cbSE8gm/index.html',
+    'User-Agent': $.userAgent,
+    'x-referer-page': 'https://prodev.m.jd.com/mall/active/3C751WNneAUaZ8Lw8xYN7cbSE8gm/index.html',
+    'x-rp-client': 'h5_1.0.0',
    },
-   data: sign.qs
+   data: sign.qs,
   });
 
   let tempKeyword = ``;
@@ -555,19 +629,19 @@ async function try_feedsList(tabId, page) {
    console.log(`获取到商品 ${data.data.feedList.length} 条`);
    for (let item of data.data.feedList) {
     if (item.applyNum === null) {
-     args_xh.printLog ? console.log(`商品未到申请时间：${item.skuTitle}\n`) : "";
+     args_xh.printLog ? console.log(`商品未到申请时间：${item.skuTitle}\n`) : '';
      continue;
     }
     if (trialActivityIdList.length >= args_xh.maxLength) {
-     console.log("商品列表长度已满.结束获取");
+     console.log('商品列表长度已满.结束获取');
      break;
     }
     if (item.applyState === 1) {
-     args_xh.printLog ? console.log(`商品已申请试用：${item.skuTitle}\n`) : "";
+     args_xh.printLog ? console.log(`商品已申请试用：${item.skuTitle}\n`) : '';
      continue;
     }
     if (item.applyState !== null) {
-     args_xh.printLog ? console.log(`商品状态异常，未找到skuTitle\n`) : "";
+     args_xh.printLog ? console.log(`商品状态异常，未找到skuTitle\n`) : '';
      continue;
     }
     if (args_xh.passZhongCao) {
@@ -575,11 +649,11 @@ async function try_feedsList(tabId, page) {
      if (item.tagList.length !== 0) {
       for (let itemTag of item.tagList) {
        if (itemTag.tagType === 3) {
-        args_xh.printLog ? console.log("商品被过滤，该商品是种草官专属") : "";
+        args_xh.printLog ? console.log('商品被过滤，该商品是种草官专属') : '';
         $.isPush = false;
         break;
        } else if (itemTag.tagType === 5) {
-        args_xh.printLog ? console.log("商品被跳过，该商品是付费试用！") : "";
+        args_xh.printLog ? console.log('商品被跳过，该商品是付费试用！') : '';
         $.isPush = false;
         break;
        }
@@ -587,29 +661,29 @@ async function try_feedsList(tabId, page) {
      }
     }
     if (item.skuTitle && $.isPush) {
-     args_xh.printLog ? console.log(`检测 tabId:${args_xh.tabId[$.nowTabIdIndex]} 的 第 ${page} 页 第 ${$.nowItem++ + 1} 个商品\n${item.skuTitle}`) : "";
+     args_xh.printLog ? console.log(`检测 tabId:${args_xh.tabId[$.nowTabIdIndex]} 的 第 ${page} 页 第 ${$.nowItem++ + 1} 个商品\n${item.skuTitle}`) : '';
      if (args_xh.whiteList) {
       if (args_xh.whiteListKeywords.some((fileter_word) => item.skuTitle.includes(fileter_word))) {
-       args_xh.printLog ? console.log(`商品白名单通过，将加入试用组，trialActivityId为${item.trialActivityId}\n`) : "";
+       args_xh.printLog ? console.log(`商品白名单通过，将加入试用组，trialActivityId为${item.trialActivityId}\n`) : '';
        trialActivityIdList.push(item.trialActivityId);
        trialActivityTitleList.push(item.skuTitle);
       }
      } else {
       tempKeyword = ``;
       if (parseFloat(item.jdPrice) <= args_xh.jdPrice) {
-       args_xh.printLog ? console.log(`商品被过滤，商品价格 ${item.jdPrice} < ${args_xh.jdPrice} \n`) : "";
+       args_xh.printLog ? console.log(`商品被过滤，商品价格 ${item.jdPrice} < ${args_xh.jdPrice} \n`) : '';
       } else if (parseFloat(item.supplyNum) < args_xh.minSupplyNum && item.supplyNum !== null) {
-       args_xh.printLog ? console.log(`商品被过滤，提供申请的份数小于预设申请的份数 \n`) : "";
+       args_xh.printLog ? console.log(`商品被过滤，提供申请的份数小于预设申请的份数 \n`) : '';
       } else if (parseFloat(item.applyNum) > args_xh.applyNumFilter && item.applyNum !== null) {
-       args_xh.printLog ? console.log(`商品被过滤，已申请人数大于预设的${args_xh.applyNumFilter}人 \n`) : "";
+       args_xh.printLog ? console.log(`商品被过滤，已申请人数大于预设的${args_xh.applyNumFilter}人 \n`) : '';
       } else if (item.jdPrice === null) {
-       args_xh.printLog ? console.log(`商品被过滤，商品无价，不能申请 \n`) : "";
+       args_xh.printLog ? console.log(`商品被过滤，商品无价，不能申请 \n`) : '';
       } else if (parseFloat(item.trialPrice) > args_xh.trialPrice) {
-       args_xh.printLog ? console.log(`商品被过滤，商品试用价大于预设试用价 \n`) : "";
-      } else if (args_xh.titleFilters.some((fileter_word) => (item.skuTitle.includes(fileter_word) ? (tempKeyword = fileter_word) : ""))) {
-       args_xh.printLog ? console.log(`商品被过滤，含有关键词 ${tempKeyword}\n`) : "";
+       args_xh.printLog ? console.log(`商品被过滤，商品试用价大于预设试用价 \n`) : '';
+      } else if (args_xh.titleFilters.some((fileter_word) => (item.skuTitle.includes(fileter_word) ? (tempKeyword = fileter_word) : ''))) {
+       args_xh.printLog ? console.log(`商品被过滤，含有关键词 ${tempKeyword}\n`) : '';
       } else {
-       args_xh.printLog ? console.log(`商品通过，加入试用组，trialActivityId为${item.trialActivityId}\n`) : "";
+       args_xh.printLog ? console.log(`商品通过，加入试用组，trialActivityId为${item.trialActivityId}\n`) : '';
        if (trialActivityIdList.indexOf(item.trialActivityId) === -1) {
         trialActivityIdList.push(item.trialActivityId);
         trialActivityTitleList.push(item.skuTitle);
@@ -617,7 +691,7 @@ async function try_feedsList(tabId, page) {
       }
      }
     } else if ($.isPush !== false) {
-     console.error("skuTitle解析异常");
+     console.error('skuTitle解析异常');
      return;
     }
    }
@@ -631,7 +705,7 @@ async function try_feedsList(tabId, page) {
      $.retrynum = 0;
     } else {
      // 这下是真的没了
-     $.retrynum = 999
+     $.retrynum = 999;
     }
    } else {
     $.nowPage++;
@@ -645,7 +719,7 @@ async function try_feedsList(tabId, page) {
    $.retrynum++;
    if ($.retrynum === 4) {
     $.isForbidden = true;
-    $.log("多次尝试失败，换个时间再试！");
+    $.log('多次尝试失败，换个时间再试！');
    } else {
     console.log(`403，第 ${$.retrynum} 次重试`);
    }
@@ -656,22 +730,35 @@ async function try_feedsList(tabId, page) {
  }
 }
 
-async function h5stSign(body, h5st) {
+async function h5stSign(body, h5st, version = '4.8.2') {
  const options = {
   method: 'POST',
   url: `${args_xh.h5st_server}/h5st`,
-  headers: {'content-type': 'application/json'},
+  headers: { 'content-type': 'application/json' },
   data: {
-   version: '4.7.4',
+   version: version,
    pin: $.UserName,
    ua: $.userAgent,
    body,
-   h5st
+   h5st,
   },
  };
 
- const {data} = await axios.request(options);
+ const { data } = await axios.request(options);
  return data.body;
+}
+
+async function readCache() {
+ try {
+  const data = await fs.readFile(cacheFilePath, 'utf8');
+  return JSON.parse(data);
+ } catch (err) {
+  return {};
+ }
+}
+
+async function writeCache() {
+ await fs.writeFile(cacheFilePath, JSON.stringify($.cache, null, 2), 'utf8');
 }
 
 function Env(name, opts) {
@@ -680,17 +767,21 @@ function Env(name, opts) {
    this.env = env;
   }
 
-  send(opts, method = "GET") {
-   opts = typeof opts === "string" ? {
-    url: opts,
-   } : opts;
+  send(opts, method = 'GET') {
+   opts =
+       typeof opts === 'string'
+           ? {
+            url: opts,
+           }
+           : opts;
    let sender = this.get;
-   if (method === "POST") {
+   if (method === 'POST') {
     sender = this.post;
    }
    return new Promise((resolve, reject) => {
     sender.call(this, opts, (err, resp, body) => {
-     if (err) reject(err); else resolve(resp);
+     if (err) reject(err);
+     else resolve(resp);
     });
    });
   }
@@ -700,64 +791,68 @@ function Env(name, opts) {
   }
 
   post(opts) {
-   return this.send.call(this.env, opts, "POST");
+   return this.send.call(this.env, opts, 'POST');
   }
  }
 
  return new (class {
-      constructor(name, opts) {
-       this.name = name;
-       this.http = new Http(this);
-       this.data = null;
-       this.dataFile = "box.dat";
-       this.logs = [];
-       this.isMute = false;
-       this.isNeedRewrite = false;
-       this.logSeparator = "\n";
-       this.startTime = new Date().getTime();
-       Object.assign(this, opts);
-       this.log("", `🔔${this.name}, 开始!`);
-      }
+  constructor(name, opts) {
+   this.name = name;
+   this.http = new Http(this);
+   this.data = null;
+   this.dataFile = 'box.dat';
+   this.logs = [];
+   this.isMute = false;
+   this.isNeedRewrite = false;
+   this.logSeparator = '\n';
+   this.startTime = new Date().getTime();
+   Object.assign(this, opts);
+   this.log('', `🔔${this.name}, 开始!`);
+  }
 
-      initAxios() {
-       if (!this.axios) {
-        this.axios = axios.create();
-       }
-      }
+  initAxios() {
+   if (!this.axios) {
+    this.axios = axios.create();
+   }
+  }
 
-      restApi(opts, callback = () => {
-      }) {
-       this.initAxios();
-       this.axios(opts)
-           .then(resp => {
-            const {status, headers, data} = resp;
-            callback(null, {
-             status, headers, data,
-            }, data);
-           }, (err) => {
-            const {message: error, response: resp} = err;
-            callback(error, resp, resp && resp.data);
-           });
-      }
+  restApi(opts, callback = () => {}) {
+   this.initAxios();
+   this.axios(opts).then(
+       (resp) => {
+        const { status, headers, data } = resp;
+        callback(
+            null,
+            {
+             status,
+             headers,
+             data,
+            },
+            data,
+        );
+       },
+       (err) => {
+        const { message: error, response: resp } = err;
+        callback(error, resp, resp && resp.data);
+       },
+   );
+  }
 
-      log(...logs) {
-       if (logs.length > 0) {
-        this.logs = [...this.logs, ...logs];
-       }
-       console.log(logs.join(this.logSeparator));
-      }
+  log(...logs) {
+   if (logs.length > 0) {
+    this.logs = [...this.logs, ...logs];
+   }
+   console.log(logs.join(this.logSeparator));
+  }
 
-      wait(time) {
-       return new Promise((resolve) => setTimeout(resolve, time));
-      }
+  wait(time) {
+   return new Promise((resolve) => setTimeout(resolve, time));
+  }
 
-      done() {
-       const endTime = new Date().getTime();
-       const costTime = (endTime - this.startTime) / 1000;
-       this.log("", `🔔${this.name}, 结束! 🕛 ${costTime} 秒`);
-      }
-     }
-
- )
- (name, opts);
+  done() {
+   const endTime = new Date().getTime();
+   const costTime = (endTime - this.startTime) / 1000;
+   this.log('', `🔔${this.name}, 结束! 🕛 ${costTime} 秒`);
+  }
+ })(name, opts);
 }
