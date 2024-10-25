@@ -6,7 +6,10 @@
 ## 依赖
 ```
 redis@4.7.0
+global-agent
 https-proxy-agent@7.0.5
+tunnel
+ws
 png-js
 date-fns
 axios@1.7.7
@@ -21,8 +24,6 @@ request
 tough-cookie
 jsdom
 download
-tunnel
-ws
 js-base64
 qrcode-terminal
 moment
@@ -43,3 +44,5 @@ ql repo https://pro.proenv.top/https://github.com/feverrun/my_scripts.git "jd_|j
 定时更新:  1 * * * *
 
 学习使用
+
+## [一些介绍](https://github.com/feverrun/my_scripts/wiki/%E4%BB%8B%E7%BB%8D)
