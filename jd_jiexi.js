@@ -1,7 +1,7 @@
 /*
 解析
 export jd_jiexi_code=""          #需要解析的口令
-cron "2 2 29 2 *" jd_jump.js
+cron "2 2 29 2 *" jd_jiexi.js
  */
 const $ = new Env('京东口令解析');
 
