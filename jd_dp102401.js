@@ -6,7 +6,7 @@ export DPLHTY_VIEWSHOP="1"          #是否做浏览任务, 1做，0不做， �
 export DPLHTY_CODE=""               #全部助力给这个邀请码
 cron "2 2 29 2 *" jd_dp102401.js
 */
-const $ = new Env('大牌1024 10.24-11.03');
+const $ = new Env('大牌102401 10.24-11.03');
 
 
 
