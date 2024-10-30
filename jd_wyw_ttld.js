@@ -1,5 +1,6 @@
 /*
-#天天领豆
+# 每天需要定时两次
+cron "36 7,15 * * *" jd_wyw_ttld.js
 */
 const $ = new Env('天天领豆');
 
