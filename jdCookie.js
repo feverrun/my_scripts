@@ -4,30 +4,9 @@
  */
 let CookieJDs = []
 
-// modified by proenv
 if (process.env.JD_COOKIE) {
-    let jd_cookies = process.env.JD_COOKIE;
-    // let jdStr = '';
-    // jd_cookies = jd_cookies.replace(/\r\n/g, "");
-    // jd_cookies = jd_cookies.replace(/\n/g, "");
-    // jd_cookies = jd_cookies.replace(/\s+/g, "");
-    // pkes = jd_cookies.match(/pt_key=(.*?);/g);
-    // ppins = jd_cookies.match(/pt_pin=(.*?);/g);
-    // if (pkes.length >= 1) {
-    //     for (let i = 0; i < pkes.length; i++) {
-    //         jdStr += pkes[i] + ppins[i] + '&';
-    //     }
-    //     jd_cookies = jdStr.substr(0, jdStr.length - 1);
-    // }else {
-    //     jd_cookies = jd_cookies;
-    // }
-    if (jd_cookies.indexOf('&') > -1) {
-        CookieJDs = jd_cookies.split('&');
-    } else if (jd_cookies.indexOf('\n') > -1) {
-        CookieJDs = jd_cookies.split('\n');
-    } else {
-        CookieJDs = [jd_cookies];
-    }
+    let jd_cookies = process.env.JD_COOKIE.replace(/\s+/g, '');
+    CookieJDs = jd_cookies.split(/[\n&]+/);
 }
 
 // if (JSON.stringify(process.env).indexOf('GITHUB') > -1) {
@@ -39,12 +18,32 @@ if (process.env.JD_COOKIE) {
 // }
 
 CookieJDs = [...new Set(CookieJDs.filter(item => !!item))]
-console.log(`\n===============共${CookieJDs.length}个京东账号Cookie===============\n`);
+console.log(`\n【保护环境】欢迎进群反馈问题: https://t.me/proenv\n`);
+console.log(`===============共${CookieJDs.length}个京东账号Cookie===============\n`);
 if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
 };
 
+// const path = require('path');
+// /**
+//  * 获取当前活动脚本的文件名或完整路径
+//  * @param {boolean} onlyName - 如果为 true，则返回文件名；如果为 false，则返回完整路径
+//  * @returns {string} 当前活动脚本的文件名或完整路径
+//  */
+// function getCurrentScriptName(onlyName = false) {
+//     if (onlyName) {
+//         return path.basename(__filename); // 返回文件名
+//     }
+//     return __filename; // 返回完整路径
+// }
+// console.log(getCurrentScriptName(true), getCurrentScriptName(false))
+
 for (let i = 0; i < CookieJDs.length; i++) {
-    if (!CookieJDs[i].match(/pt_pin=(.+?);/) || !CookieJDs[i].match(/pt_key=(.+?);/)) console.log(`\n提示:京东cookie 【${CookieJDs[i]}】填写不规范,可能会影响部分脚本正常使用。正确格式为: pt_key=xxx;pt_pin=xxx;（分号;不可少）\n`);
-    const index = (i + 1 === 1) ? '' : (i + 1);
-    exports['CookieJD' + index] = CookieJDs[i].trim();
+    const cookie = CookieJDs[i];
+    const hasPtPin = cookie.match(/pt_pin=(.+?);/);
+    const hasPtKey = cookie.match(/pt_key=(.+?);/);
+    if (!hasPtPin || !hasPtKey) {
+        console.log(`\n提示:京东cookie 【${cookie}】填写不规范,可能会影响部分脚本正常使用。正确格式为: pt_key=xxx;pt_pin=xxx;（分号;不可少）\n`);
+    }
+    const index = (i === 0) ? '' : (i + 1);
+    exports['CookieJD' + index] = cookie.trim();
 }
