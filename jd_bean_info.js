@@ -15,7 +15,8 @@ if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
+    };
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
@@ -52,7 +53,7 @@ if ($.isNode()) {
             }
 
             await bean();
-            await $.wait(parseInt(Math.random() * 1000 + 200, 10));
+            await $.wait(parseInt(Math.random() * 1000 + 1000, 10));
             await showMsg();
         }
 
@@ -60,7 +61,7 @@ if ($.isNode()) {
     }
     allMessage += `\n今日全部账号收入：${allBean}个京豆 🐶\n`
     if ($.isNode() && allMessage) {
-        await notify.sendNotify(`${$.name}`, `${allMessage}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
+        await notify.sendNotify(`${$.name}`, `${allMessage}`, {url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`})
     }
 })()
     .catch((e) => {
@@ -77,11 +78,11 @@ async function showMsg() {
         allMessage += `\n【账号${$.index}：${$.nickName || $.UserName} 京豆详情统计】\n\n`;
         $.message += `\n【账号${$.index}：${$.nickName || $.UserName} 京豆详情统计】\n\n`;
         allMessage += `今日收入：${$.todayIncomeBean}个京豆 🐶\n`
-        $.message  += `今日收入：${$.todayIncomeBean}个京豆 🐶\n`
+        $.message += `今日收入：${$.todayIncomeBean}个京豆 🐶\n`
         allBean = allBean + parseInt($.todayIncomeBean)
         for (let key of myMap.keys()) {
-            allMessage += key + ' ---> ' +myMap.get(key)+'京豆 🐶\n'
-            $.message += key + ' ---> ' +myMap.get(key)+'京豆 🐶\n'
+            allMessage += key + ' ---> ' + myMap.get(key) + '京豆 🐶\n'
+            $.message += key + ' ---> ' + myMap.get(key) + '京豆 🐶\n'
         }
         myMap = new Map()
         console.log($.message);
@@ -89,16 +90,16 @@ async function showMsg() {
         //   await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `账号${$.index}：${$.nickName || $.UserName}\n昨日收入：${$.incomeBean}京豆 🐶\n昨日支出：${$.expenseBean}京豆 🐶\n当前京豆：${$.beanCount}京豆 🐶${$.message}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
         // }
         // $.msg($.name, '', `账号${$.index}：${$.nickName || $.UserName}\n今日收入：${$.todayIncomeBean}京豆 🐶\n昨日收入：${$.incomeBean}京豆 🐶\n昨日支出：${$.expenseBean}京豆 🐶\n当前京豆：${$.beanCount}(七天将过期${$.expirejingdou})京豆🐶${$.message}`, {"open-url": "https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean", "media-url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png"});
-    }catch (e) {}
+    } catch (e) {
+        console.log(e.message)
+    }
 }
 
 async function bean() {
     try {
-
         // console.log(`北京时间零点时间戳:${parseInt((Date.now() + 28800000) / 86400000) * 86400000 - 28800000}`);
         // console.log(`北京时间2020-10-28 06:16:05::${new Date("2020/10/28 06:16:05+08:00").getTime()}`)
         // 不管哪个时区。得到都是当前时刻北京时间的时间戳 new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000
-
         //前一天的0:0:0时间戳
         const tm = parseInt((Date.now() + 28800000) / 86400000) * 86400000 - 28800000 - (24 * 60 * 60 * 1000);
         // 今天0:0:0时间戳
@@ -106,7 +107,7 @@ async function bean() {
         let page = 1, t = 0, yesterdayArr = [], todayArr = [];
         do {
             let response = await getJingBeanBalanceDetail(page);
-            await $.wait(parseInt(Math.random()*1000+200,10));
+            await $.wait(parseInt(Math.random() * 1000 + 200, 10));
 
             // console.log(`第${page}页: ${JSON.stringify(response)}`);
             if (response && response.code === "0") {
@@ -150,12 +151,12 @@ async function bean() {
         for (let item of todayArr) {
             if (Number(item.amount) > 0) {
                 $.todayIncomeBean += Number(item.amount);
-                myMap.set(item.eventMassage,0)
+                myMap.set(item.eventMassage, 0)
             }
         }
         for (let item of todayArr) {
             if (Number(item.amount) > 0) {
-                myMap.set(item.eventMassage,parseInt(myMap.get(item.eventMassage))+parseInt(item.amount))
+                myMap.set(item.eventMassage, parseInt(myMap.get(item.eventMassage)) + parseInt(item.amount))
             }
         }
         // console.log(myMap)
@@ -163,10 +164,11 @@ async function bean() {
         // await redPacket();//过期红包
         // console.log(`今日收入：${$.todayIncomeBean}个京豆 🐶`);
         // console.log(`昨日支出：${$.expenseBean}个京豆 🐶`)
-    }catch (e) {
-        
+    } catch (e) {
+
     }
 }
+
 function TotalBean() {
     return new Promise(async resolve => {
         const options = {
@@ -211,6 +213,7 @@ function TotalBean() {
         })
     })
 }
+
 function getJingBeanBalanceDetail(page) {
     return new Promise(async resolve => {
         const options = {
@@ -245,6 +248,7 @@ function getJingBeanBalanceDetail(page) {
         })
     })
 }
+
 function queryexpirejingdou() {
     return new Promise(async resolve => {
         const options = {
@@ -292,6 +296,7 @@ function queryexpirejingdou() {
         })
     })
 }
+
 function jsonParse(str) {
     if (typeof str == "string") {
         try {

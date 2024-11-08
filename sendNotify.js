@@ -8,7 +8,7 @@ const querystring = require('querystring');
 const exec = require('child_process').exec;
 const $ = new Env();
 const timeout = 15000; //超时时间(单位毫秒)
-console.log("加载sendNotify，当前版本: 20220327");
+// console.log("加载sendNotify，当前版本: 20220327");
 // =======================================go-cqhttp通知设置区域===========================================
 //gobot_url 填写请求地址http://127.0.0.1/send_private_msg
 //gobot_token 填写在go-cqhttp文件设置的访问密钥
@@ -169,6 +169,7 @@ if (process.env.NOTIFY_SHOWNAMETYPE) {
     if (ShowRemarkType == "4")
         console.log("检测到显示备注名称，格式为: 备注");
 }
+
 async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "") {
     console.log(`开始发送通知...`);
 
@@ -283,7 +284,7 @@ async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "
                                     tempid = temptest._id;
                                 }
                                 if (temptest.id) {
-                                    tempid =temptest.id;
+                                    tempid = temptest.id;
                                 }
                                 const DisableCkBody = await DisableCk(tempid);
                                 strPtPin = temptest.value;
@@ -1442,10 +1443,10 @@ async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "
                             text = text.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
                             if (text == "京东资产变动" || text == "京东资产变动#2" || text == "京东资产变动#3" || text == "京东资产变动#4") {
                                 var Tempinfo = "";
-                                if(envs[i].created)
-                                    Tempinfo=getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
+                                if (envs[i].created)
+                                    Tempinfo = getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
                                 else
-                                    Tempinfo=getQLinfo(cookie, envs[i].createdAt, envs[i].timestamp, envs[i].remarks);
+                                    Tempinfo = getQLinfo(cookie, envs[i].createdAt, envs[i].timestamp, envs[i].remarks);
                                 if (Tempinfo) {
                                     $.Remark += Tempinfo;
                                 }
@@ -1479,7 +1480,7 @@ async function sendNotify(text, desp, params = {}, author = '\n', strsummary = "
             }
             console.log("处理完成，开始发送通知...");
             if (strAllNotify) {
-                desp = strAllNotify+"\n" + desp;
+                desp = strAllNotify + "\n" + desp;
             }
         }
     } catch (error) {
@@ -1700,10 +1701,10 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n', strsummary
                             $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
 
                             var Tempinfo = "";
-                            if(tempEnv.created)
-                                Tempinfo=getQLinfo(cookie, tempEnv.created, tempEnv.timestamp, tempEnv.remarks);
+                            if (tempEnv.created)
+                                Tempinfo = getQLinfo(cookie, tempEnv.created, tempEnv.timestamp, tempEnv.remarks);
                             else
-                                Tempinfo=getQLinfo(cookie, tempEnv.createdAt, tempEnv.timestamp, tempEnv.remarks);
+                                Tempinfo = getQLinfo(cookie, tempEnv.createdAt, tempEnv.timestamp, tempEnv.remarks);
 
                             if (Tempinfo) {
                                 Tempinfo = $.nickName + Tempinfo;
@@ -1809,8 +1810,7 @@ async function checkCookie(cookie) {
                 }
             } catch (e) {
                 console.log(e);
-            }
-            finally {
+            } finally {
                 resolve();
             }
         });
@@ -1842,8 +1842,7 @@ function gotifyNotify(text, desp) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve();
                 }
             });
@@ -1884,8 +1883,7 @@ function gobotNotify(text, desp, time = 2100) {
                         }
                     } catch (e) {
                         $.logErr(e, resp);
-                    }
-                    finally {
+                    } finally {
                         resolve(data);
                     }
                 });
@@ -1929,8 +1927,7 @@ function serverNotify(text, desp, time = 2100) {
                         }
                     } catch (e) {
                         $.logErr(e, resp);
-                    }
-                    finally {
+                    } finally {
                         resolve(data);
                     }
                 });
@@ -1968,8 +1965,7 @@ function BarkNotify(text, desp, params = {}) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve();
                 }
             });
@@ -1987,7 +1983,7 @@ function tgBotNotify(text, desp) {
                 json: {
                     chat_id: `${TG_USER_ID}`,
                     text: `${text}\n\n${desp}`,
-                    disable_web_page_preview:true,
+                    disable_web_page_preview: true,
                 },
                 headers: {
                     'Content-Type': 'application/json',
@@ -2071,8 +2067,7 @@ function ddBotNotify(text, desp) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
             });
@@ -2092,8 +2087,7 @@ function ddBotNotify(text, desp) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
             });
@@ -2134,8 +2128,7 @@ function qywxBotNotify(text, desp) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
             });
@@ -2235,7 +2228,7 @@ function qywxamNotify(text, desp, strsummary = "") {
                                     content_source_url: ``,
                                     content: `${html}`,
                                     digest: `${strsummary}`,
-                                }, ],
+                                },],
                             },
                         };
                 }
@@ -2276,8 +2269,7 @@ function qywxamNotify(text, desp, strsummary = "") {
                         }
                     } catch (e) {
                         $.logErr(e, resp);
-                    }
-                    finally {
+                    } finally {
                         resolve(data);
                     }
                 });
@@ -2322,8 +2314,7 @@ function iGotNotify(text, desp, params = {}) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
             });
@@ -2332,6 +2323,7 @@ function iGotNotify(text, desp, params = {}) {
         }
     });
 }
+
 function pushPlusNotifyhxtrip(text, desp) {
     return new Promise((resolve) => {
         if (PUSH_PLUS_TOKEN_hxtrip) {
@@ -2369,8 +2361,7 @@ function pushPlusNotifyhxtrip(text, desp) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
             });
@@ -2419,8 +2410,7 @@ function pushPlusNotify(text, desp) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
             });
@@ -2429,6 +2419,7 @@ function pushPlusNotify(text, desp) {
         }
     });
 }
+
 function wxpusherNotifyByOne(text, desp, strsummary = "") {
     return new Promise((resolve) => {
         if (WP_APP_TOKEN_ONE) {
@@ -2446,7 +2437,8 @@ function wxpusherNotifyByOne(text, desp, strsummary = "") {
             for (let i of WP_UIDS_ONE.split(";")) {
                 if (i.length != 0)
                     uids.push(i);
-            };
+            }
+            ;
             let topicIds = [];
 
             //desp = `<font size="3">${desp}</font>`;
@@ -2513,8 +2505,7 @@ function wxpusherNotifyByOne(text, desp, strsummary = "") {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
             });
@@ -2531,12 +2522,14 @@ function wxpusherNotify(text, desp) {
             for (let i of WP_UIDS.split(";")) {
                 if (i.length != 0)
                     uids.push(i);
-            };
+            }
+            ;
             let topicIds = [];
             for (let i of WP_TOPICIDS.split(";")) {
                 if (i.length != 0)
                     topicIds.push(i);
-            };
+            }
+            ;
             desp = `<font size="4"><b>${text}</b></font>\n\n<font size="3">${desp}</font>`;
             desp = desp.replace(/[\n\r]/g, '<br>'); // 默认为html, 不支持plaintext
             const body = {
@@ -2569,8 +2562,7 @@ function wxpusherNotify(text, desp) {
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
             });
@@ -2648,8 +2640,7 @@ function GetnickName() {
                 }
             } catch (e) {
                 $.logErr(e)
-            }
-            finally {
+            } finally {
                 resolve();
             }
         })
@@ -2657,7 +2648,7 @@ function GetnickName() {
 }
 
 function GetnickName2() {
-    return new Promise(async(resolve) => {
+    return new Promise(async (resolve) => {
         const options = {
             url: `https://wxapp.m.jd.com/kwxhome/myJd/home.json?&useGuideModule=0&bizId=&brandId=&fromType=wxapp&timestamp=${Date.now()}`,
             headers: {
@@ -2691,8 +2682,7 @@ function GetnickName2() {
                 }
             } catch (e) {
                 $.logErr(e);
-            }
-            finally {
+            } finally {
                 resolve();
             }
         });
