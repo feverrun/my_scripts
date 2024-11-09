@@ -83,7 +83,7 @@ $.innerKeyWords = [
 ];
 //下面很重要，遇到问题请把下面注释看一遍再来问
 let args_xh = {
- h5st_server: process.env.H5ST_SERVER || 'https://jd1.zhx47.xyz',
+ h5st_server: process.env.H5ST_SERVER || '',
  /*
   * 控制一次最多跑几个号，默认10个
   */
@@ -201,6 +201,12 @@ let args_xh = {
 !(async () => {
  await $.wait(500);
  $.log("\n遇到问题请先看脚本内注释");
+ if (!args_xh.h5st_server) {
+  console.log(`环境变量H5ST_SERVER 未设置`);
+  process.exit(1)
+ } else {
+  console.log(`环境变量H5ST_SERVER 已设置为: ${args_xh.h5st_server}`);
+ }
  await requireConfig();
  if (!$.cookiesArr[0]) {
   console.log($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/');
@@ -357,9 +363,8 @@ async function try_apply(title, activityId) {
       },
       'x-api-eid-token': $.jsToken,
      },
-     '20241104091955428;eff00hehr4ue9l19;35fa0;tk03wa18a1c3c18nrVVH0fVC09nTbpyxLa-AtXv7k9axIQwIZ7nC2JPC13FilyXdje29HbNypOMhVaSnBzLN0muMWTKv;0813c056fa4710d7a1f19c4d1d152dbb;4.9;1730683195428;of7ruCLjynoQyXVO3jkRGKlf7TFSGipjxjpPFipjLDrgzrJdJz1TIipjLDrgJnIf5jofKGITIq4f4LYSyXFfKele7jYTJWofImoS4XISJrJdJrEa-OFTGOEjLrJp-jpS4TIezjIe6PoS2X4TFm4e7XVTGiYd5fIeGeIS0nYeHipjxj5PKSEQKeFjLrJp-jZf9HIg3T0UG6VRFuWeDipjxjJOJrpjh7Jj0f1QWeVQm2VY7eXZJrJdJ31QHyVT5ipjLDrgJbIeDeFPKmljzWEQC6HjLDIjFqEjLrJp-3kjLDrfLDIjzXETJrpjLrJp-jJjLDIj0XETJrpjLrJp-nIfLDIj1XETJrpjLrJp-rojxjZe2iFjLrpjLDrg7rJdJbYOJipjLrpjh7Je1rJdJfYOJipjLrpjh7Zf_rJdJjYOJipjLrpjh7Jj2zZf9r4UGaUR-ipjxjZf2iFjLrpjLDrg7rJdJ-1OJrpjLrJp-rojxj5P-ipjLrpjh7pfLDIj-ipjLrpjh7pfLDIjHOEjLrpjLD7NLDIjHyVS3KUSJrpjh7ZMLrJpJnVTImVTHmYS4rYd2P4UHCFjLDIj6rEjLrpjLD7NLDIj7qEjLrJp-jJO0q5d7joYq2pYgiXZmOWbWK3gH6VR2inj7joYq2pYginjwrYfLbVR8ikS9mnjwLUO9GlYJrJdJnVO4ipjLD7N;8e0c73930d22c0413d9318cf8a541561',
+     '20241109192724484;qv5heevhe1zkruu7;35fa0;tk03w8d731b9718n0uIbomT0F4awBFtnB-RQPyTOFZ8aB2p7zprN438VEc9ohRf0aEmpDkmv67amqa4DyUL1a8QBbLee;af4a14de1fc8cb9faf41ad2ec4ccd379;4.9;1731151644484;q3EpJPYO2i0RxmYSDSUSGKVe1mEjLDIj7SFjLrJp-LojxjJQIeFjLrJp-jZf5jIf7nVdJelf4fodGGYS5n1T3rIfKiVe7fVfHeYeFipjxjpPl61SJW1OJrpjh7JjFGoS7fVfKiYeyb1e0nodGG4T3TofyXVT1PYf1nVf6bIjLDIj4mFO9m1TJrpjh7Jj5zZd9bIOMWlQCS1U2LFjLDIj1ipjLDrgJjIe4eGblK1Z5O1X_ipjxjZQ8aFQKiEjLrJp-jpe1L1T5mVTLLUO9GlYJrJdJTlPJrpjh7ZMLrJp7rJdJLYOJipjLrpjh7JjJrJdJPYOJipjLrpjh7JfLDIj1XETJrpjLrJp-rojxjZe2iFjLrpjLDrg7rJdJbYOJipjLrpjh75f1rJdJfYOJipjLrpjh7Jf_rJdJjYOJipjLrpjh7Jj2zZf9r4UGaUR-ipjxjZf2iFjLrpjLDrg7rJdJ-1OJrpjLrJp-rojxj5P-ipjLrpjh7pfLDIj-ipjLrpjh7pfLDIjHOEjLrpjLD7NLDIjHyVS3KUSJrpjh7ZMLrJpJnVTImVTHmYS4rYd2P4UHCFjLDIj6rEjLrpjLD7NLDIj7qEjLrJp-jJO0q5d7joYq2pYgiXZmOWbWK3gH6VR2inj7joYq2pYginjwrYfLbVR8ikS9mnjwLUO9GlYJrJdJnVO4ipjLD7N;9449a280bfc3801bb26f555ffb049e6c',
  );
-
  setBaseCookie();
  const joylog = await $.smashUtils.sign(
      {
@@ -371,7 +376,7 @@ async function try_apply(title, activityId) {
  try {
   const { data } = await api({
    method: 'POST',
-   url: `https://api.m.jd.com/client.action`,
+   url: `${URL}`,
    headers: {
     'content-type': 'application/x-www-form-urlencoded',
     origin: 'https://pro.m.jd.com',
@@ -440,10 +445,9 @@ async function try_MyTrials(page, selected) {
      '20241020190915983;agi39zmtagmaaap8;6d63a;tk02wc1d11c3f41lMisxeDIrM3F5zw3TlpVl9lTWqno08Vqtiq4GkXuDVANat5P5-_e_KEjjFRW7OrmT7wCN7nkBO0Eh;c86014a641551242004b4f25c80b56b3efd4405d6bf9899da355593a8710e73e;4.2;1729422555983;e9f6ec1bab0ebf8ad0759c5c9ae319e1e6e561685fd3cb857e7337eff91b61f556bf8a7d02fa529215a3be23a58fcfe0128cabd647573f2a59044ccdd081cca3b1b9334614e6d42db8e32b5c2a8dfe46c4fea05d438740136f73aba5a8b1673c119835af2c1f0459d5b259773ab0312e6aa38abdbe32772a6256aaa4674f4e2beee112716c526703a1e93306c7771b610617a98f88165f08f00444938cd695d29a2df1ac2ffa476c9505cd78864ba430ce5081edadba67198b13ca3fafc9739c053460325939c1342afae5b7963d4005dcc643d32e8f36bb97585d5a6e3210fbbb86eb075b3f9493926e7cefd59d542e06b0bbfbeb78d764025f6a2c1d51dc7cdc806118aa9ef83ee8a5992ba4945c0b6a541385d17bd302ea99572bd1999f7f8ec143e2f59287e8aa14b362eb36ef8a',
      '4.2.0',
  );
-
  const options = {
   method: 'POST',
-  url: 'https://api.m.jd.com/client.action',
+  url: `${URL}`,
   headers: {
    'Content-Type': 'application/x-www-form-urlencoded',
    Cookie: $.cookie,
@@ -505,7 +509,7 @@ async function showMsg() {
 async function try_rafflecount() {
  const options = {
   method: 'POST',
-  url: 'https://api.m.jd.com/client.action',
+  url: `${URL}`,
   headers: {
    'Content-Type': 'application/x-www-form-urlencoded',
    Cookie: $.cookie,
@@ -574,7 +578,7 @@ async function initJsToken() {
  const currentTime = Date.now();
 
  if ($.cache[$.UserName] && $.cache[$.UserName].expiry > currentTime) {
-  $.jsToken = $.cache[$.UserName].jsToken;
+  $.jsToken = '' //$.cache[$.UserName].jsToken;
  } else {
   // const jsTokenData = await getJsToken();
   $.jsToken = '' //jsTokenData.token;
@@ -605,13 +609,12 @@ async function try_feedsList(tabId, page) {
       },
       'x-api-eid-token': $.jsToken,
      },
-     '20241104091709178;eff00hehr4ue9l19;35fa0;tk03wa18a1c3c18nrVVH0fVC09nTbpyxLa-AtXv7k9axIQwIZ7nC2JPC13FilyXdje29HbNypOMhVaSnBzLN0muMWTKv;5e9bb68b3683ba2a8c36a40d0b76e9cc;4.9;1730683029178;of7ruCLjynoQyXVO3jkRGKlf7TFSGipjxjpPFipjLDrgzrJdJz1TIipjLDrgJnIf5jofKGITIq4f4LYSyXFfKele7jYTJWofImoS4XISJrJdJrEa-OFTGOEjLrJp-jpS4TIezjIe6PoS2X4TFm4e7XVTGiYd5fIeGeIS0nYeHipjxj5PKSEQKeFjLrJp-jZf9HIg3T0UG6VRFuWeDipjxjJOJrpjh7Jj4CVWUWVN82HOjG3aJrJdJ31QHyVT5ipjLDrgJbIeDeFPKmljzWEQC6HjLDIjFqEjLrJp-3kjLDrfLDIjzXETJrpjLrJp-jJjLDIj0XETJrpjLrJp-r4fLDIj1XETJrpjLrJp-rojxjZe2iFjLrpjLDrg7rJdJbYOJipjLrpjh7Jf0rJdJfYOJipjLrpjh7Zf_rJdJjYOJipjLrpjh7Jj2zZf9r4UGaUR-ipjxjZf2iFjLrpjLDrg7rJdJ-1OJrpjLrJp-rojxj5P-ipjLrpjh7pfLDIj-ipjLrpjh7pfLDIjHOEjLrpjLD7NLDIjHyVS3KUSJrpjh7ZMLrJpJnVTImVTHmYS4rYd2P4UHCFjLDIj6rEjLrpjLD7NLDIj7qEjLrJp-jJO0q5d7joYq2pYgiXZmOWbWK3gH6VR2inj7joYq2pYginjwrYfLbVR8ikS9mnjwLUO9GlYJrJdJnVO4ipjLD7N;9bd0d651b63926fa2c693d46f753b6c7',
+     '20241109192724484;qv5heevhe1zkruu7;35fa0;tk03w8d731b9718n0uIbomT0F4awBFtnB-RQPyTOFZ8aB2p7zprN438VEc9ohRf0aEmpDkmv67amqa4DyUL1a8QBbLee;af4a14de1fc8cb9faf41ad2ec4ccd379;4.9;1731151644484;q3EpJPYO2i0RxmYSDSUSGKVe1mEjLDIj7SFjLrJp-LojxjJQIeFjLrJp-jZf5jIf7nVdJelf4fodGGYS5n1T3rIfKiVe7fVfHeYeFipjxjpPl61SJW1OJrpjh7JjFGoS7fVfKiYeyb1e0nodGG4T3TofyXVT1PYf1nVf6bIjLDIj4mFO9m1TJrpjh7Jj5zZd9bIOMWlQCS1U2LFjLDIj1ipjLDrgJjIe4eGblK1Z5O1X_ipjxjZQ8aFQKiEjLrJp-jpe1L1T5mVTLLUO9GlYJrJdJTlPJrpjh7ZMLrJp7rJdJLYOJipjLrpjh7JjJrJdJPYOJipjLrpjh7JfLDIj1XETJrpjLrJp-rojxjZe2iFjLrpjLDrg7rJdJbYOJipjLrpjh75f1rJdJfYOJipjLrpjh7Jf_rJdJjYOJipjLrpjh7Jj2zZf9r4UGaUR-ipjxjZf2iFjLrpjLDrg7rJdJ-1OJrpjLrJp-rojxj5P-ipjLrpjh7pfLDIj-ipjLrpjh7pfLDIjHOEjLrpjLD7NLDIjHyVS3KUSJrpjh7ZMLrJpJnVTImVTHmYS4rYd2P4UHCFjLDIj6rEjLrpjLD7NLDIj7qEjLrJp-jJO0q5d7joYq2pYgiXZmOWbWK3gH6VR2inj7joYq2pYginjwrYfLbVR8ikS9mnjwLUO9GlYJrJdJnVO4ipjLD7N;9449a280bfc3801bb26f555ffb049e6c',
  );
-
  try {
   const { data } = await api({
    method: 'POST',
-   url: `https://api.m.jd.com/client.action`,
+   url: `${URL}`,
    headers: {
     'content-type': 'application/x-www-form-urlencoded',
     origin: 'https://prodev.m.jd.com',
@@ -730,10 +733,11 @@ async function try_feedsList(tabId, page) {
  }
 }
 
-async function h5stSign(body, h5st, version = '4.9.1') {
+async function h5stSign(body, h5st, version = '4.9.2') {
+ url = `${args_xh.h5st_server.includes('h5st') ? args_xh.h5st_server : args_xh.h5st_server+'/h5st'}`
  const options = {
+  url: url,
   method: 'POST',
-  url: `${args_xh.h5st_server}/h5st`,
   headers: { 'content-type': 'application/json' },
   data: {
    version: version,
