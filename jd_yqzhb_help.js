@@ -10,9 +10,9 @@ export PRO_API_PROXY_URL=""             #api    代理地址,推荐这个。搭�
 export PRO_GLOBAL_PROXY_URL=""          #global 代理地址
 export PRO_PROXY_WHITELIST=""           #代理白名单,哪些本需要代理, 脚本关键词&隔开
 export PRO_PROXY_BLACKLIST=""           #代理黑名单,哪些本不需要代理, 脚本关键词&隔开
-cron "1 0,9 * * *" jd_yqzhb2_help.js
+cron "0 0,12 * * *" jd_yqzhb_help.js
 */
-const $ = new Env('京东转赚红包-助力2');
+const $ = new Env('京东转赚红包-助力');
 
 
 
