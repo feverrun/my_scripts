@@ -1,11 +1,11 @@
 /*
-发财挖宝-挖雷
-地址： 京东 》 玩一玩 》 欢乐淘金
+欢乐挖宝-挖雷
+地址： 京东 》 我的 》 欢乐挖宝
 新地址: https://bnzf.jd.com/?activityId=Bn1VWXtvgTv5ewPoMR-X8A
 功能: 只做3个日常任务 + 开雷  此任务默认不主动执行
 cron "2 2 29 2 *" jd_fcwb_auto2.js
  */
-const $ = new Env('发财挖宝-挖雷');
+const $ = new Env('欢乐挖宝-挖雷');
 
 
 
