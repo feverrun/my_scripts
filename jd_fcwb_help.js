@@ -8,7 +8,7 @@ export FCWB_INVITER=""
 export FCWB_INVITER_CODE=""
 export fcwb_helpnum="32"                            #自己设置多少个助力后停止
 跑之前最好先去手动挖宝，先开两个格子,看看是不是券，如果是券基本就是暂时黑了
-cron "0 18 * * *" jd_fcwb_help.js
+cron "2 2 29 2 *" jd_fcwb_help.js
  */
 const $ = new Env('京东特价版 现金挖宝-助力');
 
