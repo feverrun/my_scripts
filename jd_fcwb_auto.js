@@ -1,11 +1,11 @@
 /*
-欢乐淘金-挖雷
-地址： 京东特价版 》 首页 》 欢乐淘金
+现金挖宝-挖雷
+地址： 京东特价版 》 首页 》 现金挖宝
 新地址: https://bnzf.jd.com/?activityId=CmPJ1svf_qoTYXEwfOkKPg
 功能: 只做3个日常任务 + 开雷
 cron "2 2 29 2 *" jd_fcwb_auto.js
  */
-const $ = new Env('京东特价版 欢乐淘金-挖雷');
+const $ = new Env('京东特价版 现金挖宝-挖雷');
 
 
 
