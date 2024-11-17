@@ -4,7 +4,7 @@ https://u.jd.com/xxxxxxx
 export CODE1818="xxx"                     #xxx换成自己的返利code, 链接后面那7位字母
 export CODE1818_waitTime="30"             #未设置代理的情况下，配置生效，可自行设置账号之间延迟x秒
 
-cron "6 21 17-18 11 *" jd_1818hb.js
+cron "0 0,10 18 11 *" jd_1818hb1.js
  */
 const $ = new Env('超级18红包');
 
