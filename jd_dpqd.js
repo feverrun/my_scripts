@@ -1,5 +1,6 @@
 /*
 店铺签到
+#一个号换一次ip
 export dpqd_token="token1&token2&token3..."    #多个token&隔开或换行|@,隔开
 cron "2 2 29 2 *"jd_dpqd.js
 */
