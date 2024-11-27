@@ -1,6 +1,6 @@
 /*
 #可自行定时
-cron "5 17 * * 11,12,1" jd_yyDraw.js
+cron "5 17 * 11,12,1 *" jd_yyDraw.js
 */
 const $ = new Env('京东大药房抽奖');
 
