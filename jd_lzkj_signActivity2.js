@@ -1,7 +1,7 @@
 /*
 lzkj签到有礼
 不自动入会，不自动入会，不自动入会
-地址：
+地址：https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=b2e79b562e1145569f96013190395a77&venderId=1000295114
 export jd_lzkj_signActivity2_ids = "id1&id2&id3"     活动Id   必须
 export jd_lzkj_signActivity2_num="10"                执行前多少个号  不设置则默认执行前10个
 export jd_lzkj_signActivity2_openCard="1"            设置为1则自动入会 不设置或者设置为0则不自动入会
