@@ -16,6 +16,9 @@ axios@1.7.7
 dotenv
 got@11.8.6
 crypto-js
+sharp
+fs
+form-data
 md5
 ts-md5
 tslib
