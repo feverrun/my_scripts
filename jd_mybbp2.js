@@ -2,7 +2,7 @@
 #集卡赢好礼，百元礼包等你拿
 cron "35 0 15-16 11 *" jd_mybbp2.js
 */
-const $ = new Env('集卡赢好礼，百元礼包等你拿 11.14-11.30')
+const $ = new Env('集卡赢好礼，百元礼包等你拿 11.14-12.15')
 let isDraw = false      //是否抽奖默认为false， 如需抽奖可自行改成true
 
 

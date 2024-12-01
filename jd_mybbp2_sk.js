@@ -5,7 +5,7 @@
 export jd_mybbp_cardUuid=''         #另一个任务本有打印的
 cron "2 2 2 2 2" jd_mybbp2_sk.js
 */
-const $ = new Env('集卡赢好礼，百元礼包等你拿-收卡 11.14-11.30')
+const $ = new Env('集卡赢好礼，百元礼包等你拿-收卡 11.14-12.15')
 
 
 
