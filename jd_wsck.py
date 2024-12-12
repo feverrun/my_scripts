@@ -253,7 +253,7 @@ def getcookie_wskey(key):
         #sign = get_sign_diy(pin)
         if not sign:
         	continue
-        url = f"https://api.m.jd.com/client.action?functionId=genToken&{sign}"
+        url = f"http://api.m.jd.com/client.action?functionId=genToken&{sign}"
         headers = {
             "cookie": key,
             'user-agent': UserAgent,
@@ -598,7 +598,7 @@ def main():
             else:
                 printf("没有启用通知!")
 
-    printf("\n\n===============转换结果==============\n")
+    printf("\n===============转换结果==============\n")
     printf(resurt)
 
 if __name__ == '__main__':
