@@ -3,10 +3,6 @@
 export jd_zlyhl_code=""                 #帮助的助力码，后续所有账号将会助力这个码
 export jd_zlyhl_num=""                  #助力成功的次数, 比如10
 export jd_zlyhl_waitTime=""             #每个助力间隔多少秒,非必须默认不生效
-如果有全局代理配置如下
-export JD_YQ_GLOBAL_AGENT_HTTP_PROXY_URL=""
-如果有api代理配置如下，api代理配置优先级高于全局代理配置
-export JD_YQ_API_PROXY_URL=""
 cron "2 2 29 2 *" jd_zlyhl.js
 */
 const $ = new Env('助力赢好礼 瓜分一亿京豆-300豆');
