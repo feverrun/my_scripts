@@ -7,7 +7,7 @@ export jd_gold_code=""                 #帮助的助力码，后续所有账号�
 export jd_gold_num=""                  #助力成功的次数, 比如200
 export jd_yqzhb_waitTime=""            #每个助力间隔多少秒,非必须默认不生效
 
-cron "0 0,11 17-24 12 *" jd_gold_help.js
+cron "1 0,11 17-24 12 *" jd_gold_help.js
 */
 const $ = new Env('吃水饺得黄金');
 
