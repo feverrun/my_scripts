@@ -6,7 +6,7 @@ export CODE1224_RedCount="1"              #0=不限制(3次) 1=领取1次, 不�
 export CODE1224_waitTime="0"              #未设置代理的情况下，配置生效，可自行设置账号之间延迟x秒
 cron "59 59 9,15,23 14-31,1-11 10,11 *" jd_1224hb.js
  */
-const $ = new Env('1111抢红包');
+const $ = new Env('1224抢红包');
 
 
 
