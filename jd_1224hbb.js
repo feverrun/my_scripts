@@ -4,7 +4,7 @@ https://u.jd.com/xxxxxxx
 export CODE1224="xxx"                     #xxx换成自己的返利code, 链接后面那7位字母
 export CODE1224_RedCount="1"              #0=不限制(3次) 1=领取1次, 不设置则默认只抽1次
 export CODE1224_waitTime="0"              #未设置代理的情况下，配置生效，可自行设置账号之间延迟x秒
-cron "59 59 9,15,23 14-31,1-11 10,11 *" jd_1224hb.js
+cron "59 59 9,15,23 14-31,1-11 12,1 *" jd_1224hbb.js
  */
 const $ = new Env('1224抢红包');
 
