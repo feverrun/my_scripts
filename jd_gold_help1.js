@@ -1,16 +1,13 @@
 /*
-邀请好友抽大奖-助力
-车头账号失效自动退出
 地址：
 https://pro.m.jd.com/mall/active/38fBeMPN3sLNzhvpxCZBbsteaLsv/index.html
 export jd_gold_code=""                 #帮助的助力码，后续所有账号将会助力这个码
 export jd_gold_num=""                  #助力成功的次数, 比如200
 export jd_yqzhb_waitTime=""            #每个助力间隔多少秒,非必须默认不生效
-
-cron "1 0,11 17-24 12 *" jd_gold_help.js
+#默认做任务抽点红包 2月4号结束，可自定义执行时间
+cron "30 0 0,11 25-31,1-31,1-4 12,1,2 *" jd_gold_help1.js
 */
-const $ = new Env('吃水饺得黄金');
-
+const $ = new Env('吃水饺得黄金-助力');
 
 
 

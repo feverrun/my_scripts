@@ -3,9 +3,9 @@
 https://pro.m.jd.com/mall/active/38fBeMPN3sLNzhvpxCZBbsteaLsv/index.html
 export jd_gold_page="1"                #不设置, 默认列出1项提现页
 export jd_gold_dotask="1"              #是否做任务,1做 0不做，默认为1
-cron "2 2 2 2 2" jd_gold_draw.js
+#默认做任务抽点红包 2月4号结束，可自定义执行时间
 */
-const $ = new Env('吃水饺得黄金');
+const $ = new Env('吃水饺得黄金-抽奖');
 
 
 
