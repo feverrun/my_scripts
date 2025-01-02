@@ -1,8 +1,9 @@
 /*
-邀请好友抽大奖-抽奖
+敲幸福-抽奖
 https://pro.m.jd.com/mall/active/vA3es3NAyG3b3K4bxLcpEQj3Aoa/index.html
 export jd_qxf_dotask="1"              #是否做任务,1做 0不做，默认为1
 -1.22 结束
+cron "2 2 29 2 *" jd_qxf_drw.js
 */
 const $ = new Env('敲幸福-抽奖');
 
