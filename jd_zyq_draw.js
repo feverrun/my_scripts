@@ -1,7 +1,8 @@
 /*
 https://pro.m.jd.com/mall/active/2SPD9SANqEbYq9zMfivnHsSjgpBR/index.html
 export jd_zyq_dotask="1"              #是否做任务,1做 0不做，默认为1
-#随机定时可自行设置定时
+#年在一起这个活动 黑号抽不到任何东西,白号自行desi吧
+cron "2 2 29 2 *" jd_zyq_draw.js
 */
 const $ = new Env('1.1-2.28 年在一起抽幸运锦鲤-抽奖');
 
