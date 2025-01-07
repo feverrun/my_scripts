@@ -1,9 +1,9 @@
 /*
 店铺抽奖
-https://shop.m.jd.com/shop/lottery?shopId=xxx
+https://shop.m.jd.com/shop/lottery?shopId=xxx&venderId=xxx
 export jd_shop_draw_ids="shopId1&shop2&shop3"            #shopId必须, 支持多个店铺抽奖，或者单链接
 export jd_shop_draw_num="100";                           #不设置默认最多跑100个号
-cron "2 2 29 2 *" jd_shopGifts.js
+cron "2 2 29 2 *" jd_shop_draw.js
  */
 const $ = new Env('店铺抽奖');
 
