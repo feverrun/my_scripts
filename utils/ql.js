@@ -5,17 +5,22 @@ require('dotenv').config();
 const { readFile } = require('fs/promises');
 const fs = require('fs');
 
-let Fileexists = fs.existsSync('/ql/data/config/auth.json');
-let authFile = Fileexists ? "/ql/data/config/auth.json" : "/ql/config/auth.json";
-
+let authFile = fs.existsSync('/ql/data/db/keyv.sqlite') ? '/ql/data/db/keyv.sqlite' : '';
+authFile = fs.existsSync('/ql/data/config/auth.json') && "/ql/data/config/auth.json" || fs.existsSync('/ql/config/auth.json') && "/ql/config/auth.json" || authFile;
 const api = got.extend({
     prefixUrl: 'http://127.0.0.1:5600',
     retry: { limit: 0 },
 });
 
 async function getToken() {
-    const authConfig = JSON.parse(await readFile(authFile));
-    return authConfig.token;
+    try{
+        const authConfig = JSON.parse(await readFile(authFile));
+        return authConfig.token;
+    }catch (e) {
+        const authConfig = (await readFile(authFile)).toString();
+        return authConfig.match(/"token":"(.*?)"/)[1];
+    }
+
 }
 
 module.exports.getEnvs = async () => {
