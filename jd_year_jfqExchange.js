@@ -1,7 +1,7 @@
 /*
 团员全家福 新年集福气
 https://prodev.m.jd.com/mall/active/2Eby36UFbEhZ3EfM9sS5ZZm6NgT2/index.html
-cron "2 2 29 2*" jd_year_jfqExchange.js
+cron "2 2 29 2 *" jd_year_jfqExchange.js
 */
 const $ = new Env('1.7-2.5 团员全家福 新年集福气 兑换')
 
