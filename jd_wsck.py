@@ -455,6 +455,10 @@ def main():
         config="/wskey/config/auth.json"
         envtype="wskey"
 
+    if os.path.exists("/ql/data/db/keyv.sqlite"):
+        config="/ql/data/db/keyv.sqlite"
+        envtype="ql_latest"
+
     if config=="":
         printf(f"无法判断使用环境，退出脚本!")
         return
@@ -499,7 +503,21 @@ def main():
         url = 'http://127.0.0.1:5678/openApi/count'
         headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer ', 'api-token': f'{token}'}
         datas = get(url, headers=headers).json()["data"]["accountCount"]
-
+    elif envtype == "ql_latest":
+            with open(config, "r", encoding="latin1") as f1:
+                content = f1.read()
+                matches = re.search(r'token":"([^"]+)"', content)
+                try:
+                    token = matches.group(1)
+                except Exception as e:
+                    sys.exit(0)
+            url = 'http://127.0.0.1:5600/api/envs'
+            headers = {'Authorization': f'Bearer {token}'}
+            body = {
+                'searchValue': 'JD_WSCK',
+                'Authorization': f'Bearer {token}'
+            }
+            datas = get(url, params=body, headers=headers).json()['data']
     # printf(f"token：{token}")
     # printf(f"datas：{datas}")
 
@@ -510,7 +528,7 @@ def main():
         printf("\n错误:没有需要转换的JD_WSCK，退出脚本!")
         return
 
-    if envtype == "ql":
+    if envtype in ('ql','ql_latest'):
         for data in datas:
             randomuserAgent()
             if data['status']!=0:

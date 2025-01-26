@@ -7,10 +7,10 @@ new Env('禁用重复任务');
 import json
 import logging
 import os
-import sys
+from re import findall
+import sys,re
 import time
 import traceback
-
 import requests
 
 logger = logging.getLogger(name=None)  # 创建一个日志对象
@@ -93,7 +93,7 @@ def get_duplicate_list(tasklist: list) -> tuple:
     names = []
     cmds = []
     for task in tasklist:
-        ids.append(task.get("_id",task.get("id")))
+        ids.append(task.get("_id", task.get("id")))
         names.append(task.get("name"))
         cmds.append(task.get("command"))
 
@@ -123,7 +123,7 @@ def get_duplicate_list(tasklist: list) -> tuple:
 
 
 def reserve_task_only(
-    tem_ids: list, tem_tasks: list, dup_ids: list, res_list: list
+        tem_ids: list, tem_tasks: list, dup_ids: list, res_list: list
 ) -> list:
     if len(tem_ids) == 0:
         return tem_ids
@@ -133,7 +133,7 @@ def reserve_task_only(
     for task1 in tem_tasks:
         for task2 in res_list:
             if task1.get("name") == task2.get("name"):
-                dup_ids.append(task1.get("_id",task1.get("id")))
+                dup_ids.append(task1.get("_id", task1.get("id")))
                 logger.info(f"【✅保留】{task2.get('command')}")
                 task3 = task1
         if task3:
@@ -158,19 +158,28 @@ def disable_duplicate_tasks(ids: list) -> None:
 
 def get_token() -> str or None:
     path = '/ql/config/auth.json'  # 设置青龙 auth文件地址
+    path1 = '/ql/data/config/auth.json'
+    path2 = '/ql/data/db/keyv.sqlite'
     global flag1
     flag1 = True
     if not os.path.isfile(path):
-        path = '/ql/data/config/auth.json'  # 尝试设置青龙 auth 新版文件地址
+        path = path1  # 尝试设置青龙 auth 新版文件地址
         flag1 = False
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        logger.info(f"❌无法获取 token!!!\n{traceback.format_exc()}")
-        send("💔禁用重复任务失败", "无法获取 token!!!")
-        exit(1)
-    return data.get("token")
+    if os.path.isfile(path2):
+        with open(path2, "r", encoding="latin1") as f1:
+            content = f1.read()
+            matches = re.search(r'token":"([^"]+)"', content)
+            token = matches.group(1)
+            return token
+    else:
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception:
+            logger.info(f"❌无法获取 token!!!\n{traceback.format_exc()}")
+            send("💔禁用重复任务失败", "无法获取 token!!!")
+            exit(1)
+        return data.get("token")
 
 
 if __name__ == "__main__":
@@ -205,5 +214,5 @@ if __name__ == "__main__":
         logger.info("😁没有重复任务~")
     else:
         disable_duplicate_tasks(ids)
-    #if send:
-        #send("💖禁用重复任务成功", f"\n{sum}\n{filter}\n{disable}")
+    # if send:
+    # send("💖禁用重复任务成功", f"\n{sum}\n{filter}\n{disable}")
