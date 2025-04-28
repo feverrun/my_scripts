@@ -1,7 +1,7 @@
 /*
 export jd_lzdz1_openCard="0"                #卡是否开卡 0-不开卡  1-开卡  默认执行开卡
 export jd_card_waitTime="60"                #表示账号之间延迟, 填60表示账号之间延迟60秒
-cron "5 0,12 28-30,1-10 4,5 *" jd_opencard_lz.js
+cron "5 0,12 28-30,1-10 4,5 *" jd_opencard_cp.js
 */
 const $ = new Env('4.28-5.11 超品生活节 五一焕新盛典')
 
